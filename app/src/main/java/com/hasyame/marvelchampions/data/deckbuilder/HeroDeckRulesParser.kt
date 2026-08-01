@@ -3,6 +3,7 @@ package com.hasyame.marvelchampions.data.deckbuilder
 import com.hasyame.marvelchampions.data.db.entity.CardEntity
 import com.hasyame.marvelchampions.domain.deckbuilder.DeckCardInfo
 import com.hasyame.marvelchampions.domain.deckbuilder.DeckOption
+import com.hasyame.marvelchampions.domain.deckbuilder.HERO_DECK_SIZE_OVERRIDES
 import com.hasyame.marvelchampions.domain.deckbuilder.HeroDeckRules
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
@@ -40,12 +41,18 @@ object HeroDeckRulesParser {
             }
             .orEmpty()
 
+        // Deck size is not in the card data at all, so any hero that departs
+        // from 40-50 has to be listed in the curated override map.
+        val sizeOverride = HERO_DECK_SIZE_OVERRIDES[hero.code]
+
         return HeroDeckRules(
             heroCode = hero.code,
             heroSetCode = hero.cardSetCode,
             aspectCount = aspectCount,
             perAspectLimit = perAspectLimit,
             options = options,
+            minDeckSize = sizeOverride?.first,
+            maxDeckSize = sizeOverride?.second,
         )
     }
 

@@ -19,7 +19,19 @@ data class HeroDeckRules(
     val perAspectLimit: Int? = null,
     /** Extra allowances that widen what is legal, straight from `deck_options`. */
     val options: List<DeckOption> = emptyList(),
-)
+    /**
+     * Per-hero deck size, when a hero departs from the standard 40–50.
+     *
+     * Null means the standard bounds. These are **not** in the card data — see
+     * [HERO_DECK_SIZE_OVERRIDES] — so they have to be curated if a hero ever
+     * needs one.
+     */
+    val minDeckSize: Int? = null,
+    val maxDeckSize: Int? = null,
+) {
+    val effectiveMinimum: Int get() = minDeckSize ?: MINIMUM_DECK_SIZE
+    val effectiveMaximum: Int get() = maxDeckSize ?: MAXIMUM_DECK_SIZE
+}
 
 /**
  * An entry of a hero's `deck_options`, which *permits* cards that would
@@ -67,6 +79,8 @@ data class DeckCardInfo(
 sealed interface DeckProblem {
     data class TooFewCards(val actual: Int, val required: Int) : DeckProblem
 
+    data class TooManyCards(val actual: Int, val allowed: Int) : DeckProblem
+
     data class WrongAspectCount(val actual: Int, val required: Int) : DeckProblem
 
     data class OffAspectCard(val cardCode: String, val cardName: String, val factionCode: String) :
@@ -99,8 +113,19 @@ data class DeckValidation(
  * The one rule that is not in the card data.
  *
  * MarvelCDB encodes copy limits, uniqueness, factions and the handful of
- * per-hero exceptions, but nothing anywhere states the deck size. This is the
- * standard minimum and is kept as a named constant so it is obvious what is
- * assumed rather than derived.
+ * per-hero exceptions, but **nothing anywhere states the deck size** — checked
+ * against all 72 hero cards and the whole card pool on 2026-08-01, zero
+ * mentions. These are named constants so it is obvious what is configured
+ * rather than derived.
  */
 const val MINIMUM_DECK_SIZE: Int = 40
+const val MAXIMUM_DECK_SIZE: Int = 50
+
+/**
+ * Heroes whose deck size departs from 40–50, as `heroCode to (min to max)`.
+ *
+ * Empty on purpose: no such hero is known, and inventing one would be worse
+ * than having none. The map exists so adding one is a data change here rather
+ * than a change to the validator.
+ */
+val HERO_DECK_SIZE_OVERRIDES: Map<String, Pair<Int, Int>> = emptyMap()

@@ -202,6 +202,10 @@
         <item quantity="one">Only %1$d card, %2$d required.</item>
         <item quantity="other">Only %1$d cards, %2$d required.</item>
     </plurals>
+    <plurals name="decks_problem_too_many">
+        <item quantity="one">%1$d card, at most %2$d allowed.</item>
+        <item quantity="other">%1$d cards, at most %2$d allowed.</item>
+    </plurals>
     <plurals name="decks_problem_aspect_count">
         <item quantity="one">%1$d aspect chosen, %2$d required.</item>
         <item quantity="other">%1$d aspects chosen, %2$d required.</item>

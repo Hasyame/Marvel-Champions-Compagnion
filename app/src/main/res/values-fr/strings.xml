@@ -209,6 +209,11 @@
         <item quantity="many">Seulement %1$d de cartes, %2$d requises.</item>
         <item quantity="other">Seulement %1$d cartes, %2$d requises.</item>
     </plurals>
+    <plurals name="decks_problem_too_many">
+        <item quantity="one">%1$d carte, %2$d au maximum.</item>
+        <item quantity="many">%1$d de cartes, %2$d au maximum.</item>
+        <item quantity="other">%1$d cartes, %2$d au maximum.</item>
+    </plurals>
     <plurals name="decks_problem_aspect_count">
         <item quantity="one">%1$d aspect choisi, %2$d requis.</item>
         <item quantity="many">%1$d d\'aspects choisis, %2$d requis.</item>

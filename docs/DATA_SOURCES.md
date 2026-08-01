@@ -229,9 +229,17 @@ objects include the key with an explicit `null`.
 
 **Deck size appears nowhere.** MarvelCDB encodes copy limits, uniqueness,
 factions and the per-hero exceptions, but nothing states how many cards a deck
-must hold. `MINIMUM_DECK_SIZE` in `domain/deckbuilder/DeckRules.kt` is a named
-constant precisely so it is visible as an assumption rather than buried in a
-condition.
+must hold. Checked on 2026-08-01: of 72 hero cards, **zero** mention a deck
+size, and no card in the whole pool mentions a 40- or 50-card deck.
+
+So it is configured, not derived: `MINIMUM_DECK_SIZE = 40` and
+`MAXIMUM_DECK_SIZE = 50` in `domain/deckbuilder/DeckRules.kt`, confirmed by the
+owner as the rule they play by.
+
+A hero that departs from those bounds goes in `HERO_DECK_SIZE_OVERRIDES` in the
+same file. It is **empty on purpose** — no such hero is known, and inventing one
+would be worse than having none. The map exists so that adding an exception is a
+data change rather than a change to the validator.
 
 ## Card images
 

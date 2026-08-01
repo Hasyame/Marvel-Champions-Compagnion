@@ -34,7 +34,7 @@ class DeckValidatorTest {
         resourceEnergy = energy,
     )
 
-    /** A legal filler deck of the required size, all from one aspect. */
+    /** A legal filler deck of the given size, all from one aspect. */
     private fun fillerDeck(count: Int = MINIMUM_DECK_SIZE, faction: String = "justice") =
         (1..count).associate { "j$it" to 1 } to
             (1..count).associate { "j$it" to card("j$it", faction) }
@@ -57,6 +57,44 @@ class DeckValidatorTest {
 
         assertTrue(
             result.problems.any { it == DeckProblem.TooFewCards(10, MINIMUM_DECK_SIZE) },
+        )
+    }
+
+    @Test
+    fun `a deck at the maximum size is legal`() {
+        val (slots, cards) = fillerDeck(count = MAXIMUM_DECK_SIZE)
+
+        val result = DeckValidator.validate(heroRules, listOf("justice"), slots, cards)
+
+        assertTrue(result.problems.toString(), result.isLegal)
+    }
+
+    @Test
+    fun `too many cards is reported`() {
+        val (slots, cards) = fillerDeck(count = MAXIMUM_DECK_SIZE + 1)
+
+        val result = DeckValidator.validate(heroRules, listOf("justice"), slots, cards)
+
+        assertTrue(
+            result.problems.any {
+                it == DeckProblem.TooManyCards(MAXIMUM_DECK_SIZE + 1, MAXIMUM_DECK_SIZE)
+            },
+        )
+    }
+
+    @Test
+    fun `a hero override replaces both bounds`() {
+        // No such hero is known, but the mechanism has to work the day one
+        // appears, without touching the validator.
+        val oddHero = heroRules.copy(minDeckSize = 25, maxDeckSize = 30)
+        val (slots, cards) = fillerDeck(count = 28)
+
+        assertTrue(DeckValidator.validate(oddHero, listOf("justice"), slots, cards).isLegal)
+
+        val (tooMany, tooManyCards) = fillerDeck(count = 31)
+        assertTrue(
+            DeckValidator.validate(oddHero, listOf("justice"), tooMany, tooManyCards)
+                .problems.any { it is DeckProblem.TooManyCards },
         )
     }
 
@@ -289,5 +327,12 @@ class DeckValidatorTest {
 
         assertEquals(1, result.problems.size)
         assertTrue(result.problems.single() is DeckProblem.TooFewCards)
+    }
+
+    @Test
+    fun `no hero currently overrides the deck size`() {
+        // Deck size appears nowhere in the card data, so the override map is
+        // curated. It stays empty until a real exception turns up.
+        assertTrue(HERO_DECK_SIZE_OVERRIDES.isEmpty())
     }
 }

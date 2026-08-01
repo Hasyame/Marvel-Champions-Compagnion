@@ -79,18 +79,25 @@ Name (fr):
    After a loss: replay this one, or something else?
 ```
 
-## C. Things I could not determine and did not guess
+## C. Answered
 
-1. **Deck size for legality checks.** MarvelCDB does not encode it. I used a
-   minimum of 40. Confirm or correct.
-2. **Campaign-only scenarios.** The randomiser currently offers every scenario
-   from an owned pack, including those inside campaign boxes. Tell me which, if
-   any, should be excluded from a random draw.
-3. **Whether victory points are spent or only accumulated.**
-4. **Whether hit points carry between scenarios on Standard** as well as Expert.
-   I assumed Expert only, per the brief.
+1. **Deck size.** Minimum 40, maximum 50, unless a hero has its own rule.
+   Implemented. No hero in the card data states a deck size, so per-hero
+   exceptions live in the curated `HERO_DECK_SIZE_OVERRIDES`, currently empty.
+2. **Campaign-only scenarios.** None are excluded — a scenario is drawable if
+   its pack is owned, which is already how the randomiser works. No change
+   needed.
+3. **Hit points between scenarios.** Expert only, unless a campaign says
+   otherwise. Already the case: carrying hit points is expressed in the template
+   as `activeWhen: { "difficulty": "expert" }` on the counter and
+   `when: { "difficulty": "expert" }` on the effect. A campaign that wants them
+   on Standard simply omits the guard — the engine hardcodes nothing.
 
-## D. What happens next
+## D. Still open
+
+1. **Whether victory points are spent or only accumulated.**
+
+## E. What happens next
 
 Once you send section B for scenario 1, I will fill it in, import it, and show
 you the result before you write the rest — so a misunderstanding costs one

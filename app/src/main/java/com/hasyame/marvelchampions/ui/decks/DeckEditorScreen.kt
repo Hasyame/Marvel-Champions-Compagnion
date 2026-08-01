@@ -259,6 +259,13 @@ private fun problemMessage(problem: DeckProblem): String = when (problem) {
         problem.required,
     )
 
+    is DeckProblem.TooManyCards -> pluralStringResource(
+        R.plurals.decks_problem_too_many,
+        problem.actual,
+        problem.actual,
+        problem.allowed,
+    )
+
     is DeckProblem.WrongAspectCount -> pluralStringResource(
         R.plurals.decks_problem_aspect_count,
         problem.actual,

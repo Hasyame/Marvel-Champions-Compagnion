@@ -27,8 +27,11 @@ object DeckValidator {
             problems += DeckProblem.WrongAspectCount(chosenAspects.size, rules.aspectCount)
         }
 
-        if (totalCards < MINIMUM_DECK_SIZE) {
-            problems += DeckProblem.TooFewCards(totalCards, MINIMUM_DECK_SIZE)
+        if (totalCards < rules.effectiveMinimum) {
+            problems += DeckProblem.TooFewCards(totalCards, rules.effectiveMinimum)
+        }
+        if (totalCards > rules.effectiveMaximum) {
+            problems += DeckProblem.TooManyCards(totalCards, rules.effectiveMaximum)
         }
 
         // How many cards each deck_options allowance has admitted so far, so a
