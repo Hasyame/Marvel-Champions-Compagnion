@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Compose supplies the real theming; this exists so the Activity has an
+      AppCompat parent, which the per-app locale delegate requires.
+    -->
+    <style name="Theme.MarvelChampionsCompanion" parent="Theme.AppCompat.DayNight.NoActionBar" />
+</resources>

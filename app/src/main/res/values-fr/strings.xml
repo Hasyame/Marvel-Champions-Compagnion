@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Marvel Champions Companion</string>
+
+    <string name="destination_cards">Cartes</string>
+    <string name="destination_decks">Decks</string>
+    <string name="destination_campaign">Campagne</string>
+    <string name="destination_randomizer">Aléatoire</string>
+    <string name="destination_settings">Réglages</string>
+</resources>

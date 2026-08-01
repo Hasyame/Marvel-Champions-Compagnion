@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 11 and below. Only user owned state is backed up; the cached card
+  database is rebuilt per device and must never travel in a backup.
+  Exclusions are added as those files appear (milestone 2 onwards).
+-->
+<full-backup-content>
+    <exclude domain="database" path="cards.db" />
+    <exclude domain="database" path="cards.db-shm" />
+    <exclude domain="database" path="cards.db-wal" />
+</full-backup-content>

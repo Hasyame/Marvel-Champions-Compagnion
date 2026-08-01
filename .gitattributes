@@ -1,0 +1,11 @@
+# Normalise to LF in the repository. gradlew in particular must keep LF or the
+# Linux CI runner cannot execute it.
+* text=auto eol=lf
+
+gradlew text eol=lf
+*.bat text eol=crlf
+
+*.jar binary
+*.png binary
+*.webp binary
+*.keystore binary
