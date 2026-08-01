@@ -139,14 +139,20 @@ expected scenario count in `ScenarioRulesAssetTest`.
 
 ## How to add a campaign
 
-Campaign templates contain verbatim campaign book text, so they are **never
-committed** (`.gitignore` enforces this). They are not, however, kept out of the
-app: drop a template in `app/src/main/assets/campaigns/` — a gitignored folder —
-and it is baked into the APK by whoever builds it and offered on the Campaign
-tab with nothing to import. Exactly the arrangement the card seed uses.
+Campaign templates live in `app/src/main/assets/campaigns/` and **are
+committed**. Drop a `.json` there and it is offered on the Campaign tab with
+nothing to import.
 
-Importing a file from device storage still works, for a template being edited
-without a rebuild or moved between devices.
+**Mechanics only.** Card codes, counters, conditions, effects, and short labels
+written for this app. **No rules text, no flavour text, no setup prose copied
+from the campaign book.** The test is whether someone without the book and the
+physical game could play from the app alone — they must not be able to.
+`BundledCampaignsTest` enforces this: it rejects any flavour field and any setup
+step longer than 80 characters, because a long step means book text has crept
+in.
+
+Importing a file from device storage still works, for a personal template.
+Name such a file `*.campaign.json`, which stays gitignored.
 
 A new campaign is one JSON file validated against the template schema at load
 time. If you find yourself writing Kotlin for a specific campaign, stop: the

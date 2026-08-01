@@ -3,10 +3,15 @@
 What I need from you to turn `TEMPLATE_BLANK.json` into a working Galaxy's Most
 Wanted campaign.
 
-**I have deliberately not filled any of this in.** Scenario text, credit rules
-and setup instructions are campaign book content — reconstructing them from
-memory would produce plausible-looking numbers that are quietly wrong, which is
-worse than blanks.
+**I have deliberately not filled any of this in.** Credit rules and setup
+instructions are campaign book content — reconstructing them from memory would
+produce plausible-looking numbers that are quietly wrong, which is worse than
+blanks.
+
+Send me the book's wording; what goes into the template is the **mechanics**
+distilled from it — card codes, counters, conditions and effects, with short
+labels. No rules text and no flavour text reaches the file. See the Legal
+section of the README.
 
 Answer in French; English can be added later and falls back to French when
 missing.

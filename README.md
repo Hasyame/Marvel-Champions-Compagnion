@@ -46,5 +46,11 @@ or Fantasy Flight Games.
 
 No card images, card text, or campaign book text is stored in this repository.
 Card data is fetched from MarvelCDB at build or run time and cached on the
-device. Campaign templates contain verbatim campaign book text and are imported
-by the user from their own device storage; they are never committed here.
+device.
+
+Campaign templates in `app/src/main/assets/campaigns/` hold **mechanics only** —
+card codes, counters, conditions and effects, plus short labels written for this
+app. They contain no rules text and no flavour text. They are a play aid for
+someone who already owns the campaign box and has the book to hand; on their own
+they do not explain how to play a campaign, and they are not a substitute for
+either the book or the game.
