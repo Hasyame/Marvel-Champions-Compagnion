@@ -144,8 +144,14 @@
         <item quantity="other">%1$d cards</item>
     </plurals>
     <!-- Campaign -->
-    <string name="campaign_empty">No campaign yet. Import a campaign template with the + button.</string>
+    <string name="campaign_my_runs">My campaigns</string>
     <string name="campaign_start">Start a campaign</string>
+    <string name="campaign_none_bundled">No campaign is built into this version. Import a template file below.</string>
+    <string name="campaign_import_file">Import a template from a file</string>
+    <plurals name="campaign_scenario_count">
+        <item quantity="one">%1$d scenario</item>
+        <item quantity="other">%1$d scenarios</item>
+    </plurals>
     <string name="campaign_in_progress">In progress</string>
     <string name="campaign_finished">Finished</string>
     <string name="campaign_difficulty">Difficulty for the whole campaign</string>

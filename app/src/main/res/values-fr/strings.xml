@@ -148,8 +148,15 @@
         <item quantity="other">%1$d cartes</item>
     </plurals>
     <!-- Campaign -->
-    <string name="campaign_empty">Aucune campagne. Importez un modèle de campagne avec le bouton +.</string>
+    <string name="campaign_my_runs">Mes campagnes</string>
     <string name="campaign_start">Démarrer une campagne</string>
+    <string name="campaign_none_bundled">Aucune campagne n\'est intégrée à cette version. Importez un fichier ci-dessous.</string>
+    <string name="campaign_import_file">Importer un modèle depuis un fichier</string>
+    <plurals name="campaign_scenario_count">
+        <item quantity="one">%1$d scénario</item>
+        <item quantity="many">%1$d de scénarios</item>
+        <item quantity="other">%1$d scénarios</item>
+    </plurals>
     <string name="campaign_in_progress">En cours</string>
     <string name="campaign_finished">Terminée</string>
     <string name="campaign_difficulty">Difficulté pour toute la campagne</string>

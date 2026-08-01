@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,6 +51,7 @@ fun CampaignScreen(
     decksViewModel: DecksViewModel = hiltViewModel(),
 ) {
     val runs by viewModel.runs.collectAsStateWithLifecycle()
+    val available by viewModel.available.collectAsStateWithLifecycle()
     val errors by viewModel.errors.collectAsStateWithLifecycle()
     val message by viewModel.message.collectAsStateWithLifecycle()
     val imported by viewModel.importedTemplate.collectAsStateWithLifecycle()
@@ -63,25 +65,17 @@ fun CampaignScreen(
 
     Scaffold(
         topBar = { TopAppBar(title = { Text(stringResource(R.string.destination_campaign)) }) },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { picker.launch(arrayOf("application/json", "*/*")) }) {
-                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.campaign_start))
-            }
-        },
     ) { padding ->
-        if (runs.isEmpty()) {
-            Box(
-                Modifier.fillMaxSize().padding(padding).padding(32.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = stringResource(R.string.campaign_empty),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        } else {
-            LazyColumn(Modifier.fillMaxSize().padding(padding)) {
+        LazyColumn(Modifier.fillMaxSize().padding(padding)) {
+            if (runs.isNotEmpty()) {
+                item {
+                    Text(
+                        text = stringResource(R.string.campaign_my_runs),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(16.dp),
+                    )
+                }
                 items(runs, key = { it.id }) { run ->
                     ListItem(
                         modifier = Modifier.clickable { onOpenRun(run.id) },
@@ -108,6 +102,59 @@ fun CampaignScreen(
                         },
                     )
                     HorizontalDivider()
+                }
+            }
+
+            item {
+                Text(
+                    text = stringResource(R.string.campaign_start),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(16.dp),
+                )
+            }
+
+            if (available.isEmpty()) {
+                item {
+                    Text(
+                        text = stringResource(R.string.campaign_none_bundled),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                    )
+                }
+            }
+
+            items(available, key = { it.id }) { template ->
+                ListItem(
+                    modifier = Modifier.clickable { viewModel.choose(template) },
+                    headlineContent = { Text(template.name.resolve("fr")) },
+                    supportingContent = {
+                        Text(
+                            pluralStringResource(
+                                R.plurals.campaign_scenario_count,
+                                template.scenarios.size,
+                                template.scenarios.size,
+                            ),
+                        )
+                    },
+                )
+                HorizontalDivider()
+            }
+
+            item {
+                // Still available for a template kept on the device rather than
+                // built into the app — editing one without a rebuild, or moving
+                // it between phone and tablet.
+                TextButton(
+                    onClick = { picker.launch(arrayOf("application/json", "*/*")) },
+                    modifier = Modifier.padding(8.dp),
+                ) {
+                    Icon(Icons.Filled.Add, contentDescription = null)
+                    Text(
+                        text = stringResource(R.string.campaign_import_file),
+                        modifier = Modifier.padding(start = 8.dp),
+                    )
                 }
             }
         }

@@ -10,6 +10,7 @@ import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.domain.campaign.engine.AnswerSet
 import com.hasyame.marvelchampions.domain.campaign.engine.CampaignEvent
 import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
+import com.hasyame.marvelchampions.domain.campaign.template.CampaignTemplate
 import com.hasyame.marvelchampions.domain.campaign.template.TemplateError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,6 +47,18 @@ class CampaignListViewModel @Inject constructor(
     /** Holds a template that validated, until difficulty and decks are chosen. */
     private val _importedTemplate = MutableStateFlow<ImportedTemplate?>(null)
     val importedTemplate: StateFlow<ImportedTemplate?> = _importedTemplate
+
+    /** Campaigns bundled into this build, ready to start without importing. */
+    private val _available = MutableStateFlow<List<CampaignTemplate>>(emptyList())
+    val available: StateFlow<List<CampaignTemplate>> = _available
+
+    init {
+        viewModelScope.launch { _available.value = repository.bundledTemplates() }
+    }
+
+    fun choose(template: CampaignTemplate) {
+        _importedTemplate.value = ImportedTemplate(template)
+    }
 
     fun importTemplate(uri: android.net.Uri) {
         viewModelScope.launch {
@@ -96,9 +109,7 @@ class CampaignListViewModel @Inject constructor(
     }
 }
 
-data class ImportedTemplate(
-    val template: com.hasyame.marvelchampions.domain.campaign.template.CampaignTemplate,
-)
+data class ImportedTemplate(val template: CampaignTemplate)
 
 data class CampaignRunUiState(
     val run: CampaignRun? = null,

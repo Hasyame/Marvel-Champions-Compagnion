@@ -139,9 +139,14 @@ expected scenario count in `ScenarioRulesAssetTest`.
 
 ## How to add a campaign
 
-Campaign templates are **data, not assets**. They contain verbatim campaign book
-text, so they are imported by the user from device storage and are never
-committed to this repository (`.gitignore` enforces this).
+Campaign templates contain verbatim campaign book text, so they are **never
+committed** (`.gitignore` enforces this). They are not, however, kept out of the
+app: drop a template in `app/src/main/assets/campaigns/` — a gitignored folder —
+and it is baked into the APK by whoever builds it and offered on the Campaign
+tab with nothing to import. Exactly the arrangement the card seed uses.
+
+Importing a file from device storage still works, for a template being edited
+without a rebuild or moved between devices.
 
 A new campaign is one JSON file validated against the template schema at load
 time. If you find yourself writing Kotlin for a specific campaign, stop: the

@@ -56,6 +56,34 @@ class CampaignRepository @Inject constructor(
     fun observeRuns(): Flow<List<CampaignRunEntity>> = campaignDao.observeRuns()
 
     /**
+     * Campaign templates bundled into this build, from `assets/campaigns/`.
+     *
+     * That folder is **gitignored**, so the templates are baked into the APK on
+     * the machine that builds it and never reach the repository — the same
+     * arrangement as the card seed. It means a campaign is ready to start
+     * without importing anything, while Fantasy Flight's text stays out of
+     * version control.
+     *
+     * An invalid file is skipped rather than crashing the tab; [importTemplate]
+     * is the path that reports problems, because there the user is watching.
+     */
+    suspend fun bundledTemplates(): List<CampaignTemplate> = withContext(ioDispatcher) {
+        val names = runCatching { context.assets.list(CAMPAIGN_ASSET_DIR) }.getOrNull().orEmpty()
+        names.filter { it.endsWith(".json", ignoreCase = true) }
+            .mapNotNull { name ->
+                runCatching {
+                    val text = context.assets.open("$CAMPAIGN_ASSET_DIR/$name").use {
+                        it.readBytes().decodeToString()
+                    }
+                    TemplateValidator.validateOrThrow(
+                        json.decodeFromString(CampaignTemplate.serializer(), text),
+                    )
+                }.getOrNull()
+            }
+            .sortedBy { it.name.resolve("fr") }
+    }
+
+    /**
      * Reads a campaign template the user picked from device storage.
      *
      * Templates are never bundled in the APK: they contain verbatim campaign
@@ -195,4 +223,8 @@ class CampaignRepository @Inject constructor(
     }
 
     fun newEventId(): String = UUID.randomUUID().toString()
+
+    private companion object {
+        const val CAMPAIGN_ASSET_DIR = "campaigns"
+    }
 }
