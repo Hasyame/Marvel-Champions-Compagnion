@@ -1,11 +1,173 @@
 package com.hasyame.marvelchampions.ui.settings
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
-import com.hasyame.marvelchampions.core.ui.PlaceholderScreen
+import com.hasyame.marvelchampions.data.sync.CardSyncState
+import com.hasyame.marvelchampions.domain.model.CardLocale
+import java.text.DateFormat
+import java.util.Date
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsScreen(
+    onOpenCollection: () -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel(),
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    Scaffold(
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.destination_settings)) }) },
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState()),
+        ) {
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_collection)) },
+                supportingContent = {
+                    Text(stringResource(R.string.settings_collection_summary))
+                },
+                modifier = Modifier.clickable(onClick = onOpenCollection),
+            )
+            HorizontalDivider()
+
+            Text(
+                text = stringResource(R.string.settings_card_language),
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier.padding(start = 16.dp, top = 16.dp),
+            )
+            Text(
+                text = stringResource(R.string.settings_card_language_summary),
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+            Row(
+                modifier = Modifier.padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                CardLocale.entries.forEach { locale ->
+                    FilterChip(
+                        selected = state.cardLocale == locale,
+                        onClick = { viewModel.setCardLocale(locale) },
+                        label = {
+                            Text(
+                                when (locale) {
+                                    CardLocale.FRENCH -> stringResource(R.string.language_french)
+                                    CardLocale.ENGLISH -> stringResource(R.string.language_english)
+                                },
+                            )
+                        },
+                    )
+                }
+            }
+            HorizontalDivider()
+
+            CardUpdateSection(
+                state = state,
+                onSync = viewModel::syncCards,
+                onCancel = viewModel::cancelSync,
+            )
+        }
+    }
+}
 
 @Composable
-fun SettingsScreen() {
-    PlaceholderScreen(title = stringResource(R.string.destination_settings))
+private fun CardUpdateSection(
+    state: SettingsUiState,
+    onSync: () -> Unit,
+    onCancel: () -> Unit,
+) {
+    Column(Modifier.padding(16.dp)) {
+        Text(
+            text = stringResource(R.string.settings_update_cards),
+            style = MaterialTheme.typography.titleSmall,
+        )
+        Text(
+            text = state.lastCardSync?.let {
+                stringResource(
+                    R.string.settings_last_sync,
+                    DateFormat.getDateTimeInstance().format(Date(it)),
+                )
+            } ?: stringResource(R.string.settings_never_synced),
+            style = MaterialTheme.typography.bodySmall,
+        )
+
+        when (val sync = state.syncState) {
+            is CardSyncState.Running -> {
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                )
+                Text(
+                    text = syncStepLabel(sync),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                TextButton(onClick = onCancel) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            }
+
+            is CardSyncState.Failed -> {
+                Text(
+                    text = stringResource(
+                        R.string.settings_sync_failed,
+                        sync.message ?: stringResource(R.string.settings_sync_unknown_error),
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error,
+                )
+                Button(onClick = onSync) { Text(stringResource(R.string.settings_update_now)) }
+            }
+
+            is CardSyncState.Cancelled -> {
+                Text(
+                    text = stringResource(R.string.settings_sync_cancelled),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                Button(onClick = onSync) { Text(stringResource(R.string.settings_update_now)) }
+            }
+
+            else -> Button(onClick = onSync) {
+                Text(stringResource(R.string.settings_update_now))
+            }
+        }
+    }
+}
+
+@Composable
+private fun syncStepLabel(running: CardSyncState.Running): String {
+    val locale = running.locale?.uppercase()
+    return when (running.step) {
+        "PACKS" -> stringResource(R.string.settings_sync_step_packs)
+        "DOWNLOADING_CARDS" -> stringResource(R.string.settings_sync_step_downloading, locale ?: "")
+        "STORING_CARDS" -> stringResource(R.string.settings_sync_step_storing, locale ?: "")
+        else -> stringResource(R.string.settings_sync_step_starting)
+    }
 }

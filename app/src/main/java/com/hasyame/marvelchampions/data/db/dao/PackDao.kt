@@ -1,6 +1,7 @@
 package com.hasyame.marvelchampions.data.db.dao
 
 import androidx.room.Dao
+import androidx.room.Embedded
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -9,6 +10,12 @@ import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
 import com.hasyame.marvelchampions.data.db.entity.PackEntity
 import com.hasyame.marvelchampions.data.db.entity.PackTranslationEntity
 import kotlinx.coroutines.flow.Flow
+
+/** A pack with its name resolved for one locale. */
+data class NamedPack(
+    @Embedded val pack: PackEntity,
+    val localizedName: String?,
+)
 
 @Dao
 interface PackDao {
@@ -38,6 +45,24 @@ interface PackDao {
 
     @Query("SELECT * FROM packs ORDER BY wave, position")
     fun observePacks(): Flow<List<PackEntity>>
+
+    /**
+     * Packs with their name in [locale].
+     *
+     * A LEFT JOIN so a pack whose translation is missing still appears — the
+     * newest packs are not translated for months, and hiding them would be
+     * worse than showing an English name.
+     */
+    @Query(
+        """
+        SELECT packs.*, pack_translations.name AS localizedName
+        FROM packs
+        LEFT JOIN pack_translations
+          ON pack_translations.packCode = packs.code AND pack_translations.locale = :locale
+        ORDER BY packs.wave, packs.position
+        """,
+    )
+    fun observeNamedPacks(locale: String): Flow<List<NamedPack>>
 
     @Query("SELECT * FROM packs ORDER BY wave, position")
     suspend fun getPacks(): List<PackEntity>

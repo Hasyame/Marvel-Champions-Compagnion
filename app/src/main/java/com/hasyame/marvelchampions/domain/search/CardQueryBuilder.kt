@@ -1,0 +1,101 @@
+package com.hasyame.marvelchampions.domain.search
+
+import com.hasyame.marvelchampions.domain.model.CardFilter
+import com.hasyame.marvelchampions.domain.model.CardLocale
+
+/** A SQL statement and its bind arguments, ready for Room's raw query support. */
+data class CardQuery(
+    val sql: String,
+    val args: List<Any>,
+)
+
+/**
+ * Builds the card list query.
+ *
+ * This is a raw query rather than a pile of `@Query` methods because the filters
+ * combine freely: seven independent dimensions would otherwise mean either a
+ * combinatorial explosion of methods or a single query with a dozen
+ * `(:x IS NULL OR ...)` guards that SQLite cannot index well.
+ *
+ * It lives in `domain` and returns a value rather than executing anything, so
+ * the filter logic is testable without a database.
+ */
+object CardQueryBuilder {
+
+    fun build(
+        filter: CardFilter,
+        locale: CardLocale,
+        ownedPackCodes: Set<String> = emptySet(),
+        limit: Int = 200,
+        offset: Int = 0,
+    ): CardQuery {
+        val args = mutableListOf<Any>()
+        val where = mutableListOf<String>()
+
+        val matchQuery = SearchNormalizer.toPrefixMatchQuery(filter.query)
+        val from = if (matchQuery != null) {
+            args += matchQuery
+            "cards JOIN cards_fts ON cards_fts.rowid = cards.rowid AND cards_fts MATCH ?"
+        } else {
+            "cards"
+        }
+
+        where += "cards.locale = ?"
+        args += locale.code
+
+        filter.packCodes.addInClause(where, args, "cards.packCode")
+        filter.typeCodes.addInClause(where, args, "cards.typeCode")
+        filter.factionCodes.addInClause(where, args, "cards.factionCode")
+
+        if (filter.ownedOnly) {
+            if (ownedPackCodes.isEmpty()) {
+                // An empty collection with ownedOnly on means no results, which
+                // is correct. Emitting "IN ()" would be a syntax error.
+                where += "0"
+            } else {
+                ownedPackCodes.addInClause(where, args, "cards.packCode")
+            }
+        }
+
+        filter.minCost?.let {
+            where += "cards.cost >= ?"
+            args += it
+        }
+        filter.maxCost?.let {
+            where += "cards.cost <= ?"
+            args += it
+        }
+
+        // Traits are stored as the printed string ("Avenger. Gamma."), so each
+        // selected trait is matched against the normalised copy.
+        filter.traits.forEach { trait ->
+            where += "cards.searchTraits LIKE ?"
+            args += "%${SearchNormalizer.normalize(trait)}%"
+        }
+
+        args += limit
+        args += offset
+
+        val sql = buildString {
+            append("SELECT cards.* FROM ")
+            append(from)
+            append(" WHERE ")
+            append(where.joinToString(" AND "))
+            append(" ORDER BY cards.packCode, cards.position")
+            append(" LIMIT ? OFFSET ?")
+        }
+        return CardQuery(sql, args)
+    }
+
+    private fun Collection<String>.addInClause(
+        where: MutableList<String>,
+        args: MutableList<Any>,
+        column: String,
+    ) {
+        if (isEmpty()) {
+            return
+        }
+        where += "$column IN (${joinToString(",") { "?" }})"
+        args.addAll(this)
+    }
+}

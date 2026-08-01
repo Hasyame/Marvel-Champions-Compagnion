@@ -7,4 +7,85 @@
     <string name="destination_campaign">Campagne</string>
     <string name="destination_randomizer">Aléatoire</string>
     <string name="destination_settings">Réglages</string>
+
+    <!-- Common actions -->
+    <string name="action_back">Retour</string>
+    <string name="action_clear">Effacer</string>
+    <string name="action_cancel">Annuler</string>
+    <string name="action_clear_filters">Réinitialiser les filtres</string>
+
+    <!-- Cards -->
+    <string name="cards_search_hint">Rechercher une carte</string>
+    <string name="cards_filters">Filtres</string>
+    <string name="cards_no_results">Aucune carte ne correspond à votre recherche.</string>
+    <string name="cards_not_found">Carte introuvable.</string>
+    <string name="cards_select_a_card">Sélectionnez une carte pour voir son détail.</string>
+    <string name="cards_database_empty">La base de cartes est vide. Mettez les cartes à jour depuis les réglages.</string>
+    <string name="cards_filter_owned_only">Extensions possédées uniquement</string>
+    <string name="cards_filter_type">Type</string>
+    <string name="cards_filter_aspect">Aspect</string>
+    <string name="cards_filter_cost">Coût</string>
+    <string name="cards_filter_traits">Traits</string>
+    <string name="card_cost_short">%1$d</string>
+    <string name="card_linked_card">Carte liée</string>
+    <string name="card_illustrator">Illustration : %1$s</string>
+    <string name="card_errata">Errata : %1$s</string>
+    <string name="card_stat_cost">Coût</string>
+    <string name="card_stat_attack">ATQ</string>
+    <string name="card_stat_thwart">CTR</string>
+    <string name="card_stat_defense">DEF</string>
+    <string name="card_stat_recover">REC</string>
+    <string name="card_stat_health">PV</string>
+    <string name="card_stat_hand_size">Main</string>
+    <string name="card_stat_scheme">COM</string>
+    <string name="card_stat_boost">Boost</string>
+    <string name="card_stat_threat">Menace</string>
+
+    <!-- Collection -->
+    <string name="collection_title">Ma collection</string>
+    <plurals name="collection_owned_count">
+        <item quantity="one">%1$d extension possédée sur %2$d</item>
+        <item quantity="many">%1$d d\'extensions possédées sur %2$d</item>
+        <item quantity="other">%1$d extensions possédées sur %2$d</item>
+    </plurals>
+    <string name="collection_wave">Vague %1$d</string>
+    <string name="collection_select_all">Tout sélectionner</string>
+    <string name="collection_select_core">Boîte de base</string>
+    <string name="collection_select_hero_packs">Tous les paquets héros</string>
+    <string name="collection_select_scenario_packs">Tous les paquets scénario</string>
+    <string name="collection_select_campaign_boxes">Toutes les boîtes campagne</string>
+    <string name="collection_clear_all">Tout désélectionner</string>
+    <plurals name="collection_partial_pack">
+        <item quantity="one">%1$d carte connue sur %2$d</item>
+        <item quantity="many">%1$d de cartes connues sur %2$d</item>
+        <item quantity="other">%1$d cartes connues sur %2$d</item>
+    </plurals>
+
+    <!-- Pack types -->
+    <string name="pack_type_core">Boîte de base</string>
+    <string name="pack_type_hero">Paquet héros</string>
+    <string name="pack_type_scenario">Paquet scénario</string>
+    <string name="pack_type_campaign_box">Boîte campagne</string>
+    <string name="pack_type_modular_set">Set modulaire</string>
+    <string name="pack_type_unknown">Non classée</string>
+
+    <!-- Settings -->
+    <string name="settings_collection">Ma collection</string>
+    <string name="settings_collection_summary">Choisissez les extensions que vous possédez</string>
+    <string name="settings_card_language">Langue des cartes</string>
+    <string name="settings_card_language_summary">La langue du texte des cartes, indépendante de la langue de l\'application.</string>
+    <string name="settings_update_cards">Mettre à jour les cartes depuis MarvelCDB</string>
+    <string name="settings_update_now">Mettre à jour</string>
+    <string name="settings_last_sync">Dernière mise à jour : %1$s</string>
+    <string name="settings_never_synced">Jamais mise à jour</string>
+    <string name="settings_sync_failed">Échec de la mise à jour : %1$s</string>
+    <string name="settings_sync_unknown_error">erreur inconnue</string>
+    <string name="settings_sync_cancelled">Mise à jour annulée.</string>
+    <string name="settings_sync_step_starting">Démarrage…</string>
+    <string name="settings_sync_step_packs">Mise à jour des extensions…</string>
+    <string name="settings_sync_step_downloading">Téléchargement des cartes (%1$s)…</string>
+    <string name="settings_sync_step_storing">Enregistrement des cartes (%1$s)…</string>
+
+    <string name="language_french">Français</string>
+    <string name="language_english">English</string>
 </resources>

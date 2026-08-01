@@ -7,4 +7,83 @@
     <string name="destination_campaign">Campaign</string>
     <string name="destination_randomizer">Randomizer</string>
     <string name="destination_settings">Settings</string>
+
+    <!-- Common actions -->
+    <string name="action_back">Back</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_clear_filters">Clear filters</string>
+
+    <!-- Cards -->
+    <string name="cards_search_hint">Search cards</string>
+    <string name="cards_filters">Filters</string>
+    <string name="cards_no_results">No card matches your search.</string>
+    <string name="cards_not_found">Card not found.</string>
+    <string name="cards_select_a_card">Select a card to see its details.</string>
+    <string name="cards_database_empty">The card database is empty. Update the cards from Settings.</string>
+    <string name="cards_filter_owned_only">Owned packs only</string>
+    <string name="cards_filter_type">Type</string>
+    <string name="cards_filter_aspect">Aspect</string>
+    <string name="cards_filter_cost">Cost</string>
+    <string name="cards_filter_traits">Traits</string>
+    <string name="card_cost_short">%1$d</string>
+    <string name="card_linked_card">Linked card</string>
+    <string name="card_illustrator">Illustration: %1$s</string>
+    <string name="card_errata">Errata: %1$s</string>
+    <string name="card_stat_cost">Cost</string>
+    <string name="card_stat_attack">ATK</string>
+    <string name="card_stat_thwart">THW</string>
+    <string name="card_stat_defense">DEF</string>
+    <string name="card_stat_recover">REC</string>
+    <string name="card_stat_health">HP</string>
+    <string name="card_stat_hand_size">Hand</string>
+    <string name="card_stat_scheme">SCH</string>
+    <string name="card_stat_boost">Boost</string>
+    <string name="card_stat_threat">Threat</string>
+
+    <!-- Collection -->
+    <string name="collection_title">My collection</string>
+    <plurals name="collection_owned_count">
+        <item quantity="one">%1$d of %2$d pack owned</item>
+        <item quantity="other">%1$d of %2$d packs owned</item>
+    </plurals>
+    <string name="collection_wave">Wave %1$d</string>
+    <string name="collection_select_all">Select all</string>
+    <string name="collection_select_core">Core set</string>
+    <string name="collection_select_hero_packs">All hero packs</string>
+    <string name="collection_select_scenario_packs">All scenario packs</string>
+    <string name="collection_select_campaign_boxes">All campaign boxes</string>
+    <string name="collection_clear_all">Clear all</string>
+    <plurals name="collection_partial_pack">
+        <item quantity="one">%1$d of %2$d card known</item>
+        <item quantity="other">%1$d of %2$d cards known</item>
+    </plurals>
+
+    <!-- Pack types -->
+    <string name="pack_type_core">Core set</string>
+    <string name="pack_type_hero">Hero pack</string>
+    <string name="pack_type_scenario">Scenario pack</string>
+    <string name="pack_type_campaign_box">Campaign box</string>
+    <string name="pack_type_modular_set">Modular set</string>
+    <string name="pack_type_unknown">Uncategorised</string>
+
+    <!-- Settings -->
+    <string name="settings_collection">My collection</string>
+    <string name="settings_collection_summary">Choose the packs you own</string>
+    <string name="settings_card_language">Card language</string>
+    <string name="settings_card_language_summary">The language of card text, independent of the app language.</string>
+    <string name="settings_update_cards">Update cards from MarvelCDB</string>
+    <string name="settings_update_now">Update now</string>
+    <string name="settings_last_sync">Last update: %1$s</string>
+    <string name="settings_never_synced">Never updated</string>
+    <string name="settings_sync_failed">Update failed: %1$s</string>
+    <string name="settings_sync_unknown_error">unknown error</string>
+    <string name="settings_sync_cancelled">Update cancelled.</string>
+    <string name="settings_sync_step_starting">Starting…</string>
+    <string name="settings_sync_step_packs">Updating packs…</string>
+    <string name="settings_sync_step_downloading">Downloading cards (%1$s)…</string>
+    <string name="settings_sync_step_storing">Saving cards (%1$s)…</string>
+
+    <string name="language_french">Français</string>
+    <string name="language_english">English</string>
 </resources>

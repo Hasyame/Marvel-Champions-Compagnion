@@ -16,6 +16,10 @@ data object CardsGraph
 @Serializable
 data object CardsRoute
 
+/** A single card. Reached from the card list on a narrow screen. */
+@Serializable
+data class CardDetailRoute(val code: String)
+
 @Serializable
 data object DecksGraph
 
@@ -39,3 +43,11 @@ data object SettingsGraph
 
 @Serializable
 data object SettingsRoute
+
+/**
+ * The collection. A full screen of its own rather than a section inside the
+ * settings list, because it is the source of truth for the randomiser and for
+ * deck legality.
+ */
+@Serializable
+data object CollectionRoute

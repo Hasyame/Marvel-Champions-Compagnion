@@ -4,7 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RawQuery
 import androidx.room.Transaction
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.hasyame.marvelchampions.data.db.entity.CardEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -75,6 +77,33 @@ interface CardDao {
         """,
     )
     suspend fun search(matchQuery: String, locale: String, limit: Int = 200): List<CardEntity>
+
+    /**
+     * Filtered card list. The statement comes from
+     * [com.hasyame.marvelchampions.domain.search.CardQueryBuilder], which is
+     * the only thing allowed to construct it.
+     */
+    @RawQuery
+    suspend fun queryCards(query: SupportSQLiteQuery): List<CardEntity>
+
+    /** Distinct values for the filter sheet, in the current locale. */
+    @Query("SELECT DISTINCT typeCode FROM cards WHERE locale = :locale ORDER BY typeCode")
+    suspend fun distinctTypeCodes(locale: String): List<String>
+
+    @Query("SELECT DISTINCT factionCode FROM cards WHERE locale = :locale ORDER BY factionCode")
+    suspend fun distinctFactionCodes(locale: String): List<String>
+
+    @Query(
+        """
+        SELECT DISTINCT traits FROM cards
+        WHERE locale = :locale AND traits IS NOT NULL AND traits != ''
+        """,
+    )
+    suspend fun distinctTraitStrings(locale: String): List<String>
+
+    /** Every card of a pack, for the "cards I am missing" view later on. */
+    @Query("SELECT * FROM cards WHERE packCode = :packCode AND locale = :locale ORDER BY position")
+    suspend fun getPackCards(packCode: String, locale: String): List<CardEntity>
 
     /** Cards of a set, used to resolve a scenario's encounter sets. */
     @Query(

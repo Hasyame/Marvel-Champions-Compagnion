@@ -4,6 +4,7 @@ import com.hasyame.marvelchampions.data.db.dao.OwnedPackDao
 import com.hasyame.marvelchampions.data.db.dao.PackDao
 import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
 import com.hasyame.marvelchampions.data.db.entity.PackEntity
+import com.hasyame.marvelchampions.domain.model.CardLocale
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -14,6 +15,8 @@ import javax.inject.Singleton
 data class PackOwnership(
     val pack: PackEntity,
     val quantity: Int,
+    /** Falls back to the pack code when no translation exists yet. */
+    val name: String,
 ) {
     val isOwned: Boolean get() = quantity > 0
 }
@@ -28,10 +31,19 @@ class CollectionRepository @Inject constructor(
     private val ownedPackDao: OwnedPackDao,
 ) {
 
-    fun observeCollection(): Flow<List<PackOwnership>> =
-        combine(packDao.observePacks(), ownedPackDao.observeOwned()) { packs, owned ->
+    fun observeCollection(locale: CardLocale): Flow<List<PackOwnership>> =
+        combine(
+            packDao.observeNamedPacks(locale.code),
+            ownedPackDao.observeOwned(),
+        ) { packs, owned ->
             val quantities = owned.associate { it.packCode to it.quantity }
-            packs.map { PackOwnership(pack = it, quantity = quantities[it.code] ?: 0) }
+            packs.map { named ->
+                PackOwnership(
+                    pack = named.pack,
+                    quantity = quantities[named.pack.code] ?: 0,
+                    name = named.localizedName ?: named.pack.code,
+                )
+            }
         }
 
     fun observeOwnedCodes(): Flow<Set<String>> =
