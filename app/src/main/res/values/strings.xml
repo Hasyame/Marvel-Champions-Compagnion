@@ -173,6 +173,10 @@
     <string name="campaign_no_questions">Nothing to record for this outcome.</string>
     <string name="campaign_card_list_hint">Card names separated by commas.</string>
     <string name="campaign_unknown_prompt">Unsupported question type “%1$s” in the template.</string>
+    <string name="campaign_defeat_recorded">Defeat recorded</string>
+    <string name="campaign_defeat_choice">Replay this scenario now, or take a break and come back to it later? The loss stays in the log either way.</string>
+    <string name="campaign_replay_now">Replay now</string>
+    <string name="campaign_take_a_break">Take a break</string>
 
     <!-- Deck builder -->
     <string name="decks_new">New deck</string>

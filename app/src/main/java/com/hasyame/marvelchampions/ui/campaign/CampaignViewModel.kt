@@ -104,6 +104,8 @@ data class CampaignRunUiState(
     val run: CampaignRun? = null,
     val elapsedMillis: Long = 0,
     val isLoading: Boolean = true,
+    /** Set after a loss, to offer replaying now or stepping away. */
+    val showDefeatChoice: Boolean = false,
 )
 
 @HiltViewModel
@@ -125,7 +127,7 @@ class CampaignRunViewModel @Inject constructor(
     private suspend fun reload() {
         val id = runId ?: return
         val run = repository.load(id, preferences.currentCardLocale())
-        state.value = CampaignRunUiState(
+        state.value = state.value.copy(
             run = run,
             elapsedMillis = run?.timer?.elapsedAt(System.currentTimeMillis()) ?: 0,
             isLoading = false,
@@ -172,10 +174,19 @@ class CampaignRunViewModel @Inject constructor(
                     elapsedMillis = run.timer.elapsedAt(System.currentTimeMillis()),
                 ),
             )
+            // The timer is zeroed either way: a win moves on, a loss replays
+            // this scenario from scratch. The loss is still in the log.
             repository.updateTimer(id, TimerState(), scenarioId)
             reload()
             state.value.run?.state?.finished?.let { repository.markFinished(id, it) }
+            if (!victory) {
+                state.value = state.value.copy(showDefeatChoice = true)
+            }
         }
+    }
+
+    fun dismissDefeatChoice() {
+        state.value = state.value.copy(showDefeatChoice = false)
     }
 
     fun purchase(heroId: String, cardCode: String, cost: Int, cardListId: String) {

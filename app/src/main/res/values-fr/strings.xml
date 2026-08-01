@@ -177,6 +177,10 @@
     <string name="campaign_no_questions">Rien à enregistrer pour ce résultat.</string>
     <string name="campaign_card_list_hint">Noms de cartes séparés par des virgules.</string>
     <string name="campaign_unknown_prompt">Type de question « %1$s » non pris en charge dans le modèle.</string>
+    <string name="campaign_defeat_recorded">Défaite enregistrée</string>
+    <string name="campaign_defeat_choice">Rejouer ce scénario maintenant, ou faire une pause et y revenir plus tard ? La défaite reste dans le journal dans les deux cas.</string>
+    <string name="campaign_replay_now">Rejouer maintenant</string>
+    <string name="campaign_take_a_break">Faire une pause</string>
 
     <!-- Deck builder -->
     <string name="decks_new">Nouveau deck</string>

@@ -108,6 +108,35 @@ class MarketRulesTest {
     }
 
     @Test
+    fun `a hero may keep buying until the credits run out`() {
+        // "You may repeat this process as many times as you wish (until you
+        // have no units remaining)" — there is no per-scenario purchase limit.
+        val first = CampaignEvent.MarketPurchase("e3", 4, "h1", "m1", 2, "purchases")
+        val second = CampaignEvent.MarketPurchase("e4", 5, "h1", "m2", 5, "purchases")
+        val state = stateWithCredits(h1 = 7, h2 = 0, extra = listOf(first, second))
+
+        assertEquals(0, state.heroCounter("credits", "h1"))
+        assertEquals(listOf("m1", "m2"), state.heroCards("purchases", "h1"))
+    }
+
+    @Test
+    fun `market cards live on the run, not in the deck, so they never affect deck size`() {
+        // "Cards added to a player's deck this way do not count toward that
+        // player's minimum or maximum deck size." That holds by construction: a
+        // purchase writes to the campaign run's hero card list and never
+        // touches the saved deck's slots, which are what the deck validator
+        // counts. Breaking that would mean a campaign silently invalidating a
+        // legal deck.
+        val bought = CampaignEvent.MarketPurchase("e3", 4, "h1", "m1", 2, "purchases")
+        val state = stateWithCredits(h1 = 9, h2 = 9, extra = listOf(bought))
+
+        assertEquals(listOf("m1"), state.heroCards("purchases", "h1"))
+        assertEquals(1, state.purchases.size)
+        // Nothing deck-shaped exists in campaign state at all.
+        assertTrue(state.cardLists["purchases"].isNullOrEmpty())
+    }
+
+    @Test
     fun `a purchased card joins that hero's list only`() {
         val bought = CampaignEvent.MarketPurchase(
             id = "e3", timestamp = 4, heroId = "h1",

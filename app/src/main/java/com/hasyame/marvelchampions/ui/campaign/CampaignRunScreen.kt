@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -24,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -102,6 +104,33 @@ fun CampaignRunScreen(
                 onFinishScenario = { questionnaireVictory = it },
             )
         }
+    }
+
+    // A defeat leaves the run on the same scenario with the timer zeroed, so
+    // both options the campaign offers are one tap away: replay now, or step
+    // away and come back to this scenario later.
+    if (state.showDefeatChoice) {
+        AlertDialog(
+            onDismissRequest = viewModel::dismissDefeatChoice,
+            title = { Text(stringResource(R.string.campaign_defeat_recorded)) },
+            text = { Text(stringResource(R.string.campaign_defeat_choice)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.dismissDefeatChoice()
+                        viewModel.startTimer()
+                    },
+                ) { Text(stringResource(R.string.campaign_replay_now)) }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.dismissDefeatChoice()
+                        onBack()
+                    },
+                ) { Text(stringResource(R.string.campaign_take_a_break)) }
+            },
+        )
     }
 
     val run = state.run
