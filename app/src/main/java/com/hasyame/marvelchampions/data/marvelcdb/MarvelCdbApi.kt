@@ -2,6 +2,8 @@ package com.hasyame.marvelchampions.data.marvelcdb
 
 import com.hasyame.marvelchampions.data.marvelcdb.dto.CardDto
 import com.hasyame.marvelchampions.data.marvelcdb.dto.PackDto
+import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -46,4 +48,20 @@ interface MarvelCdbApi {
 
     @GET
     suspend fun getPacksAt(@Url url: String): List<PackDto>
+
+    /**
+     * Fetches a deck as a raw response.
+     *
+     * Deliberately not typed as `DeckDto`: MarvelCDB signals both failure modes
+     * without an error status, and a typed converter would turn them into
+     * unhelpful parse exceptions.
+     *
+     * - A decklist that does not exist returns **200 with an empty body**.
+     * - A deck that is private or missing **302s to /login**, so with redirects
+     *   followed we get 200 and a page of HTML.
+     *
+     * `DeckRepository` inspects the response for both.
+     */
+    @GET
+    suspend fun getDeckRaw(@Url url: String): Response<ResponseBody>
 }

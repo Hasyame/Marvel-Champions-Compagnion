@@ -20,10 +20,42 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.MarvelChampionsCompanion">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!--
+              Share target. A browser sharing a marvelcdb.com page sends plain
+              text, so the link is pulled out of whatever text arrives.
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <!--
+              Opening a marvelcdb.com deck link directly. Not autoVerify: that
+              would need a Digital Asset Links file hosted on marvelcdb.com,
+              which is not ours, so Android shows the app chooser instead.
+            -->
+            <intent-filter android:autoVerify="false">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!--
+                  Attributes combine as a cross product, so these separate tags
+                  cover every host and path pair.
+                -->
+                <data android:scheme="https" />
+                <data android:host="marvelcdb.com" />
+                <data android:host="www.marvelcdb.com" />
+                <data android:host="fr.marvelcdb.com" />
+                <data android:pathPrefix="/decklist/view" />
+                <data android:pathPrefix="/deck/view" />
             </intent-filter>
         </activity>
 

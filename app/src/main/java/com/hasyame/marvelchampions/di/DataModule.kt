@@ -7,6 +7,7 @@ import com.hasyame.marvelchampions.data.db.dao.CardDao
 import com.hasyame.marvelchampions.data.db.dao.OwnedPackDao
 import com.hasyame.marvelchampions.data.db.dao.PackDao
 import com.hasyame.marvelchampions.data.db.dao.RandomizerHistoryDao
+import com.hasyame.marvelchampions.data.db.dao.SavedDeckDao
 import com.hasyame.marvelchampions.data.marvelcdb.MarvelCdbApi
 import com.hasyame.marvelchampions.data.marvelcdb.MarvelCdbUrls
 import dagger.Module
@@ -84,4 +85,8 @@ object DataModule {
     @Provides
     fun provideRandomizerHistoryDao(database: MarvelChampionsDatabase): RandomizerHistoryDao =
         database.randomizerHistoryDao()
+
+    @Provides
+    fun provideSavedDeckDao(database: MarvelChampionsDatabase): SavedDeckDao =
+        database.savedDeckDao()
 }

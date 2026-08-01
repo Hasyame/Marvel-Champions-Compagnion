@@ -26,6 +26,10 @@ data object DecksGraph
 @Serializable
 data object DecksRoute
 
+/** One imported deck. */
+@Serializable
+data class DeckDetailRoute(val deckId: String)
+
 @Serializable
 data object CampaignGraph
 

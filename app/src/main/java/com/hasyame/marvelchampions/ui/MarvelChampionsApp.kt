@@ -18,6 +18,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.hasyame.marvelchampions.ui.navigation.CardsGraph
 import com.hasyame.marvelchampions.ui.navigation.CollectionRoute
+import com.hasyame.marvelchampions.ui.navigation.DecksGraph
 import com.hasyame.marvelchampions.ui.navigation.MarvelChampionsNavHost
 import com.hasyame.marvelchampions.ui.navigation.SettingsGraph
 import com.hasyame.marvelchampions.ui.navigation.TopLevelDestination
@@ -29,7 +30,12 @@ import com.hasyame.marvelchampions.ui.navigation.navigateToTopLevelDestination
  * class on its own: a bottom bar on a phone, a rail on the tablet.
  */
 @Composable
-fun MarvelChampionsApp(viewModel: AppStartViewModel = hiltViewModel()) {
+fun MarvelChampionsApp(
+    /** A MarvelCDB link shared into the app, if it was launched by a share. */
+    sharedLink: String? = null,
+    onSharedLinkHandled: () -> Unit = {},
+    viewModel: AppStartViewModel = hiltViewModel(),
+) {
     val startupState by viewModel.startupState.collectAsStateWithLifecycle()
 
     when (val startup = startupState) {
@@ -38,12 +44,22 @@ fun MarvelChampionsApp(viewModel: AppStartViewModel = hiltViewModel()) {
             contentAlignment = Alignment.Center,
         ) { CircularProgressIndicator() }
 
-        is StartupState.Ready -> AppContent(openCollectionFirst = startup.openCollectionFirst)
+        is StartupState.Ready -> AppContent(
+            // A shared deck link wins over the first-run collection prompt:
+            // the user asked for something specific.
+            openCollectionFirst = startup.openCollectionFirst && sharedLink.isNullOrBlank(),
+            sharedLink = sharedLink,
+            onSharedLinkHandled = onSharedLinkHandled,
+        )
     }
 }
 
 @Composable
-private fun AppContent(openCollectionFirst: Boolean) {
+private fun AppContent(
+    openCollectionFirst: Boolean,
+    sharedLink: String?,
+    onSharedLinkHandled: () -> Unit,
+) {
     val navController = rememberNavController()
     val currentDestination by navController.currentBackStackEntryAsState()
 
@@ -77,7 +93,13 @@ private fun AppContent(openCollectionFirst: Boolean) {
     ) {
         MarvelChampionsNavHost(
             navController = navController,
-            startDestination = if (openCollectionFirst) SettingsGraph else CardsGraph,
+            startDestination = when {
+                sharedLink != null -> DecksGraph
+                openCollectionFirst -> SettingsGraph
+                else -> CardsGraph
+            },
+            sharedLink = sharedLink,
+            onSharedLinkHandled = onSharedLinkHandled,
         )
     }
 }

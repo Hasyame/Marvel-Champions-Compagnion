@@ -118,4 +118,33 @@
     <string name="aspect_leadership">Leadership</string>
     <string name="aspect_protection">Protection</string>
     <string name="aspect_pool">\'Pool</string>
+
+    <!-- Decks -->
+    <string name="decks_add">Add a deck</string>
+    <string name="decks_import">Import</string>
+    <string name="decks_paste_url">MarvelCDB link</string>
+    <string name="decks_paste_url_hint">Paste a decklist link, or share one from your browser.</string>
+    <string name="decks_empty">No deck yet. Import one from MarvelCDB with the + button.</string>
+    <string name="decks_not_found">Deck not found.</string>
+    <string name="decks_refresh">Refresh from MarvelCDB</string>
+    <string name="decks_hero">Hero</string>
+    <string name="decks_import_failed">Import failed</string>
+    <string name="decks_card_missing">%1$s — not in your collection</string>
+    <plurals name="decks_unknown_cards">
+        <item quantity="one">%1$d card in this deck is not in the local database. Update the cards from Settings.</item>
+        <item quantity="other">%1$d cards in this deck are not in the local database. Update the cards from Settings.</item>
+    </plurals>
+    <string name="decks_error_not_a_link">That is not a MarvelCDB deck link. Expected something like marvelcdb.com/decklist/view/12345.</string>
+    <string name="decks_error_not_found">MarvelCDB has no decklist with that number.</string>
+    <string name="decks_error_not_shared">This deck is private, or it does not exist. Its owner has to enable “Share your decks” in their MarvelCDB settings before it can be imported.</string>
+    <string name="decks_error_network">Could not reach MarvelCDB. Check your connection and try again.</string>
+    <string name="decks_error_unexpected">Unexpected error: %1$s</string>
+    <plurals name="decks_card_count">
+        <item quantity="one">%1$d card</item>
+        <item quantity="other">%1$d cards</item>
+    </plurals>
+    <plurals name="decks_missing_count">
+        <item quantity="one">%1$d card is missing from your collection</item>
+        <item quantity="other">%1$d cards are missing from your collection</item>
+    </plurals>
 </resources>

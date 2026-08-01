@@ -11,6 +11,7 @@ import com.hasyame.marvelchampions.ui.campaign.CampaignScreen
 import com.hasyame.marvelchampions.ui.cards.CardDetailScreen
 import com.hasyame.marvelchampions.ui.cards.CardsScreen
 import com.hasyame.marvelchampions.ui.collection.CollectionScreen
+import com.hasyame.marvelchampions.ui.decks.DeckDetailScreen
 import com.hasyame.marvelchampions.ui.decks.DecksScreen
 import com.hasyame.marvelchampions.ui.randomizer.RandomizerScreen
 import com.hasyame.marvelchampions.ui.settings.SettingsScreen
@@ -20,6 +21,8 @@ fun MarvelChampionsNavHost(
     navController: NavHostController,
     startDestination: Any,
     modifier: Modifier = Modifier,
+    sharedLink: String? = null,
+    onSharedLinkHandled: () -> Unit = {},
 ) {
     NavHost(
         navController = navController,
@@ -40,7 +43,28 @@ fun MarvelChampionsNavHost(
             }
         }
         navigation<DecksGraph>(startDestination = DecksRoute) {
-            composable<DecksRoute> { DecksScreen() }
+            composable<DecksRoute> {
+                DecksScreen(
+                    onDeckClick = { deckId -> navController.navigate(DeckDetailRoute(deckId)) },
+                    sharedLink = sharedLink,
+                    onSharedLinkHandled = onSharedLinkHandled,
+                )
+            }
+            composable<DeckDetailRoute> { entry ->
+                DeckDetailScreen(
+                    deckId = entry.toRoute<DeckDetailRoute>().deckId,
+                    onBack = { navController.popBackStack() },
+                    onCardClick = { code -> navController.navigate(CardDetailRoute(code)) },
+                )
+            }
+            // A card opened from a deck belongs to the Decks back stack, so it
+            // is registered here too rather than jumping the user to Cards.
+            composable<CardDetailRoute> { entry ->
+                CardDetailScreen(
+                    code = entry.toRoute<CardDetailRoute>().code,
+                    onBack = { navController.popBackStack() },
+                )
+            }
         }
         navigation<CampaignGraph>(startDestination = CampaignRoute) {
             composable<CampaignRoute> { CampaignScreen() }

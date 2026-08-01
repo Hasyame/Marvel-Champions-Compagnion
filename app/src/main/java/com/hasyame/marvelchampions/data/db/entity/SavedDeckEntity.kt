@@ -1,0 +1,35 @@
+package com.hasyame.marvelchampions.data.db.entity
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+/**
+ * A deck imported from MarvelCDB.
+ *
+ * User-owned state: it travels in the cross-device export bundle.
+ *
+ * [rawJson] keeps the untouched API response. A campaign that grants cards
+ * stores its additions as a separate diff, so this row stays the source of
+ * truth and can always be re-derived without another fetch.
+ */
+@Entity(tableName = "saved_decks")
+data class SavedDeckEntity(
+    /** `decklist-12345` or `deck-12345`; the two id spaces are separate. */
+    @PrimaryKey val id: String,
+    val marvelCdbId: Long,
+    val kind: String,
+    val url: String,
+    val name: String,
+    val heroCode: String,
+    val heroName: String,
+    /** Comma separated aspect codes; a deck can have two. */
+    val aspects: String,
+    /** `cardCode=quantity` pairs, comma separated. */
+    val slots: String,
+    val ignoreDeckLimitSlots: String,
+    val descriptionMd: String?,
+    val version: String?,
+    val tags: String?,
+    val rawJson: String,
+    val lastSyncedAt: Long,
+)

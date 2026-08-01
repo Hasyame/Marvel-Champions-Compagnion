@@ -7,12 +7,14 @@ import com.hasyame.marvelchampions.data.db.dao.CardDao
 import com.hasyame.marvelchampions.data.db.dao.OwnedPackDao
 import com.hasyame.marvelchampions.data.db.dao.PackDao
 import com.hasyame.marvelchampions.data.db.dao.RandomizerHistoryDao
+import com.hasyame.marvelchampions.data.db.dao.SavedDeckDao
 import com.hasyame.marvelchampions.data.db.entity.CardEntity
 import com.hasyame.marvelchampions.data.db.entity.CardFtsEntity
 import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
 import com.hasyame.marvelchampions.data.db.entity.PackEntity
 import com.hasyame.marvelchampions.data.db.entity.PackTranslationEntity
 import com.hasyame.marvelchampions.data.db.entity.RandomizerHistoryEntity
+import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
 
 /**
  * Note that this database holds two very different kinds of data:
@@ -33,19 +35,24 @@ import com.hasyame.marvelchampions.data.db.entity.RandomizerHistoryEntity
         PackTranslationEntity::class,
         OwnedPackEntity::class,
         RandomizerHistoryEntity::class,
+        SavedDeckEntity::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = true,
-    // Version 2 only adds randomizer_history, so Room can generate the
-    // migration from the exported schemas. Anything that alters an existing
-    // table needs a handwritten migration instead.
-    autoMigrations = [AutoMigration(from = 1, to = 2)],
+    // Both migrations so far only add a table, so Room can generate them from
+    // the exported schemas. Anything that alters an existing table needs a
+    // handwritten migration instead.
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+        AutoMigration(from = 2, to = 3),
+    ],
 )
 abstract class MarvelChampionsDatabase : RoomDatabase() {
     abstract fun cardDao(): CardDao
     abstract fun packDao(): PackDao
     abstract fun ownedPackDao(): OwnedPackDao
     abstract fun randomizerHistoryDao(): RandomizerHistoryDao
+    abstract fun savedDeckDao(): SavedDeckDao
 
     companion object {
         const val NAME: String = "marvelchampions.db"

@@ -120,4 +120,36 @@
     <string name="aspect_leadership">Commandement</string>
     <string name="aspect_protection">Protection</string>
     <string name="aspect_pool">\'Pool</string>
+
+    <!-- Decks -->
+    <string name="decks_add">Ajouter un deck</string>
+    <string name="decks_import">Importer</string>
+    <string name="decks_paste_url">Lien MarvelCDB</string>
+    <string name="decks_paste_url_hint">Collez un lien de deck, ou partagez-en un depuis votre navigateur.</string>
+    <string name="decks_empty">Aucun deck pour l\'instant. Importez-en un depuis MarvelCDB avec le bouton +.</string>
+    <string name="decks_not_found">Deck introuvable.</string>
+    <string name="decks_refresh">Actualiser depuis MarvelCDB</string>
+    <string name="decks_hero">Héros</string>
+    <string name="decks_import_failed">Échec de l\'import</string>
+    <string name="decks_card_missing">%1$s — absent de votre collection</string>
+    <plurals name="decks_unknown_cards">
+        <item quantity="one">%1$d carte de ce deck est absente de la base locale. Mettez les cartes à jour depuis les réglages.</item>
+        <item quantity="many">%1$d de cartes de ce deck sont absentes de la base locale. Mettez les cartes à jour depuis les réglages.</item>
+        <item quantity="other">%1$d cartes de ce deck sont absentes de la base locale. Mettez les cartes à jour depuis les réglages.</item>
+    </plurals>
+    <string name="decks_error_not_a_link">Ce n\'est pas un lien de deck MarvelCDB. Attendu quelque chose comme marvelcdb.com/decklist/view/12345.</string>
+    <string name="decks_error_not_found">MarvelCDB n\'a aucun deck publié portant ce numéro.</string>
+    <string name="decks_error_not_shared">Ce deck est privé, ou il n\'existe pas. Son propriétaire doit activer « Share your decks » dans ses réglages MarvelCDB pour permettre l\'import.</string>
+    <string name="decks_error_network">Impossible de joindre MarvelCDB. Vérifiez votre connexion et réessayez.</string>
+    <string name="decks_error_unexpected">Erreur inattendue : %1$s</string>
+    <plurals name="decks_card_count">
+        <item quantity="one">%1$d carte</item>
+        <item quantity="many">%1$d de cartes</item>
+        <item quantity="other">%1$d cartes</item>
+    </plurals>
+    <plurals name="decks_missing_count">
+        <item quantity="one">%1$d carte absente de votre collection</item>
+        <item quantity="many">%1$d de cartes absentes de votre collection</item>
+        <item quantity="other">%1$d cartes absentes de votre collection</item>
+    </plurals>
 </resources>
