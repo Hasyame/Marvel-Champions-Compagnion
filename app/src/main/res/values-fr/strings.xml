@@ -88,4 +88,36 @@
 
     <string name="language_french">Français</string>
     <string name="language_english">English</string>
+
+    <!-- Randomizer -->
+    <string name="randomizer_roll">Tirer</string>
+    <string name="randomizer_save_draw">Enregistrer ce tirage</string>
+    <string name="randomizer_scenario">Scénario</string>
+    <string name="randomizer_difficulty">Difficulté</string>
+    <string name="randomizer_modular_sets">Sets modulaires</string>
+    <string name="randomizer_players">Joueurs</string>
+    <string name="randomizer_heroes">Héros</string>
+    <string name="randomizer_aspects">Aspects</string>
+    <string name="randomizer_none">—</string>
+    <string name="randomizer_lock">Verrouiller</string>
+    <string name="randomizer_unlock">Déverrouiller</string>
+    <string name="randomizer_reroll">Relancer</string>
+    <string name="randomizer_history">Historique</string>
+    <string name="randomizer_beaten">Battu</string>
+    <string name="randomizer_exclude_beaten">Exclure les scénarios déjà battus</string>
+    <string name="randomizer_excluded_aspects">Aspects exclus</string>
+    <string name="randomizer_no_packs">Sélectionnez vos extensions dans les réglages avant de tirer.</string>
+    <string name="randomizer_needs_review">La mise en place de ce scénario n\'a pas pu être lue automatiquement. Vérifiez la carte du scénario.</string>
+    <string name="action_delete">Supprimer</string>
+
+    <string name="difficulty_standard_i">Standard I</string>
+    <string name="difficulty_standard_ii">Standard II</string>
+    <string name="difficulty_expert_i">Expert I</string>
+    <string name="difficulty_expert_ii">Expert II</string>
+
+    <string name="aspect_aggression">Agressivité</string>
+    <string name="aspect_justice">Justice</string>
+    <string name="aspect_leadership">Commandement</string>
+    <string name="aspect_protection">Protection</string>
+    <string name="aspect_pool">\'Pool</string>
 </resources>

@@ -138,10 +138,47 @@ and is marked `waveInferred`. These are the entries most likely to be wrong.
 
 ### Scenario to required-modular-set relationships
 
-Not exposed. This is the curated file that F2 (randomiser) depends on. Cards do
-expose `card_set_type_name_code` with values `hero`, `hero_special`, `leader`,
-`modular`, `villain`, which identifies *which* sets are modular but not *which
-scenario requires which*.
+Not exposed as a field — **but it is written on the scenario's main scheme
+card**, in the `Contents:` paragraph of `back_text`:
+
+> Contents: … Rhino and Standard encounter sets. One modular encounter set
+> (recommended: Bomb Scare).
+
+`tools/generate-scenario-rules.mjs` parses that into
+`app/src/main/assets/scenario_rules.json`. Only structured references are
+written out — set codes, counts and flags, never the prose — so nothing there
+republishes card text. Names come from the card database at runtime, already
+localised.
+
+Two things the parser depends on:
+
+- The word is separated from the colon by markup: the raw field is
+  `<b>Contents</b>:`, so **strip HTML before matching**, or a `Contents\s*:`
+  regex silently matches nothing.
+- A bare parenthetical names **mandatory** sets. One beginning `recommended:` is
+  only a printed suggestion, so those sets stay in the random pool.
+
+Coverage on 2026-08-01: 58 scenarios, **49 parsed cleanly, 9 flagged
+`needsReview`** rather than guessed. Only one of the nine (`sinister_six`) is in
+a pack the collection currently owns, and it genuinely uses no modular set.
+
+Counts are not always small: The Hood asks for **seven** modular sets.
+
+### Card sets are derivable, so only the relationship needs a file
+
+`card_set_type_name_code` takes the values `hero`, `hero_special`, `leader`,
+`modular`, `villain`, `nemesis`, `standard`, `expert`, `evidence`,
+`main_scheme`. That is enough to derive the scenario list, the modular set list
+and the hero list at runtime, filtered by owned packs — no curation needed for
+any of them.
+
+Difficulty sets present: `standard`, `standard_ii`, `standard_iii`,
+`standard_pvp`, `expert`, `expert_ii`.
+
+Aspects are the primary factions: `aggression`, `justice`, `leadership`,
+`protection`, `pool`, plus `basic` which is not a chosen aspect. **`pool` is
+Deadpool-only** — 34 cards, all in the `deadpool` pack — so the randomiser
+must never offer it to another hero.
 
 ## Packs not in MarvelCDB
 

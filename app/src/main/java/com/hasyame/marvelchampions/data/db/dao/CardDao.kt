@@ -16,6 +16,13 @@ import kotlinx.coroutines.flow.Flow
  */
 private const val INSERT_CHUNK_SIZE = 200
 
+/** A card set or hero, with its name in the requested locale. */
+data class CardSetSummary(
+    val code: String,
+    val name: String?,
+    val packCode: String,
+)
+
 @Dao
 interface CardDao {
 
@@ -104,6 +111,44 @@ interface CardDao {
     /** Every card of a pack, for the "cards I am missing" view later on. */
     @Query("SELECT * FROM cards WHERE packCode = :packCode AND locale = :locale ORDER BY position")
     suspend fun getPackCards(packCode: String, locale: String): List<CardEntity>
+
+    /**
+     * Distinct card sets of one kind (`villain`, `modular`, `hero`), with their
+     * localised name and owning pack.
+     *
+     * This is what lets the randomiser build its pools without a second curated
+     * file: which scenarios and modular sets exist is already in the card data.
+     */
+    @Query(
+        """
+        SELECT cardSetCode AS code,
+               MIN(cardSetName) AS name,
+               MIN(packCode) AS packCode
+        FROM cards
+        WHERE locale = :locale
+          AND cardSetTypeNameCode = :setType
+          AND cardSetCode IS NOT NULL
+        GROUP BY cardSetCode
+        ORDER BY name
+        """,
+    )
+    suspend fun getCardSets(setType: String, locale: String): List<CardSetSummary>
+
+    /** Hero identities, which are cards rather than sets. */
+    @Query(
+        """
+        SELECT cardSetCode AS code,
+               MIN(name) AS name,
+               MIN(packCode) AS packCode
+        FROM cards
+        WHERE locale = :locale
+          AND typeCode = 'hero'
+          AND cardSetCode IS NOT NULL
+        GROUP BY cardSetCode
+        ORDER BY name
+        """,
+    )
+    suspend fun getHeroes(locale: String): List<CardSetSummary>
 
     /** Cards of a set, used to resolve a scenario's encounter sets. */
     @Query(

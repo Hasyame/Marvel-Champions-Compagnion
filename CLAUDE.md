@@ -120,6 +120,23 @@ the mapping before committing it. A pack that MarvelCDB has not entered yet has
 no code at all — `owned_packs` deliberately has no foreign key so the collection
 can still hold it.
 
+## How to add a scenario
+
+You do not. Scenarios, modular sets and heroes are derived from the card
+database at runtime, so a new pack appears as soon as the cards sync.
+
+What does need regenerating is the scenario-to-modular-set relationship:
+
+```bash
+node tools/generate-scenario-rules.mjs
+```
+
+That rewrites `app/src/main/assets/scenario_rules.json` by parsing the
+`Contents:` paragraph off each scenario's main scheme card, and prints anything
+it could not resolve. Entries it cannot parse are written with
+`"needsReview": true` and surfaced in the app — **never guessed**. Then bump the
+expected scenario count in `ScenarioRulesAssetTest`.
+
 ## How to add a campaign
 
 Campaign templates are **data, not assets**. They contain verbatim campaign book
@@ -137,7 +154,7 @@ if the same shape appears twice, it belongs in the schema instead.
 1. ✅ Skeleton — Gradle, Hilt, Compose, five-tab navigation, CI
 2. ✅ Data layer — Room, MarvelCDB client, sync, asset seeding, FTS
 3. ✅ F5 card search + F1 collection
-4. F2 randomiser
+4. ✅ F2 randomiser
 5. F4 decklists — 5a import and share target, 5b in-app deck builder
 6. F3 campaign engine + Galaxy's Most Wanted
 7. Polish

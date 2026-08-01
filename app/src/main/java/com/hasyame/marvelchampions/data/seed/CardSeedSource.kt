@@ -4,6 +4,7 @@ import android.content.Context
 import com.hasyame.marvelchampions.data.marvelcdb.dto.CardDto
 import com.hasyame.marvelchampions.data.marvelcdb.dto.PackDto
 import com.hasyame.marvelchampions.data.marvelcdb.dto.PackMetadataFileDto
+import com.hasyame.marvelchampions.data.marvelcdb.dto.ScenarioRulesFileDto
 import com.hasyame.marvelchampions.domain.model.CardLocale
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -71,6 +72,17 @@ class CardSeedSource @Inject constructor(
         false
     }
 
+    /**
+     * Scenario setup rules for the randomiser. Committed, like the pack
+     * metadata: it holds only set codes and counts, never card text.
+     */
+    suspend fun readScenarioRules(): ScenarioRulesFileDto = withContext(ioDispatcher) {
+        context.assets.open(SCENARIO_RULES_ASSET).use { stream ->
+            @Suppress("OPT_IN_USAGE")
+            json.decodeFromStream<ScenarioRulesFileDto>(stream)
+        }
+    }
+
     private fun cardsAsset(locale: CardLocale) = "$SEED_DIR/cards_${locale.code}.json"
 
     private fun packsAsset(locale: CardLocale) = "$SEED_DIR/packs_${locale.code}.json"
@@ -78,5 +90,6 @@ class CardSeedSource @Inject constructor(
     private companion object {
         const val SEED_DIR = "seed"
         const val PACK_METADATA_ASSET = "pack_metadata.json"
+        const val SCENARIO_RULES_ASSET = "scenario_rules.json"
     }
 }

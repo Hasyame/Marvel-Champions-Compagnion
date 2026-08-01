@@ -86,4 +86,36 @@
 
     <string name="language_french">Français</string>
     <string name="language_english">English</string>
+
+    <!-- Randomizer -->
+    <string name="randomizer_roll">Roll</string>
+    <string name="randomizer_save_draw">Save this draw</string>
+    <string name="randomizer_scenario">Scenario</string>
+    <string name="randomizer_difficulty">Difficulty</string>
+    <string name="randomizer_modular_sets">Modular sets</string>
+    <string name="randomizer_players">Players</string>
+    <string name="randomizer_heroes">Heroes</string>
+    <string name="randomizer_aspects">Aspects</string>
+    <string name="randomizer_none">—</string>
+    <string name="randomizer_lock">Lock</string>
+    <string name="randomizer_unlock">Unlock</string>
+    <string name="randomizer_reroll">Reroll</string>
+    <string name="randomizer_history">History</string>
+    <string name="randomizer_beaten">Beaten</string>
+    <string name="randomizer_exclude_beaten">Exclude scenarios I have beaten</string>
+    <string name="randomizer_excluded_aspects">Excluded aspects</string>
+    <string name="randomizer_no_packs">Select the packs you own in Settings before rolling.</string>
+    <string name="randomizer_needs_review">The setup for this scenario could not be read automatically. Check the scenario card.</string>
+    <string name="action_delete">Delete</string>
+
+    <string name="difficulty_standard_i">Standard I</string>
+    <string name="difficulty_standard_ii">Standard II</string>
+    <string name="difficulty_expert_i">Expert I</string>
+    <string name="difficulty_expert_ii">Expert II</string>
+
+    <string name="aspect_aggression">Aggression</string>
+    <string name="aspect_justice">Justice</string>
+    <string name="aspect_leadership">Leadership</string>
+    <string name="aspect_protection">Protection</string>
+    <string name="aspect_pool">\'Pool</string>
 </resources>
