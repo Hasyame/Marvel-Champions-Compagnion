@@ -12,7 +12,9 @@ import com.hasyame.marvelchampions.ui.cards.CardDetailScreen
 import com.hasyame.marvelchampions.ui.cards.CardsScreen
 import com.hasyame.marvelchampions.ui.collection.CollectionScreen
 import com.hasyame.marvelchampions.ui.decks.DeckDetailScreen
+import com.hasyame.marvelchampions.ui.decks.DeckEditorScreen
 import com.hasyame.marvelchampions.ui.decks.DecksScreen
+import com.hasyame.marvelchampions.ui.decks.NewDeckScreen
 import com.hasyame.marvelchampions.ui.randomizer.RandomizerScreen
 import com.hasyame.marvelchampions.ui.settings.SettingsScreen
 
@@ -46,6 +48,7 @@ fun MarvelChampionsNavHost(
             composable<DecksRoute> {
                 DecksScreen(
                     onDeckClick = { deckId -> navController.navigate(DeckDetailRoute(deckId)) },
+                    onBuildDeck = { navController.navigate(NewDeckRoute) },
                     sharedLink = sharedLink,
                     onSharedLinkHandled = onSharedLinkHandled,
                 )
@@ -55,6 +58,24 @@ fun MarvelChampionsNavHost(
                     deckId = entry.toRoute<DeckDetailRoute>().deckId,
                     onBack = { navController.popBackStack() },
                     onCardClick = { code -> navController.navigate(CardDetailRoute(code)) },
+                    onEdit = { deckId -> navController.navigate(DeckEditorRoute(deckId)) },
+                )
+            }
+            composable<NewDeckRoute> {
+                NewDeckScreen(
+                    onBack = { navController.popBackStack() },
+                    onDeckCreated = { deckId ->
+                        // Pop the picker so the back gesture from the editor
+                        // returns to the deck list, not to hero selection.
+                        navController.popBackStack()
+                        navController.navigate(DeckEditorRoute(deckId))
+                    },
+                )
+            }
+            composable<DeckEditorRoute> { entry ->
+                DeckEditorScreen(
+                    deckId = entry.toRoute<DeckEditorRoute>().deckId,
+                    onBack = { navController.popBackStack() },
                 )
             }
             // A card opened from a deck belongs to the Decks back stack, so it

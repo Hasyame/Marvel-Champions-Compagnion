@@ -193,6 +193,46 @@ collection entry by card name would silently produce the wrong pack.
 The collection model therefore has to tolerate packs the API does not know about
 yet, so they can be marked as owned before MarvelCDB catches up.
 
+## Deck building rules
+
+Almost everything the deck builder needs is in the card data:
+
+- `deck_limit` — copies allowed. Values seen: 1, 2, 3, 4, 6.
+- `is_unique` — and **no unique card has `deck_limit` > 1**, so the two never
+  disagree.
+- `faction_code` — `hero`, `aggression`, `justice`, `leadership`, `protection`,
+  `basic`, `pool`, plus `encounter` and `campaign` which are not player cards.
+
+Two exceptions are encoded per hero, and **only two heroes have them**:
+
+| Hero | `deck_requirements` |
+|---|---|
+| Spider-Woman (`04031a`) | `[{"aspects":2}]` |
+| Adam Warlock (`21031a`) | `[{"aspects":4,"limit":1}]` |
+
+**Five heroes** carry `deck_options`, which *widen* what is legal. Without
+honouring them the builder rejects perfectly legal decks:
+
+| Hero | Allowance |
+|---|---|
+| Gamora | 6 Attack/Thwart events of any aspect |
+| Cyclops | X-Men allies of any aspect |
+| Cable | player side schemes |
+| Maria Hill | S.H.I.E.L.D. supports, name limit 3 |
+| Wonder Man | events with an energy resource |
+
+Beware when counting these: reading `cards.filter(c => c.deck_options)` gives 5,
+but scanning every key occurrence gives ~330, because nested `linked_card`
+objects include the key with an explicit `null`.
+
+### The one rule that is not in the data
+
+**Deck size appears nowhere.** MarvelCDB encodes copy limits, uniqueness,
+factions and the per-hero exceptions, but nothing states how many cards a deck
+must hold. `MINIMUM_DECK_SIZE` in `domain/deckbuilder/DeckRules.kt` is a named
+constant precisely so it is visible as an assumption rather than buried in a
+condition.
+
 ## Card images
 
 Fetched from MarvelCDB at runtime and disk-cached by Coil. Never committed to

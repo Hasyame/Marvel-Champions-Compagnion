@@ -44,6 +44,7 @@ import com.hasyame.marvelchampions.data.repository.DeckRepository
 @Composable
 fun DecksScreen(
     onDeckClick: (String) -> Unit,
+    onBuildDeck: () -> Unit,
     /** A link shared into the app, imported once on arrival. */
     sharedLink: String? = null,
     onSharedLinkHandled: () -> Unit = {},
@@ -130,6 +131,10 @@ fun DecksScreen(
         AddDeckDialog(
             onDismiss = { addDialogOpen = false },
             onImport = viewModel::import,
+            onBuild = {
+                addDialogOpen = false
+                onBuildDeck()
+            },
         )
     }
 
@@ -151,6 +156,7 @@ fun DecksScreen(
 private fun AddDeckDialog(
     onDismiss: () -> Unit,
     onImport: (String) -> Unit,
+    onBuild: () -> Unit,
 ) {
     var text by remember { mutableStateOf("") }
 
@@ -158,13 +164,18 @@ private fun AddDeckDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.decks_add)) },
         text = {
-            OutlinedTextField(
-                value = text,
-                onValueChange = { text = it },
-                singleLine = true,
-                label = { Text(stringResource(R.string.decks_paste_url)) },
-                supportingText = { Text(stringResource(R.string.decks_paste_url_hint)) },
-            )
+            androidx.compose.foundation.layout.Column {
+                OutlinedTextField(
+                    value = text,
+                    onValueChange = { text = it },
+                    singleLine = true,
+                    label = { Text(stringResource(R.string.decks_paste_url)) },
+                    supportingText = { Text(stringResource(R.string.decks_paste_url_hint)) },
+                )
+                TextButton(onClick = onBuild) {
+                    Text(stringResource(R.string.decks_build_from_scratch))
+                }
+            }
         },
         confirmButton = {
             TextButton(
@@ -184,6 +195,7 @@ internal fun importErrorMessage(error: DeckImportError): String = when (error) {
     DeckImportError.NotFound -> stringResource(R.string.decks_error_not_found)
     DeckImportError.NotShared -> stringResource(R.string.decks_error_not_shared)
     DeckImportError.Network -> stringResource(R.string.decks_error_network)
+    DeckImportError.LocalDeck -> stringResource(R.string.decks_error_local)
     is DeckImportError.Unexpected -> stringResource(
         R.string.decks_error_unexpected,
         error.message ?: "",

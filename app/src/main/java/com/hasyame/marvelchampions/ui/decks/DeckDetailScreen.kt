@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,6 +41,7 @@ fun DeckDetailScreen(
     deckId: String,
     onBack: () -> Unit,
     onCardClick: (String) -> Unit,
+    onEdit: (String) -> Unit,
     viewModel: DeckDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -59,11 +61,21 @@ fun DeckDetailScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = viewModel::refresh) {
-                        Icon(
-                            Icons.Filled.Refresh,
-                            contentDescription = stringResource(R.string.decks_refresh),
-                        )
+                    val deck = state.contents?.deck
+                    if (deck != null && DeckRepository.isLocal(deck)) {
+                        IconButton(onClick = { onEdit(deckId) }) {
+                            Icon(
+                                Icons.Filled.Edit,
+                                contentDescription = stringResource(R.string.decks_edit),
+                            )
+                        }
+                    } else {
+                        IconButton(onClick = viewModel::refresh) {
+                            Icon(
+                                Icons.Filled.Refresh,
+                                contentDescription = stringResource(R.string.decks_refresh),
+                            )
+                        }
                     }
                 },
             )

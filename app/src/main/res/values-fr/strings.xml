@@ -147,6 +147,56 @@
         <item quantity="many">%1$d de cartes</item>
         <item quantity="other">%1$d cartes</item>
     </plurals>
+    <!-- Deck builder -->
+    <string name="decks_new">Nouveau deck</string>
+    <string name="decks_build_from_scratch">Ou construire un deck de zéro</string>
+    <string name="decks_name">Nom du deck</string>
+    <string name="decks_choose_hero">Choisissez un héros</string>
+    <plurals name="decks_choose_aspects">
+        <item quantity="one">Choisissez %1$d aspect</item>
+        <item quantity="many">Choisissez %1$d d\'aspects</item>
+        <item quantity="other">Choisissez %1$d aspects</item>
+    </plurals>
+    <string name="decks_create">Créer le deck</string>
+    <string name="decks_hero_not_owned">%1$s — extension absente de votre collection</string>
+    <string name="decks_edit">Modifier le deck</string>
+    <string name="decks_tab_deck">Deck</string>
+    <string name="decks_tab_add">Ajouter des cartes</string>
+    <string name="decks_editor_empty">Aucune carte pour l\'instant. Utilisez l\'onglet « Ajouter des cartes ».</string>
+    <string name="decks_add_card">Ajouter un exemplaire</string>
+    <string name="decks_remove_card">Retirer un exemplaire</string>
+    <string name="decks_limit">limite %1$d</string>
+    <plurals name="decks_card_total">
+        <item quantity="one">%1$d carte</item>
+        <item quantity="many">%1$d de cartes</item>
+        <item quantity="other">%1$d cartes</item>
+    </plurals>
+    <string name="decks_legal">Ce deck est légal.</string>
+    <string name="decks_imported_readonly">Importé depuis MarvelCDB, donc en lecture seule. Actualisez-le pour récupérer les modifications faites là-bas.</string>
+    <plurals name="decks_problem_too_few">
+        <item quantity="one">Seulement %1$d carte, %2$d requises.</item>
+        <item quantity="many">Seulement %1$d de cartes, %2$d requises.</item>
+        <item quantity="other">Seulement %1$d cartes, %2$d requises.</item>
+    </plurals>
+    <plurals name="decks_problem_aspect_count">
+        <item quantity="one">%1$d aspect choisi, %2$d requis.</item>
+        <item quantity="many">%1$d d\'aspects choisis, %2$d requis.</item>
+        <item quantity="other">%1$d aspects choisis, %2$d requis.</item>
+    </plurals>
+    <string name="decks_problem_off_aspect">%1$s n\'est pas autorisée : elle appartient à %2$s.</string>
+    <plurals name="decks_problem_copy_limit">
+        <item quantity="one">%1$s : %2$d exemplaire, limite %3$d.</item>
+        <item quantity="many">%1$s : %2$d d\'exemplaires, limite %3$d.</item>
+        <item quantity="other">%1$s : %2$d exemplaires, limite %3$d.</item>
+    </plurals>
+    <string name="decks_problem_unique">%1$s est unique, un seul exemplaire autorisé.</string>
+    <plurals name="decks_problem_aspect_limit">
+        <item quantity="one">%1$s : %2$d carte, limite %3$d.</item>
+        <item quantity="many">%1$s : %2$d de cartes, limite %3$d.</item>
+        <item quantity="other">%1$s : %2$d cartes, limite %3$d.</item>
+    </plurals>
+    <string name="decks_error_local">Ce deck a été construit dans l\'application, il n\'y a rien à actualiser depuis MarvelCDB.</string>
+
     <plurals name="decks_missing_count">
         <item quantity="one">%1$d carte absente de votre collection</item>
         <item quantity="many">%1$d de cartes absentes de votre collection</item>

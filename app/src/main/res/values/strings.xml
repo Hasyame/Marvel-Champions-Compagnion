@@ -143,6 +143,50 @@
         <item quantity="one">%1$d card</item>
         <item quantity="other">%1$d cards</item>
     </plurals>
+    <!-- Deck builder -->
+    <string name="decks_new">New deck</string>
+    <string name="decks_build_from_scratch">Or build one from scratch</string>
+    <string name="decks_name">Deck name</string>
+    <string name="decks_choose_hero">Choose a hero</string>
+    <plurals name="decks_choose_aspects">
+        <item quantity="one">Choose %1$d aspect</item>
+        <item quantity="other">Choose %1$d aspects</item>
+    </plurals>
+    <string name="decks_create">Create deck</string>
+    <string name="decks_hero_not_owned">%1$s — pack not in your collection</string>
+    <string name="decks_edit">Edit deck</string>
+    <string name="decks_tab_deck">Deck</string>
+    <string name="decks_tab_add">Add cards</string>
+    <string name="decks_editor_empty">No card yet. Use the “Add cards” tab.</string>
+    <string name="decks_add_card">Add a copy</string>
+    <string name="decks_remove_card">Remove a copy</string>
+    <string name="decks_limit">limit %1$d</string>
+    <plurals name="decks_card_total">
+        <item quantity="one">%1$d card</item>
+        <item quantity="other">%1$d cards</item>
+    </plurals>
+    <string name="decks_legal">This deck is legal.</string>
+    <string name="decks_imported_readonly">Imported from MarvelCDB, so it is read only. Refresh it to pick up changes made there.</string>
+    <plurals name="decks_problem_too_few">
+        <item quantity="one">Only %1$d card, %2$d required.</item>
+        <item quantity="other">Only %1$d cards, %2$d required.</item>
+    </plurals>
+    <plurals name="decks_problem_aspect_count">
+        <item quantity="one">%1$d aspect chosen, %2$d required.</item>
+        <item quantity="other">%1$d aspects chosen, %2$d required.</item>
+    </plurals>
+    <string name="decks_problem_off_aspect">%1$s is not allowed: it belongs to %2$s.</string>
+    <plurals name="decks_problem_copy_limit">
+        <item quantity="one">%1$s: %2$d copy, limit is %3$d.</item>
+        <item quantity="other">%1$s: %2$d copies, limit is %3$d.</item>
+    </plurals>
+    <string name="decks_problem_unique">%1$s is unique, only one copy allowed.</string>
+    <plurals name="decks_problem_aspect_limit">
+        <item quantity="one">%1$s: %2$d card, limit is %3$d.</item>
+        <item quantity="other">%1$s: %2$d cards, limit is %3$d.</item>
+    </plurals>
+    <string name="decks_error_local">This deck was built in the app, so there is nothing to refresh from MarvelCDB.</string>
+
     <plurals name="decks_missing_count">
         <item quantity="one">%1$d card is missing from your collection</item>
         <item quantity="other">%1$d cards are missing from your collection</item>

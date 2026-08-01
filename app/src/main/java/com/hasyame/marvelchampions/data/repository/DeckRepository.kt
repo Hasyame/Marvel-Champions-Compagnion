@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.IOException
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,6 +33,9 @@ sealed interface DeckImportError {
     data object NotShared : DeckImportError
 
     data object Network : DeckImportError
+
+    /** A deck built in the app has nothing to refresh from. */
+    data object LocalDeck : DeckImportError
 
     data class Unexpected(val message: String?) : DeckImportError
 }
@@ -116,10 +120,82 @@ class DeckRepository @Inject constructor(
     suspend fun refresh(id: String): DeckImportResult {
         val existing = withContext(ioDispatcher) { savedDeckDao.getDeck(id) }
             ?: return DeckImportResult.Failure(DeckImportError.NotFound)
+        if (existing.kind == LOCAL_KIND) {
+            // A deck built in the app has no MarvelCDB counterpart to refresh
+            // from; refreshing it would mean overwriting it with nothing.
+            return DeckImportResult.Failure(DeckImportError.LocalDeck)
+        }
         val kind = DeckReference.Kind.entries.firstOrNull { it.name == existing.kind }
             ?: return DeckImportResult.Failure(DeckImportError.Unexpected(existing.kind))
         return import(DeckReference(existing.marvelCdbId, kind))
     }
+
+    /** Creates an empty deck built in the app rather than imported. */
+    suspend fun createLocalDeck(
+        name: String,
+        heroCode: String,
+        heroName: String,
+        aspects: List<String>,
+    ): String = withContext(ioDispatcher) {
+        val id = "$LOCAL_ID_PREFIX${UUID.randomUUID()}"
+        savedDeckDao.upsert(
+            SavedDeckEntity(
+                id = id,
+                marvelCdbId = 0L,
+                kind = LOCAL_KIND,
+                url = "",
+                name = name,
+                heroCode = heroCode,
+                heroName = heroName,
+                aspects = aspects.joinToString(","),
+                slots = "",
+                ignoreDeckLimitSlots = "",
+                descriptionMd = null,
+                version = null,
+                tags = null,
+                rawJson = "",
+                lastSyncedAt = System.currentTimeMillis(),
+            ),
+        )
+        id
+    }
+
+    /**
+     * Changes how many copies of a card a locally built deck holds.
+     *
+     * Only local decks are editable: an imported deck must stay a faithful copy
+     * of what MarvelCDB has, so that a refresh never silently discards edits.
+     */
+    suspend fun setCardQuantity(deckId: String, cardCode: String, quantity: Int): Boolean =
+        withContext(ioDispatcher) {
+            val deck = savedDeckDao.getDeck(deckId) ?: return@withContext false
+            if (deck.kind != LOCAL_KIND) {
+                return@withContext false
+            }
+            val slots = parseSlots(deck.slots).toMutableMap()
+            if (quantity <= 0) {
+                slots.remove(cardCode)
+            } else {
+                slots[cardCode] = quantity
+            }
+            savedDeckDao.upsert(
+                deck.copy(slots = slots.entries.joinToString(",") { "${it.key}=${it.value}" }),
+            )
+            true
+        }
+
+    suspend fun renameDeck(deckId: String, name: String) = withContext(ioDispatcher) {
+        savedDeckDao.getDeck(deckId)?.let { savedDeckDao.upsert(it.copy(name = name)) }
+    }
+
+    suspend fun setAspects(deckId: String, aspects: List<String>) = withContext(ioDispatcher) {
+        savedDeckDao.getDeck(deckId)?.let {
+            savedDeckDao.upsert(it.copy(aspects = aspects.joinToString(",")))
+        }
+    }
+
+    suspend fun getDeck(id: String): SavedDeckEntity? =
+        withContext(ioDispatcher) { savedDeckDao.getDeck(id) }
 
     /**
      * Resolves a stored deck against the card database.
@@ -190,6 +266,12 @@ class DeckRepository @Inject constructor(
     }
 
     companion object {
+        /** Marks a deck built in the app rather than imported. */
+        const val LOCAL_KIND: String = "LOCAL"
+        private const val LOCAL_ID_PREFIX = "local-"
+
+        fun isLocal(deck: SavedDeckEntity): Boolean = deck.kind == LOCAL_KIND
+
         /** Namespaced because decklist 30000 and deck 30000 are different decks. */
         fun localId(reference: DeckReference): String =
             "${reference.kind.name.lowercase()}-${reference.id}"

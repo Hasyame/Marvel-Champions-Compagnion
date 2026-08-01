@@ -155,7 +155,7 @@ if the same shape appears twice, it belongs in the schema instead.
 2. ✅ Data layer — Room, MarvelCDB client, sync, asset seeding, FTS
 3. ✅ F5 card search + F1 collection
 4. ✅ F2 randomiser
-5. F4 decklists — ✅ 5a import and share target, 5b in-app deck builder
+5. ✅ F4 decklists — import, share target, in-app deck builder
 6. F3 campaign engine + Galaxy's Most Wanted
 7. Polish
 

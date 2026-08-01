@@ -30,6 +30,14 @@ data object DecksRoute
 @Serializable
 data class DeckDetailRoute(val deckId: String)
 
+/** Hero and aspect picker for a deck built in the app. */
+@Serializable
+data object NewDeckRoute
+
+/** The card-by-card editor for a locally built deck. */
+@Serializable
+data class DeckEditorRoute(val deckId: String)
+
 @Serializable
 data object CampaignGraph
 
