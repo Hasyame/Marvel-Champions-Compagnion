@@ -23,10 +23,21 @@
   "packCode": "gmw",
   "difficulties": ["standard", "expert"],
 
-  "_counters": "Numbers the campaign tracks. scope 'hero' means each player has their own.",
+  "_counters": [
+    "Numbers the campaign carries BETWEEN scenarios. scope 'hero' means each",
+    "player has their own.",
+    "",
+    "Victory points are deliberately NOT a counter. They measure how well one",
+    "scenario was played, they are not spent and they do not accumulate across",
+    "the campaign. They are a prompt answer, recorded per scenario and shown in",
+    "the run log. What carries forward is whatever they convert into — in",
+    "Galaxy's Most Wanted, credits capped at 3.",
+    "",
+    "If a campaign ever does want a running total, add a counter here and an",
+    "addCounter effect; the engine supports it."
+  ],
   "counters": [
     { "id": "credits", "scope": "hero", "initial": 0, "min": 0 },
-    { "id": "vp", "scope": "campaign", "initial": 0 },
     {
       "id": "hp",
       "scope": "hero",
@@ -102,7 +113,12 @@
       "onVictory": {
         "_prompts": "What the app asks after a win. Types: number, boolean, perHeroNumber, perHeroBoolean, cardList, choice.",
         "prompts": [
-          { "id": "vp", "type": "number", "label": { "fr": "TODO: victory points earned?" } },
+          {
+            "id": "vp",
+            "type": "number",
+            "label": { "fr": "TODO: victory points earned?" },
+            "_note": "Recorded per scenario. Only what it converts into carries forward."
+          },
           { "id": "TODO_boolPrompt", "type": "boolean", "label": { "fr": "TODO: a yes/no about the final board state?" } },
           {
             "id": "hpPerHero",
@@ -121,9 +137,11 @@
         "_effects": "Applied in order. Several small steps rather than one formula. 'max' caps that step only.",
         "effects": [
           { "op": "addCounter", "counter": "credits", "value": 1 },
-          { "op": "addCounter", "counter": "credits", "from": "vp", "max": 3 },
+          {
+            "op": "addCounter", "counter": "credits", "from": "vp", "max": 3,
+            "_note": "This is the whole of what victory points do: convert to credits, capped at 3."
+          },
           { "op": "addCounter", "counter": "credits", "value": 1, "when": { "answer": "TODO_boolPrompt" } },
-          { "op": "addCounter", "counter": "vp", "from": "vp" },
           { "op": "setFlag", "flag": "TODO_flagName", "from": "TODO_boolPrompt" },
           { "op": "setHeroCounter", "counter": "hp", "from": "hpPerHero", "when": { "difficulty": "expert" } }
         ],

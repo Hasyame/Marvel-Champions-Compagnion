@@ -362,6 +362,66 @@ class CampaignEngineTest {
     }
 
     @Test
+    fun `victory points are recorded per scenario and never accumulate`() {
+        // They measure how well one scenario was played. They are not spent and
+        // do not carry forward — only what they convert into does.
+        val first = victory(AnswerSet(numbers = mapOf("vp" to 3)), id = "e1", timestamp = 2L)
+        val second = CampaignEvent.ScenarioCompleted(
+            id = "e2", timestamp = 3L, scenarioId = "s2", victory = true,
+            answers = AnswerSet(numbers = mapOf("vp" to 1)),
+        )
+
+        val state = engine.fold(template, listOf(start(), first, second), heroStats)
+
+        assertEquals(
+            listOf(3, 1),
+            state.completedScenarios.map { it.answers.numbers["vp"] },
+        )
+        // Credits carried forward: (1 + min(3,3)) then s2 has no effects.
+        assertEquals(4, state.heroCounter("credits", "h1"))
+    }
+
+    @Test
+    fun `a campaign with no victory point counter still converts them to credits`() {
+        // The conversion is an effect reading an answer, so no counter is needed
+        // to hold the points themselves. This is the shape the blank template
+        // ships with.
+        val scenario = template.scenarios.first()
+        val noVp = template.copy(
+            counters = template.counters.filterNot { it.id == "vp" },
+            scenarios = listOf(
+                scenario.copy(
+                    onVictory = scenario.onVictory?.copy(
+                        effects = scenario.onVictory!!.effects.filterNot { it.counter == "vp" },
+                    ),
+                ),
+            ) + template.scenarios.drop(1),
+        )
+        val answers = AnswerSet(numbers = mapOf("vp" to 5))
+
+        val state = engine.fold(noVp, listOf(start(), victory(answers)), heroStats)
+
+        assertEquals(4, state.heroCounter("credits", "h1"))
+        assertEquals(5, state.completedScenarios.single().answers.numbers["vp"])
+    }
+
+    @Test
+    fun `replaying an old log does not resurrect a counter the template dropped`() {
+        // Correcting a template and replaying is a design goal, so an effect
+        // naming a counter that no longer exists has to be inert rather than
+        // conjuring it back onto the screen.
+        val withoutVp = template.copy(counters = template.counters.filterNot { it.id == "vp" })
+        val answers = AnswerSet(numbers = mapOf("vp" to 5))
+
+        val state = engine.fold(withoutVp, listOf(start(), victory(answers)), heroStats)
+
+        assertEquals(0, state.counter("vp"))
+        assertFalse(state.counters.containsKey("vp"))
+        // Everything else still applies.
+        assertEquals(4, state.heroCounter("credits", "h1"))
+    }
+
+    @Test
     fun `play time accumulates across scenarios`() {
         val first = CampaignEvent.ScenarioCompleted(
             id = "e1", timestamp = 2L, scenarioId = "s1", victory = true,

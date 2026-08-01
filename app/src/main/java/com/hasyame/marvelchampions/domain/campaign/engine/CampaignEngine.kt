@@ -222,7 +222,12 @@ class CampaignEngine(
                 }
                 val delta = resolveValue(effect, answers) ?: return state
                 val counterDef = template.counters.firstOrNull { it.id == effect.counter }
-                val isHeroScoped = counterDef?.counterScope == CounterScope.HERO
+                    // The validator rejects undeclared counters, so this only
+                    // happens when an old event log is replayed against a
+                    // template that has since dropped one. Resurrecting it would
+                    // put a counter on screen that the campaign no longer has.
+                    ?: return state
+                val isHeroScoped = counterDef.counterScope == CounterScope.HERO
                 if (isHeroScoped) {
                     applyPerHeroCounter(template, state, effect, delta, scenarioId, answers, heroStats, actingHeroId)
                 } else {
@@ -234,6 +239,9 @@ class CampaignEngine(
             }
 
             EffectOp.ADD_HERO_COUNTER, EffectOp.SET_HERO_COUNTER -> {
+                if (template.counters.none { it.id == effect.counter }) {
+                    return state
+                }
                 val delta = resolveValue(effect, answers)
                 applyPerHeroCounter(
                     template, state, effect, delta, scenarioId, answers, heroStats, actingHeroId,

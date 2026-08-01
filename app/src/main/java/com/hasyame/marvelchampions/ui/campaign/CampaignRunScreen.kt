@@ -190,7 +190,20 @@ private fun RunBody(
                                 ),
                         )
                     },
-                    supportingContent = { Text(TimerState.format(result.elapsedMillis)) },
+                    supportingContent = {
+                        // Recorded answers are shown here because some of them —
+                        // victory points above all — are a per-scenario record
+                        // that nothing carries forward, so the log is the only
+                        // place they exist.
+                        val recorded = result.answers.numbers.entries
+                            .joinToString(" · ") { "${it.key} ${it.value}" }
+                        Text(
+                            listOfNotNull(
+                                TimerState.format(result.elapsedMillis),
+                                recorded.takeIf { it.isNotBlank() },
+                            ).joinToString(" — "),
+                        )
+                    },
                     trailingContent = {
                         // Editing a past result is a revocation, logged as such
                         // rather than a silent rewrite.

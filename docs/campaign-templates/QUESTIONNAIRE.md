@@ -17,10 +17,10 @@ missing.
 
 1. **Scenario order.** The scenario ids in order, and which one starts the
    campaign. Anything that branches — say so and I will model it as a condition.
-2. **Counters.** I have assumed three: `credits` (per hero), `vp` (cumulative,
-   campaign-wide) and `hp` (per hero, Expert only, capped at printed health).
-   - Is `vp` really cumulative across the campaign, or per scenario only?
-   - Anything else the campaign tracks?
+2. **Counters.** Two carry between scenarios: `credits` (per hero) and `hp`
+   (per hero, Expert only, capped at printed health). Victory points are not a
+   counter — see section C.4.
+   - Anything else the campaign carries forward?
 3. **Flags.** Which yes/no facts carry between scenarios? For each: what sets it,
    and which later scenario reads it. If a later scenario counts *how many* are
    set, say so — that is the `countTrue` case.
@@ -93,9 +93,14 @@ Name (fr):
    `when: { "difficulty": "expert" }` on the effect. A campaign that wants them
    on Standard simply omits the guard — the engine hardcodes nothing.
 
-## D. Still open
+4. **Victory points.** Neither spent nor accumulated. They measure how well a
+   single scenario was played, so they are a **prompt answer recorded per
+   scenario**, not a counter. What carries forward is only what they convert
+   into — in Galaxy's Most Wanted, credits capped at 3. The run log shows the
+   points recorded for each scenario, since that is the only place they live.
 
-1. **Whether victory points are spent or only accumulated.**
+   A campaign that does want a running total can still declare a counter and an
+   `addCounter` effect; the engine supports it, it is simply not the default.
 
 ## E. What happens next
 
