@@ -33,8 +33,13 @@ changing anything.
 | Unit tests | `./gradlew testDebugUnitTest` |
 | Lint | `./gradlew lintDebug` |
 | Everything CI runs | `./gradlew lintDebug testDebugUnitTest assembleDebug` |
+| Download the card seed | `./gradlew fetchCardSeed` |
 
 Lint runs with `warningsAsErrors = true`. Fix the warning; do not add a baseline.
+
+`fetchCardSeed` writes `app/src/main/assets/seed/` (~15 MB, gitignored). Without
+it the app still builds and runs — it just asks for a sync on first launch,
+which is how CI builds.
 
 ## Toolchain
 
@@ -49,6 +54,13 @@ Two things about AGP 9 that will bite you:
   still applied separately.
 - `defaultConfig.resourceConfigurations` is gone; use
   `androidResources.localeFilters`.
+
+Two more traps that have already cost time:
+
+- Robolectric 4.16.1 caps at SDK 36 while the app targets 37, so
+  `app/src/test/resources/robolectric.properties` pins `sdk=36`.
+- The configuration cache is on. A custom task must not touch `project` from
+  inside `doLast` — resolve paths and values at configuration time.
 
 ## Architecture
 
@@ -97,12 +109,16 @@ enforces this.
 Pack **type** and **wave** are not in the MarvelCDB API (see
 `docs/DATA_SOURCES.md`). Everything else comes from `/api/public/packs/`.
 
-1. Add the entry to the curated `pack_metadata.json` with its real MarvelCDB
-   `pack_code`, its type, and its wave.
-2. Nothing else. Do not hardcode pack codes in Kotlin.
+1. Add the entry to `app/src/main/assets/pack_metadata.json` with its real
+   MarvelCDB `pack_code`, its type, and its wave.
+2. Bump the expected count in `PackMetadataAssetTest`, which fails deliberately
+   when MarvelCDB publishes a pack the curated file does not cover.
+3. Nothing else. Do not hardcode pack codes in Kotlin.
 
 Never invent a `pack_code`. Resolve it against `/api/public/packs/` and report
-the mapping before committing it.
+the mapping before committing it. A pack that MarvelCDB has not entered yet has
+no code at all — `owned_packs` deliberately has no foreign key so the collection
+can still hold it.
 
 ## How to add a campaign
 
@@ -119,7 +135,7 @@ if the same shape appears twice, it belongs in the schema instead.
 ## Roadmap
 
 1. ✅ Skeleton — Gradle, Hilt, Compose, five-tab navigation, CI
-2. Data layer — Room, MarvelCDB client, sync, asset seeding, FTS
+2. ✅ Data layer — Room, MarvelCDB client, sync, asset seeding, FTS
 3. F5 card search + F1 collection
 4. F2 randomiser
 5. F4 decklists — 5a import and share target, 5b in-app deck builder

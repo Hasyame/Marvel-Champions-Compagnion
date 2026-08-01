@@ -1,0 +1,327 @@
+{
+  "schemaVersion": 1,
+  "note": "Curated. MarvelCDB's /api/public/packs/ exposes neither pack type nor wave. Wave is taken from the pack_wave field on cards where present; entries marked waveInferred were derived from release-date adjacency instead. Entries marked typeManual could not be classified from card composition. See docs/DATA_SOURCES.md.",
+  "packs": [
+    {
+      "code": "core",
+      "type": "CORE",
+      "wave": 1,
+      "waveInferred": true,
+      "typeManual": true
+    },
+    {
+      "code": "gob",
+      "type": "SCENARIO_PACK",
+      "wave": 1,
+      "waveInferred": true
+    },
+    {
+      "code": "cap",
+      "type": "HERO_PACK",
+      "wave": 1
+    },
+    {
+      "code": "msm",
+      "type": "HERO_PACK",
+      "wave": 1
+    },
+    {
+      "code": "twc",
+      "type": "SCENARIO_PACK",
+      "wave": 1,
+      "waveInferred": true
+    },
+    {
+      "code": "thor",
+      "type": "HERO_PACK",
+      "wave": 1
+    },
+    {
+      "code": "bkw",
+      "type": "HERO_PACK",
+      "wave": 1
+    },
+    {
+      "code": "drs",
+      "type": "HERO_PACK",
+      "wave": 1
+    },
+    {
+      "code": "ron",
+      "type": "MODULAR_SET",
+      "wave": 1,
+      "waveInferred": true,
+      "typeManual": true
+    },
+    {
+      "code": "hlk",
+      "type": "HERO_PACK",
+      "wave": 1
+    },
+    {
+      "code": "trors",
+      "type": "CAMPAIGN_BOX",
+      "wave": 2
+    },
+    {
+      "code": "toafk",
+      "type": "SCENARIO_PACK",
+      "wave": 2,
+      "waveInferred": true
+    },
+    {
+      "code": "ant",
+      "type": "HERO_PACK",
+      "wave": 2
+    },
+    {
+      "code": "wsp",
+      "type": "HERO_PACK",
+      "wave": 2
+    },
+    {
+      "code": "qsv",
+      "type": "HERO_PACK",
+      "wave": 2
+    },
+    {
+      "code": "scw",
+      "type": "HERO_PACK",
+      "wave": 2
+    },
+    {
+      "code": "gmw",
+      "type": "CAMPAIGN_BOX",
+      "wave": 3
+    },
+    {
+      "code": "stld",
+      "type": "HERO_PACK",
+      "wave": 3
+    },
+    {
+      "code": "gam",
+      "type": "HERO_PACK",
+      "wave": 3
+    },
+    {
+      "code": "drax",
+      "type": "HERO_PACK",
+      "wave": 3
+    },
+    {
+      "code": "vnm",
+      "type": "HERO_PACK",
+      "wave": 3
+    },
+    {
+      "code": "mts",
+      "type": "CAMPAIGN_BOX",
+      "wave": 4
+    },
+    {
+      "code": "nebu",
+      "type": "HERO_PACK",
+      "wave": 4
+    },
+    {
+      "code": "warm",
+      "type": "HERO_PACK",
+      "wave": 4
+    },
+    {
+      "code": "hood",
+      "type": "SCENARIO_PACK",
+      "wave": 4,
+      "waveInferred": true
+    },
+    {
+      "code": "valk",
+      "type": "HERO_PACK",
+      "wave": 4
+    },
+    {
+      "code": "vision",
+      "type": "HERO_PACK",
+      "wave": 4
+    },
+    {
+      "code": "sm",
+      "type": "CAMPAIGN_BOX",
+      "wave": 5
+    },
+    {
+      "code": "nova",
+      "type": "HERO_PACK",
+      "wave": 5
+    },
+    {
+      "code": "ironheart",
+      "type": "HERO_PACK",
+      "wave": 5
+    },
+    {
+      "code": "spiderham",
+      "type": "HERO_PACK",
+      "wave": 5
+    },
+    {
+      "code": "spdr",
+      "type": "HERO_PACK",
+      "wave": 5
+    },
+    {
+      "code": "mut_gen",
+      "type": "CAMPAIGN_BOX",
+      "wave": 6
+    },
+    {
+      "code": "cyclops",
+      "type": "HERO_PACK",
+      "wave": 6
+    },
+    {
+      "code": "phoenix",
+      "type": "HERO_PACK",
+      "wave": 6
+    },
+    {
+      "code": "wolv",
+      "type": "HERO_PACK",
+      "wave": 6
+    },
+    {
+      "code": "storm",
+      "type": "HERO_PACK",
+      "wave": 6
+    },
+    {
+      "code": "mojo",
+      "type": "SCENARIO_PACK",
+      "wave": 6,
+      "waveInferred": true
+    },
+    {
+      "code": "gambit",
+      "type": "HERO_PACK",
+      "wave": 6
+    },
+    {
+      "code": "rogue",
+      "type": "HERO_PACK",
+      "wave": 6
+    },
+    {
+      "code": "next_evol",
+      "type": "CAMPAIGN_BOX",
+      "wave": 7
+    },
+    {
+      "code": "psylocke",
+      "type": "HERO_PACK",
+      "wave": 7
+    },
+    {
+      "code": "angel",
+      "type": "HERO_PACK",
+      "wave": 7
+    },
+    {
+      "code": "x23",
+      "type": "HERO_PACK",
+      "wave": 7
+    },
+    {
+      "code": "deadpool",
+      "type": "HERO_PACK",
+      "wave": 7
+    },
+    {
+      "code": "aoa",
+      "type": "CAMPAIGN_BOX",
+      "wave": 8
+    },
+    {
+      "code": "iceman",
+      "type": "HERO_PACK",
+      "wave": 8
+    },
+    {
+      "code": "jubilee",
+      "type": "HERO_PACK",
+      "wave": 8
+    },
+    {
+      "code": "ncrawler",
+      "type": "HERO_PACK",
+      "wave": 8
+    },
+    {
+      "code": "magneto",
+      "type": "HERO_PACK",
+      "wave": 8
+    },
+    {
+      "code": "aos",
+      "type": "CAMPAIGN_BOX",
+      "wave": 9
+    },
+    {
+      "code": "bp",
+      "type": "HERO_PACK",
+      "wave": 9
+    },
+    {
+      "code": "silk",
+      "type": "HERO_PACK",
+      "wave": 9
+    },
+    {
+      "code": "falcon",
+      "type": "HERO_PACK",
+      "wave": 9
+    },
+    {
+      "code": "winter",
+      "type": "HERO_PACK",
+      "wave": 9
+    },
+    {
+      "code": "tt",
+      "type": "SCENARIO_PACK",
+      "wave": 9,
+      "waveInferred": true,
+      "typeManual": true
+    },
+    {
+      "code": "cw",
+      "type": "CAMPAIGN_BOX",
+      "wave": 10,
+      "typeManual": true
+    },
+    {
+      "code": "synthezoid",
+      "type": "SCENARIO_PACK",
+      "wave": 10,
+      "waveInferred": true,
+      "typeManual": true
+    },
+    {
+      "code": "wonder_man",
+      "type": "HERO_PACK",
+      "wave": 10
+    },
+    {
+      "code": "hercules",
+      "type": "HERO_PACK",
+      "wave": 10
+    },
+    {
+      "code": "fne",
+      "type": "CAMPAIGN_BOX",
+      "wave": 11,
+      "waveInferred": true,
+      "typeManual": true
+    }
+  ]
+}

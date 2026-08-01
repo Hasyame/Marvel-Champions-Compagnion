@@ -1,0 +1,88 @@
+package com.hasyame.marvelchampions.data.db.dao
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import com.hasyame.marvelchampions.data.db.entity.CardEntity
+import kotlinx.coroutines.flow.Flow
+
+/**
+ * SQLite's default bound-variable limit is 999 and each card binds well over a
+ * hundred columns, so inserts are chunked well below it.
+ */
+private const val INSERT_CHUNK_SIZE = 200
+
+@Dao
+interface CardDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(cards: List<CardEntity>)
+
+    @Query("DELETE FROM cards WHERE locale = :locale")
+    suspend fun deleteLocale(locale: String)
+
+    /**
+     * Replaces every card of one locale.
+     *
+     * Delete and insert happen in one SQLite transaction, so a sync that fails
+     * or is cancelled part way leaves the previous data untouched rather than a
+     * half-written database.
+     */
+    @Transaction
+    suspend fun replaceLocale(locale: String, cards: List<CardEntity>) {
+        deleteLocale(locale)
+        cards.chunked(INSERT_CHUNK_SIZE).forEach { insertAll(it) }
+    }
+
+    @Query("SELECT COUNT(*) FROM cards WHERE locale = :locale")
+    suspend fun countForLocale(locale: String): Int
+
+    @Query("SELECT COUNT(*) FROM cards")
+    fun observeCount(): Flow<Int>
+
+    @Query("SELECT * FROM cards WHERE code = :code AND locale = :locale")
+    suspend fun getCard(code: String, locale: String): CardEntity?
+
+    @Query("SELECT * FROM cards WHERE code = :code AND locale = :locale")
+    fun observeCard(code: String, locale: String): Flow<CardEntity?>
+
+    @Query(
+        """
+        SELECT * FROM cards
+        WHERE locale = :locale
+        ORDER BY packCode, position
+        LIMIT :limit OFFSET :offset
+        """,
+    )
+    suspend fun getPage(locale: String, limit: Int, offset: Int): List<CardEntity>
+
+    /**
+     * Full text search.
+     *
+     * [matchQuery] must already be normalised and turned into an FTS
+     * expression by `SearchNormalizer.toPrefixMatchQuery`.
+     */
+    @Query(
+        """
+        SELECT cards.* FROM cards
+        JOIN cards_fts ON cards_fts.rowid = cards.rowid
+        WHERE cards_fts MATCH :matchQuery
+          AND cards.locale = :locale
+        ORDER BY cards.packCode, cards.position
+        LIMIT :limit
+        """,
+    )
+    suspend fun search(matchQuery: String, locale: String, limit: Int = 200): List<CardEntity>
+
+    /** Cards of a set, used to resolve a scenario's encounter sets. */
+    @Query(
+        """
+        SELECT * FROM cards
+        WHERE cardSetCode = :cardSetCode AND locale = :locale
+        ORDER BY setPosition, position
+        """,
+    )
+    suspend fun getCardSet(cardSetCode: String, locale: String): List<CardEntity>
+}

@@ -10,8 +10,9 @@ endpoint the app uses.
 
 | Endpoint | Notes |
 |---|---|
-| `cards/` | Every card. 2191 cards, 3.1 MB (EN) / 3.3 MB (FR). |
-| `cards/{pack_code}` | Cards of one pack. |
+| `cards/?encounter=1` | Every card. **4375** cards, 7.25 MB (EN) / 7.62 MB (FR). |
+| `cards/` | Player cards only — **2086**. See the warning below. |
+| `cards/{pack_code}` | Cards of one pack. Unaffected by `encounter`. |
 | `card/{card_code}` | One card. Codes look like `01001a`, `09014`, `60007`. |
 | `packs/` | Every pack. 61 packs, 9 KB. |
 | `factions/` | Faction list. Returns 200. |
@@ -19,6 +20,19 @@ endpoint the app uses.
 | `deck/{id}` | A personal deck, only if the owner enabled "Share your decks". |
 
 `sets/`, `types/` and `taxonomies/` return **404**. They do not exist.
+
+### The `encounter=1` trap
+
+`GET /api/public/cards/` returns **2086** cards. `GET /api/public/cards/?encounter=1`
+returns **4375** — the same list plus every villain, main scheme, side scheme,
+minion, treachery, attachment and modular set card.
+
+There is no error, no warning and no pagination hint. The bare endpoint just
+silently omits more than half the database, which would leave the randomiser
+and the campaign tracker with nothing to work from.
+
+`sum(known)` over `/packs/` is 4375, which is the check that caught it. **Always
+pass `encounter=1`.** The per-pack endpoint returns everything either way.
 
 ### Caching
 
@@ -45,6 +59,30 @@ Example (`01021`):
 
 - EN — name `Gamma Slam`, traits `Attack. Superpower.`
 - FR — name `Frappe Gamma`, traits `Attaque. Super-pouvoir.`
+
+### Card fields
+
+The full dump exposes **88 distinct top-level fields**. `CardDto` and
+`CardEntity` carry all of them. Only the always-present ones are non-nullable:
+the API omits null fields from top-level card objects rather than emitting them,
+so almost everything has to be optional.
+
+`meta`, `deck_options`, `deck_requirements`, `restrictions` and `duplicated_by`
+are structured. They are stored as raw JSON strings — nothing interprets them
+yet, and discarding them would lose data we cannot get back without a resync.
+
+### `linked_card` is redundant
+
+105 player cards (327 including encounter cards) carry a nested `linked_card`
+object — a hero's alter-ego side, a scheme's reverse. **Every linked card also
+appears as its own top-level entry in the same response**, so the nested copy is
+dropped and the relationship is rebuilt from `linked_to_code`.
+
+One thing that looks alarming and is not: nested objects are *dense* (they
+include explicit nulls) while top-level entries are *sparse* (nulls omitted), so
+a nested object appears to have dozens of fields its top-level twin lacks. It
+does not. The only genuinely nested-only key is `id`, MarvelCDB's internal row
+id, which nothing needs.
 
 ### Two things to know about the FR payload
 
@@ -78,12 +116,25 @@ These require curated data. Do not guess them.
 There is **no type field**. Core set / hero pack / scenario pack / campaign box
 must be maintained in the curated `pack_metadata.json`.
 
+Classification in `assets/pack_metadata.json` was derived from card composition:
+a pack with two hero sets and 150+ cards is a campaign box, one hero set and no
+villain set is a hero pack, no hero set and a villain set is a scenario pack.
+
+Six packs could not be classified that way and are marked `typeManual`:
+`core`, `ron` (a five-card standalone modular set), and `cw`, `fne`,
+`synthezoid`, `tt` — the four newest, whose card sets MarvelCDB has not finished
+tagging.
+
 ### Pack wave
 
 Not on the packs endpoint either, but cards carry `pack_wave` and `pack_legacy`,
-so wave is derivable from `/api/public/cards/`. Waves 1–10 are present. Four
-packs have no wave on their cards: `core`, `fne`, `synthezoid`, `tt`. Treat the
-derived value as a starting point for the curated file, not as authoritative.
+so wave is derivable from `/api/public/cards/?encounter=1`. Waves 1–10 are
+present.
+
+Ten packs have no wave on any of their cards: `core`, `gob`, `twc`, `ron`,
+`toafk`, `hood`, `mojo`, `tt`, `synthezoid`, `fne`. Their wave in the curated
+file was inferred from release-date adjacency to the campaign box of that wave
+and is marked `waveInferred`. These are the entries most likely to be wrong.
 
 ### Scenario to required-modular-set relationships
 
