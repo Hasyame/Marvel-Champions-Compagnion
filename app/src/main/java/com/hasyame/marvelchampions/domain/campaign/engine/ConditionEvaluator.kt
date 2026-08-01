@@ -1,0 +1,101 @@
+package com.hasyame.marvelchampions.domain.campaign.engine
+
+import com.hasyame.marvelchampions.domain.campaign.template.Condition
+
+/** The context a condition is judged against. */
+data class EvaluationContext(
+    val state: CampaignState,
+    val scenarioId: String? = null,
+    val answers: AnswerSet = AnswerSet(),
+    /** Set when evaluating per hero, so hero counters resolve to that hero. */
+    val heroId: String? = null,
+)
+
+/**
+ * Evaluates a template [Condition].
+ *
+ * Every field present must hold; [Condition.any] is the escape hatch for
+ * alternatives. A condition with no fields set is vacuously true, which is what
+ * makes `when` optional throughout the schema.
+ */
+object ConditionEvaluator {
+
+    fun evaluate(condition: Condition?, context: EvaluationContext): Boolean {
+        if (condition == null) {
+            return true
+        }
+        val state = context.state
+
+        condition.difficulty?.let {
+            if (!state.difficulty.equals(it, ignoreCase = true)) return false
+        }
+
+        condition.answer?.let {
+            if (context.answers.booleans[it] != true) return false
+        }
+        condition.notAnswer?.let {
+            if (context.answers.booleans[it] == true) return false
+        }
+
+        condition.flag?.let {
+            if (!resolveFlag(it, state, context.scenarioId)) return false
+        }
+        condition.notFlag?.let {
+            if (resolveFlag(it, state, context.scenarioId)) return false
+        }
+
+        condition.countTrue?.let { setId ->
+            val count = state.countTrue(setId)
+            condition.countAtLeast?.let { if (count < it) return false }
+            condition.countAtMost?.let { if (count > it) return false }
+            // Without a bound, "countTrue" alone means at least one.
+            if (condition.countAtLeast == null && condition.countAtMost == null && count < 1) {
+                return false
+            }
+        }
+
+        condition.counter?.let { counterId ->
+            val value = context.heroId
+                ?.takeIf { state.heroCounters.containsKey(counterId) }
+                ?.let { state.heroCounter(counterId, it) }
+                ?: state.counter(counterId)
+            condition.atLeast?.let { if (value < it) return false }
+            condition.atMost?.let { if (value > it) return false }
+            condition.equals?.let { if (value != it) return false }
+        }
+
+        condition.choice?.let { promptId ->
+            val expected = condition.choiceIs
+            if (expected != null && context.answers.choices[promptId] != expected) {
+                return false
+            }
+        }
+
+        if (condition.all.isNotEmpty() && condition.all.any { !evaluate(it, context) }) {
+            return false
+        }
+        if (condition.any.isNotEmpty() && condition.any.none { evaluate(it, context) }) {
+            return false
+        }
+
+        return true
+    }
+
+    /**
+     * `trackerDefeated.s1_badoon` reads one scenario's flag;
+     * `trackerDefeated` reads the current scenario's, falling back to the
+     * campaign-scoped slot.
+     */
+    private fun resolveFlag(
+        reference: String,
+        state: CampaignState,
+        currentScenarioId: String?,
+    ): Boolean {
+        val parts = reference.split('.', limit = 2)
+        return if (parts.size == 2) {
+            state.flag(parts[0], parts[1])
+        } else {
+            state.flag(reference, currentScenarioId ?: "") || state.flag(reference, "")
+        }
+    }
+}

@@ -145,9 +145,27 @@ committed to this repository (`.gitignore` enforces this).
 
 A new campaign is one JSON file validated against the template schema at load
 time. If you find yourself writing Kotlin for a specific campaign, stop: the
-declarative schema is supposed to cover it. The scenario handler registry exists
-for genuinely bespoke mechanics only, and every use of it must be justified —
-if the same shape appears twice, it belongs in the schema instead.
+declarative schema is supposed to cover it. The scenario handler registry
+(`ScenarioHandler`) exists for genuinely bespoke mechanics only, and every use
+of it must be justified — if the same shape appears twice, it belongs in the
+schema instead.
+
+Start from `docs/campaign-templates/TEMPLATE_BLANK.json`; the questions the
+author has to answer are in `QUESTIONNAIRE.md` beside it. `SchemaStressTest`
+proves a second campaign shape works without code changes, and is the place to
+add a case before extending the schema.
+
+The engine lives in `domain/campaign/`:
+
+- `CampaignEvent` — the append-only log. Ids are stable, which is what makes a
+  two-device merge idempotent.
+- `CampaignEngine.fold` — derives all state. **Nothing about counters, flags or
+  progress is stored**; storing it would let the two disagree.
+- `TemplateValidator` — strict, and reports every problem at once. Never make it
+  lenient: silently skipping an unknown effect means a campaign quietly not
+  paying out, which is worse than refusing to load.
+- `TimerState` — wall-clock based on purpose. `SystemClock.elapsedRealtime`
+  resets on reboot and cannot be used here.
 
 ## Roadmap
 
@@ -156,7 +174,7 @@ if the same shape appears twice, it belongs in the schema instead.
 3. ✅ F5 card search + F1 collection
 4. ✅ F2 randomiser
 5. ✅ F4 decklists — import, share target, in-app deck builder
-6. F3 campaign engine + Galaxy's Most Wanted
+6. ✅ F3 campaign engine (awaiting campaign content for Galaxy's Most Wanted)
 7. Polish
 
 ## Legal constraints on what may be committed

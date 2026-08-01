@@ -1,0 +1,97 @@
+package com.hasyame.marvelchampions.domain.campaign.template
+
+import kotlinx.serialization.Serializable
+
+/**
+ * A guard on a setup step, an effect or a branch.
+ *
+ * Every field present must hold, so `{"difficulty":"expert","flag":"x"}` means
+ * both. Alternatives go through [any].
+ *
+ * Deliberately flat rather than a polymorphic hierarchy: the JSON stays close
+ * to the sketch in the brief and readable by whoever is filling the template in
+ * from the campaign book.
+ */
+@Serializable
+data class Condition(
+    /** Campaign difficulty, e.g. `expert`. */
+    val difficulty: String? = null,
+
+    /** A boolean answer from this scenario's questionnaire must be true. */
+    val answer: String? = null,
+    /** The same, negated. */
+    val notAnswer: String? = null,
+
+    /** A flag must be set. `flagSet.scenarioId`, or just `flagSet`. */
+    val flag: String? = null,
+    val notFlag: String? = null,
+
+    /** How many flags of a set are true, e.g. `countTrue >= 1`. */
+    val countTrue: String? = null,
+    val countAtLeast: Int? = null,
+    val countAtMost: Int? = null,
+
+    /** A counter comparison. Hero-scoped counters use the evaluating hero. */
+    val counter: String? = null,
+    val atLeast: Int? = null,
+    val atMost: Int? = null,
+    val equals: Int? = null,
+
+    /** A choice answer must equal this option id. */
+    val choice: String? = null,
+    val choiceIs: String? = null,
+
+    /** True when any nested condition holds. */
+    val any: List<Condition> = emptyList(),
+    /** True when every nested condition holds. */
+    val all: List<Condition> = emptyList(),
+)
+
+/**
+ * An effect step.
+ *
+ * Arithmetic is deliberately kept out of the schema: a rule is several small
+ * steps rather than one formula. [max] caps a single operation, [value] is a
+ * literal and [from] takes the number the player answered.
+ */
+@Serializable
+data class Effect(
+    val op: String,
+    @kotlinx.serialization.SerialName("when") val condition: Condition? = null,
+
+    val counter: String? = null,
+    val flag: String? = null,
+    val cardList: String? = null,
+
+    val value: Int? = null,
+    val boolValue: Boolean? = null,
+    /** Answer id supplying the value. */
+    val from: String? = null,
+    /** Upper bound applied to this operation only. */
+    val max: Int? = null,
+    val min: Int? = null,
+
+    val cardCode: String? = null,
+    /** Applies per hero rather than once to the campaign. */
+    val perHero: Boolean = false,
+) {
+    val operation: EffectOp
+        get() = EffectOp.entries.firstOrNull { it.token == op.lowercase() } ?: EffectOp.UNKNOWN
+}
+
+enum class EffectOp(val token: String) {
+    ADD_COUNTER("addcounter"),
+    SET_COUNTER("setcounter"),
+    SET_HERO_COUNTER("setherocounter"),
+    ADD_HERO_COUNTER("addherocounter"),
+    SET_FLAG("setflag"),
+    ADD_CARD("addcard"),
+    ADD_CARDS_FROM_ANSWER("addcardsfromanswer"),
+    ELIMINATE_HERO("eliminatehero"),
+    UNKNOWN("");
+
+    companion object {
+        fun isKnown(token: String): Boolean =
+            entries.any { it.token == token.lowercase() && it != UNKNOWN }
+    }
+}

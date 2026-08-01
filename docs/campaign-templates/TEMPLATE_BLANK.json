@@ -1,0 +1,145 @@
+{
+  "_comment": [
+    "FILL-IN-THE-BLANKS CAMPAIGN TEMPLATE.",
+    "",
+    "Copy this file, fill it in from the campaign book, and import it in the app",
+    "(Campaign tab, + button). It is validated on import and every problem is",
+    "reported at once.",
+    "",
+    "Keep your filled-in copy OFF this repository: setup instructions and flavour",
+    "text are Fantasy Flight's words. .gitignore already blocks *.campaign.json.",
+    "",
+    "Everything below marked TODO needs your input. See QUESTIONNAIRE.md for what",
+    "each one is asking for. Keys beginning with an underscore are comments and",
+    "are ignored.",
+    "",
+    "Card and set codes are MarvelCDB codes. You can find them in the app: the",
+    "card detail screen shows the pack, and the code is in the MarvelCDB URL."
+  ],
+
+  "id": "gmw",
+  "schemaVersion": 1,
+  "name": { "fr": "Convoitise Galactique", "en": "The Galaxy's Most Wanted" },
+  "packCode": "gmw",
+  "difficulties": ["standard", "expert"],
+
+  "_counters": "Numbers the campaign tracks. scope 'hero' means each player has their own.",
+  "counters": [
+    { "id": "credits", "scope": "hero", "initial": 0, "min": 0 },
+    { "id": "vp", "scope": "campaign", "initial": 0 },
+    {
+      "id": "hp",
+      "scope": "hero",
+      "initial": 0,
+      "maxFrom": "heroCard.health",
+      "activeWhen": { "difficulty": "expert" },
+      "_note": "maxFrom reads printed health from the card database, so you do not restate it."
+    }
+  ],
+
+  "_flagSets": "Yes/no facts remembered between scenarios. scope 'perScenario' gives one per scenario, which conditions can count.",
+  "flagSets": [
+    { "id": "TODO_flagName", "scope": "perScenario" }
+  ],
+
+  "_cardLists": "Lists of card codes the campaign records.",
+  "cardLists": [
+    { "id": "purchases", "scope": "hero" }
+  ],
+
+  "_market": "Cards buyable between scenarios. One copy of each per campaign across the whole group.",
+  "market": {
+    "counterId": "credits",
+    "entries": [
+      { "cardCode": "TODO_cardCode", "cost": 0, "cardListId": "purchases" }
+    ]
+  },
+
+  "startScenarioId": "TODO_firstScenarioId",
+
+  "scenarios": [
+    {
+      "id": "TODO_scenarioId",
+      "name": { "fr": "TODO" },
+      "flavour": { "fr": "TODO: the flavour text read at the start." },
+
+      "_baseSetup": "What goes on the table. Codes, not prose.",
+      "baseSetup": {
+        "villainDeck": {
+          "standard": ["TODO_villainStage1", "TODO_villainStage2"],
+          "expert": ["TODO_villainStage2", "TODO_villainStage3"]
+        },
+        "mainScheme": ["TODO_mainSchemeCode"],
+        "encounterSets": ["TODO_encounterSetCode"],
+        "modularSets": ["TODO_modularSetCode"]
+      },
+
+      "_campaignSetup": "Extra instructions, in order. 'when' hides a step unless it applies. 'action' turns it into a button that changes state.",
+      "campaignSetup": [
+        { "text": { "fr": "TODO: an instruction that always applies." } },
+        {
+          "text": { "fr": "TODO: an Expert-only instruction." },
+          "when": { "difficulty": "expert" }
+        },
+        {
+          "text": { "fr": "TODO: an instruction conditional on an earlier scenario." },
+          "when": { "flag": "TODO_flagName" }
+        },
+        {
+          "text": { "fr": "TODO: something a player may choose to do." },
+          "action": {
+            "id": "TODO_actionId",
+            "label": { "fr": "TODO: button text" },
+            "perHero": true,
+            "cost": { "counterId": "credits", "amount": 1 },
+            "effects": [
+              { "op": "setHeroCounter", "counter": "hp", "value": 0 }
+            ]
+          }
+        }
+      ],
+
+      "onVictory": {
+        "_prompts": "What the app asks after a win. Types: number, boolean, perHeroNumber, perHeroBoolean, cardList, choice.",
+        "prompts": [
+          { "id": "vp", "type": "number", "label": { "fr": "TODO: victory points earned?" } },
+          { "id": "TODO_boolPrompt", "type": "boolean", "label": { "fr": "TODO: a yes/no about the final board state?" } },
+          {
+            "id": "hpPerHero",
+            "type": "perHeroNumber",
+            "label": { "fr": "TODO: remaining hit points?" },
+            "when": { "difficulty": "expert" }
+          },
+          {
+            "id": "eliminated",
+            "type": "perHeroBoolean",
+            "label": { "fr": "Ce héros a-t-il été éliminé ?" },
+            "_note": "Keep this id exactly. The engine skips eliminated heroes in per-hero rewards."
+          }
+        ],
+
+        "_effects": "Applied in order. Several small steps rather than one formula. 'max' caps that step only.",
+        "effects": [
+          { "op": "addCounter", "counter": "credits", "value": 1 },
+          { "op": "addCounter", "counter": "credits", "from": "vp", "max": 3 },
+          { "op": "addCounter", "counter": "credits", "value": 1, "when": { "answer": "TODO_boolPrompt" } },
+          { "op": "addCounter", "counter": "vp", "from": "vp" },
+          { "op": "setFlag", "flag": "TODO_flagName", "from": "TODO_boolPrompt" },
+          { "op": "setHeroCounter", "counter": "hp", "from": "hpPerHero", "when": { "difficulty": "expert" } }
+        ],
+
+        "_next": "Evaluated in order, first match wins. A branch is a condition, never code.",
+        "next": [
+          { "goto": "TODO_scenarioIfFlagSet", "when": { "countTrue": "TODO_flagName", "countAtLeast": 1 } },
+          { "goto": "TODO_nextScenarioId" }
+        ]
+      },
+
+      "onDefeat": {
+        "prompts": [],
+        "effects": [],
+        "next": [{ "goto": "TODO_scenarioId" }]
+      }
+    }
+  ]
+}

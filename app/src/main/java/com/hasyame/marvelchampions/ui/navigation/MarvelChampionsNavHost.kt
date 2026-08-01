@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.hasyame.marvelchampions.ui.campaign.CampaignRunScreen
 import com.hasyame.marvelchampions.ui.campaign.CampaignScreen
 import com.hasyame.marvelchampions.ui.cards.CardDetailScreen
 import com.hasyame.marvelchampions.ui.cards.CardsScreen
@@ -88,7 +89,17 @@ fun MarvelChampionsNavHost(
             }
         }
         navigation<CampaignGraph>(startDestination = CampaignRoute) {
-            composable<CampaignRoute> { CampaignScreen() }
+            composable<CampaignRoute> {
+                CampaignScreen(
+                    onOpenRun = { runId -> navController.navigate(CampaignRunRoute(runId)) },
+                )
+            }
+            composable<CampaignRunRoute> { entry ->
+                CampaignRunScreen(
+                    runId = entry.toRoute<CampaignRunRoute>().runId,
+                    onBack = { navController.popBackStack() },
+                )
+            }
         }
         navigation<RandomizerGraph>(startDestination = RandomizerRoute) {
             composable<RandomizerRoute> { RandomizerScreen() }

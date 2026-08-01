@@ -44,6 +44,10 @@ data object CampaignGraph
 @Serializable
 data object CampaignRoute
 
+/** One campaign run. */
+@Serializable
+data class CampaignRunRoute(val runId: String)
+
 @Serializable
 data object RandomizerGraph
 

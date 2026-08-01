@@ -147,6 +147,37 @@
         <item quantity="many">%1$d de cartes</item>
         <item quantity="other">%1$d cartes</item>
     </plurals>
+    <!-- Campaign -->
+    <string name="campaign_empty">Aucune campagne. Importez un modèle de campagne avec le bouton +.</string>
+    <string name="campaign_start">Démarrer une campagne</string>
+    <string name="campaign_in_progress">En cours</string>
+    <string name="campaign_finished">Terminée</string>
+    <string name="campaign_difficulty">Difficulté pour toute la campagne</string>
+    <string name="campaign_roster">Liste des héros</string>
+    <string name="campaign_roster_locked">La liste des héros et la difficulté sont fixées au démarrage.</string>
+    <string name="campaign_no_decks">Importez ou construisez d\'abord un deck : une campagne a besoin de héros.</string>
+    <string name="campaign_template_invalid">Problème dans le modèle de campagne</string>
+    <string name="campaign_run_not_found">Campagne introuvable.</string>
+    <string name="campaign_complete">Campagne terminée.</string>
+    <string name="campaign_villain_deck">Deck du méchant : %1$s</string>
+    <string name="campaign_main_scheme">Complot principal : %1$s</string>
+    <string name="campaign_encounter_sets">Sets rencontre : %1$s</string>
+    <string name="campaign_play">Jouer</string>
+    <string name="campaign_pause">Pause</string>
+    <string name="campaign_reset">Réinitialiser</string>
+    <string name="campaign_victory">Victoire</string>
+    <string name="campaign_defeat">Défaite</string>
+    <string name="campaign_record">Enregistrer</string>
+    <string name="campaign_market">Marché</string>
+    <string name="campaign_buy">Acheter</string>
+    <string name="campaign_refund">Rembourser</string>
+    <string name="campaign_log">Journal</string>
+    <string name="campaign_undo">Annuler</string>
+    <string name="campaign_total_time">Temps de jeu total : %1$s</string>
+    <string name="campaign_no_questions">Rien à enregistrer pour ce résultat.</string>
+    <string name="campaign_card_list_hint">Noms de cartes séparés par des virgules.</string>
+    <string name="campaign_unknown_prompt">Type de question « %1$s » non pris en charge dans le modèle.</string>
+
     <!-- Deck builder -->
     <string name="decks_new">Nouveau deck</string>
     <string name="decks_build_from_scratch">Ou construire un deck de zéro</string>

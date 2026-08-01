@@ -3,11 +3,14 @@ package com.hasyame.marvelchampions.data.db
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.hasyame.marvelchampions.data.db.dao.CampaignDao
 import com.hasyame.marvelchampions.data.db.dao.CardDao
 import com.hasyame.marvelchampions.data.db.dao.OwnedPackDao
 import com.hasyame.marvelchampions.data.db.dao.PackDao
 import com.hasyame.marvelchampions.data.db.dao.RandomizerHistoryDao
 import com.hasyame.marvelchampions.data.db.dao.SavedDeckDao
+import com.hasyame.marvelchampions.data.db.entity.CampaignEventEntity
+import com.hasyame.marvelchampions.data.db.entity.CampaignRunEntity
 import com.hasyame.marvelchampions.data.db.entity.CardEntity
 import com.hasyame.marvelchampions.data.db.entity.CardFtsEntity
 import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
@@ -36,8 +39,10 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
         OwnedPackEntity::class,
         RandomizerHistoryEntity::class,
         SavedDeckEntity::class,
+        CampaignRunEntity::class,
+        CampaignEventEntity::class,
     ],
-    version = 3,
+    version = 4,
     exportSchema = true,
     // Both migrations so far only add a table, so Room can generate them from
     // the exported schemas. Anything that alters an existing table needs a
@@ -45,6 +50,7 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 3, to = 4),
     ],
 )
 abstract class MarvelChampionsDatabase : RoomDatabase() {
@@ -53,6 +59,7 @@ abstract class MarvelChampionsDatabase : RoomDatabase() {
     abstract fun ownedPackDao(): OwnedPackDao
     abstract fun randomizerHistoryDao(): RandomizerHistoryDao
     abstract fun savedDeckDao(): SavedDeckDao
+    abstract fun campaignDao(): CampaignDao
 
     companion object {
         const val NAME: String = "marvelchampions.db"

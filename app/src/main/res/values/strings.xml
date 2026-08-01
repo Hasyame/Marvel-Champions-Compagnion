@@ -143,6 +143,37 @@
         <item quantity="one">%1$d card</item>
         <item quantity="other">%1$d cards</item>
     </plurals>
+    <!-- Campaign -->
+    <string name="campaign_empty">No campaign yet. Import a campaign template with the + button.</string>
+    <string name="campaign_start">Start a campaign</string>
+    <string name="campaign_in_progress">In progress</string>
+    <string name="campaign_finished">Finished</string>
+    <string name="campaign_difficulty">Difficulty for the whole campaign</string>
+    <string name="campaign_roster">Hero roster</string>
+    <string name="campaign_roster_locked">The roster and difficulty are fixed once the campaign starts.</string>
+    <string name="campaign_no_decks">Import or build a deck first — a campaign needs a hero roster.</string>
+    <string name="campaign_template_invalid">Campaign template problem</string>
+    <string name="campaign_run_not_found">Campaign not found.</string>
+    <string name="campaign_complete">Campaign complete.</string>
+    <string name="campaign_villain_deck">Villain deck: %1$s</string>
+    <string name="campaign_main_scheme">Main scheme: %1$s</string>
+    <string name="campaign_encounter_sets">Encounter sets: %1$s</string>
+    <string name="campaign_play">Play</string>
+    <string name="campaign_pause">Pause</string>
+    <string name="campaign_reset">Reset</string>
+    <string name="campaign_victory">Victory</string>
+    <string name="campaign_defeat">Defeat</string>
+    <string name="campaign_record">Record</string>
+    <string name="campaign_market">Market</string>
+    <string name="campaign_buy">Buy</string>
+    <string name="campaign_refund">Refund</string>
+    <string name="campaign_log">Event log</string>
+    <string name="campaign_undo">Undo</string>
+    <string name="campaign_total_time">Total play time: %1$s</string>
+    <string name="campaign_no_questions">Nothing to record for this outcome.</string>
+    <string name="campaign_card_list_hint">Card names separated by commas.</string>
+    <string name="campaign_unknown_prompt">Unsupported question type “%1$s” in the template.</string>
+
     <!-- Deck builder -->
     <string name="decks_new">New deck</string>
     <string name="decks_build_from_scratch">Or build one from scratch</string>
