@@ -144,14 +144,7 @@
         <item quantity="other">%1$d cards</item>
     </plurals>
     <!-- Campaign -->
-    <string name="campaign_my_runs">My campaigns</string>
     <string name="campaign_start">Start a campaign</string>
-    <string name="campaign_none_bundled">No campaign is built into this version. Import a template file below.</string>
-    <string name="campaign_import_file">Import a template from a file</string>
-    <plurals name="campaign_scenario_count">
-        <item quantity="one">%1$d scenario</item>
-        <item quantity="other">%1$d scenarios</item>
-    </plurals>
     <string name="campaign_in_progress">In progress</string>
     <string name="campaign_finished">Finished</string>
     <string name="campaign_difficulty">Difficulty for the whole campaign</string>
@@ -161,27 +154,17 @@
     <string name="campaign_template_invalid">Campaign template problem</string>
     <string name="campaign_run_not_found">Campaign not found.</string>
     <string name="campaign_complete">Campaign complete.</string>
-    <string name="campaign_villain_deck">Villain deck: %1$s</string>
-    <string name="campaign_main_scheme">Main scheme: %1$s</string>
-    <string name="campaign_encounter_sets">Encounter sets: %1$s</string>
     <string name="campaign_play">Play</string>
     <string name="campaign_pause">Pause</string>
-    <string name="campaign_reset">Reset</string>
     <string name="campaign_victory">Victory</string>
     <string name="campaign_defeat">Defeat</string>
-    <string name="campaign_record">Record</string>
     <string name="campaign_market">Market</string>
     <string name="campaign_buy">Buy</string>
     <string name="campaign_refund">Refund</string>
-    <string name="campaign_log">Event log</string>
-    <string name="campaign_undo">Undo</string>
-    <string name="campaign_total_time">Total play time: %1$s</string>
     <string name="campaign_no_questions">Nothing to record for this outcome.</string>
     <string name="campaign_card_list_hint">Card names separated by commas.</string>
     <string name="campaign_unknown_prompt">Unsupported question type “%1$s” in the template.</string>
     <string name="campaign_defeat_recorded">Defeat recorded</string>
-    <string name="campaign_defeat_choice">Replay this scenario now, or take a break and come back to it later? The loss stays in the log either way.</string>
-    <string name="campaign_replay_now">Replay now</string>
     <string name="campaign_take_a_break">Take a break</string>
 
     <!-- Deck builder -->
@@ -236,4 +219,56 @@
         <item quantity="one">%1$d card is missing from your collection</item>
         <item quantity="other">%1$d cards are missing from your collection</item>
     </plurals>
+
+    <string name="campaign_which">Which campaign</string>
+    <string name="campaign_none_bundled">No campaign is built into this version.</string>
+    <string name="campaign_name">Name this campaign</string>
+    <string name="campaign_lets_go">Let\'s go!</string>
+    <string name="campaign_im_ready">I\'m ready</string>
+    <string name="campaign_not_ready">I\'m not ready yet</string>
+    <string name="campaign_pre_setup">Pre-setup</string>
+    <string name="campaign_setup_label">Campaign setup</string>
+    <string name="campaign_villain_deck_label">Villain deck</string>
+    <string name="campaign_main_scheme_label">Main scheme deck</string>
+    <string name="campaign_encounter_sets_label">Encounter deck</string>
+    <string name="campaign_questions_title">A few questions</string>
+    <string name="campaign_validate">Validate</string>
+    <string name="campaign_bravo">Bravo!</string>
+    <plurals name="campaign_result_solo">
+        <item quantity="one">You gained %1$d unit and finished in %2$s with %3$d victory points!</item>
+        <item quantity="other">You gained %1$d units and finished in %2$s with %3$d victory points!</item>
+    </plurals>
+    <plurals name="campaign_result_group">
+        <item quantity="one">Finished in %1$s with %2$d victory point!</item>
+        <item quantity="other">Finished in %1$s with %2$d victory points!</item>
+    </plurals>
+    <string name="campaign_go_to_next">Go to %1$s</string>
+    <string name="campaign_need_to_buy">Need to buy anything?</string>
+    <string name="campaign_all_day">I can do this all day! (restart)</string>
+    <string name="campaign_defeat_time">You held out for %1$s.</string>
+    <plurals name="campaign_credits_available">
+        <item quantity="one">%1$d unit available</item>
+        <item quantity="other">%1$d units available</item>
+    </plurals>
+    <plurals name="campaign_price">
+        <item quantity="one">%1$d unit</item>
+        <item quantity="other">%1$d units</item>
+    </plurals>
+    <string name="campaign_are_you_sure">Are you sure?</string>
+    <plurals name="campaign_confirm_purchase">
+        <item quantity="one">Buy %1$s for %2$d unit? It comes out of this hero\'s units.</item>
+        <item quantity="other">Buy %1$s for %2$d units? It comes out of this hero\'s units.</item>
+    </plurals>
+    <string name="campaign_see_card">See the full card</string>
+    <string name="campaign_purchased">Already bought</string>
+    <string name="campaign_done_shopping">Done shopping</string>
+    <string name="campaign_no_market">This campaign has no market.</string>
+    <string name="campaign_not_enough_credits">Not enough units</string>
+    <string name="campaign_already_bought">Already bought by %1$s</string>
+    <string name="campaign_unknown_card">Unknown card</string>
+    <plurals name="campaign_player_count">
+        <item quantity="one">%1$d player</item>
+        <item quantity="other">%1$d players</item>
+    </plurals>
+    <string name="campaign_empty">No campaign yet. Start one with the button below.</string>
 </resources>

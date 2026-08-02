@@ -1,5 +1,6 @@
 package com.hasyame.marvelchampions.ui.campaign
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,11 +9,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -20,12 +21,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,7 +34,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,9 +44,7 @@ import com.hasyame.marvelchampions.R
 import com.hasyame.marvelchampions.data.repository.CampaignRun
 import com.hasyame.marvelchampions.domain.campaign.engine.ConditionEvaluator
 import com.hasyame.marvelchampions.domain.campaign.engine.EvaluationContext
-import com.hasyame.marvelchampions.domain.campaign.engine.MarketRules
 import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
-import com.hasyame.marvelchampions.domain.campaign.template.CounterScope
 import com.hasyame.marvelchampions.domain.campaign.template.ScenarioTemplate
 import kotlinx.coroutines.delay
 
@@ -54,14 +53,13 @@ import kotlinx.coroutines.delay
 fun CampaignRunScreen(
     runId: String,
     onBack: () -> Unit,
+    onCardClick: (String) -> Unit,
     viewModel: CampaignRunViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    var questionnaireVictory by remember { mutableStateOf<Boolean?>(null) }
 
     LaunchedEffect(runId) { viewModel.load(runId) }
 
-    // Only ticks while something is running, so a paused run costs nothing.
     LaunchedEffect(state.run?.timer?.isRunning) {
         while (state.run?.timer?.isRunning == true) {
             viewModel.tick()
@@ -69,10 +67,18 @@ fun CampaignRunScreen(
         }
     }
 
+    val run = state.run
+    val scenario = run?.template?.scenarios?.firstOrNull { it.id == run.state.currentScenarioId }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(state.run?.entity?.templateName ?: "") },
+                title = {
+                    Text(
+                        scenario?.name?.resolve("fr")?.takeIf { it.isNotBlank() }
+                            ?: run?.entity?.name.orEmpty(),
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
@@ -84,7 +90,6 @@ fun CampaignRunScreen(
             )
         },
     ) { padding ->
-        val run = state.run
         when {
             state.isLoading -> Box(
                 Modifier.fillMaxSize().padding(padding),
@@ -96,346 +101,351 @@ fun CampaignRunScreen(
                 contentAlignment = Alignment.Center,
             ) { Text(stringResource(R.string.campaign_run_not_found)) }
 
-            else -> RunBody(
-                run = run,
-                elapsedMillis = state.elapsedMillis,
-                viewModel = viewModel,
-                padding = padding,
-                onFinishScenario = { questionnaireVictory = it },
-            )
-        }
-    }
+            else -> Box(Modifier.fillMaxSize().padding(padding)) {
+                when (state.page) {
+                    RunPage.BRIEFING -> BriefingPage(
+                        run = run,
+                        scenario = scenario,
+                        onReady = viewModel::beginScenario,
+                        onNotReady = onBack,
+                        onCardClick = onCardClick,
+                        onSetupAction = viewModel::takeSetupAction,
+                    )
 
-    // A defeat leaves the run on the same scenario with the timer zeroed, so
-    // both options the campaign offers are one tap away: replay now, or step
-    // away and come back to this scenario later.
-    if (state.showDefeatChoice) {
-        AlertDialog(
-            onDismissRequest = viewModel::dismissDefeatChoice,
-            title = { Text(stringResource(R.string.campaign_defeat_recorded)) },
-            text = { Text(stringResource(R.string.campaign_defeat_choice)) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        viewModel.dismissDefeatChoice()
-                        viewModel.startTimer()
-                    },
-                ) { Text(stringResource(R.string.campaign_replay_now)) }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        viewModel.dismissDefeatChoice()
-                        onBack()
-                    },
-                ) { Text(stringResource(R.string.campaign_take_a_break)) }
-            },
-        )
-    }
+                    RunPage.PLAYING -> PlayingPage(
+                        run = run,
+                        scenario = scenario,
+                        elapsedMillis = state.elapsedMillis,
+                        onVictory = viewModel::declareVictory,
+                        onDefeat = viewModel::declareDefeat,
+                        onPause = viewModel::pauseTimer,
+                        onResume = viewModel::resumeTimer,
+                    )
 
-    val run = state.run
-    val victory = questionnaireVictory
-    if (run != null && victory != null) {
-        val scenario = run.template.scenarios.firstOrNull { it.id == run.state.currentScenarioId }
-        ScenarioOutcomeDialog(
-            scenario = scenario,
-            victory = victory,
-            heroes = run.state.heroes,
-            difficulty = run.state.difficulty,
-            state = run.state,
-            onDismiss = { questionnaireVictory = null },
-            onConfirm = { answers ->
-                viewModel.completeScenario(victory, answers)
-                questionnaireVictory = null
-            },
-        )
-    }
-}
+                    RunPage.QUESTIONS -> QuestionsPage(
+                        run = run,
+                        scenario = scenario,
+                        onSubmit = viewModel::submitAnswers,
+                    )
 
-@Composable
-private fun RunBody(
-    run: CampaignRun,
-    elapsedMillis: Long,
-    viewModel: CampaignRunViewModel,
-    padding: androidx.compose.foundation.layout.PaddingValues,
-    onFinishScenario: (Boolean) -> Unit,
-) {
-    val scenario = run.template.scenarios.firstOrNull { it.id == run.state.currentScenarioId }
+                    RunPage.RESULT -> ResultPage(
+                        run = run,
+                        summary = state.summary,
+                        onNext = viewModel::continueToNextScenario,
+                        onMarket = { viewModel.goTo(RunPage.MARKET) },
+                        onBreak = onBack,
+                    )
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(padding),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        item { CountersCard(run) }
+                    RunPage.DEFEAT -> DefeatPage(
+                        summary = state.summary,
+                        onRestart = viewModel::replayScenario,
+                        onBreak = onBack,
+                    )
 
-        if (run.state.finished) {
-            item {
-                Text(
-                    text = stringResource(R.string.campaign_complete),
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
-        }
-
-        scenario?.let {
-            item { ScenarioSetupCard(run, it, viewModel) }
-            item {
-                TimerCard(
-                    elapsedMillis = elapsedMillis,
-                    isRunning = run.timer.isRunning,
-                    onStart = viewModel::startTimer,
-                    onPause = viewModel::pauseTimer,
-                    onReset = viewModel::resetTimer,
-                    onVictory = { onFinishScenario(true) },
-                    onDefeat = { onFinishScenario(false) },
-                )
-            }
-        }
-
-        if (run.template.market != null) {
-            item { MarketCard(run, viewModel) }
-        }
-
-        if (run.state.completedScenarios.isNotEmpty()) {
-            item {
-                Text(
-                    text = stringResource(R.string.campaign_log),
-                    style = MaterialTheme.typography.titleMedium,
-                )
-            }
-            items(run.state.completedScenarios, key = { it.eventId }) { result ->
-                ListItem(
-                    headlineContent = {
-                        Text(
-                            scenarioName(run, result.scenarioId) + " — " +
-                                stringResource(
-                                    if (result.victory) {
-                                        R.string.campaign_victory
-                                    } else {
-                                        R.string.campaign_defeat
-                                    },
-                                ),
-                        )
-                    },
-                    supportingContent = {
-                        // Recorded answers are shown here because some of them —
-                        // victory points above all — are a per-scenario record
-                        // that nothing carries forward, so the log is the only
-                        // place they exist.
-                        val recorded = result.answers.numbers.entries
-                            .joinToString(" · ") { "${it.key} ${it.value}" }
-                        Text(
-                            listOfNotNull(
-                                TimerState.format(result.elapsedMillis),
-                                recorded.takeIf { it.isNotBlank() },
-                            ).joinToString(" — "),
-                        )
-                    },
-                    trailingContent = {
-                        // Editing a past result is a revocation, logged as such
-                        // rather than a silent rewrite.
-                        OutlinedButton(onClick = { viewModel.revoke(result.eventId, null) }) {
-                            Text(stringResource(R.string.campaign_undo))
-                        }
-                    },
-                )
-                HorizontalDivider()
-            }
-        }
-    }
-}
-
-@Composable
-private fun CountersCard(run: CampaignRun) {
-    Card(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(
-                text = run.state.difficulty.replaceFirstChar(Char::uppercase),
-                style = MaterialTheme.typography.labelLarge,
-            )
-            run.template.counters.forEach { counter ->
-                when (counter.counterScope) {
-                    CounterScope.CAMPAIGN -> Text("${counter.id}: ${run.state.counter(counter.id)}")
-                    CounterScope.HERO -> {
-                        val active = counter.activeWhen == null ||
-                            ConditionEvaluator.evaluate(
-                                counter.activeWhen,
-                                EvaluationContext(run.state),
-                            )
-                        if (active) {
-                            Text(
-                                text = counter.id + ": " + run.state.heroes.joinToString(", ") {
-                                    "${it.name} ${run.state.heroCounter(counter.id, it.id)}"
-                                },
-                            )
-                        }
-                    }
-                }
-            }
-            Text(
-                text = stringResource(
-                    R.string.campaign_total_time,
-                    TimerState.format(run.state.totalPlayTimeMillis),
-                ),
-                style = MaterialTheme.typography.bodySmall,
-            )
-        }
-    }
-}
-
-@Composable
-private fun ScenarioSetupCard(
-    run: CampaignRun,
-    scenario: ScenarioTemplate,
-    viewModel: CampaignRunViewModel,
-) {
-    Card(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(
-                text = scenario.name?.resolve("fr").orEmpty().ifBlank { scenario.id },
-                style = MaterialTheme.typography.titleLarge,
-            )
-            scenario.flavour?.resolve("fr")?.takeIf { it.isNotBlank() }?.let {
-                Text(it, style = MaterialTheme.typography.bodyMedium)
-            }
-
-            scenario.baseSetup?.let { setup ->
-                setup.villainDeck[run.state.difficulty]?.takeIf { it.isNotEmpty() }?.let {
-                    Text(stringResource(R.string.campaign_villain_deck, it.joinToString(", ")))
-                }
-                setup.mainScheme.takeIf { it.isNotEmpty() }?.let {
-                    Text(stringResource(R.string.campaign_main_scheme, it.joinToString(", ")))
-                }
-                (setup.encounterSets + setup.modularSets).takeIf { it.isNotEmpty() }?.let {
-                    Text(stringResource(R.string.campaign_encounter_sets, it.joinToString(", ")))
-                }
-            }
-
-            val context = EvaluationContext(run.state, scenario.id)
-            scenario.campaignSetup
-                .filter { ConditionEvaluator.evaluate(it.condition, context) }
-                .forEach { step ->
-                    Text("• " + step.text.resolve("fr"))
-                    step.action?.let { action ->
-                        val enabled = ConditionEvaluator.evaluate(action.enabledWhen, context)
-                        if (action.perHero) {
-                            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                run.state.heroes.forEach { hero ->
-                                    OutlinedButton(
-                                        onClick = { viewModel.takeSetupAction(action.id, hero.id) },
-                                        enabled = enabled,
-                                    ) { Text("${action.label.resolve("fr")} — ${hero.name}") }
-                                }
-                            }
-                        } else {
-                            OutlinedButton(
-                                onClick = { viewModel.takeSetupAction(action.id, null) },
-                                enabled = enabled,
-                            ) { Text(action.label.resolve("fr")) }
-                        }
-                    }
-                }
-        }
-    }
-}
-
-@Composable
-private fun TimerCard(
-    elapsedMillis: Long,
-    isRunning: Boolean,
-    onStart: () -> Unit,
-    onPause: () -> Unit,
-    onReset: () -> Unit,
-    onVictory: () -> Unit,
-    onDefeat: () -> Unit,
-) {
-    Card(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(TimerState.format(elapsedMillis), style = MaterialTheme.typography.headlineMedium)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = if (isRunning) onPause else onStart) {
-                    Text(
-                        stringResource(
-                            if (isRunning) R.string.campaign_pause else R.string.campaign_play,
-                        ),
+                    RunPage.MARKET -> MarketPage(
+                        run = run,
+                        onBuy = viewModel::purchase,
+                        onRefund = viewModel::refund,
+                        onCardClick = onCardClick,
+                        onDone = { viewModel.goTo(RunPage.BRIEFING) },
                     )
                 }
-                OutlinedButton(onClick = onReset) { Text(stringResource(R.string.campaign_reset)) }
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = onVictory, modifier = Modifier.weight(1f)) {
-                    Text(stringResource(R.string.campaign_victory))
-                }
-                OutlinedButton(onClick = onDefeat, modifier = Modifier.weight(1f)) {
-                    Text(stringResource(R.string.campaign_defeat))
-                }
             }
         }
     }
 }
 
+/** Page 1. Title, story, what to put on the table. */
 @Composable
-private fun MarketCard(run: CampaignRun, viewModel: CampaignRunViewModel) {
-    Card(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(
-                text = stringResource(R.string.campaign_market),
-                style = MaterialTheme.typography.titleMedium,
-            )
-            run.state.heroes.forEach { hero ->
-                Text(
-                    text = hero.name + " — " + run.state.heroCounter(
-                        run.template.market?.counterId ?: "credits",
-                        hero.id,
-                    ),
-                    style = MaterialTheme.typography.titleSmall,
-                )
-                MarketRules.offersFor(run.template, run.state, hero.id).forEach { offer ->
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = "${offer.entry.cardCode} (${offer.entry.cost})",
-                            style = MaterialTheme.typography.bodySmall,
+private fun BriefingPage(
+    run: CampaignRun,
+    scenario: ScenarioTemplate?,
+    onReady: () -> Unit,
+    onNotReady: () -> Unit,
+    onCardClick: (String) -> Unit,
+    onSetupAction: (String, String?) -> Unit,
+) {
+    if (scenario == null) {
+        Box(Modifier.fillMaxSize().padding(32.dp), contentAlignment = Alignment.Center) {
+            Text(stringResource(R.string.campaign_complete))
+        }
+        return
+    }
+
+    Column(
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        scenario.flavour?.resolve("fr")?.takeIf { it.isNotBlank() }?.let {
+            Text(it, style = MaterialTheme.typography.bodyMedium, fontStyle = FontStyle.Italic)
+        }
+
+        scenario.baseSetup?.let { setup ->
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        text = stringResource(R.string.campaign_pre_setup),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    setup.villainDeck[run.state.difficulty]?.takeIf { it.isNotEmpty() }?.let {
+                        CardChips(
+                            label = stringResource(R.string.campaign_villain_deck_label),
+                            codes = it,
+                            run = run,
+                            onCardClick = onCardClick,
                         )
-                        OutlinedButton(
-                            onClick = {
-                                viewModel.purchase(
-                                    hero.id,
-                                    offer.entry.cardCode,
-                                    offer.entry.cost,
-                                    offer.entry.cardListId,
-                                )
-                            },
-                            enabled = offer.canBuy,
-                        ) { Text(stringResource(R.string.campaign_buy)) }
                     }
-                }
-            }
-            if (run.state.purchases.isNotEmpty()) {
-                HorizontalDivider()
-                run.state.purchases.forEach { purchase ->
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        Text(purchase.cardCode, style = MaterialTheme.typography.bodySmall)
-                        OutlinedButton(onClick = { viewModel.refund(purchase.eventId) }) {
-                            Text(stringResource(R.string.campaign_refund))
+                    setup.mainScheme.takeIf { it.isNotEmpty() }?.let {
+                        CardChips(
+                            label = stringResource(R.string.campaign_main_scheme_label),
+                            codes = it,
+                            run = run,
+                            onCardClick = onCardClick,
+                        )
+                    }
+                    (setup.encounterSets + setup.modularSets).takeIf { it.isNotEmpty() }?.let { sets ->
+                        Column {
+                            Text(
+                                text = stringResource(R.string.campaign_encounter_sets_label),
+                                style = MaterialTheme.typography.labelLarge,
+                            )
+                            Text(sets.joinToString(", ") { run.names.set(it) })
                         }
                     }
                 }
             }
         }
+
+        if (scenario.campaignSetup.isNotEmpty()) {
+            val context = EvaluationContext(run.state, scenario.id)
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        text = stringResource(R.string.campaign_setup_label),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    scenario.campaignSetup
+                        .filter { ConditionEvaluator.evaluate(it.condition, context) }
+                        .forEach { step ->
+                            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Text("• " + step.text.resolve("fr"))
+                                if (step.cards.isNotEmpty()) {
+                                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                        step.cards.forEach { code ->
+                                            AssistChip(
+                                                onClick = { onCardClick(code) },
+                                                label = { Text(run.names.card(code)) },
+                                            )
+                                        }
+                                    }
+                                }
+                                step.action?.let { action ->
+                                    val enabled =
+                                        ConditionEvaluator.evaluate(action.enabledWhen, context)
+                                    if (action.perHero) {
+                                        FlowRow(
+                                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                        ) {
+                                            run.state.heroes.forEach { hero ->
+                                                OutlinedButton(
+                                                    onClick = { onSetupAction(action.id, hero.id) },
+                                                    enabled = enabled,
+                                                ) {
+                                                    Text(
+                                                        action.label.resolve("fr") +
+                                                            " — " + hero.name,
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        OutlinedButton(
+                                            onClick = { onSetupAction(action.id, null) },
+                                            enabled = enabled,
+                                        ) { Text(action.label.resolve("fr")) }
+                                    }
+                                }
+                            }
+                        }
+                }
+            }
+        }
+
+        Button(onClick = onReady, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.campaign_im_ready))
+        }
+        OutlinedButton(onClick = onNotReady, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.campaign_not_ready))
+        }
     }
 }
 
-private fun scenarioName(run: CampaignRun, scenarioId: String): String =
-    run.template.scenarios.firstOrNull { it.id == scenarioId }
-        ?.name?.resolve("fr")
-        ?.takeIf { it.isNotBlank() }
-        ?: scenarioId
+@Composable
+private fun CardChips(
+    label: String,
+    codes: List<String>,
+    run: CampaignRun,
+    onCardClick: (String) -> Unit,
+) {
+    Column {
+        Text(label, style = MaterialTheme.typography.labelLarge)
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            codes.forEach { code ->
+                AssistChip(
+                    onClick = { onCardClick(code) },
+                    label = { Text(run.names.card(code)) },
+                )
+            }
+        }
+    }
+}
+
+/** Page 2. The clock, and the two ways a scenario ends. */
+@Composable
+private fun PlayingPage(
+    run: CampaignRun,
+    scenario: ScenarioTemplate?,
+    elapsedMillis: Long,
+    onVictory: () -> Unit,
+    onDefeat: () -> Unit,
+    onPause: () -> Unit,
+    onResume: () -> Unit,
+) {
+    Column(
+        Modifier.fillMaxSize().padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = scenario?.name?.resolve("fr").orEmpty(),
+            style = MaterialTheme.typography.headlineSmall,
+        )
+        Text(
+            text = TimerState.format(elapsedMillis),
+            style = MaterialTheme.typography.displayLarge,
+        )
+        OutlinedButton(onClick = if (run.timer.isRunning) onPause else onResume) {
+            Text(
+                stringResource(
+                    if (run.timer.isRunning) R.string.campaign_pause else R.string.campaign_play,
+                ),
+            )
+        }
+
+        Button(onClick = onVictory, modifier = Modifier.fillMaxWidth()) {
+            Text(
+                scenario?.victoryLabel?.resolve("fr")?.takeIf { it.isNotBlank() }
+                    ?: stringResource(R.string.campaign_victory),
+            )
+        }
+        OutlinedButton(onClick = onDefeat, modifier = Modifier.fillMaxWidth()) {
+            Text(
+                scenario?.defeatLabel?.resolve("fr")?.takeIf { it.isNotBlank() }
+                    ?: stringResource(R.string.campaign_defeat),
+            )
+        }
+    }
+}
+
+/** Page 4. What the scenario awarded, and the three ways onward. */
+@Composable
+private fun ResultPage(
+    run: CampaignRun,
+    summary: ScenarioOutcomeSummary?,
+    onNext: () -> Unit,
+    onMarket: () -> Unit,
+    onBreak: () -> Unit,
+) {
+    Column(
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.campaign_bravo),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary,
+        )
+
+        val gained = summary?.creditsGained.orEmpty()
+        val distinct = gained.values.distinct()
+        Text(
+            text = if (distinct.size == 1 && run.state.heroes.size == 1) {
+                pluralStringResource(
+                    R.plurals.campaign_result_solo,
+                    distinct.single(),
+                    distinct.single(),
+                    TimerState.format(summary?.elapsedMillis ?: 0),
+                    summary?.victoryPoints ?: 0,
+                )
+            } else {
+                pluralStringResource(
+                    R.plurals.campaign_result_group,
+                    summary?.victoryPoints ?: 0,
+                    TimerState.format(summary?.elapsedMillis ?: 0),
+                    summary?.victoryPoints ?: 0,
+                )
+            },
+            style = MaterialTheme.typography.bodyLarge,
+        )
+
+        if (run.state.heroes.size > 1) {
+            run.state.heroes.forEach { hero ->
+                Text("${hero.name}: +${gained[hero.id] ?: 0}")
+            }
+        }
+
+        HorizontalDivider()
+
+        if (summary?.campaignFinished == true) {
+            Text(
+                text = stringResource(R.string.campaign_complete),
+                style = MaterialTheme.typography.titleMedium,
+            )
+        } else {
+            Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    stringResource(
+                        R.string.campaign_go_to_next,
+                        summary?.nextScenarioName.orEmpty(),
+                    ),
+                )
+            }
+        }
+        OutlinedButton(onClick = onMarket, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.campaign_need_to_buy))
+        }
+        OutlinedButton(onClick = onBreak, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.campaign_take_a_break))
+        }
+    }
+}
+
+/** Page 3, the other branch. */
+@Composable
+private fun DefeatPage(
+    summary: ScenarioOutcomeSummary?,
+    onRestart: () -> Unit,
+    onBreak: () -> Unit,
+) {
+    Column(
+        Modifier.fillMaxSize().padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.campaign_defeat_recorded),
+            style = MaterialTheme.typography.headlineMedium,
+        )
+        Text(
+            text = stringResource(
+                R.string.campaign_defeat_time,
+                TimerState.format(summary?.elapsedMillis ?: 0),
+            ),
+        )
+        Button(onClick = onRestart, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.campaign_all_day))
+        }
+        OutlinedButton(onClick = onBreak, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.campaign_take_a_break))
+        }
+    }
+}

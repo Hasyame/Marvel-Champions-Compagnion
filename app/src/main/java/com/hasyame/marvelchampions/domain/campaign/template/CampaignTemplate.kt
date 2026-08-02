@@ -102,6 +102,12 @@ data class ScenarioTemplate(
     val id: String,
     val name: LocalizedText? = null,
     val flavour: LocalizedText? = null,
+    /**
+     * Wording for the two buttons that end a scenario, which reads better named
+     * after the villain than as a generic Victory/Defeat pair.
+     */
+    val victoryLabel: LocalizedText? = null,
+    val defeatLabel: LocalizedText? = null,
     val baseSetup: BaseSetup? = null,
     val campaignSetup: List<SetupStep> = emptyList(),
     val onVictory: Outcome? = null,
@@ -134,6 +140,14 @@ data class SetupStep(
     val text: LocalizedText,
     @SerialName("when") val condition: Condition? = null,
     val action: SetupAction? = null,
+    /**
+     * Cards this step refers to, by MarvelCDB code.
+     *
+     * Structured rather than written into [text] so the UI can show the card's
+     * real name in the reader's language and let them open it. A code in the
+     * prose would be unreadable and would not translate.
+     */
+    val cards: List<String> = emptyList(),
 )
 
 @Serializable

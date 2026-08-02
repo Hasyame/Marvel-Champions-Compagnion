@@ -90,21 +90,38 @@ class BundledCampaignsTest {
     }
 
     @Test
-    fun `bundled campaigns carry no long prose`() {
-        // The rule this project works to: mechanics, not rules text. A long
-        // sentence in a setup step or a flavour field is the signal that book
-        // text has crept in.
+    fun `setup steps stay mechanical rather than restating the rules`() {
+        // The line this project works to: no rules text. Narrative flavour is
+        // fine — it tells nobody how to play — but a setup step long enough to
+        // be a paragraph is a rule copied from the book, and someone without
+        // the book must not be able to play from the app alone.
         templates().forEach { (name, template) ->
             template.scenarios.forEach { scenario ->
-                assertTrue(
-                    "$name/${scenario.id} has flavour text",
-                    scenario.flavour == null,
-                )
                 scenario.campaignSetup.forEach { step ->
                     listOfNotNull(step.text.fr, step.text.en).forEach { text ->
                         assertTrue(
-                            "$name/${scenario.id} setup step looks like prose: \"$text\"",
+                            "$name/${scenario.id} setup step reads like a rule: \"$text\"",
                             text.length <= MAX_STEP_LENGTH,
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `setup steps point at cards by code rather than naming them in the text`() {
+        // A code in the prose would be unreadable and would not translate; the
+        // app resolves the code to the card's real name in the reader's
+        // language, so the reference belongs in `cards`.
+        val codePattern = Regex("""\b\d{5}[a-z]?\b""")
+        templates().forEach { (name, template) ->
+            template.scenarios.forEach { scenario ->
+                scenario.campaignSetup.forEach { step ->
+                    listOfNotNull(step.text.fr, step.text.en).forEach { text ->
+                        assertTrue(
+                            "$name/${scenario.id} has a raw card code in its text: \"$text\"",
+                            !codePattern.containsMatchIn(text),
                         )
                     }
                 }

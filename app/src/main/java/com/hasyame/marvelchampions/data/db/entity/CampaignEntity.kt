@@ -1,5 +1,6 @@
 package com.hasyame.marvelchampions.data.db.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -17,6 +18,15 @@ data class CampaignRunEntity(
     @PrimaryKey val id: String,
     val templateId: String,
     val templateName: String,
+    /**
+     * What the players called this run. Two groups can be part way through the
+     * same campaign, so the template name alone does not identify it.
+     *
+     * The SQL default is what lets Room generate the migration: runs created
+     * before this column existed simply have no name and fall back to the
+     * template's.
+     */
+    @ColumnInfo(defaultValue = "") val name: String = "",
     val difficulty: String,
     val createdAt: Long,
     val finished: Boolean = false,

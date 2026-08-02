@@ -44,6 +44,10 @@ data object CampaignGraph
 @Serializable
 data object CampaignRoute
 
+/** Page 0: choose campaign, name, roster and difficulty. */
+@Serializable
+data object StartCampaignRoute
+
 /** One campaign run. */
 @Serializable
 data class CampaignRunRoute(val runId: String)

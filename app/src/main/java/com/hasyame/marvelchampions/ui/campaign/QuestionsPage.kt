@@ -3,58 +3,51 @@ package com.hasyame.marvelchampions.ui.campaign
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.layout.Row
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.data.repository.CampaignRun
 import com.hasyame.marvelchampions.domain.campaign.engine.AnswerSet
-import com.hasyame.marvelchampions.domain.campaign.engine.CampaignHero
-import com.hasyame.marvelchampions.domain.campaign.engine.CampaignState
 import com.hasyame.marvelchampions.domain.campaign.engine.ConditionEvaluator
 import com.hasyame.marvelchampions.domain.campaign.engine.EvaluationContext
 import com.hasyame.marvelchampions.domain.campaign.template.PromptType
 import com.hasyame.marvelchampions.domain.campaign.template.ScenarioTemplate
 
 /**
- * The post-scenario questionnaire.
+ * Page 3. The post-victory questionnaire, entirely driven by the template.
  *
- * Entirely driven by the template's prompt list — this file knows nothing about
- * any particular campaign. Prompts whose `when` fails are not shown, which is
- * how Expert-only questions disappear on Standard.
+ * Prompts whose `when` fails are not shown, which is how the Expert-only
+ * questions disappear on Standard without this file knowing anything about
+ * difficulty.
  */
 @Composable
-fun ScenarioOutcomeDialog(
+fun QuestionsPage(
+    run: CampaignRun,
     scenario: ScenarioTemplate?,
-    victory: Boolean,
-    heroes: List<CampaignHero>,
-    difficulty: String,
-    state: CampaignState,
-    onDismiss: () -> Unit,
-    onConfirm: (AnswerSet) -> Unit,
+    onSubmit: (AnswerSet) -> Unit,
 ) {
-    val outcome = if (victory) scenario?.onVictory else scenario?.onDefeat
-    val context = EvaluationContext(state = state, scenarioId = scenario?.id)
-    val prompts = outcome?.prompts.orEmpty()
+    val context = EvaluationContext(state = run.state, scenarioId = scenario?.id)
+    val prompts = scenario?.onVictory?.prompts.orEmpty()
         .filter { ConditionEvaluator.evaluate(it.condition, context) }
 
     val numbers = remember { mutableStateMapOf<String, String>() }
@@ -64,25 +57,26 @@ fun ScenarioOutcomeDialog(
     val perHeroNumbers = remember { mutableStateMapOf<String, String>() }
     val perHeroBooleans = remember { mutableStateMapOf<String, Boolean>() }
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text(
-                stringResource(
-                    if (victory) R.string.campaign_victory else R.string.campaign_defeat,
-                ),
-            )
-        },
-        text = {
-            Column(
-                modifier = Modifier.verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                if (prompts.isEmpty()) {
-                    Text(stringResource(R.string.campaign_no_questions))
-                }
-                prompts.forEach { prompt ->
-                    val label = prompt.label?.resolve("fr").orEmpty().ifBlank { prompt.id }
+    Column(
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.campaign_questions_title),
+            style = MaterialTheme.typography.headlineSmall,
+        )
+
+        if (prompts.isEmpty()) {
+            Text(stringResource(R.string.campaign_no_questions))
+        }
+
+        prompts.forEach { prompt ->
+            val label = prompt.label?.resolve("fr").orEmpty().ifBlank { prompt.id }
+            Card(Modifier.fillMaxWidth()) {
+                Column(
+                    Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
                     when (prompt.promptType) {
                         PromptType.NUMBER -> OutlinedTextField(
                             value = numbers[prompt.id].orEmpty(),
@@ -107,7 +101,7 @@ fun ScenarioOutcomeDialog(
 
                         PromptType.PER_HERO_NUMBER -> {
                             Text(label, style = MaterialTheme.typography.titleSmall)
-                            heroes.forEach { hero ->
+                            run.state.heroes.forEach { hero ->
                                 val key = "${prompt.id}|${hero.id}"
                                 OutlinedTextField(
                                     value = perHeroNumbers[key].orEmpty(),
@@ -126,7 +120,7 @@ fun ScenarioOutcomeDialog(
 
                         PromptType.PER_HERO_BOOLEAN -> {
                             Text(label, style = MaterialTheme.typography.titleSmall)
-                            heroes.forEach { hero ->
+                            run.state.heroes.forEach { hero ->
                                 val key = "${prompt.id}|${hero.id}"
                                 Row(
                                     Modifier.fillMaxWidth(),
@@ -177,46 +171,43 @@ fun ScenarioOutcomeDialog(
                     }
                 }
             }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onConfirm(
-                        AnswerSet(
-                            numbers = numbers.mapNotNull { (k, v) ->
-                                v.toIntOrNull()?.let { k to it }
-                            }.toMap(),
-                            booleans = booleans.toMap(),
-                            choices = choices.toMap(),
-                            cardLists = cardLists.mapValues { (_, v) ->
-                                v.split(',').map { it.trim() }.filter { it.isNotEmpty() }
-                            },
-                            perHeroNumbers = perHeroNumbers.entries
-                                .mapNotNull { (key, value) ->
-                                    val parts = key.split('|')
-                                    val number = value.toIntOrNull()
-                                    if (parts.size == 2 && number != null) {
-                                        Triple(parts[0], parts[1], number)
-                                    } else {
-                                        null
-                                    }
+        }
+
+        Button(
+            onClick = {
+                onSubmit(
+                    AnswerSet(
+                        numbers = numbers.mapNotNull { (k, v) ->
+                            v.toIntOrNull()?.let { k to it }
+                        }.toMap(),
+                        booleans = booleans.toMap(),
+                        choices = choices.toMap(),
+                        cardLists = cardLists.mapValues { (_, v) ->
+                            v.split(',').map { it.trim() }.filter { it.isNotEmpty() }
+                        },
+                        perHeroNumbers = perHeroNumbers.entries
+                            .mapNotNull { (key, value) ->
+                                val parts = key.split('|')
+                                val number = value.toIntOrNull()
+                                if (parts.size == 2 && number != null) {
+                                    Triple(parts[0], parts[1], number)
+                                } else {
+                                    null
                                 }
-                                .groupBy({ it.first }, { it.second to it.third })
-                                .mapValues { entry -> entry.value.toMap() },
-                            perHeroBooleans = perHeroBooleans.entries
-                                .mapNotNull { (key, value) ->
-                                    val parts = key.split('|')
-                                    if (parts.size == 2) Triple(parts[0], parts[1], value) else null
-                                }
-                                .groupBy({ it.first }, { it.second to it.third })
-                                .mapValues { entry -> entry.value.toMap() },
-                        ),
-                    )
-                },
-            ) { Text(stringResource(R.string.campaign_record)) }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
-        },
-    )
+                            }
+                            .groupBy({ it.first }, { it.second to it.third })
+                            .mapValues { entry -> entry.value.toMap() },
+                        perHeroBooleans = perHeroBooleans.entries
+                            .mapNotNull { (key, value) ->
+                                val parts = key.split('|')
+                                if (parts.size == 2) Triple(parts[0], parts[1], value) else null
+                            }
+                            .groupBy({ it.first }, { it.second to it.third })
+                            .mapValues { entry -> entry.value.toMap() },
+                    ),
+                )
+            },
+            modifier = Modifier.fillMaxWidth(),
+        ) { Text(stringResource(R.string.campaign_validate)) }
+    }
 }

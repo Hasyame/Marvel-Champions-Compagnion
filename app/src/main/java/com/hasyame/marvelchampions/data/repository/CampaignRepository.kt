@@ -26,6 +26,25 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Display names for everything a campaign template refers to by code.
+ *
+ * Templates store codes because they are stable and language-neutral; showing
+ * one to a player would be unreadable, so they are resolved here against the
+ * card database in the player's chosen language.
+ */
+data class CampaignCardNames(
+    val cards: Map<String, String> = emptyMap(),
+    val sets: Map<String, String> = emptyMap(),
+    /** Host-relative image paths, for the market's shop layout. */
+    val images: Map<String, String> = emptyMap(),
+) {
+    /** Falls back to the code, so a card missing from the database is still identifiable. */
+    fun card(code: String): String = cards[code] ?: code
+
+    fun set(code: String): String = sets[code] ?: code
+}
+
 /** A loaded run: the template, the derived state, and the timer. */
 data class CampaignRun(
     val entity: CampaignRunEntity,
@@ -33,7 +52,17 @@ data class CampaignRun(
     val state: CampaignState,
     val events: List<CampaignEvent>,
     val timer: TimerState,
-)
+    val names: CampaignCardNames = CampaignCardNames(),
+    /**
+     * Campaign state as it stood before the most recent scenario result, so the
+     * summary can show what that scenario alone awarded rather than a running
+     * total.
+     */
+    val stateBeforeLastScenario: CampaignState? = null,
+) {
+    /** Host-relative image path for a card the template refers to. */
+    fun imageSrc(code: String): String? = names.images[code]
+}
 
 sealed interface TemplateImportResult {
     data class Success(val template: CampaignTemplate) : TemplateImportResult
@@ -110,6 +139,7 @@ class CampaignRepository @Inject constructor(
         template: CampaignTemplate,
         difficulty: String,
         deckIds: List<String>,
+        name: String = "",
     ): String = withContext(ioDispatcher) {
         val heroes = deckIds.mapNotNull { deckId ->
             deckRepository.getDeck(deckId)?.let { deck ->
@@ -127,6 +157,7 @@ class CampaignRepository @Inject constructor(
                 id = runId,
                 templateId = template.id,
                 templateName = template.name.resolve("fr"),
+                name = name.ifBlank { template.name.resolve("fr") },
                 difficulty = difficulty,
                 createdAt = System.currentTimeMillis(),
                 // The template travels with the run so it stays readable even
@@ -160,6 +191,15 @@ class CampaignRepository @Inject constructor(
         }
         val heroStats = heroStats(events, locale)
 
+        // Folding the log twice — once without the latest scenario result — is
+        // how the summary reports what that scenario awarded. Nothing extra is
+        // stored, so it cannot drift from the log.
+        val lastScenarioEvent = events.filterIsInstance<CampaignEvent.ScenarioCompleted>()
+            .maxByOrNull { it.timestamp }
+        val before = lastScenarioEvent?.let { last ->
+            engine.fold(template, events.filterNot { it.id == last.id }, heroStats)
+        }
+
         CampaignRun(
             entity = entity,
             template = template,
@@ -169,6 +209,50 @@ class CampaignRepository @Inject constructor(
                 accumulatedMillis = entity.timerAccumulatedMillis,
                 runningSinceEpochMillis = entity.timerRunningSince,
             ),
+            names = resolveNames(template, locale),
+            stateBeforeLastScenario = before,
+        )
+    }
+
+    /**
+     * Looks up every card and card set the template names, in one pass, so the
+     * campaign screens can show names rather than codes.
+     */
+    private suspend fun resolveNames(
+        template: CampaignTemplate,
+        locale: CardLocale,
+    ): CampaignCardNames {
+        val cardCodes = buildSet {
+            template.market?.entries?.forEach { add(it.cardCode) }
+            template.scenarios.forEach { scenario ->
+                scenario.baseSetup?.let { setup ->
+                    setup.villainDeck.values.forEach { addAll(it) }
+                    addAll(setup.mainScheme)
+                }
+                scenario.campaignSetup.forEach { addAll(it.cards) }
+            }
+        }
+        val setCodes = buildSet {
+            template.scenarios.forEach { scenario ->
+                scenario.baseSetup?.let { addAll(it.encounterSets); addAll(it.modularSets) }
+            }
+        }
+
+        val resolved = cardCodes.mapNotNull { code ->
+            cardDao.getCard(code, locale.code)?.let { code to it }
+        }
+
+        val setNames = SET_TYPES.flatMap { type -> cardDao.getCardSets(type, locale.code) }
+            .mapNotNull { summary -> summary.name?.let { summary.code to it } }
+            .toMap()
+            .filterKeys { it in setCodes }
+
+        return CampaignCardNames(
+            cards = resolved.associate { (code, card) -> code to card.name },
+            sets = setNames,
+            images = resolved.mapNotNull { (code, card) ->
+                card.imageSrc?.let { code to it }
+            }.toMap(),
         )
     }
 
@@ -226,5 +310,8 @@ class CampaignRepository @Inject constructor(
 
     private companion object {
         const val CAMPAIGN_ASSET_DIR = "campaigns"
+
+        /** Card set kinds a scenario's encounter and modular sets can come from. */
+        val SET_TYPES = listOf("villain", "modular", "standard", "expert", "nemesis")
     }
 }

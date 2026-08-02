@@ -4,12 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hasyame.marvelchampions.data.db.entity.CampaignRunEntity
 import com.hasyame.marvelchampions.data.repository.CampaignRepository
-import com.hasyame.marvelchampions.data.repository.CampaignRun
 import com.hasyame.marvelchampions.data.repository.TemplateImportResult
-import com.hasyame.marvelchampions.data.settings.AppPreferences
-import com.hasyame.marvelchampions.domain.campaign.engine.AnswerSet
-import com.hasyame.marvelchampions.domain.campaign.engine.CampaignEvent
-import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
 import com.hasyame.marvelchampions.domain.campaign.template.CampaignTemplate
 import com.hasyame.marvelchampions.domain.campaign.template.TemplateError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -82,10 +77,15 @@ class CampaignListViewModel @Inject constructor(
         }
     }
 
-    fun startRun(difficulty: String, deckIds: List<String>, onStarted: (String) -> Unit) {
+    fun startRun(
+        difficulty: String,
+        deckIds: List<String>,
+        name: String,
+        onStarted: (String) -> Unit,
+    ) {
         val template = _importedTemplate.value?.template ?: return
         viewModelScope.launch {
-            val runId = repository.startRun(template, difficulty, deckIds)
+            val runId = repository.startRun(template, difficulty, deckIds, name)
             _importedTemplate.value = null
             onStarted(runId)
         }
@@ -110,179 +110,3 @@ class CampaignListViewModel @Inject constructor(
 }
 
 data class ImportedTemplate(val template: CampaignTemplate)
-
-data class CampaignRunUiState(
-    val run: CampaignRun? = null,
-    val elapsedMillis: Long = 0,
-    val isLoading: Boolean = true,
-    /** Set after a loss, to offer replaying now or stepping away. */
-    val showDefeatChoice: Boolean = false,
-)
-
-@HiltViewModel
-class CampaignRunViewModel @Inject constructor(
-    private val repository: CampaignRepository,
-    private val preferences: AppPreferences,
-) : ViewModel() {
-
-    private val state = MutableStateFlow(CampaignRunUiState())
-    val uiState: StateFlow<CampaignRunUiState> = state
-
-    private var runId: String? = null
-
-    fun load(id: String) {
-        runId = id
-        viewModelScope.launch { reload() }
-    }
-
-    private suspend fun reload() {
-        val id = runId ?: return
-        val run = repository.load(id, preferences.currentCardLocale())
-        state.value = state.value.copy(
-            run = run,
-            elapsedMillis = run?.timer?.elapsedAt(System.currentTimeMillis()) ?: 0,
-            isLoading = false,
-        )
-    }
-
-    /** Recomputes the displayed time without touching storage. */
-    fun tick() {
-        val timer = state.value.run?.timer ?: return
-        state.value = state.value.copy(elapsedMillis = timer.elapsedAt(System.currentTimeMillis()))
-    }
-
-    fun startTimer() = updateTimer { it.start(System.currentTimeMillis()) }
-
-    fun pauseTimer() = updateTimer { it.pause(System.currentTimeMillis()) }
-
-    fun resetTimer() = updateTimer { it.reset() }
-
-    fun setElapsed(millis: Long) = updateTimer { it.setElapsed(millis, System.currentTimeMillis()) }
-
-    private fun updateTimer(transform: (TimerState) -> TimerState) {
-        val id = runId ?: return
-        val run = state.value.run ?: return
-        viewModelScope.launch {
-            val next = transform(run.timer)
-            repository.updateTimer(id, next, run.state.currentScenarioId)
-            reload()
-        }
-    }
-
-    fun completeScenario(victory: Boolean, answers: AnswerSet) {
-        val id = runId ?: return
-        val run = state.value.run ?: return
-        val scenarioId = run.state.currentScenarioId ?: return
-        viewModelScope.launch {
-            repository.append(
-                id,
-                CampaignEvent.ScenarioCompleted(
-                    id = repository.newEventId(),
-                    timestamp = System.currentTimeMillis(),
-                    scenarioId = scenarioId,
-                    victory = victory,
-                    answers = answers,
-                    elapsedMillis = run.timer.elapsedAt(System.currentTimeMillis()),
-                ),
-            )
-            // The timer is zeroed either way: a win moves on, a loss replays
-            // this scenario from scratch. The loss is still in the log.
-            repository.updateTimer(id, TimerState(), scenarioId)
-            reload()
-            state.value.run?.state?.finished?.let { repository.markFinished(id, it) }
-            if (!victory) {
-                state.value = state.value.copy(showDefeatChoice = true)
-            }
-        }
-    }
-
-    fun dismissDefeatChoice() {
-        state.value = state.value.copy(showDefeatChoice = false)
-    }
-
-    fun purchase(heroId: String, cardCode: String, cost: Int, cardListId: String) {
-        val id = runId ?: return
-        viewModelScope.launch {
-            repository.append(
-                id,
-                CampaignEvent.MarketPurchase(
-                    id = repository.newEventId(),
-                    timestamp = System.currentTimeMillis(),
-                    heroId = heroId,
-                    cardCode = cardCode,
-                    cost = cost,
-                    cardListId = cardListId,
-                ),
-            )
-            reload()
-        }
-    }
-
-    fun refund(purchaseEventId: String) {
-        val id = runId ?: return
-        viewModelScope.launch {
-            repository.append(
-                id,
-                CampaignEvent.MarketRefund(
-                    id = repository.newEventId(),
-                    timestamp = System.currentTimeMillis(),
-                    purchaseEventId = purchaseEventId,
-                ),
-            )
-            reload()
-        }
-    }
-
-    fun takeSetupAction(actionId: String, heroId: String?) {
-        val id = runId ?: return
-        val scenarioId = state.value.run?.state?.currentScenarioId ?: return
-        viewModelScope.launch {
-            repository.append(
-                id,
-                CampaignEvent.SetupActionTaken(
-                    id = repository.newEventId(),
-                    timestamp = System.currentTimeMillis(),
-                    scenarioId = scenarioId,
-                    actionId = actionId,
-                    heroId = heroId,
-                ),
-            )
-            reload()
-        }
-    }
-
-    /** Any hand adjustment, logged as such so it never looks like a rules result. */
-    fun adjust(counterId: String?, heroId: String?, value: Int?, note: String?) {
-        val id = runId ?: return
-        viewModelScope.launch {
-            repository.append(
-                id,
-                CampaignEvent.ManualAdjustment(
-                    id = repository.newEventId(),
-                    timestamp = System.currentTimeMillis(),
-                    counterId = counterId,
-                    heroId = heroId,
-                    value = value,
-                    note = note,
-                ),
-            )
-            reload()
-        }
-    }
-
-    fun revoke(eventId: String, note: String?) {
-        val id = runId ?: return
-        viewModelScope.launch {
-            repository.append(
-                id,
-                CampaignEvent.EventRevoked(
-                    id = repository.newEventId(),
-                    timestamp = System.currentTimeMillis(),
-                    revokedEventId = eventId,
-                    note = note,
-                ),
-            )
-            reload()
-        }
-    }
-}

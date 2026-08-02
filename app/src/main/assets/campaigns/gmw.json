@@ -1,11 +1,11 @@
 {
   "_note": [
-    "MECHANICS ONLY. No rules text and no flavour text from the campaign book —",
-    "card codes, counters, conditions and effects, plus short labels written",
-    "for this app.",
+    "Mechanics and narrative flavour. No rules text: setup steps name what to do",
+    "in a few words and point at cards by code, which the app resolves to real",
+    "card names. Someone without the campaign book cannot play from this file.",
     "",
-    "This is a play aid for someone who owns the campaign box and has the book",
-    "in front of them. On its own it does not explain how to play the campaign."
+    "Card codes are MarvelCDB codes. They are stable and language-neutral, which",
+    "is why they are stored rather than names — the app shows the name."
   ],
 
   "id": "gmw",
@@ -68,7 +68,12 @@
   "scenarios": [
     {
       "id": "s1_badoon",
-      "name": { "fr": "1 — Confrérie Badoon", "en": "1 — Brotherhood of Badoon" },
+      "name": { "fr": "Confrérie Badoon", "en": "Brotherhood of Badoon" },
+      "victoryLabel": { "fr": "Drang est vaincu !", "en": "Drang beat!" },
+      "defeatLabel": { "fr": "Drang vous a vaincu !", "en": "Drang has beat you!" },
+      "flavour": {
+        "en": "The Brotherhood of Badoon has mounted a surprise attack against Earth! You and the other Guardians of the Galaxy rush to Earth's aid, teaming up with the mighty Avengers in the process to beat back the Badoon. However, the Brotherhood of Badoon's leader, Drang, is a skilled tactician with a fleet of powerful ships and an overwhelming number of soldiers at his side. This won't be an easy fight."
+      },
 
       "baseSetup": {
         "villainDeck": {
@@ -85,12 +90,16 @@
       },
 
       "campaignSetup": [
-        { "text": { "fr": "Révéler 16178a", "en": "Reveal 16178a" } },
+        {
+          "text": { "fr": "Révéler le complot secondaire", "en": "Reveal the side scheme" },
+          "cards": ["16178a"]
+        },
         {
           "text": {
-            "fr": "Mélanger 16183 dans le deck rencontre",
-            "en": "Shuffle 16183 into the encounter deck"
-          }
+            "fr": "Mélanger ce sbire dans le deck rencontre",
+            "en": "Shuffle this minion into the encounter deck"
+          },
+          "cards": ["16183"]
         },
         {
           "text": {
@@ -107,26 +116,32 @@
             "id": "vp",
             "type": "number",
             "label": {
-              "fr": "Points de victoire dans la zone de victoire",
-              "en": "Victory points in the victory display"
+              "fr": "Combien de cartes rencontre dans la zone de victoire ?",
+              "en": "How many encounter cards in the victory display?"
             }
-          },
-          {
-            "id": "noMinions",
-            "type": "boolean",
-            "label": { "fr": "Aucun sbire en jeu", "en": "No minions in play" }
           },
           {
             "id": "schemeAt1B",
             "type": "boolean",
-            "label": { "fr": "Complot principal en 1B", "en": "Main scheme on stage 1B" }
+            "label": {
+              "fr": "Le complot principal est-il en 1B (Terrestrial Invasion) ?",
+              "en": "Is the main scheme on stage 1B (Terrestrial Invasion)?"
+            }
+          },
+          {
+            "id": "minionsInPlay",
+            "type": "boolean",
+            "label": {
+              "fr": "Y a-t-il au moins un sbire en jeu ?",
+              "en": "Is there at least one minion in play?"
+            }
           },
           {
             "id": "headhunterInVictoryDisplay",
             "type": "boolean",
             "label": {
-              "fr": "16183 dans la zone de victoire",
-              "en": "16183 in the victory display"
+              "fr": "Badoon Headhunter est-il dans la zone de victoire ?",
+              "en": "Is Badoon Headhunter in the victory display?"
             }
           },
           {
@@ -143,14 +158,7 @@
         ],
 
         "effects": [
-          { "op": "addCounter", "counter": "credits", "value": 1 },
           { "op": "addCounter", "counter": "credits", "from": "vp", "max": 3 },
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "value": 1,
-            "when": { "answer": "noMinions" }
-          },
           {
             "op": "addCounter",
             "counter": "credits",
@@ -158,10 +166,17 @@
             "when": { "answer": "schemeAt1B" }
           },
           {
+            "op": "addCounter",
+            "counter": "credits",
+            "value": 1,
+            "when": { "notAnswer": "minionsInPlay" }
+          },
+          {
             "op": "setFlag",
             "flag": "headhunterDefeated",
             "from": "headhunterInVictoryDisplay"
           },
+          { "op": "addCounter", "counter": "credits", "value": 1 },
           {
             "op": "setHeroCounter",
             "counter": "hp",
@@ -181,28 +196,28 @@
     },
     {
       "id": "s2_museum",
-      "name": { "fr": "2 — Infiltrer le musée", "en": "2 — Infiltrate the Museum" },
+      "name": { "fr": "Infiltrer le musée", "en": "Infiltrate the Museum" },
       "_status": "Order confirmed. Setup, questionnaire and effects still to come.",
       "onVictory": { "next": [{ "goto": "s3_escape" }] },
       "onDefeat": { "next": [{ "goto": "s2_museum" }] }
     },
     {
       "id": "s3_escape",
-      "name": { "fr": "3 — Fuir le musée", "en": "3 — Escape the Museum" },
+      "name": { "fr": "Fuir le musée", "en": "Escape the Museum" },
       "_status": "Order confirmed. Setup, questionnaire and effects still to come.",
       "onVictory": { "next": [{ "goto": "s4_nebula" }] },
       "onDefeat": { "next": [{ "goto": "s3_escape" }] }
     },
     {
       "id": "s4_nebula",
-      "name": { "fr": "4 — Nebula", "en": "4 — Nebula" },
+      "name": { "fr": "Nebula", "en": "Nebula" },
       "_status": "Order confirmed. Setup, questionnaire and effects still to come.",
       "onVictory": { "next": [{ "goto": "s5_ronan" }] },
       "onDefeat": { "next": [{ "goto": "s4_nebula" }] }
     },
     {
       "id": "s5_ronan",
-      "name": { "fr": "5 — Ronan l'Accusateur", "en": "5 — Ronan the Accuser" },
+      "name": { "fr": "Ronan l'Accusateur", "en": "Ronan the Accuser" },
       "_status": "Order confirmed. Setup, questionnaire and effects still to come.",
       "onVictory": { "next": [{ "end": true }] },
       "onDefeat": { "next": [{ "goto": "s5_ronan" }] }

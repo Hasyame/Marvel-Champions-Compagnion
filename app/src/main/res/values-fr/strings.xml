@@ -148,15 +148,7 @@
         <item quantity="other">%1$d cartes</item>
     </plurals>
     <!-- Campaign -->
-    <string name="campaign_my_runs">Mes campagnes</string>
     <string name="campaign_start">Démarrer une campagne</string>
-    <string name="campaign_none_bundled">Aucune campagne n\'est intégrée à cette version. Importez un fichier ci-dessous.</string>
-    <string name="campaign_import_file">Importer un modèle depuis un fichier</string>
-    <plurals name="campaign_scenario_count">
-        <item quantity="one">%1$d scénario</item>
-        <item quantity="many">%1$d de scénarios</item>
-        <item quantity="other">%1$d scénarios</item>
-    </plurals>
     <string name="campaign_in_progress">En cours</string>
     <string name="campaign_finished">Terminée</string>
     <string name="campaign_difficulty">Difficulté pour toute la campagne</string>
@@ -166,27 +158,17 @@
     <string name="campaign_template_invalid">Problème dans le modèle de campagne</string>
     <string name="campaign_run_not_found">Campagne introuvable.</string>
     <string name="campaign_complete">Campagne terminée.</string>
-    <string name="campaign_villain_deck">Deck du méchant : %1$s</string>
-    <string name="campaign_main_scheme">Complot principal : %1$s</string>
-    <string name="campaign_encounter_sets">Sets rencontre : %1$s</string>
     <string name="campaign_play">Jouer</string>
     <string name="campaign_pause">Pause</string>
-    <string name="campaign_reset">Réinitialiser</string>
     <string name="campaign_victory">Victoire</string>
     <string name="campaign_defeat">Défaite</string>
-    <string name="campaign_record">Enregistrer</string>
     <string name="campaign_market">Marché</string>
     <string name="campaign_buy">Acheter</string>
     <string name="campaign_refund">Rembourser</string>
-    <string name="campaign_log">Journal</string>
-    <string name="campaign_undo">Annuler</string>
-    <string name="campaign_total_time">Temps de jeu total : %1$s</string>
     <string name="campaign_no_questions">Rien à enregistrer pour ce résultat.</string>
     <string name="campaign_card_list_hint">Noms de cartes séparés par des virgules.</string>
     <string name="campaign_unknown_prompt">Type de question « %1$s » non pris en charge dans le modèle.</string>
     <string name="campaign_defeat_recorded">Défaite enregistrée</string>
-    <string name="campaign_defeat_choice">Rejouer ce scénario maintenant, ou faire une pause et y revenir plus tard ? La défaite reste dans le journal dans les deux cas.</string>
-    <string name="campaign_replay_now">Rejouer maintenant</string>
     <string name="campaign_take_a_break">Faire une pause</string>
 
     <!-- Deck builder -->
@@ -249,4 +231,62 @@
         <item quantity="many">%1$d de cartes absentes de votre collection</item>
         <item quantity="other">%1$d cartes absentes de votre collection</item>
     </plurals>
+
+    <string name="campaign_which">Quelle campagne</string>
+    <string name="campaign_none_bundled">Aucune campagne n\'est intégrée à cette version.</string>
+    <string name="campaign_name">Nommez cette campagne</string>
+    <string name="campaign_lets_go">C\'est parti !</string>
+    <string name="campaign_im_ready">Je suis prêt</string>
+    <string name="campaign_not_ready">Pas encore prêt</string>
+    <string name="campaign_pre_setup">Mise en place</string>
+    <string name="campaign_setup_label">Mise en place de campagne</string>
+    <string name="campaign_villain_deck_label">Deck du méchant</string>
+    <string name="campaign_main_scheme_label">Deck complot principal</string>
+    <string name="campaign_encounter_sets_label">Deck rencontre</string>
+    <string name="campaign_questions_title">Quelques questions</string>
+    <string name="campaign_validate">Valider</string>
+    <string name="campaign_bravo">Bravo !</string>
+    <plurals name="campaign_result_solo">
+        <item quantity="one">Vous gagnez %1$d crédit et terminez en %2$s avec %3$d points de victoire !</item>
+        <item quantity="many">Vous gagnez %1$d de crédits et terminez en %2$s avec %3$d points de victoire !</item>
+        <item quantity="other">Vous gagnez %1$d crédits et terminez en %2$s avec %3$d points de victoire !</item>
+    </plurals>
+    <plurals name="campaign_result_group">
+        <item quantity="one">Terminé en %1$s avec %2$d point de victoire !</item>
+        <item quantity="many">Terminé en %1$s avec %2$d de points de victoire !</item>
+        <item quantity="other">Terminé en %1$s avec %2$d points de victoire !</item>
+    </plurals>
+    <string name="campaign_go_to_next">Aller à %1$s</string>
+    <string name="campaign_need_to_buy">Besoin d\'acheter quelque chose ?</string>
+    <string name="campaign_all_day">Je peux faire ça toute la journée ! (recommencer)</string>
+    <string name="campaign_defeat_time">Vous avez tenu %1$s.</string>
+    <plurals name="campaign_credits_available">
+        <item quantity="one">%1$d crédit disponible</item>
+        <item quantity="many">%1$d de crédits disponibles</item>
+        <item quantity="other">%1$d crédits disponibles</item>
+    </plurals>
+    <plurals name="campaign_price">
+        <item quantity="one">%1$d crédit</item>
+        <item quantity="many">%1$d de crédits</item>
+        <item quantity="other">%1$d crédits</item>
+    </plurals>
+    <string name="campaign_are_you_sure">Êtes-vous sûr ?</string>
+    <plurals name="campaign_confirm_purchase">
+        <item quantity="one">Acheter %1$s pour %2$d crédit ? Il est déduit des crédits de ce héros.</item>
+        <item quantity="many">Acheter %1$s pour %2$d de crédits ? Ils sont déduits des crédits de ce héros.</item>
+        <item quantity="other">Acheter %1$s pour %2$d crédits ? Ils sont déduits des crédits de ce héros.</item>
+    </plurals>
+    <string name="campaign_see_card">Voir la carte complète</string>
+    <string name="campaign_purchased">Déjà achetées</string>
+    <string name="campaign_done_shopping">Terminer les achats</string>
+    <string name="campaign_no_market">Cette campagne n\'a pas de marché.</string>
+    <string name="campaign_not_enough_credits">Crédits insuffisants</string>
+    <string name="campaign_already_bought">Déjà acheté par %1$s</string>
+    <string name="campaign_unknown_card">Carte inconnue</string>
+    <plurals name="campaign_player_count">
+        <item quantity="one">%1$d joueur</item>
+        <item quantity="many">%1$d de joueurs</item>
+        <item quantity="other">%1$d joueurs</item>
+    </plurals>
+    <string name="campaign_empty">Aucune campagne. Démarrez-en une avec le bouton ci-dessous.</string>
 </resources>

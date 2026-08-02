@@ -9,6 +9,7 @@ import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.hasyame.marvelchampions.ui.campaign.CampaignRunScreen
 import com.hasyame.marvelchampions.ui.campaign.CampaignScreen
+import com.hasyame.marvelchampions.ui.campaign.StartCampaignScreen
 import com.hasyame.marvelchampions.ui.cards.CardDetailScreen
 import com.hasyame.marvelchampions.ui.cards.CardsScreen
 import com.hasyame.marvelchampions.ui.collection.CollectionScreen
@@ -92,11 +93,29 @@ fun MarvelChampionsNavHost(
             composable<CampaignRoute> {
                 CampaignScreen(
                     onOpenRun = { runId -> navController.navigate(CampaignRunRoute(runId)) },
+                    onStartCampaign = { navController.navigate(StartCampaignRoute) },
+                )
+            }
+            composable<StartCampaignRoute> {
+                StartCampaignScreen(
+                    onBack = { navController.popBackStack() },
+                    onStarted = { runId ->
+                        navController.popBackStack()
+                        navController.navigate(CampaignRunRoute(runId))
+                    },
                 )
             }
             composable<CampaignRunRoute> { entry ->
                 CampaignRunScreen(
                     runId = entry.toRoute<CampaignRunRoute>().runId,
+                    onBack = { navController.popBackStack() },
+                    onCardClick = { code -> navController.navigate(CardDetailRoute(code)) },
+                )
+            }
+            // A card opened from a campaign stays in the Campaign back stack.
+            composable<CardDetailRoute> { entry ->
+                CardDetailScreen(
+                    code = entry.toRoute<CardDetailRoute>().code,
                     onBack = { navController.popBackStack() },
                 )
             }
