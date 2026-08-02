@@ -53,6 +53,8 @@ data class CampaignRun(
     val events: List<CampaignEvent>,
     val timer: TimerState,
     val names: CampaignCardNames = CampaignCardNames(),
+    /** Every card in every deck being played, for prompts that pick from them. */
+    val deckCards: List<CampaignDeckCard> = emptyList(),
     /**
      * Campaign state as it stood before the most recent scenario result, so the
      * summary can show what that scenario alone awarded rather than a running
@@ -89,6 +91,22 @@ data class ScenarioLogEntry(
     val elapsedMillis: Long,
     /** The questionnaire, as label-and-value pairs ready to display. */
     val answers: List<Pair<String, String>> = emptyList(),
+)
+
+/**
+ * One card in one player's deck, as a prompt needs to offer it.
+ *
+ * Held on the run rather than fetched by the questionnaire so the page stays a
+ * pure function of what it is given, and so the cards are already resolved in
+ * the player's language by the time the question is asked.
+ */
+data class CampaignDeckCard(
+    val heroId: String,
+    val heroName: String,
+    val cardCode: String,
+    val cardName: String,
+    val typeName: String?,
+    val quantity: Int,
 )
 
 /** A card a campaign added to a deck, and which campaign added it. */
@@ -246,19 +264,48 @@ class CampaignRepository @Inject constructor(
         val before = lastScenarioEvent?.let { last ->
             engine.fold(template, events.filterNot { it.id == last.id }, heroStats)
         }
+        val state = engine.fold(template, events, heroStats)
 
         CampaignRun(
             entity = entity,
             template = template,
-            state = engine.fold(template, events, heroStats),
+            state = state,
             events = events,
             timer = TimerState(
                 accumulatedMillis = entity.timerAccumulatedMillis,
                 runningSinceEpochMillis = entity.timerRunningSince,
             ),
-            names = resolveNames(template, locale),
+            // Cards recorded during play are named too, so a step that reads
+            // back a list shows titles rather than codes.
+            names = resolveNames(template, locale, state.cardLists.values.flatten().toSet()),
+            deckCards = deckCards(state, locale),
             stateBeforeLastScenario = before,
         )
+    }
+
+    /**
+     * The contents of every deck in the run, flattened and labelled by hero.
+     *
+     * A deck that has since been deleted simply contributes nothing: the run
+     * has to stay openable, and a campaign log is worth more than the prompt
+     * that can no longer be offered.
+     */
+    private suspend fun deckCards(
+        state: CampaignState,
+        locale: CardLocale,
+    ): List<CampaignDeckCard> = state.heroes.flatMap { hero ->
+        val deckId = hero.deckId ?: return@flatMap emptyList()
+        val contents = deckRepository.contents(deckId, locale) ?: return@flatMap emptyList()
+        contents.cardsByType.values.flatten().map { entry ->
+            CampaignDeckCard(
+                heroId = hero.id,
+                heroName = hero.name,
+                cardCode = entry.card.code,
+                cardName = entry.card.name.orEmpty().ifBlank { entry.card.code },
+                typeName = entry.card.typeName,
+                quantity = entry.quantity,
+            )
+        }
     }
 
     /**
@@ -268,8 +315,10 @@ class CampaignRepository @Inject constructor(
     private suspend fun resolveNames(
         template: CampaignTemplate,
         locale: CardLocale,
+        recordedCodes: Set<String> = emptySet(),
     ): CampaignCardNames {
         val cardCodes = buildSet {
+            addAll(recordedCodes)
             template.market?.entries?.forEach { add(it.cardCode) }
             template.scenarios.forEach { scenario ->
                 scenario.baseSetup?.let { setup ->

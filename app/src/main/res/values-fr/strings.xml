@@ -350,4 +350,6 @@
         <item>BADABOUM!</item>
     </string-array>
     <string name="cards_loading">Fouille dans les archives</string>
+    <string name="campaign_filter_cards">Filtrer les cartes</string>
+    <string name="campaign_no_deck_cards">Aucune carte de deck disponible pour cette partie.</string>
 </resources>

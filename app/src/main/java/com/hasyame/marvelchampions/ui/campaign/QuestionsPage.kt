@@ -18,14 +18,18 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.data.repository.CampaignDeckCard
 import com.hasyame.marvelchampions.data.repository.CampaignRun
 import com.hasyame.marvelchampions.domain.campaign.engine.AnswerSet
 import com.hasyame.marvelchampions.domain.campaign.engine.ConditionEvaluator
@@ -188,6 +192,19 @@ fun QuestionsPage(
                             }
                         }
 
+                        PromptType.DECK_CARD_SELECT -> {
+                            Text(label, style = MaterialTheme.typography.titleSmall)
+                            DeckCardPicker(
+                                deckCards = run.deckCards,
+                                selected = cardSelections[prompt.id].orEmpty(),
+                                onToggle = { code, on ->
+                                    val current = cardSelections[prompt.id].orEmpty()
+                                    cardSelections[prompt.id] =
+                                        if (on) current + code else current - code
+                                },
+                            )
+                        }
+
                         PromptType.CARD_LIST -> OutlinedTextField(
                             value = cardLists[prompt.id].orEmpty(),
                             onValueChange = { cardLists[prompt.id] = it },
@@ -261,5 +278,76 @@ fun QuestionsPage(
             },
             modifier = Modifier.fillMaxWidth(),
         ) { Text(stringResource(R.string.campaign_validate)) }
+    }
+}
+
+/**
+ * Picks cards out of the decks in play, grouped by the player who owns them.
+ *
+ * Typing card titles was the alternative, and it fails in both directions: a
+ * misspelling records something no later scenario can match, and a player with
+ * two identical titles across decks cannot say whose copy it was. Grouping by
+ * hero answers that, and the filter keeps a fifty-card deck usable on a phone.
+ */
+@Composable
+private fun DeckCardPicker(
+    deckCards: List<CampaignDeckCard>,
+    selected: Set<String>,
+    onToggle: (String, Boolean) -> Unit,
+) {
+    if (deckCards.isEmpty()) {
+        Text(
+            text = stringResource(R.string.campaign_no_deck_cards),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.error,
+        )
+        return
+    }
+
+    var filter by remember { mutableStateOf("") }
+
+    OutlinedTextField(
+        value = filter,
+        onValueChange = { filter = it },
+        label = { Text(stringResource(R.string.campaign_filter_cards)) },
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+    )
+
+    val matching = deckCards.filter { it.cardName.contains(filter, ignoreCase = true) }
+
+    // Selected cards stay visible even when the filter would hide them, so a
+    // choice cannot be silently lost behind a search term.
+    val visible = (matching + deckCards.filter { it.cardCode in selected }).distinct()
+
+    visible.groupBy { it.heroId }.forEach { (_, cards) ->
+        Text(
+            text = cards.first().heroName,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        cards.sortedBy { it.cardName }.forEach { entry ->
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text(entry.cardName)
+                    entry.typeName?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+                Switch(
+                    checked = entry.cardCode in selected,
+                    onCheckedChange = { on -> onToggle(entry.cardCode, on) },
+                )
+            }
+        }
     }
 }

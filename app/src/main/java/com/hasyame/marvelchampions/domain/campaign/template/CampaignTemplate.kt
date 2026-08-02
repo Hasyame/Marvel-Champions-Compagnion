@@ -213,6 +213,16 @@ enum class PromptType {
      * on the answer instead of only showing it back.
      */
     CARD_SELECT,
+
+    /**
+     * Tick cards out of the decks actually being played.
+     *
+     * The set cannot come from the template, because it is whatever the players
+     * built, so the prompt is filled from the run's decks at the moment it is
+     * asked. Codes are recorded rather than typed titles, which is what lets a
+     * later scenario say "remove these from the game" and name them.
+     */
+    DECK_CARD_SELECT,
     CHOICE,
     UNKNOWN,
 }
@@ -238,6 +248,7 @@ data class Prompt(
             "perheroboolean" -> PromptType.PER_HERO_BOOLEAN
             "cardlist" -> PromptType.CARD_LIST
             "cardselect" -> PromptType.CARD_SELECT
+            "deckcardselect" -> PromptType.DECK_CARD_SELECT
             "choice" -> PromptType.CHOICE
             else -> PromptType.UNKNOWN
         }

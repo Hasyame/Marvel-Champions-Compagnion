@@ -332,4 +332,6 @@
         <item>KA-BLAM!</item>
     </string-array>
     <string name="cards_loading">Searching the archives</string>
+    <string name="campaign_filter_cards">Filter cards</string>
+    <string name="campaign_no_deck_cards">No deck cards available for this run.</string>
 </resources>

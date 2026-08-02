@@ -555,10 +555,10 @@
           },
           {
             "id": "collectionCards",
-            "type": "cardList",
+            "type": "deckCardSelect",
             "label": {
-              "fr": "Cartes joueur dans La Collection",
-              "en": "Player cards in The Collection"
+              "fr": "Cartes joueur placées dans La Collection — les sélectionner dans les decks",
+              "en": "Player cards put into The Collection — pick them from the decks"
             }
           },
           {
@@ -701,8 +701,8 @@
         },
         {
           "text": {
-            "fr": "Retirer du jeu ces cartes enregistrées dans La Collection, puis repiocher jusqu’à sa taille de main",
-            "en": "Remove these cards recorded in The Collection from the game, then draw up to hand size"
+            "fr": "Retirer ces cartes de la partie : elles ne peuvent pas être jouées ce scénario. Puis piocher jusqu'à la taille de main",
+            "en": "Remove these cards from the game — they cannot be played this scenario. Then draw up to hand size"
           },
           "showCardList": "collection",
           "when": {

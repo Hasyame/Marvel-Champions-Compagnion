@@ -10,6 +10,7 @@ import com.hasyame.marvelchampions.domain.campaign.engine.CampaignState
 import com.hasyame.marvelchampions.domain.campaign.engine.ConditionEvaluator
 import com.hasyame.marvelchampions.domain.campaign.engine.EvaluationContext
 import com.hasyame.marvelchampions.domain.campaign.template.CampaignTemplate
+import com.hasyame.marvelchampions.domain.campaign.template.PromptType
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -297,6 +298,46 @@ class CampaignCarryOverTest {
         assertTrue(
             visibleSetup(template, withArtifacts, "s4_nebula").any { it.showCardList == "artifacts" },
         )
+    }
+
+    @Test
+    fun `cards put into The Collection are the cards scenario 3 removes`() {
+        val template = gmw()
+        // The prompt records codes picked out of the decks, so the next
+        // scenario can name them rather than repeat back typed text.
+        val state = engine.fold(
+            template,
+            listOf(
+                started(template),
+                won("s1_badoon", headhunter = false, at = 1),
+                CampaignEvent.ScenarioCompleted(
+                    id = "win-s2",
+                    timestamp = 2,
+                    scenarioId = "s2_museum",
+                    victory = true,
+                    answers = AnswerSet(
+                        numbers = mapOf("vp" to 0),
+                        cardLists = mapOf("collectionCards" to listOf("01007", "01010")),
+                    ),
+                    elapsedMillis = 1000,
+                ),
+            ),
+        )
+
+        assertEquals(listOf("01007", "01010"), state.cardLists["collection"])
+        assertTrue(
+            "scenario 3 must tell the player to remove exactly what was recorded",
+            visibleSetup(template, state, "s3_escape").any { it.showCardList == "collection" },
+        )
+    }
+
+    @Test
+    fun `the prompt for The Collection picks from the decks rather than free text`() {
+        val prompt = gmw().scenarios.first { it.id == "s2_museum" }
+            .onVictory?.prompts?.first { it.id == "collectionCards" }
+        // Typed titles cannot be matched by a later scenario, so this prompt has
+        // to record codes.
+        assertEquals(PromptType.DECK_CARD_SELECT, prompt?.promptType)
     }
 
     @Test
