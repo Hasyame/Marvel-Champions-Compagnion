@@ -278,4 +278,6 @@
     <string name="settings_music_url">Playlist link</string>
     <string name="settings_music_default">Use the default playlist</string>
     <string name="settings_music_browse">Browse Melodice</string>
+    <string name="campaign_no_scenario">This campaign has no current scenario. It may already be finished.</string>
+    <string name="campaign_scenario_incomplete">Scenario “%1$s” has no victory questionnaire yet in the campaign template.</string>
 </resources>

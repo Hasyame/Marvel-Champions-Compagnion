@@ -296,4 +296,6 @@
     <string name="settings_music_url">Lien de la playlist</string>
     <string name="settings_music_default">Utiliser la playlist par défaut</string>
     <string name="settings_music_browse">Parcourir Melodice</string>
+    <string name="campaign_no_scenario">Cette campagne n\'a pas de scénario en cours. Elle est peut-être déjà terminée.</string>
+    <string name="campaign_scenario_incomplete">Le scénario « %1$s » n\'a pas encore de questionnaire de victoire dans le modèle de campagne.</string>
 </resources>

@@ -182,9 +182,24 @@ class CampaignRepository @Inject constructor(
 
     suspend fun load(runId: String, locale: CardLocale): CampaignRun? = withContext(ioDispatcher) {
         val entity = campaignDao.getRun(runId) ?: return@withContext null
-        val template = runCatching {
+        val stored = runCatching {
             json.decodeFromString(CampaignTemplate.serializer(), entity.templateJson)
         }.getOrNull() ?: return@withContext null
+
+        // A run stores its own copy of the template so it survives the file
+        // moving, but a bundled campaign of the same id is the newer rules. The
+        // log is the history and the template is only how it is interpreted, so
+        // re-folding against the corrected template is exactly the replay the
+        // design is built for — and it stops a run being stuck on whichever
+        // version happened to be installed the day it started.
+        val template = bundledTemplates().firstOrNull { it.id == stored.id } ?: stored
+        if (template !== stored) {
+            campaignDao.upsertRun(
+                entity.copy(
+                    templateJson = json.encodeToString(CampaignTemplate.serializer(), template),
+                ),
+            )
+        }
 
         val events = campaignDao.getEvents(runId).mapNotNull { row ->
             runCatching { json.decodeFromString(CampaignEvent.serializer(), row.payload) }.getOrNull()
@@ -248,7 +263,15 @@ class CampaignRepository @Inject constructor(
             .filterKeys { it in setCodes }
 
         return CampaignCardNames(
-            cards = resolved.associate { (code, card) -> code to card.name },
+            // The stage is part of the identity, not decoration: Drang I, II
+            // and III are all called "Drang", so a villain deck would otherwise
+            // read "Drang, Drang".
+            cards = resolved.associate { (code, card) ->
+                code to card.stage?.takeIf { it.isNotBlank() }
+                    ?.let { stage -> "${card.name} ($stage)" }
+                    .orEmpty()
+                    .ifEmpty { card.name }
+            },
             sets = setNames,
             images = resolved.mapNotNull { (code, card) ->
                 card.imageSrc?.let { code to it }

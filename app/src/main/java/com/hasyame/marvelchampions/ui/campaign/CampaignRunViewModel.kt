@@ -186,7 +186,12 @@ class CampaignRunViewModel @Inject constructor(
     fun submitAnswers(answers: AnswerSet) {
         val id = runId ?: return
         val run = state.value.run ?: return
-        val scenarioId = run.state.currentScenarioId ?: return
+        val scenarioId = run.state.currentScenarioId
+        if (scenarioId == null) {
+            // Returning quietly here made the Validate button look broken.
+            state.value = state.value.copy(page = RunPage.RESULT, summary = null)
+            return
+        }
         viewModelScope.launch {
             val elapsed = run.timer.elapsedAt(System.currentTimeMillis())
             repository.append(

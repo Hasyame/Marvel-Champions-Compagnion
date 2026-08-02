@@ -197,7 +197,7 @@
     {
       "id": "s1_badoon",
       "name": {
-        "fr": "Confrérie Badoon",
+        "fr": "La confrérie des Badoon",
         "en": "Brotherhood of Badoon"
       },
       "victoryLabel": {
@@ -250,6 +250,15 @@
           },
           "cards": [
             "16183"
+          ]
+        },
+        {
+          "text": {
+            "fr": "Chaque joueur met ce soutien en jeu de son côté",
+            "en": "Each player puts this support into play on their side"
+          },
+          "cards": [
+            "16142"
           ]
         },
         {

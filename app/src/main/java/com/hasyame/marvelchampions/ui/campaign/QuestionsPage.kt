@@ -67,7 +67,21 @@ fun QuestionsPage(
         )
 
         if (prompts.isEmpty()) {
-            Text(stringResource(R.string.campaign_no_questions))
+            // Silence here used to be indistinguishable from a broken screen,
+            // so it now says which of the three reasons applies.
+            Text(
+                text = when {
+                    scenario == null -> stringResource(R.string.campaign_no_scenario)
+                    scenario.onVictory == null ->
+                        stringResource(R.string.campaign_scenario_incomplete, scenario.id)
+
+                    scenario.onVictory.prompts.isEmpty() ->
+                        stringResource(R.string.campaign_scenario_incomplete, scenario.id)
+
+                    else -> stringResource(R.string.campaign_no_questions)
+                },
+                color = MaterialTheme.colorScheme.error,
+            )
         }
 
         prompts.forEach { prompt ->
