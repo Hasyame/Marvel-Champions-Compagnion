@@ -1,7 +1,6 @@
 # Marvel Champions Companion
 
-An Android companion app for **Marvel Champions: The Card Game**, built for solo
-play: card database and search, deck lists, a scenario randomiser driven by the
+An Android companion app for **Marvel Champions: The Card Game**: card database and search, deck lists, a scenario randomiser driven by the
 packs you actually own, and a data-driven campaign tracker. Offline first, no
 account, no backend, no advertising.
 
