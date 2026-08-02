@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -46,6 +47,7 @@ import com.hasyame.marvelchampions.domain.campaign.engine.ConditionEvaluator
 import com.hasyame.marvelchampions.domain.campaign.engine.EvaluationContext
 import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
 import com.hasyame.marvelchampions.domain.campaign.template.ScenarioTemplate
+import com.hasyame.marvelchampions.ui.util.openExternalUrl
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -116,6 +118,7 @@ fun CampaignRunScreen(
                         run = run,
                         scenario = scenario,
                         elapsedMillis = state.elapsedMillis,
+                        musicUrl = state.musicUrl,
                         onVictory = viewModel::declareVictory,
                         onDefeat = viewModel::declareDefeat,
                         onPause = viewModel::pauseTimer,
@@ -306,11 +309,15 @@ private fun PlayingPage(
     run: CampaignRun,
     scenario: ScenarioTemplate?,
     elapsedMillis: Long,
+    musicUrl: String,
     onVictory: () -> Unit,
     onDefeat: () -> Unit,
     onPause: () -> Unit,
     onResume: () -> Unit,
 ) {
+    val context = LocalContext.current
+    var musicUnavailable by remember { mutableStateOf(false) }
+
     Column(
         Modifier.fillMaxSize().padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
@@ -324,11 +331,30 @@ private fun PlayingPage(
             text = TimerState.format(elapsedMillis),
             style = MaterialTheme.typography.displayLarge,
         )
-        OutlinedButton(onClick = if (run.timer.isRunning) onPause else onResume) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedButton(onClick = if (run.timer.isRunning) onPause else onResume) {
+                Text(
+                    stringResource(
+                        if (run.timer.isRunning) {
+                            R.string.campaign_pause
+                        } else {
+                            R.string.campaign_play
+                        },
+                    ),
+                )
+            }
+            // The playlist plays in Spotify or the browser, which keeps
+            // playing while this screen stays on the timer.
+            OutlinedButton(
+                onClick = { musicUnavailable = !openExternalUrl(context, musicUrl) },
+                enabled = musicUrl.isNotBlank(),
+            ) { Text(stringResource(R.string.campaign_music)) }
+        }
+        if (musicUnavailable) {
             Text(
-                stringResource(
-                    if (run.timer.isRunning) R.string.campaign_pause else R.string.campaign_play,
-                ),
+                text = stringResource(R.string.campaign_music_unavailable),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
             )
         }
 

@@ -18,6 +18,7 @@ data class SettingsUiState(
     val cardLocale: CardLocale = CardLocale.FRENCH,
     val lastCardSync: Long? = null,
     val syncState: CardSyncState = CardSyncState.Idle,
+    val musicUrl: String = AppPreferences.DEFAULT_MUSIC_URL,
 )
 
 @HiltViewModel
@@ -30,8 +31,14 @@ class SettingsViewModel @Inject constructor(
         preferences.cardLocale,
         preferences.lastCardSync,
         syncManager.observeState(),
-    ) { locale, lastSync, syncState ->
-        SettingsUiState(cardLocale = locale, lastCardSync = lastSync, syncState = syncState)
+        preferences.musicUrl,
+    ) { locale, lastSync, syncState, musicUrl ->
+        SettingsUiState(
+            cardLocale = locale,
+            lastCardSync = lastSync,
+            syncState = syncState,
+            musicUrl = musicUrl,
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
@@ -40,6 +47,10 @@ class SettingsViewModel @Inject constructor(
 
     fun setCardLocale(locale: CardLocale) {
         viewModelScope.launch { preferences.setCardLocale(locale) }
+    }
+
+    fun setMusicUrl(url: String) {
+        viewModelScope.launch { preferences.setMusicUrl(url) }
     }
 
     fun syncCards() = syncManager.start()

@@ -16,20 +16,27 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.data.sync.CardSyncState
 import com.hasyame.marvelchampions.domain.model.CardLocale
+import com.hasyame.marvelchampions.ui.util.openExternalUrl
 import java.text.DateFormat
 import java.util.Date
 
@@ -95,6 +102,58 @@ fun SettingsScreen(
                 onSync = viewModel::syncCards,
                 onCancel = viewModel::cancelSync,
             )
+            HorizontalDivider()
+
+            MusicSection(state = state, onMusicUrlChange = viewModel::setMusicUrl)
+        }
+    }
+}
+
+/**
+ * The playlist the play screen opens.
+ *
+ * A link rather than in-app playback: Spotify would need its own SDK and a
+ * signed-in session to play inside another app, and Melodice's playlists are
+ * YouTube. Handing the URL over keeps the user's own subscription and app in
+ * charge.
+ */
+@Composable
+private fun MusicSection(
+    state: SettingsUiState,
+    onMusicUrlChange: (String) -> Unit,
+) {
+    val context = LocalContext.current
+    var draft by remember(state.musicUrl) { mutableStateOf(state.musicUrl) }
+
+    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = stringResource(R.string.settings_music),
+            style = MaterialTheme.typography.titleSmall,
+        )
+        Text(
+            text = stringResource(R.string.settings_music_summary),
+            style = MaterialTheme.typography.bodySmall,
+        )
+        OutlinedTextField(
+            value = draft,
+            onValueChange = {
+                draft = it
+                onMusicUrlChange(it)
+            },
+            singleLine = true,
+            label = { Text(stringResource(R.string.settings_music_url)) },
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            TextButton(
+                onClick = {
+                    draft = AppPreferences.DEFAULT_MUSIC_URL
+                    onMusicUrlChange(AppPreferences.DEFAULT_MUSIC_URL)
+                },
+            ) { Text(stringResource(R.string.settings_music_default)) }
+            TextButton(
+                onClick = { openExternalUrl(context, AppPreferences.MELODICE_URL) },
+            ) { Text(stringResource(R.string.settings_music_browse)) }
         }
     }
 }

@@ -35,6 +35,18 @@ class AppPreferences @Inject constructor(
 
     val lastCardSync: Flow<Long?> = context.dataStore.data.map { it[KEY_LAST_SYNC] }
 
+    /**
+     * Ambient music opened from the play screen.
+     *
+     * A link rather than in-app playback: Spotify needs its own SDK and a
+     * signed-in account to play inside another app, and Melodice's playlists
+     * are YouTube. Handing the URL to whichever app owns it is both simpler and
+     * the only version that respects the user's subscription.
+     */
+    val musicUrl: Flow<String> = context.dataStore.data.map { preferences ->
+        preferences[KEY_MUSIC_URL] ?: DEFAULT_MUSIC_URL
+    }
+
     suspend fun currentCardLocale(): CardLocale = cardLocale.first()
 
     suspend fun setCardLocale(locale: CardLocale) {
@@ -45,8 +57,27 @@ class AppPreferences @Inject constructor(
         context.dataStore.edit { it[KEY_LAST_SYNC] = epochMillis }
     }
 
-    private companion object {
-        val KEY_CARD_LOCALE = stringPreferencesKey("card_locale")
-        val KEY_LAST_SYNC = longPreferencesKey("last_card_sync")
+    suspend fun setMusicUrl(url: String) {
+        context.dataStore.edit { preferences ->
+            if (url.isBlank()) {
+                preferences.remove(KEY_MUSIC_URL)
+            } else {
+                preferences[KEY_MUSIC_URL] = url.trim()
+            }
+        }
+    }
+
+    companion object {
+        /** The Marvel Champions ambient playlist on Spotify. */
+        const val DEFAULT_MUSIC_URL: String =
+            "https://open.spotify.com/playlist/70oaFf8tEpbWCNcXdDVSfH"
+
+        /** Curated ambient playlists for the game, to pick a different one from. */
+        const val MELODICE_URL: String =
+            "https://melodice.org/playlist/marvel-champions-the-card-game-2019/"
+
+        private val KEY_CARD_LOCALE = stringPreferencesKey("card_locale")
+        private val KEY_LAST_SYNC = longPreferencesKey("last_card_sync")
+        private val KEY_MUSIC_URL = stringPreferencesKey("music_url")
     }
 }

@@ -7,80 +7,225 @@
     "Card codes are MarvelCDB codes. They are stable and language-neutral, which",
     "is why they are stored rather than names — the app shows the name."
   ],
-
   "id": "gmw",
   "schemaVersion": 1,
-  "name": { "fr": "Convoitise Galactique", "en": "The Galaxy's Most Wanted" },
+  "name": {
+    "fr": "Convoitise Galactique",
+    "en": "The Galaxy's Most Wanted"
+  },
   "packCode": "gmw",
-  "difficulties": ["standard", "expert"],
-
+  "difficulties": [
+    "standard",
+    "expert"
+  ],
   "counters": [
-    { "id": "credits", "scope": "hero", "initial": 0, "min": 0 },
+    {
+      "id": "credits",
+      "scope": "hero",
+      "initial": 0,
+      "min": 0
+    },
     {
       "id": "hp",
       "scope": "hero",
       "initial": 0,
       "maxFrom": "heroCard.health",
-      "activeWhen": { "difficulty": "expert" }
+      "activeWhen": {
+        "difficulty": "expert"
+      }
     }
   ],
-
-  "flagSets": [{ "id": "headhunterDefeated", "scope": "perScenario" }],
-
-  "cardLists": [{ "id": "purchases", "scope": "hero" }],
-
+  "flagSets": [
+    {
+      "id": "headhunterDefeated",
+      "scope": "perScenario"
+    }
+  ],
+  "cardLists": [
+    {
+      "id": "purchases",
+      "scope": "hero"
+    }
+  ],
   "market": {
     "counterId": "credits",
     "entries": [
-      { "cardCode": "16150", "cost": 1, "cardListId": "purchases" },
-      { "cardCode": "16151", "cost": 1, "cardListId": "purchases" },
-      { "cardCode": "16152", "cost": 1, "cardListId": "purchases" },
-      { "cardCode": "16153", "cost": 1, "cardListId": "purchases" },
-      { "cardCode": "16154", "cost": 2, "cardListId": "purchases" },
-      { "cardCode": "16155", "cost": 2, "cardListId": "purchases" },
-      { "cardCode": "16156", "cost": 2, "cardListId": "purchases" },
-      { "cardCode": "16157", "cost": 2, "cardListId": "purchases" },
-      { "cardCode": "16158", "cost": 3, "cardListId": "purchases" },
-      { "cardCode": "16159", "cost": 3, "cardListId": "purchases" },
-      { "cardCode": "16160", "cost": 3, "cardListId": "purchases" },
-      { "cardCode": "16161", "cost": 3, "cardListId": "purchases" },
-      { "cardCode": "16162", "cost": 4, "cardListId": "purchases" },
-      { "cardCode": "16163", "cost": 4, "cardListId": "purchases" },
-      { "cardCode": "16164", "cost": 4, "cardListId": "purchases" },
-      { "cardCode": "16165", "cost": 4, "cardListId": "purchases" },
-      { "cardCode": "16166", "cost": 5, "cardListId": "purchases" },
-      { "cardCode": "16167", "cost": 5, "cardListId": "purchases" },
-      { "cardCode": "16168", "cost": 5, "cardListId": "purchases" },
-      { "cardCode": "16169", "cost": 5, "cardListId": "purchases" },
-      { "cardCode": "16170", "cost": 6, "cardListId": "purchases" },
-      { "cardCode": "16171", "cost": 6, "cardListId": "purchases" },
-      { "cardCode": "16172", "cost": 6, "cardListId": "purchases" },
-      { "cardCode": "16173", "cost": 6, "cardListId": "purchases" },
-      { "cardCode": "16174", "cost": 7, "cardListId": "purchases" },
-      { "cardCode": "16175", "cost": 7, "cardListId": "purchases" },
-      { "cardCode": "16176", "cost": 7, "cardListId": "purchases" },
-      { "cardCode": "16177", "cost": 7, "cardListId": "purchases" }
+      {
+        "cardCode": "16150",
+        "cost": 1,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16151",
+        "cost": 1,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16152",
+        "cost": 1,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16153",
+        "cost": 1,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16154",
+        "cost": 2,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16155",
+        "cost": 2,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16156",
+        "cost": 2,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16157",
+        "cost": 2,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16158",
+        "cost": 3,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16159",
+        "cost": 3,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16160",
+        "cost": 3,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16161",
+        "cost": 3,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16162",
+        "cost": 4,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16163",
+        "cost": 4,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16164",
+        "cost": 4,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16165",
+        "cost": 4,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16166",
+        "cost": 5,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16167",
+        "cost": 5,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16168",
+        "cost": 5,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16169",
+        "cost": 5,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16170",
+        "cost": 6,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16171",
+        "cost": 6,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16172",
+        "cost": 6,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16173",
+        "cost": 6,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16174",
+        "cost": 7,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16175",
+        "cost": 7,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16176",
+        "cost": 7,
+        "cardListId": "purchases"
+      },
+      {
+        "cardCode": "16177",
+        "cost": 7,
+        "cardListId": "purchases"
+      }
     ]
   },
-
   "startScenarioId": "s1_badoon",
-
   "scenarios": [
     {
       "id": "s1_badoon",
-      "name": { "fr": "Confrérie Badoon", "en": "Brotherhood of Badoon" },
-      "victoryLabel": { "fr": "Drang est vaincu !", "en": "Drang beat!" },
-      "defeatLabel": { "fr": "Drang vous a vaincu !", "en": "Drang has beat you!" },
+      "name": {
+        "fr": "Confrérie Badoon",
+        "en": "Brotherhood of Badoon"
+      },
+      "victoryLabel": {
+        "fr": "Drang est vaincu !",
+        "en": "Drang beat!"
+      },
+      "defeatLabel": {
+        "fr": "Drang vous a vaincu !",
+        "en": "Drang has beat you!"
+      },
       "flavour": {
         "en": "The Brotherhood of Badoon has mounted a surprise attack against Earth! You and the other Guardians of the Galaxy rush to Earth's aid, teaming up with the mighty Avengers in the process to beat back the Badoon. However, the Brotherhood of Badoon's leader, Drang, is a skilled tactician with a fleet of powerful ships and an overwhelming number of soldiers at his side. This won't be an easy fight."
       },
-
       "baseSetup": {
         "villainDeck": {
-          "standard": ["16058", "16059"],
-          "expert": ["16059", "16060"]
+          "standard": [
+            "16058",
+            "16059"
+          ],
+          "expert": [
+            "16059",
+            "16060"
+          ]
         },
-        "mainScheme": ["16061a", "16062a"],
+        "mainScheme": [
+          "16061a",
+          "16062a"
+        ],
         "encounterSets": [
           "brotherhood_of_badoon",
           "band_of_badoon",
@@ -88,37 +233,45 @@
           "standard"
         ]
       },
-
       "campaignSetup": [
         {
-          "text": { "fr": "Révéler le complot secondaire", "en": "Reveal the side scheme" },
-          "cards": ["16178a"]
+          "text": {
+            "fr": "Révéler le complot secondaire",
+            "en": "Reveal the side scheme"
+          },
+          "cards": [
+            "16178a"
+          ]
         },
         {
           "text": {
             "fr": "Mélanger ce sbire dans le deck rencontre",
             "en": "Shuffle this minion into the encounter deck"
           },
-          "cards": ["16183"]
+          "cards": [
+            "16183"
+          ]
         },
         {
           "text": {
             "fr": "Étape supplémentaire en Expert — voir le livret de campagne",
             "en": "Additional Expert step — see the campaign book"
           },
-          "when": { "difficulty": "expert" }
+          "when": {
+            "difficulty": "expert"
+          }
         }
       ],
-
       "onVictory": {
         "prompts": [
           {
             "id": "vp",
             "type": "number",
             "label": {
-              "fr": "Combien de cartes rencontre dans la zone de victoire ?",
-              "en": "How many encounter cards in the victory display?"
-            }
+              "fr": "Combien de points de victoire avez-vous accumulés ?",
+              "en": "How many victory points did you accumulate?"
+            },
+            "_note": "The total of the VICTORY values printed on encounter cards in the victory display, which the players add up themselves."
           },
           {
             "id": "schemeAt1B",
@@ -147,80 +300,168 @@
           {
             "id": "hpPerHero",
             "type": "perHeroNumber",
-            "label": { "fr": "Points de vie restants", "en": "Remaining hit points" },
-            "when": { "difficulty": "expert" }
+            "label": {
+              "fr": "Points de vie restants",
+              "en": "Remaining hit points"
+            },
+            "when": {
+              "difficulty": "expert"
+            }
           },
           {
             "id": "eliminated",
             "type": "perHeroBoolean",
-            "label": { "fr": "Héros éliminé", "en": "Hero eliminated" }
+            "label": {
+              "fr": "Héros éliminé",
+              "en": "Hero eliminated"
+            }
           }
         ],
-
         "effects": [
-          { "op": "addCounter", "counter": "credits", "from": "vp", "max": 3 },
           {
             "op": "addCounter",
             "counter": "credits",
-            "value": 1,
-            "when": { "answer": "schemeAt1B" }
+            "from": "vp",
+            "max": 3
           },
           {
             "op": "addCounter",
             "counter": "credits",
             "value": 1,
-            "when": { "notAnswer": "minionsInPlay" }
+            "when": {
+              "answer": "schemeAt1B"
+            }
+          },
+          {
+            "op": "addCounter",
+            "counter": "credits",
+            "value": 1,
+            "when": {
+              "notAnswer": "minionsInPlay"
+            }
           },
           {
             "op": "setFlag",
             "flag": "headhunterDefeated",
             "from": "headhunterInVictoryDisplay"
           },
-          { "op": "addCounter", "counter": "credits", "value": 1 },
+          {
+            "op": "addCounter",
+            "counter": "credits",
+            "value": 1
+          },
           {
             "op": "setHeroCounter",
             "counter": "hp",
             "from": "hpPerHero",
-            "when": { "difficulty": "expert" }
+            "when": {
+              "difficulty": "expert"
+            }
           }
         ],
-
-        "next": [{ "goto": "s2_museum" }]
+        "next": [
+          {
+            "goto": "s2_museum"
+          }
+        ]
       },
-
       "onDefeat": {
         "prompts": [],
         "effects": [],
-        "next": [{ "goto": "s1_badoon" }]
+        "next": [
+          {
+            "goto": "s1_badoon"
+          }
+        ]
       }
     },
     {
       "id": "s2_museum",
-      "name": { "fr": "Infiltrer le musée", "en": "Infiltrate the Museum" },
+      "name": {
+        "fr": "Infiltrer le musée",
+        "en": "Infiltrate the Museum"
+      },
       "_status": "Order confirmed. Setup, questionnaire and effects still to come.",
-      "onVictory": { "next": [{ "goto": "s3_escape" }] },
-      "onDefeat": { "next": [{ "goto": "s2_museum" }] }
+      "onVictory": {
+        "next": [
+          {
+            "goto": "s3_escape"
+          }
+        ]
+      },
+      "onDefeat": {
+        "next": [
+          {
+            "goto": "s2_museum"
+          }
+        ]
+      }
     },
     {
       "id": "s3_escape",
-      "name": { "fr": "Fuir le musée", "en": "Escape the Museum" },
+      "name": {
+        "fr": "Fuir le musée",
+        "en": "Escape the Museum"
+      },
       "_status": "Order confirmed. Setup, questionnaire and effects still to come.",
-      "onVictory": { "next": [{ "goto": "s4_nebula" }] },
-      "onDefeat": { "next": [{ "goto": "s3_escape" }] }
+      "onVictory": {
+        "next": [
+          {
+            "goto": "s4_nebula"
+          }
+        ]
+      },
+      "onDefeat": {
+        "next": [
+          {
+            "goto": "s3_escape"
+          }
+        ]
+      }
     },
     {
       "id": "s4_nebula",
-      "name": { "fr": "Nebula", "en": "Nebula" },
+      "name": {
+        "fr": "Nebula",
+        "en": "Nebula"
+      },
       "_status": "Order confirmed. Setup, questionnaire and effects still to come.",
-      "onVictory": { "next": [{ "goto": "s5_ronan" }] },
-      "onDefeat": { "next": [{ "goto": "s4_nebula" }] }
+      "onVictory": {
+        "next": [
+          {
+            "goto": "s5_ronan"
+          }
+        ]
+      },
+      "onDefeat": {
+        "next": [
+          {
+            "goto": "s4_nebula"
+          }
+        ]
+      }
     },
     {
       "id": "s5_ronan",
-      "name": { "fr": "Ronan l'Accusateur", "en": "Ronan the Accuser" },
+      "name": {
+        "fr": "Ronan l'Accusateur",
+        "en": "Ronan the Accuser"
+      },
       "_status": "Order confirmed. Setup, questionnaire and effects still to come.",
-      "onVictory": { "next": [{ "end": true }] },
-      "onDefeat": { "next": [{ "goto": "s5_ronan" }] }
+      "onVictory": {
+        "next": [
+          {
+            "end": true
+          }
+        ]
+      },
+      "onDefeat": {
+        "next": [
+          {
+            "goto": "s5_ronan"
+          }
+        ]
+      }
     }
   ]
 }

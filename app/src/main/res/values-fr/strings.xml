@@ -289,4 +289,11 @@
         <item quantity="other">%1$d joueurs</item>
     </plurals>
     <string name="campaign_empty">Aucune campagne. Démarrez-en une avec le bouton ci-dessous.</string>
+    <string name="campaign_music">Musique</string>
+    <string name="campaign_music_unavailable">Aucune application ne peut ouvrir ce lien.</string>
+    <string name="settings_music">Musique d\'ambiance</string>
+    <string name="settings_music_summary">Ouverte depuis l\'écran de jeu. Elle se lance dans Spotify ou votre navigateur, et continue pendant que vous utilisez le minuteur.</string>
+    <string name="settings_music_url">Lien de la playlist</string>
+    <string name="settings_music_default">Utiliser la playlist par défaut</string>
+    <string name="settings_music_browse">Parcourir Melodice</string>
 </resources>

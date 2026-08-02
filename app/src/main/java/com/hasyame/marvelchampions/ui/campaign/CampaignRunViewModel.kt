@@ -56,6 +56,8 @@ data class CampaignRunUiState(
     val elapsedMillis: Long = 0,
     val isLoading: Boolean = true,
     val summary: ScenarioOutcomeSummary? = null,
+    /** Ambient playlist offered on the play page. */
+    val musicUrl: String = "",
 )
 
 @HiltViewModel
@@ -74,6 +76,11 @@ class CampaignRunViewModel @Inject constructor(
             return
         }
         runId = id
+        viewModelScope.launch {
+            preferences.musicUrl.collect { url ->
+                state.value = state.value.copy(musicUrl = url)
+            }
+        }
         viewModelScope.launch {
             reload()
             // A run reopened with the timer already going belongs on the play
