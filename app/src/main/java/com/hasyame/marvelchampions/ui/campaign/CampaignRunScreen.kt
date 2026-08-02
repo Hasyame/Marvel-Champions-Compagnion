@@ -193,8 +193,18 @@ private fun BriefingPage(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
+        // The story sits in a caption box, which is both what a comic does with
+        // narration and what makes it readable: italic body text straight on
+        // the halftone had the dots showing through every line.
         scenario.flavour?.resolve("fr")?.takeIf { it.isNotBlank() }?.let {
-            Text(it, style = MaterialTheme.typography.bodyMedium, fontStyle = FontStyle.Italic)
+            ComicPanel(Modifier.fillMaxWidth()) {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontStyle = FontStyle.Italic,
+                    modifier = Modifier.padding(16.dp),
+                )
+            }
         }
 
         scenario.baseSetup?.let { setup ->
@@ -468,29 +478,38 @@ private fun ResultPage(
 
         val gained = summary?.creditsGained.orEmpty()
         val distinct = gained.values.distinct()
-        Text(
-            text = if (distinct.size == 1 && run.state.heroes.size == 1) {
-                pluralStringResource(
-                    R.plurals.campaign_result_solo,
-                    distinct.single(),
-                    distinct.single(),
-                    TimerState.format(summary?.elapsedMillis ?: 0),
-                    summary?.victoryPoints ?: 0,
+        // Prose over halftone is the one thing the texture spoils, so what the
+        // scenario awarded goes in a caption box like the story does.
+        ComicPanel(Modifier.fillMaxWidth()) {
+            Column(
+                Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Text(
+                    text = if (distinct.size == 1 && run.state.heroes.size == 1) {
+                        pluralStringResource(
+                            R.plurals.campaign_result_solo,
+                            distinct.single(),
+                            distinct.single(),
+                            TimerState.format(summary?.elapsedMillis ?: 0),
+                            summary?.victoryPoints ?: 0,
+                        )
+                    } else {
+                        pluralStringResource(
+                            R.plurals.campaign_result_group,
+                            summary?.victoryPoints ?: 0,
+                            TimerState.format(summary?.elapsedMillis ?: 0),
+                            summary?.victoryPoints ?: 0,
+                        )
+                    },
+                    style = MaterialTheme.typography.bodyLarge,
                 )
-            } else {
-                pluralStringResource(
-                    R.plurals.campaign_result_group,
-                    summary?.victoryPoints ?: 0,
-                    TimerState.format(summary?.elapsedMillis ?: 0),
-                    summary?.victoryPoints ?: 0,
-                )
-            },
-            style = MaterialTheme.typography.bodyLarge,
-        )
 
-        if (run.state.heroes.size > 1) {
-            run.state.heroes.forEach { hero ->
-                Text("${hero.name}: +${gained[hero.id] ?: 0}")
+                if (run.state.heroes.size > 1) {
+                    run.state.heroes.forEach { hero ->
+                        Text("${hero.name}: +${gained[hero.id] ?: 0}")
+                    }
+                }
             }
         }
 
@@ -546,12 +565,15 @@ private fun DefeatPage(
             text = stringResource(R.string.campaign_defeat_recorded),
             style = MaterialTheme.typography.headlineMedium,
         )
-        Text(
-            text = stringResource(
-                R.string.campaign_defeat_time,
-                TimerState.format(summary?.elapsedMillis ?: 0),
-            ),
-        )
+        ComicPanel(Modifier.fillMaxWidth()) {
+            Text(
+                text = stringResource(
+                    R.string.campaign_defeat_time,
+                    TimerState.format(summary?.elapsedMillis ?: 0),
+                ),
+                modifier = Modifier.padding(16.dp),
+            )
+        }
         Button(onClick = onRestart, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.campaign_all_day))
         }
