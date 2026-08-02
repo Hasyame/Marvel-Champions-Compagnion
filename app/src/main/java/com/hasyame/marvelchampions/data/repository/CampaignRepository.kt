@@ -152,7 +152,7 @@ class CampaignRepository @Inject constructor(
             }
         }
         val runId = UUID.randomUUID().toString()
-        campaignDao.upsertRun(
+        campaignDao.insertRun(
             CampaignRunEntity(
                 id = runId,
                 templateId = template.id,
@@ -193,11 +193,10 @@ class CampaignRepository @Inject constructor(
         // design is built for — and it stops a run being stuck on whichever
         // version happened to be installed the day it started.
         val template = bundledTemplates().firstOrNull { it.id == stored.id } ?: stored
-        if (template !== stored) {
-            campaignDao.upsertRun(
-                entity.copy(
-                    templateJson = json.encodeToString(CampaignTemplate.serializer(), template),
-                ),
+        if (template != stored) {
+            campaignDao.setTemplateJson(
+                runId,
+                json.encodeToString(CampaignTemplate.serializer(), template),
             )
         }
 
@@ -310,19 +309,16 @@ class CampaignRepository @Inject constructor(
 
     suspend fun updateTimer(runId: String, timer: TimerState, scenarioId: String?) =
         withContext(ioDispatcher) {
-            campaignDao.getRun(runId)?.let { run ->
-                campaignDao.upsertRun(
-                    run.copy(
-                        timerAccumulatedMillis = timer.accumulatedMillis,
-                        timerRunningSince = timer.runningSinceEpochMillis,
-                        timerScenarioId = scenarioId,
-                    ),
-                )
-            }
+            campaignDao.updateTimer(
+                runId = runId,
+                accumulated = timer.accumulatedMillis,
+                runningSince = timer.runningSinceEpochMillis,
+                scenarioId = scenarioId,
+            )
         }
 
     suspend fun markFinished(runId: String, finished: Boolean) = withContext(ioDispatcher) {
-        campaignDao.getRun(runId)?.let { campaignDao.upsertRun(it.copy(finished = finished)) }
+        campaignDao.setFinished(runId, finished)
     }
 
     suspend fun deleteRun(runId: String) = withContext(ioDispatcher) {

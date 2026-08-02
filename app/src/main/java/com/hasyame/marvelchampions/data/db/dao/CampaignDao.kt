@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.hasyame.marvelchampions.data.db.entity.CampaignEventEntity
 import com.hasyame.marvelchampions.data.db.entity.CampaignRunEntity
 import kotlinx.coroutines.flow.Flow
@@ -11,8 +12,43 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CampaignDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsertRun(run: CampaignRunEntity)
+    /**
+     * Creates a run.
+     *
+     * Deliberately **not** `onConflict = REPLACE`. In SQLite that is a DELETE
+     * followed by an INSERT, and `campaign_events` references this table with
+     * ON DELETE CASCADE — so replacing a run silently destroys its entire event
+     * log, which is the only place campaign state exists. Updates go through
+     * [updateRun] and the targeted queries below.
+     */
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    suspend fun insertRun(run: CampaignRunEntity)
+
+    /** An UPDATE statement, so child rows are untouched. */
+    @Update
+    suspend fun updateRun(run: CampaignRunEntity)
+
+    @Query(
+        """
+        UPDATE campaign_runs
+        SET timerAccumulatedMillis = :accumulated,
+            timerRunningSince = :runningSince,
+            timerScenarioId = :scenarioId
+        WHERE id = :runId
+        """,
+    )
+    suspend fun updateTimer(
+        runId: String,
+        accumulated: Long,
+        runningSince: Long?,
+        scenarioId: String?,
+    )
+
+    @Query("UPDATE campaign_runs SET finished = :finished WHERE id = :runId")
+    suspend fun setFinished(runId: String, finished: Boolean)
+
+    @Query("UPDATE campaign_runs SET templateJson = :templateJson WHERE id = :runId")
+    suspend fun setTemplateJson(runId: String, templateJson: String)
 
     @Query("SELECT * FROM campaign_runs ORDER BY finished, createdAt DESC")
     fun observeRuns(): Flow<List<CampaignRunEntity>>
