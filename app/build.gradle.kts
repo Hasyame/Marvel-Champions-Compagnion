@@ -36,29 +36,51 @@ android {
     /**
      * Release signing.
      *
-     * Uses `keystore.properties` when it exists, which is gitignored so no key
-     * or password reaches the repository. Without it the release is signed with
-     * the debug key instead: not something to publish, but installable on a
-     * device, which is what this app is for. See README.
+     * The signing password has to be plain text somewhere — Gradle hands the
+     * real value to the signing engine, so nothing reversible-by-the-build is
+     * safe from anyone holding the file. What can be controlled is *where* it
+     * sits, and the safest place is outside the repository: inside it, the key
+     * is one zipped folder, one cloud backup or one bad `.gitignore` edit away
+     * from being shared by accident.
+     *
+     * Searched in order:
+     *  1. `$MCC_KEYSTORE_PROPERTIES` — an explicit path, for CI or an unusual setup
+     *  2. `~/.mcc/keystore.properties` — the recommended home, outside every repo
+     *  3. `keystore.properties` in the repo root — still honoured, but see above
+     *
+     * Without any of them the release is signed with the debug key and says so
+     * loudly. See README.
      */
+    val keystorePropertiesFile = listOfNotNull(
+        System.getenv("MCC_KEYSTORE_PROPERTIES")?.let { File(it) },
+        File(System.getProperty("user.home"), ".mcc/keystore.properties"),
+        rootProject.file("keystore.properties"),
+    ).firstOrNull { it.exists() }
+
     val keystoreProperties = Properties().apply {
-        val file = rootProject.file("keystore.properties")
-        if (file.exists()) {
-            file.inputStream().use { load(it) }
-        }
+        keystorePropertiesFile?.inputStream()?.use { load(it) }
     }
 
-    val declaredKeystore = keystoreProperties.getProperty("storeFile")
-        ?.let { rootProject.file(it) }
+    // A relative storeFile is resolved against the properties file's own folder,
+    // so the key and its passwords travel together and neither has to know
+    // where the checkout is.
+    val declaredKeystore = keystoreProperties.getProperty("storeFile")?.let { path ->
+        val named = File(path)
+        when {
+            named.isAbsolute -> named
+            keystorePropertiesFile != null -> File(keystorePropertiesFile.parentFile, path)
+            else -> rootProject.file(path)
+        }
+    }
 
     // A keystore.properties naming a file that is not there is a typo or a key
     // left behind on another machine. Failing here beats shipping a build that
     // is quietly debug-signed because a path was wrong.
     if (declaredKeystore != null && !declaredKeystore.exists()) {
         throw GradleException(
-            "keystore.properties points at ${declaredKeystore.absolutePath}, " +
-                "which does not exist. Fix storeFile, or delete keystore.properties " +
-                "to fall back to the debug key.",
+            "${keystorePropertiesFile?.absolutePath} points at " +
+                "${declaredKeystore.absolutePath}, which does not exist. Fix " +
+                "storeFile, or delete that file to fall back to the debug key.",
         )
     }
 

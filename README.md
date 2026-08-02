@@ -77,8 +77,15 @@ Create a key once:
 keytool -genkeypair -v -keystore release.jks -keyalg RSA -keysize 4096 -validity 10000 -alias mcc
 ```
 
-Then copy `keystore.properties.example` to `keystore.properties` and fill it in.
-Both the key and that file are gitignored.
+Then copy `keystore.properties.example` to `~/.mcc/keystore.properties` and fill
+it in, keeping `release.jks` beside it.
+
+**Outside the repository on purpose.** A signing password has to be plain text
+for Gradle to use it, so the protection is location: inside the project folder
+the key is one zipped folder, one cloud backup or one bad `.gitignore` edit away
+from being shared by accident. The build also accepts
+`$MCC_KEYSTORE_PROPERTIES` pointing at any path, and still reads
+`keystore.properties` in the repo root if you prefer that.
 
 **Back the keystore up somewhere other than this machine.** It cannot be
 regenerated or recovered. Losing it means no future build can ever update an
