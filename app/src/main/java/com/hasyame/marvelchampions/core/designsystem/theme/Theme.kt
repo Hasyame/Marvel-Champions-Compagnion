@@ -20,66 +20,67 @@ import androidx.compose.ui.platform.LocalContext
  * another has no identity left. It stays available as a parameter.
  */
 private val LightScheme = lightColorScheme(
-    primary = ComicRed,
-    onPrimary = ComicPaper,
-    primaryContainer = ComicRedLight,
-    onPrimaryContainer = ComicInk,
+    primary = IronRed,
+    onPrimary = PaperWarm,
+    primaryContainer = IronRedTint,
+    onPrimaryContainer = IronRedInk,
 
-    secondary = ComicBlue,
-    onSecondary = ComicPaper,
-    secondaryContainer = ComicBlueLight,
-    onSecondaryContainer = ComicInk,
+    secondary = BrassGold,
+    onSecondary = BrassGoldInk,
+    secondaryContainer = BrassGoldTint,
+    onSecondaryContainer = BrassGoldInk,
 
-    // Yellow is what a comic reserves for sound effects and starbursts, so it is
-    // the tertiary accent and never a page fill.
-    tertiary = ComicYellow,
-    onTertiary = ComicInk,
-    tertiaryContainer = ComicYellow,
-    onTertiaryContainer = ComicInk,
+    // The bright gold is the highlight — starbursts and accents — so it is the
+    // tertiary and never a page fill.
+    tertiary = ArcGold,
+    onTertiary = BrassGoldInk,
+    tertiaryContainer = ArcGoldTint,
+    onTertiaryContainer = BrassGoldInk,
 
-    background = ComicPaper,
-    onBackground = ComicInk,
-    surface = ComicPaper,
-    onSurface = ComicInk,
-    surfaceVariant = ComicPaperDim,
-    onSurfaceVariant = ComicInkSoft,
+    background = PaperWarm,
+    onBackground = PanelInk,
+    surface = PaperWarm,
+    onSurface = PanelInk,
+    surfaceVariant = PaperShade,
+    onSurfaceVariant = PanelInkSoft,
 
     // A heavy outline is most of what makes a panel read as drawn, not as a box.
-    outline = ComicInk,
-    outlineVariant = ComicInkSoft,
+    outline = PanelInk,
+    outlineVariant = PanelInkSoft,
 
-    error = ComicRedDark,
-    onError = ComicPaper,
+    // The deeper red, so an error still separates from the primary red.
+    error = IronRedDeep,
+    onError = PaperWarm,
 )
 
 private val DarkScheme = darkColorScheme(
-    primary = ComicRedLight,
-    onPrimary = ComicInk,
-    primaryContainer = ComicRedDark,
-    onPrimaryContainer = ComicPaper,
+    primary = IronRedBright,
+    onPrimary = IronRedInk,
+    primaryContainer = IronRedDeep,
+    onPrimaryContainer = IronRedTint,
 
-    secondary = ComicBlueLight,
-    onSecondary = ComicInk,
-    secondaryContainer = ComicBlueDark,
-    onSecondaryContainer = ComicPaper,
+    secondary = BrassGold,
+    onSecondary = BrassGoldInk,
+    secondaryContainer = BrassGoldDeep,
+    onSecondaryContainer = BrassGoldTint,
 
-    tertiary = ComicYellow,
-    onTertiary = ComicInk,
-    tertiaryContainer = ComicYellowDark,
-    onTertiaryContainer = ComicPaper,
+    tertiary = ArcGold,
+    onTertiary = BrassGoldInk,
+    tertiaryContainer = ArcGoldDeep,
+    onTertiaryContainer = ArcGoldTint,
 
-    background = ComicNight,
-    onBackground = ComicPaper,
-    surface = ComicNight,
-    onSurface = ComicPaper,
-    surfaceVariant = ComicNightRaised,
-    onSurfaceVariant = ComicPaperDim,
+    background = NightLacquer,
+    onBackground = PaperWarm,
+    surface = NightLacquer,
+    onSurface = PaperWarm,
+    surfaceVariant = NightRaised,
+    onSurfaceVariant = PaperShade,
 
-    outline = ComicPaperDim,
-    outlineVariant = ComicInkSoft,
+    outline = NightOutline,
+    outlineVariant = PanelInkSoft,
 
-    error = ComicRedLight,
-    onError = ComicInk,
+    error = IronRedBright,
+    onError = IronRedInk,
 )
 
 @Composable

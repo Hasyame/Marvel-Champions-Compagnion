@@ -51,12 +51,21 @@ fun QuestionsPage(
         .filter { ConditionEvaluator.evaluate(it.condition, context) }
 
     val numbers = remember { mutableStateMapOf<String, String>() }
-    val booleans = remember { mutableStateMapOf<String, Boolean>() }
     val choices = remember { mutableStateMapOf<String, String>() }
     val cardLists = remember { mutableStateMapOf<String, String>() }
     val cardSelections = remember { mutableStateMapOf<String, Set<String>>() }
     val perHeroNumbers = remember { mutableStateMapOf<String, String>() }
     val perHeroBooleans = remember { mutableStateMapOf<String, Boolean>() }
+
+    // Every switch on the page starts recorded as "no". A map that only gains a
+    // key when a switch is touched cannot tell "answered no" from "not asked",
+    // and the log is meant to be a record of what the player said.
+    val booleans = remember(prompts) {
+        mutableStateMapOf<String, Boolean>().apply {
+            prompts.filter { it.promptType == PromptType.BOOLEAN }
+                .forEach { put(it.id, false) }
+        }
+    }
 
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),

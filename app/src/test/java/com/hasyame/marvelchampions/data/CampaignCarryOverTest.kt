@@ -214,6 +214,44 @@ class CampaignCarryOverTest {
         assertEquals(listOf(EGG, TEAPOT), cards.filter { it in ARTIFACTS })
     }
 
+    /**
+     * A victory recorded with the question left alone entirely — the switch was
+     * never touched, so its id never reached the answer map.
+     */
+    private fun wonWithoutTouchingTheSwitch(scenarioId: String, at: Long) =
+        CampaignEvent.ScenarioCompleted(
+            id = "win-$scenarioId",
+            timestamp = at,
+            scenarioId = scenarioId,
+            victory = true,
+            answers = AnswerSet(numbers = mapOf("vp" to 0)),
+            elapsedMillis = 1000,
+        )
+
+    @Test
+    fun `an untouched switch does not mark the box`() {
+        val template = gmw()
+        // Reported from the emulator: the box checked once, at scenario 3, and
+        // scenario 4 asked for three cards. Scenarios 1 and 2 had been played
+        // without touching the switch at all, and a missing answer was being
+        // read as yes.
+        val state = engine.fold(
+            template,
+            listOf(
+                started(template),
+                wonWithoutTouchingTheSwitch("s1_badoon", at = 1),
+                wonWithoutTouchingTheSwitch("s2_museum", at = 2),
+                won("s3_escape", headhunter = true, at = 3),
+            ),
+        )
+
+        assertEquals(1, state.countTrue("headhunterDefeated"))
+        assertEquals(
+            listOf(ON_THE_HUNT),
+            setupCards(template, state, "s4_nebula").filter { it in LADDER },
+        )
+    }
+
     @Test
     fun `a step about recorded cards is hidden when nothing was recorded`() {
         val template = gmw()

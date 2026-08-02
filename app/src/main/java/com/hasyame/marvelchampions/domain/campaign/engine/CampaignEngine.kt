@@ -260,9 +260,16 @@ class CampaignEngine(
                     return state
                 }
                 val flagId = effect.flag ?: return state
-                val value = effect.boolValue
-                    ?: effect.from?.let { answers.booleans[it] }
-                    ?: true
+                // An answer that is missing means "no", never "yes". A switch
+                // the player never touches puts nothing in the answer map, so
+                // falling through to a default of true silently marked the box
+                // for every scenario it was left alone in — which is how one
+                // check produced three cards of setup.
+                val value = when {
+                    effect.boolValue != null -> effect.boolValue
+                    effect.from != null -> answers.booleans[effect.from] == true
+                    else -> true
+                }
                 val key = scenarioId ?: ""
                 val existing = state.flags[flagId].orEmpty()
                 state.copy(flags = state.flags + (flagId to (existing + (key to value))))

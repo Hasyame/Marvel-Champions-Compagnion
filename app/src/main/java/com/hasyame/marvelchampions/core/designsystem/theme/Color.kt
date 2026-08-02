@@ -3,40 +3,40 @@ package com.hasyame.marvelchampions.core.designsystem.theme
 import androidx.compose.ui.graphics.Color
 
 /**
- * A newsstand comic palette: saturated primaries, heavy black line, and paper
- * that is cream rather than white.
+ * Red and gold: hot-rod lacquer over polished brass.
  *
- * These are ordinary comic-printing colours — the four-colour process plus an
- * ink black — and not any publisher's trade dress. Nothing here reproduces a
- * logo, a character or a house style; the app has to look like a comic without
- * borrowing one.
+ * The four chosen colours are the whole identity; everything else here is a
+ * tint or shade derived from them so that Material's containers and disabled
+ * states stay in the same family rather than drifting to stock purple.
  */
 
-/** Cover red. The app's primary, used for anything that acts. */
-val ComicRed = Color(0xFFD62828)
-val ComicRedDark = Color(0xFF8E1616)
-val ComicRedLight = Color(0xFFFF6B5E)
+/** The primary red. Anything that acts is this colour. */
+val IronRed = Color(0xFFE30022)
+val IronRedDeep = Color(0xFFCC0000)
+val IronRedTint = Color(0xFFFFD9D5)
+val IronRedBright = Color(0xFFFF5A49)
+val IronRedInk = Color(0xFF480007)
 
-/** Cape blue, for secondary emphasis and selected state. */
-val ComicBlue = Color(0xFF1D4E9B)
-val ComicBlueDark = Color(0xFF0F2E5E)
-val ComicBlueLight = Color(0xFF6C9BE0)
+/** Brushed gold, for secondary emphasis. Warmer and duller than the highlight. */
+val BrassGold = Color(0xFFD3AF37)
+val BrassGoldTint = Color(0xFFFFE9AC)
+val BrassGoldDeep = Color(0xFF8A7020)
+val BrassGoldInk = Color(0xFF3A2D00)
 
-/** Sound-effect yellow. Reserved for highlights, never for large fills. */
-val ComicYellow = Color(0xFFF6BE00)
-val ComicYellowDark = Color(0xFF9A7500)
+/** The bright highlight. Reserved for accents, never a large fill. */
+val ArcGold = Color(0xFFFCC200)
+val ArcGoldTint = Color(0xFFFFE08A)
+val ArcGoldDeep = Color(0xFF7A5F00)
 
-/** Ink. Panel borders, outlines and body text on paper. */
-val ComicInk = Color(0xFF14131A)
-val ComicInkSoft = Color(0xFF3A3844)
+/** Ink, for panel borders and outlines — what makes a card read as drawn. */
+val PanelInk = Color(0xFF1A1113)
+val PanelInkSoft = Color(0xFF534342)
 
-/** Newsprint. Warmer than white, which is most of the comic feel. */
-val ComicPaper = Color(0xFFFBF4E4)
-val ComicPaperDim = Color(0xFFEFE4CC)
+/** Warm off-white rather than plain white, so the red is not glaring. */
+val PaperWarm = Color(0xFFFFF8F6)
+val PaperShade = Color(0xFFF3DDDB)
 
-/** Night pages, for the dark theme. */
-val ComicNight = Color(0xFF141118)
-val ComicNightRaised = Color(0xFF221D2B)
-
-/** Kept for the two states that must read as status, not as decoration. */
-val ComicGreen = Color(0xFF2E7D4F)
+/** Night pages. Tinted towards red so the dark theme is not neutral grey. */
+val NightLacquer = Color(0xFF161011)
+val NightRaised = Color(0xFF2A211F)
+val NightOutline = Color(0xFFE8D8D5)
