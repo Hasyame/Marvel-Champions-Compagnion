@@ -40,7 +40,25 @@ object CardQueryBuilder {
             "cards"
         }
 
-        where += "cards.locale = ?"
+        // A card MarvelCDB has not translated is still a card the player owns.
+        // Matching the locale exactly hid it from search entirely, which reads
+        // as the database being incomplete rather than the translation being
+        // missing. The fallback row is used only when no translated row exists,
+        // so a card is never returned twice.
+        where += """
+            (
+                cards.locale = ?
+                OR (
+                    cards.locale = ?
+                    AND NOT EXISTS (
+                        SELECT 1 FROM cards translated
+                        WHERE translated.code = cards.code AND translated.locale = ?
+                    )
+                )
+            )
+        """.trimIndent()
+        args += locale.code
+        args += locale.fallback().code
         args += locale.code
 
         filter.packCodes.addInClause(where, args, "cards.packCode")

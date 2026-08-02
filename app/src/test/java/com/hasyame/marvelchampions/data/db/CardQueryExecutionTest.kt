@@ -52,6 +52,43 @@ class CardQueryExecutionTest {
         database.close()
     }
 
+@Test
+    fun `an untranslated card appears in French search rather than vanishing`() = runTest {
+        // MarvelCDB has not translated every pack, and matching the locale
+        // exactly hid those cards from search altogether — which reads as a
+        // broken database rather than a missing translation.
+        dao.insertAll(
+            listOf(
+                card("45001", "Untranslated Ally", "ally", "leadership", "fne", 2, "Avenger."),
+            ),
+        )
+
+        assertEquals(5, run(CardFilter()).size)
+        assertEquals(
+            listOf("45001"),
+            run(CardFilter(query = "untranslated")).map { it.code },
+        )
+    }
+
+    @Test
+    fun `a translated card is returned once, not once per language`() = runTest {
+        // The fallback row is used only when no translated row exists. If that
+        // ever stops holding, every card in the database doubles.
+        dao.insertAll(
+            listOf(
+                englishCard("01021", "Gamma Slam", "event", "aggression", "core"),
+            ),
+        )
+
+        val results = run(CardFilter())
+        assertEquals(4, results.size)
+        assertEquals(
+            "the French row wins for a card that has one",
+            "Frappe Gamma",
+            results.first { it.code == "01021" }.name,
+        )
+    }
+
     private suspend fun run(
         filter: CardFilter,
         owned: Set<String> = emptySet(),
@@ -117,6 +154,15 @@ class CardQueryExecutionTest {
 
         assertEquals(listOf("01021"), results.map { it.code })
     }
+
+private fun englishCard(
+        code: String,
+        name: String,
+        typeCode: String,
+        factionCode: String,
+        packCode: String,
+    ) = card(code, name, typeCode, factionCode, packCode, cost = null, traits = null)
+        .copy(locale = "en")
 
     private fun card(
         code: String,

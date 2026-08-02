@@ -63,7 +63,7 @@ class CardSearchRepository @Inject constructor(
     }
 
     suspend fun getCard(code: String, locale: CardLocale): CardEntity? =
-        withContext(ioDispatcher) { cardDao.getCard(code, locale.code) }
+        withContext(ioDispatcher) { cardDao.getCardPreferringLocale(code, locale.code) }
 
     fun observeCard(code: String, locale: CardLocale): Flow<CardEntity?> =
         cardDao.observeCard(code, locale.code)
@@ -71,7 +71,7 @@ class CardSearchRepository @Inject constructor(
     /** The other side of a double-sided card, or a hero's alter-ego. */
     suspend fun getLinkedCard(card: CardEntity, locale: CardLocale): CardEntity? =
         withContext(ioDispatcher) {
-            card.linkedToCode?.let { cardDao.getCard(it, locale.code) }
+            card.linkedToCode?.let { cardDao.getCardPreferringLocale(it, locale.code) }
         }
 
     suspend fun countForLocale(locale: CardLocale): Int =

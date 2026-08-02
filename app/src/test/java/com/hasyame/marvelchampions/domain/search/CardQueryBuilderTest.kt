@@ -10,12 +10,17 @@ import org.junit.Test
 class CardQueryBuilderTest {
 
     @Test
-    fun `an empty filter still scopes to the locale`() {
+    fun `an empty filter prefers the locale and falls back to the other`() {
         val query = CardQueryBuilder.build(CardFilter(), CardLocale.FRENCH)
 
         assertTrue(query.sql.contains("cards.locale = ?"))
-        // locale, limit, offset
-        assertEquals(listOf<Any>("fr", 200, 0), query.args)
+        // The fallback row is admitted only where no translated row exists, so
+        // an untranslated card is findable without a translated one appearing
+        // twice.
+        assertTrue(query.sql.contains("NOT EXISTS"))
+        // preferred locale, fallback locale, preferred again for the subquery,
+        // then limit and offset.
+        assertEquals(listOf<Any>("fr", "en", "fr", 200, 0), query.args)
     }
 
     @Test
