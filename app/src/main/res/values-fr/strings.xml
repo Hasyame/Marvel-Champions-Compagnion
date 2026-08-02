@@ -381,4 +381,19 @@
     <string name="decks_stats_wild">Joker</string>
     <string name="decks_stats_by_type">Par type de carte</string>
     <string name="decks_stats_by_aspect">Par aspect</string>
+    <string name="settings_bgg">BoardGameGeek</string>
+    <string name="settings_bgg_summary">Enregistrez vos parties terminées dans votre historique BoardGameGeek.</string>
+    <string name="settings_bgg_password_warning">BoardGameGeek ne propose pas de connexion pour les applications : votre mot de passe de compte est donc nécessaire. Il est chiffré sur cet appareil et envoyé uniquement à boardgamegeek.com. La déconnexion l\'efface.</string>
+    <string name="settings_bgg_username">Identifiant BGG</string>
+    <string name="settings_bgg_password">Mot de passe BGG</string>
+    <string name="settings_bgg_connect">Se connecter</string>
+    <string name="settings_bgg_disconnect">Se déconnecter et effacer le mot de passe</string>
+    <string name="settings_bgg_connected_as">Connecté en tant que %1$s</string>
+    <string name="settings_bgg_when">Quand envoyer une partie</string>
+    <string name="settings_bgg_off">Jamais</string>
+    <string name="settings_bgg_ask">Me demander</string>
+    <string name="settings_bgg_always">Toujours</string>
+    <string name="settings_bgg_off_detail">Rien n\'est envoyé et votre mot de passe n\'est pas utilisé.</string>
+    <string name="settings_bgg_ask_detail">À la fin d\'une partie, vous choisissez de l\'envoyer ou non.</string>
+    <string name="settings_bgg_always_detail">Chaque partie terminée est envoyée sans demander.</string>
 </resources>

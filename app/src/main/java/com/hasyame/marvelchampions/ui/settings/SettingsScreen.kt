@@ -150,6 +150,16 @@ fun SettingsScreen(
             MusicSection(state = state, onMusicUrlChange = viewModel::setMusicUrl)
             HorizontalDivider()
 
+            BggSection(
+                state = state.bgg,
+                isVerifying = state.bggVerifying,
+                error = state.bggError,
+                onConnect = viewModel::connectBgg,
+                onDisconnect = viewModel::disconnectBgg,
+                onModeChange = viewModel::setBggMode,
+            )
+            HorizontalDivider()
+
             val context = LocalContext.current
             var noMailApp by remember { mutableStateOf(false) }
 

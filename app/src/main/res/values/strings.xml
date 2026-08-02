@@ -363,4 +363,19 @@
     <string name="decks_stats_wild">Wild</string>
     <string name="decks_stats_by_type">By card type</string>
     <string name="decks_stats_by_aspect">By aspect</string>
+    <string name="settings_bgg">BoardGameGeek</string>
+    <string name="settings_bgg_summary">Log your finished games to your BoardGameGeek play history.</string>
+    <string name="settings_bgg_password_warning">BoardGameGeek has no app login, so this needs your account password. It is encrypted on this device and sent only to boardgamegeek.com. Disconnecting erases it.</string>
+    <string name="settings_bgg_username">BGG username</string>
+    <string name="settings_bgg_password">BGG password</string>
+    <string name="settings_bgg_connect">Connect</string>
+    <string name="settings_bgg_disconnect">Disconnect and erase password</string>
+    <string name="settings_bgg_connected_as">Connected as %1$s</string>
+    <string name="settings_bgg_when">When to send a game</string>
+    <string name="settings_bgg_off">Never</string>
+    <string name="settings_bgg_ask">Ask me</string>
+    <string name="settings_bgg_always">Always</string>
+    <string name="settings_bgg_off_detail">Nothing is sent, and your password is not used.</string>
+    <string name="settings_bgg_ask_detail">At the end of a game you choose whether to send it.</string>
+    <string name="settings_bgg_always_detail">Every finished game is sent without asking.</string>
 </resources>
