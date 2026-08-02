@@ -49,6 +49,7 @@ import java.util.Date
 @Composable
 fun SettingsScreen(
     onOpenCollection: () -> Unit,
+    onOpenAbout: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -163,6 +164,13 @@ fun SettingsScreen(
                     modifier = Modifier.padding(horizontal = 16.dp),
                 )
             }
+            HorizontalDivider()
+
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_about)) },
+                supportingContent = { Text(stringResource(R.string.settings_about_summary)) },
+                modifier = Modifier.clickable(onClick = onOpenAbout),
+            )
             HorizontalDivider()
 
             var donateOpen by remember { mutableStateOf(false) }

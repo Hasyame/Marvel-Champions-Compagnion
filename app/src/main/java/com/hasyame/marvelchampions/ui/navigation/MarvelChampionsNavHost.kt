@@ -19,6 +19,7 @@ import com.hasyame.marvelchampions.ui.decks.DeckEditorScreen
 import com.hasyame.marvelchampions.ui.decks.DecksScreen
 import com.hasyame.marvelchampions.ui.decks.NewDeckScreen
 import com.hasyame.marvelchampions.ui.randomizer.RandomizerScreen
+import com.hasyame.marvelchampions.ui.settings.AboutScreen
 import com.hasyame.marvelchampions.ui.settings.SettingsScreen
 
 @Composable
@@ -141,10 +142,14 @@ fun MarvelChampionsNavHost(
             composable<SettingsRoute> {
                 SettingsScreen(
                     onOpenCollection = { navController.navigate(CollectionRoute) },
+                    onOpenAbout = { navController.navigate(AboutRoute) },
                 )
             }
             composable<CollectionRoute> {
                 CollectionScreen(onBack = { navController.popBackStack() })
+            }
+            composable<AboutRoute> {
+                AboutScreen(onBack = { navController.popBackStack() })
             }
         }
     }
