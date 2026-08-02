@@ -73,8 +73,12 @@ fun DecksScreen(
     }
 
     Scaffold(
-        topBar = { TopAppBar(
-            colors = comicTopBarColors(),title = { Text(stringResource(R.string.destination_decks)) }) },
+        topBar = {
+            TopAppBar(
+                colors = comicTopBarColors(),
+                title = { Text(stringResource(R.string.destination_decks)) },
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = { addDialogOpen = true }) {
                 Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.decks_add))

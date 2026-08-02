@@ -59,8 +59,12 @@ fun CardsScreen(
     // This was the one tab without a title bar, so its search field started
     // hard against the status bar while every other screen began below one.
     Scaffold(
-        topBar = { TopAppBar(
-            colors = comicTopBarColors(),title = { Text(stringResource(R.string.destination_cards)) }) },
+        topBar = {
+            TopAppBar(
+                colors = comicTopBarColors(),
+                title = { Text(stringResource(R.string.destination_cards)) },
+            )
+        },
     ) { padding ->
         Column(Modifier.fillMaxSize().padding(padding)) {
             SearchBar(

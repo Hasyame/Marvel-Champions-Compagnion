@@ -55,8 +55,12 @@ fun SettingsScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
-        topBar = { TopAppBar(
-            colors = comicTopBarColors(),title = { Text(stringResource(R.string.destination_settings)) }) },
+        topBar = {
+            TopAppBar(
+                colors = comicTopBarColors(),
+                title = { Text(stringResource(R.string.destination_settings)) },
+            )
+        },
     ) { padding ->
         Column(
             modifier = Modifier

@@ -1,10 +1,13 @@
 package com.hasyame.marvelchampions.ui.campaign
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -34,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.ComicEmptyState
 import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.data.repository.CampaignSummary
 import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
@@ -59,8 +63,12 @@ fun CampaignScreen(
     val finished = summaries.filter { it.entity.finished }
 
     Scaffold(
-        topBar = { TopAppBar(
-            colors = comicTopBarColors(),title = { Text(stringResource(R.string.destination_campaign)) }) },
+        topBar = {
+            TopAppBar(
+                colors = comicTopBarColors(),
+                title = { Text(stringResource(R.string.destination_campaign)) },
+            )
+        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = onStartCampaign,
@@ -70,16 +78,10 @@ fun CampaignScreen(
         },
     ) { padding ->
         if (summaries.isEmpty()) {
-            Box(
-                Modifier.fillMaxSize().padding(padding).padding(32.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = stringResource(R.string.campaign_empty),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            ComicEmptyState(
+                message = stringResource(R.string.campaign_empty),
+                modifier = Modifier.padding(padding),
+            )
             return@Scaffold
         }
 
@@ -167,12 +169,23 @@ fun CampaignScreen(
 
 @Composable
 private fun SectionHeader(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleSmall,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(16.dp),
-    )
+    // A rule under the title, the way a comic breaks a page into sections. It
+    // also does the practical job of separating "in progress" from "finished"
+    // at a glance, which a colour change alone was not doing.
+    Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)) {
+        Text(
+            text = title.uppercase(),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        Box(
+            Modifier
+                .padding(top = 4.dp)
+                .width(48.dp)
+                .height(3.dp)
+                .background(MaterialTheme.colorScheme.tertiary),
+        )
+    }
 }
 
 @Composable

@@ -48,8 +48,12 @@ fun RandomizerScreen(viewModel: RandomizerViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
-        topBar = { TopAppBar(
-            colors = comicTopBarColors(),title = { Text(stringResource(R.string.destination_randomizer)) }) },
+        topBar = {
+            TopAppBar(
+                colors = comicTopBarColors(),
+                title = { Text(stringResource(R.string.destination_randomizer)) },
+            )
+        },
     ) { padding ->
         when {
             state.isLoading -> Box(
