@@ -316,4 +316,20 @@
     <string name="campaign_stat_cards_bought">Market cards bought</string>
     <string name="campaign_stat_credits_left">Units left</string>
     <string name="campaign_log">Campaign log</string>
+    <string name="loading_percent">%1$d%%</string>
+    <!-- Original comic exclamations. Deliberately not quotations from Marvel
+         comics or films, which would be someone else's text in the APK. -->
+    <string-array name="loading_exclamations">
+        <item>KA-POW!</item>
+        <item>WHAM!</item>
+        <item>ZAP!</item>
+        <item>BOOM!</item>
+        <item>THWIP!</item>
+        <item>KRAKK!</item>
+        <item>WHOOSH!</item>
+        <item>BAMF!</item>
+        <item>SHAZAM!</item>
+        <item>KA-BLAM!</item>
+    </string-array>
+    <string name="cards_loading">Searching the archives</string>
 </resources>

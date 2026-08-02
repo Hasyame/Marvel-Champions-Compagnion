@@ -1,24 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Placeholder launcher icon: a stack of three cards. Deliberately generic, and
-  free of any Marvel or Fantasy Flight artwork.
+  A comic starburst behind a fan of three cards, drawn in ink, yellow and paper.
+
+  Entirely original geometry: no Marvel or Fantasy Flight artwork, no character,
+  no logo, no trade dress. The comic feel comes from the burst and the heavy
+  outline — which is what the app is about, playing card games out of comics —
+  rather than from anything a publisher owns.
+
+  The safe zone of an adaptive icon is the middle 66dp of 108dp, so the cards
+  stay within roughly x,y = 21..87 and only the spikes reach past it.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <group android:translateX="6" android:translateY="6">
+
+    <!-- Starburst: fourteen spikes, alternating radii around the centre. -->
+    <path
+        android:fillColor="#F6BE00"
+        android:strokeColor="#14131A"
+        android:strokeWidth="2.5"
+        android:pathData="M54,14 L60.2,26.6 L71.8,18.7 L71.5,32.8 L85.3,29.9 L78.3,42.2
+                         L92.2,44.7 L80.6,52.7 L92.2,60.7 L78.3,63.2 L85.3,75.5
+                         L71.5,72.6 L71.8,86.7 L60.2,78.8 L54,91.4 L47.8,78.8
+                         L36.2,86.7 L36.5,72.6 L22.7,75.5 L29.7,63.2 L15.8,60.7
+                         L27.4,52.7 L15.8,44.7 L29.7,42.2 L22.7,29.9 L36.5,32.8
+                         L36.2,18.7 L47.8,26.6 Z" />
+
+    <!-- Back card, fanned left. -->
+    <group android:pivotX="54" android:pivotY="58" android:rotation="-16">
         <path
-            android:fillColor="#FFFFFF"
-            android:fillAlpha="0.45"
-            android:pathData="M34,30 L58,30 A3,3 0 0 1 61,33 L61,75 A3,3 0 0 1 58,78 L34,78 A3,3 0 0 1 31,75 L31,33 A3,3 0 0 1 34,30 Z" />
-        <path
-            android:fillColor="#FFFFFF"
-            android:fillAlpha="0.7"
-            android:pathData="M42,27 L66,27 A3,3 0 0 1 69,30 L69,72 A3,3 0 0 1 66,75 L42,75 A3,3 0 0 1 39,72 L39,30 A3,3 0 0 1 42,27 Z" />
-        <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M50,24 L74,24 A3,3 0 0 1 77,27 L77,69 A3,3 0 0 1 74,72 L50,72 A3,3 0 0 1 47,69 L47,27 A3,3 0 0 1 50,24 Z" />
+            android:fillColor="#1D4E9B"
+            android:strokeColor="#14131A"
+            android:strokeWidth="2.5"
+            android:pathData="M42,34 L66,34 A3,3 0 0 1 69,37 L69,79 A3,3 0 0 1 66,82
+                             L42,82 A3,3 0 0 1 39,79 L39,37 A3,3 0 0 1 42,34 Z" />
     </group>
+
+    <!-- Back card, fanned right. -->
+    <group android:pivotX="54" android:pivotY="58" android:rotation="16">
+        <path
+            android:fillColor="#D62828"
+            android:strokeColor="#14131A"
+            android:strokeWidth="2.5"
+            android:pathData="M42,34 L66,34 A3,3 0 0 1 69,37 L69,79 A3,3 0 0 1 66,82
+                             L42,82 A3,3 0 0 1 39,79 L39,37 A3,3 0 0 1 42,34 Z" />
+    </group>
+
+    <!-- Front card, upright, carrying halftone dots instead of a face. -->
+    <path
+        android:fillColor="#FBF4E4"
+        android:strokeColor="#14131A"
+        android:strokeWidth="2.5"
+        android:pathData="M42,32 L66,32 A3,3 0 0 1 69,35 L69,81 A3,3 0 0 1 66,84
+                         L42,84 A3,3 0 0 1 39,81 L39,35 A3,3 0 0 1 42,32 Z" />
+    <path android:fillColor="#D62828" android:pathData="M44,40 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path android:fillColor="#D62828" android:pathData="M54,40 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path android:fillColor="#D62828" android:pathData="M49,48 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path android:fillColor="#D62828" android:pathData="M59,48 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path android:fillColor="#1D4E9B" android:pathData="M44,56 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path android:fillColor="#1D4E9B" android:pathData="M54,56 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path android:fillColor="#1D4E9B" android:pathData="M49,64 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path android:fillColor="#1D4E9B" android:pathData="M59,64 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path android:fillColor="#14131A" android:pathData="M44,72 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path android:fillColor="#14131A" android:pathData="M54,72 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
 </vector>

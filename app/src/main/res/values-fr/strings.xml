@@ -336,4 +336,18 @@
     <string name="campaign_stat_cards_bought">Cartes du marché achetées</string>
     <string name="campaign_stat_credits_left">Crédits restants</string>
     <string name="campaign_log">Journal de campagne</string>
+    <string name="loading_percent">%1$d%%</string>
+    <string-array name="loading_exclamations">
+        <item>BAOUM!</item>
+        <item>VLAN!</item>
+        <item>ZAP!</item>
+        <item>BOUM!</item>
+        <item>TCHAC!</item>
+        <item>CRAAC!</item>
+        <item>FIOUUU!</item>
+        <item>PAF!</item>
+        <item>SBAM!</item>
+        <item>BADABOUM!</item>
+    </string-array>
+    <string name="cards_loading">Fouille dans les archives</string>
 </resources>

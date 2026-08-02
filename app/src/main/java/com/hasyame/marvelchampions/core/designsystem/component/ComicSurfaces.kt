@@ -1,0 +1,92 @@
+package com.hasyame.marvelchampions.core.designsystem.component
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+
+/**
+ * Ben-day dots — the printed-halftone texture that reads as "comic" before any
+ * other cue does.
+ *
+ * Drawn rather than shipped as an image so it stays crisp at any density and
+ * costs nothing in the APK. Kept faint: it is paper texture, not decoration,
+ * and anything stronger fights the text on top of it.
+ */
+fun Modifier.halftone(
+    color: Color,
+    dotRadius: Dp = 1.5.dp,
+    spacing: Dp = 10.dp,
+    alpha: Float = 0.14f,
+): Modifier = drawBehind {
+    val radius = dotRadius.toPx()
+    val step = spacing.toPx()
+    if (step <= 0f) {
+        return@drawBehind
+    }
+
+    var row = 0
+    var y = 0f
+    while (y < size.height + step) {
+        // Offsetting alternate rows by half a step gives the staggered screen a
+        // press produces, rather than a plain grid.
+        val startX = if (row % 2 == 0) 0f else step / 2f
+        var x = startX
+        while (x < size.width + step) {
+            drawCircle(color = color, radius = radius, center = Offset(x, y), alpha = alpha)
+            x += step
+        }
+        y += step
+        row += 1
+    }
+}
+
+/**
+ * A comic panel: heavy ink border and a hard offset shadow, no blur.
+ *
+ * Material's elevation shadow is a soft gradient, which is exactly what print
+ * cannot do. A solid offset rectangle is what a panel actually looks like.
+ */
+@Composable
+fun ComicPanel(
+    modifier: Modifier = Modifier,
+    borderWidth: Dp = 2.5.dp,
+    offset: Dp = 4.dp,
+    color: Color = MaterialTheme.colorScheme.surface,
+    content: @Composable BoxScope.() -> Unit,
+) {
+    val ink = MaterialTheme.colorScheme.outline
+    val shape = RoundedCornerShape(6.dp)
+
+    Box(
+        modifier.drawBehind {
+            val dx = offset.toPx()
+            drawRoundRect(
+                color = ink,
+                topLeft = Offset(dx, dx),
+                size = Size(size.width, size.height),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(6.dp.toPx()),
+                alpha = 0.9f,
+            )
+        },
+    ) {
+        Surface(
+            shape = shape,
+            color = color,
+            border = BorderStroke(borderWidth, ink),
+            content = { Box(content = content) },
+        )
+    }
+}

@@ -20,7 +20,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -36,7 +38,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.ComicLoadingScreen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardsScreen(
     onCardClick: (String) -> Unit,
@@ -50,46 +54,53 @@ fun CardsScreen(
     val isWide = currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass ==
         WindowWidthSizeClass.EXPANDED
 
-    Column(Modifier.fillMaxSize()) {
-        SearchBar(
-            query = state.filter.query,
-            activeFilterCount = state.filter.activeCount,
-            onQueryChange = viewModel::onQueryChange,
-            onFiltersClick = { filtersOpen = true },
-        )
+    // This was the one tab without a title bar, so its search field started
+    // hard against the status bar while every other screen began below one.
+    Scaffold(
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.destination_cards)) }) },
+    ) { padding ->
+        Column(Modifier.fillMaxSize().padding(padding)) {
+            SearchBar(
+                query = state.filter.query,
+                activeFilterCount = state.filter.activeCount,
+                onQueryChange = viewModel::onQueryChange,
+                onFiltersClick = { filtersOpen = true },
+            )
 
-        Box(Modifier.fillMaxSize()) {
-            when {
-                state.isDatabaseEmpty -> EmptyMessage(stringResource(R.string.cards_database_empty))
-                state.isLoading && state.results.isEmpty() -> Box(
-                    Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) { CircularProgressIndicator() }
+            Box(Modifier.fillMaxSize()) {
+                when {
+                    state.isDatabaseEmpty ->
+                        EmptyMessage(stringResource(R.string.cards_database_empty))
 
-                state.results.isEmpty() -> EmptyMessage(stringResource(R.string.cards_no_results))
+                    state.isLoading && state.results.isEmpty() ->
+                        ComicLoadingScreen(message = stringResource(R.string.cards_loading))
 
-                isWide -> Row(Modifier.fillMaxSize()) {
-                    CardList(
-                        state = state,
-                        onCardClick = viewModel::onCardSelected,
-                        modifier = Modifier.weight(1f),
-                    )
-                    VerticalDivider()
-                    Box(Modifier.weight(1.2f)) {
-                        val selected = state.selectedCode
-                        if (selected == null) {
-                            EmptyMessage(stringResource(R.string.cards_select_a_card))
-                        } else {
-                            CardDetailPane(code = selected)
+                    state.results.isEmpty() ->
+                        EmptyMessage(stringResource(R.string.cards_no_results))
+
+                    isWide -> Row(Modifier.fillMaxSize()) {
+                        CardList(
+                            state = state,
+                            onCardClick = viewModel::onCardSelected,
+                            modifier = Modifier.weight(1f),
+                        )
+                        VerticalDivider()
+                        Box(Modifier.weight(1.2f)) {
+                            val selected = state.selectedCode
+                            if (selected == null) {
+                                EmptyMessage(stringResource(R.string.cards_select_a_card))
+                            } else {
+                                CardDetailPane(code = selected)
+                            }
                         }
                     }
-                }
 
-                else -> CardList(
-                    state = state,
-                    onCardClick = onCardClick,
-                    modifier = Modifier.fillMaxSize(),
-                )
+                    else -> CardList(
+                        state = state,
+                        onCardClick = onCardClick,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
             }
         }
     }
