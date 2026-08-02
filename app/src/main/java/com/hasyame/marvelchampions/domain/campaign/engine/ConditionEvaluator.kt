@@ -49,8 +49,9 @@ object ConditionEvaluator {
         }
 
         condition.cardList?.let { listId ->
-            val wanted = condition.contains ?: return@let
-            if (wanted !in state.cardLists[listId].orEmpty()) return false
+            val recorded = state.cardLists[listId].orEmpty()
+            condition.contains?.let { if (it !in recorded) return false }
+            condition.minSize?.let { if (recorded.size < it) return false }
         }
 
         condition.flag?.let {
@@ -85,6 +86,13 @@ object ConditionEvaluator {
             if (expected != null && context.answers.choices[promptId] != expected) {
                 return false
             }
+        }
+
+        condition.anyHero?.let { perHero ->
+            val holds = state.heroes.any { hero ->
+                evaluate(perHero, context.copy(heroId = hero.id))
+            }
+            if (!holds) return false
         }
 
         if (condition.all.isNotEmpty() && condition.all.any { !evaluate(it, context) }) {

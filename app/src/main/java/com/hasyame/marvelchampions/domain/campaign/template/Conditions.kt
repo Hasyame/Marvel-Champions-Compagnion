@@ -31,9 +31,17 @@ data class Condition(
     val heroAnswer: String? = null,
     val notHeroAnswer: String? = null,
 
-    /** A recorded card list must contain [contains]. */
+    /**
+     * A recorded card list must contain [contains], or hold at least [minSize]
+     * cards.
+     *
+     * [minSize] is what keeps "remove the cards recorded in The Collection" off
+     * the briefing when nothing was recorded: an instruction about an empty list
+     * reads as though the app never consulted the log.
+     */
     val cardList: String? = null,
     val contains: String? = null,
+    val minSize: Int? = null,
 
     /** A flag must be set. `flagSet.scenarioId`, or just `flagSet`. */
     val flag: String? = null,
@@ -53,6 +61,16 @@ data class Condition(
     /** A choice answer must equal this option id. */
     val choice: String? = null,
     val choiceIs: String? = null,
+
+    /**
+     * True when at least one hero in the run satisfies the nested condition.
+     *
+     * Setup steps are shown once for the table, not per player, so a rule like
+     * "deal this to whoever holds the Power Stone" needs to ask whether *some*
+     * hero qualifies. Without it a hero-scoped [counter] would be read against
+     * the campaign and always come back zero.
+     */
+    val anyHero: Condition? = null,
 
     /** True when any nested condition holds. */
     val any: List<Condition> = emptyList(),

@@ -82,7 +82,7 @@ object TemplateValidator {
         template.scenarios.forEach { scenario ->
             val path = "scenarios.${scenario.id}"
             scenario.campaignSetup.forEachIndexed { index, step ->
-                validateCondition(step.condition, "$path.campaignSetup[$index].when", counterIds, flagSetIds, errors)
+                validateCondition(step.condition, "$path.campaignSetup[$index].when", counterIds, flagSetIds, cardListIds, errors)
                 step.action?.let { action ->
                     action.cost?.let { cost ->
                         if (cost.counterId !in counterIds) {
@@ -164,7 +164,7 @@ object TemplateValidator {
             if (step.goto == null && !step.end) {
                 errors += TemplateError("$path.next[$index]", "needs either goto or end")
             }
-            validateCondition(step.condition, "$path.next[$index].when", counterIds, flagSetIds, errors)
+            validateCondition(step.condition, "$path.next[$index].when", counterIds, flagSetIds, cardListIds, errors)
         }
     }
 
@@ -215,7 +215,7 @@ object TemplateValidator {
 
             else -> Unit
         }
-        validateCondition(effect.condition, "$path.when", counterIds, flagSetIds, errors)
+        validateCondition(effect.condition, "$path.when", counterIds, flagSetIds, cardListIds, errors)
     }
 
     private fun validateCondition(
@@ -223,6 +223,7 @@ object TemplateValidator {
         path: String,
         counterIds: Set<String>,
         flagSetIds: Set<String>,
+        cardListIds: Set<String>,
         errors: MutableList<TemplateError>,
     ) {
         if (condition == null) {
@@ -230,6 +231,11 @@ object TemplateValidator {
         }
         condition.counter?.let {
             if (it !in counterIds) errors += TemplateError("$path.counter", "unknown counter '$it'")
+        }
+        condition.cardList?.let {
+            if (it !in cardListIds) {
+                errors += TemplateError("$path.cardList", "unknown card list '$it'")
+            }
         }
         condition.countTrue?.let {
             if (it !in flagSetIds) {
@@ -241,8 +247,9 @@ object TemplateValidator {
                 errors += TemplateError("$path.flag", "unknown flag set '$it'")
             }
         }
-        condition.all.forEach { validateCondition(it, "$path.all", counterIds, flagSetIds, errors) }
-        condition.any.forEach { validateCondition(it, "$path.any", counterIds, flagSetIds, errors) }
+        validateCondition(condition.anyHero, "$path.anyHero", counterIds, flagSetIds, cardListIds, errors)
+        condition.all.forEach { validateCondition(it, "$path.all", counterIds, flagSetIds, cardListIds, errors) }
+        condition.any.forEach { validateCondition(it, "$path.any", counterIds, flagSetIds, cardListIds, errors) }
     }
 
     private fun <T, K> List<T>.duplicates(key: (T) -> K): List<K> =

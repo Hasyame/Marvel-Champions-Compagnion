@@ -469,8 +469,8 @@
         },
         {
           "text": {
-            "fr": "Si 1 case ou plus est cochée dans « Headhunter Defeated ? », mélanger cette carte dans le deck rencontre",
-            "en": "If 1 or more boxes are marked in \"Headhunter Defeated?\", shuffle this card into the encounter deck"
+            "fr": "Mélanger cette traîtrise dans le deck rencontre",
+            "en": "Shuffle this treachery into the encounter deck"
           },
           "cards": [
             "16184"
@@ -704,7 +704,11 @@
             "fr": "Retirer du jeu ces cartes enregistrées dans La Collection, puis repiocher jusqu’à sa taille de main",
             "en": "Remove these cards recorded in The Collection from the game, then draw up to hand size"
           },
-          "showCardList": "collection"
+          "showCardList": "collection",
+          "when": {
+            "cardList": "collection",
+            "minSize": 1
+          }
         },
         {
           "text": {
@@ -717,8 +721,8 @@
         },
         {
           "text": {
-            "fr": "Si 1 case ou plus est cochée dans « Headhunter Defeated ? », mélanger cette carte dans le deck rencontre",
-            "en": "If 1 or more boxes are marked in \"Headhunter Defeated?\", shuffle this card into the encounter deck"
+            "fr": "Mélanger cette traîtrise dans le deck rencontre",
+            "en": "Shuffle this treachery into the encounter deck"
           },
           "cards": [
             "16184"
@@ -730,8 +734,8 @@
         },
         {
           "text": {
-            "fr": "Si 2 case ou plus est cochée dans « Headhunter Defeated ? », mélanger cette carte dans le deck rencontre",
-            "en": "If 2 or more boxes are marked in \"Headhunter Defeated?\", shuffle this card into the encounter deck"
+            "fr": "Mélanger cette traîtrise dans le deck rencontre",
+            "en": "Shuffle this treachery into the encounter deck"
           },
           "cards": [
             "16185"
@@ -954,7 +958,11 @@
             "fr": "Mélanger dans le deck rencontre les complots Galactic Artifacts enregistrés",
             "en": "Shuffle the recorded Galactic Artifacts side schemes into the encounter deck"
           },
-          "showCardList": "artifacts"
+          "showCardList": "artifacts",
+          "when": {
+            "cardList": "artifacts",
+            "minSize": 1
+          }
         },
         {
           "text": {
@@ -1019,8 +1027,8 @@
         },
         {
           "text": {
-            "fr": "Si 1 case ou plus est cochée dans « Headhunter Defeated ? », mélanger cette carte dans le deck rencontre",
-            "en": "If 1 or more boxes are marked in \"Headhunter Defeated?\", shuffle this card into the encounter deck"
+            "fr": "Mélanger cette traîtrise dans le deck rencontre",
+            "en": "Shuffle this treachery into the encounter deck"
           },
           "cards": [
             "16184"
@@ -1032,8 +1040,8 @@
         },
         {
           "text": {
-            "fr": "Si 2 case ou plus est cochée dans « Headhunter Defeated ? », mélanger cette carte dans le deck rencontre",
-            "en": "If 2 or more boxes are marked in \"Headhunter Defeated?\", shuffle this card into the encounter deck"
+            "fr": "Mélanger cette traîtrise dans le deck rencontre",
+            "en": "Shuffle this treachery into the encounter deck"
           },
           "cards": [
             "16185"
@@ -1045,8 +1053,8 @@
         },
         {
           "text": {
-            "fr": "Si 3 case ou plus est cochée dans « Headhunter Defeated ? », mélanger cette carte dans le deck rencontre",
-            "en": "If 3 or more boxes are marked in \"Headhunter Defeated?\", shuffle this card into the encounter deck"
+            "fr": "Mélanger ce sbire dans le deck rencontre",
+            "en": "Shuffle this minion into the encounter deck"
           },
           "cards": [
             "16186"
@@ -1302,13 +1310,19 @@
         },
         {
           "text": {
-            "fr": "Donner cette traîtrise face cachée au joueur qui contrôle la Pierre de Pouvoir",
-            "en": "Deal this treachery facedown to the player holding the Power Stone"
+            "fr": "Chercher cette traîtrise dans le deck rencontre et la pile de défausse, puis la donner face cachée à ce joueur",
+            "en": "Search the encounter deck and discard pile for this treachery, then deal it facedown to this player"
           },
           "cards": [
             "16116"
           ],
-          "showHeroesWith": "powerStone"
+          "showHeroesWith": "powerStone",
+          "when": {
+            "anyHero": {
+              "counter": "powerStone",
+              "atLeast": 1
+            }
+          }
         },
         {
           "text": {
@@ -1331,8 +1345,8 @@
         },
         {
           "text": {
-            "fr": "Si 1 case ou plus est cochée dans « Headhunter Defeated ? », mélanger cette carte dans le deck rencontre",
-            "en": "If 1 or more boxes are marked in \"Headhunter Defeated?\", shuffle this card into the encounter deck"
+            "fr": "Mélanger cette traîtrise dans le deck rencontre",
+            "en": "Shuffle this treachery into the encounter deck"
           },
           "cards": [
             "16184"
@@ -1344,8 +1358,8 @@
         },
         {
           "text": {
-            "fr": "Si 2 case ou plus est cochée dans « Headhunter Defeated ? », mélanger cette carte dans le deck rencontre",
-            "en": "If 2 or more boxes are marked in \"Headhunter Defeated?\", shuffle this card into the encounter deck"
+            "fr": "Mélanger cette traîtrise dans le deck rencontre",
+            "en": "Shuffle this treachery into the encounter deck"
           },
           "cards": [
             "16185"
@@ -1357,8 +1371,8 @@
         },
         {
           "text": {
-            "fr": "Si 3 case ou plus est cochée dans « Headhunter Defeated ? », mélanger cette carte dans le deck rencontre",
-            "en": "If 3 or more boxes are marked in \"Headhunter Defeated?\", shuffle this card into the encounter deck"
+            "fr": "Mélanger ce sbire dans le deck rencontre",
+            "en": "Shuffle this minion into the encounter deck"
           },
           "cards": [
             "16186"
@@ -1370,8 +1384,8 @@
         },
         {
           "text": {
-            "fr": "Si 4 case ou plus est cochée dans « Headhunter Defeated ? », mélanger cette carte dans le deck rencontre",
-            "en": "If 4 or more boxes are marked in \"Headhunter Defeated?\", shuffle this card into the encounter deck"
+            "fr": "Mélanger ce complot secondaire dans le deck rencontre",
+            "en": "Shuffle this side scheme into the encounter deck"
           },
           "cards": [
             "16187"
