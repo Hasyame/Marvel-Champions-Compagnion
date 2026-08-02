@@ -1,5 +1,6 @@
 package com.hasyame.marvelchampions.ui.campaign
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -19,6 +21,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -36,6 +39,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.ComicPanel
 import com.hasyame.marvelchampions.data.marvelcdb.MarvelCdbUrls
 import com.hasyame.marvelchampions.data.repository.CampaignRun
 import com.hasyame.marvelchampions.domain.campaign.engine.MarketRules
@@ -76,43 +80,57 @@ fun MarketPage(
     val credits = run.state.heroCounter(market.counterId, buyerId)
 
     Column(Modifier.fillMaxSize()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(
-                text = stringResource(R.string.campaign_market),
-                style = MaterialTheme.typography.headlineSmall,
-            )
-            // Always shown, even solo: a purchase spends one specific player's
-            // units, so who is buying must never be a guess.
-            Text(
-                text = stringResource(R.string.campaign_who_is_buying),
-                style = MaterialTheme.typography.titleSmall,
-            )
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                run.state.heroes.forEachIndexed { index, hero ->
-                    FilterChip(
-                        selected = hero.id == buyerId,
-                        onClick = { buyerId = hero.id },
-                        label = {
-                            Text(
-                                stringResource(
-                                    R.string.campaign_player_label,
-                                    index + 1,
-                                    hero.name,
-                                    run.state.heroCounter(market.counterId, hero.id),
-                                ),
-                            )
-                        },
+        // The shopfront: who is buying and what they can spend, boxed so it
+        // reads over the halftone and separates from the goods below.
+        ComicPanel(Modifier.fillMaxWidth().padding(12.dp)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = stringResource(R.string.campaign_market),
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+                // Always shown, even solo: a purchase spends one specific
+                // player's units, so who is buying must never be a guess.
+                Text(
+                    text = stringResource(R.string.campaign_who_is_buying),
+                    style = MaterialTheme.typography.titleSmall,
+                )
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    run.state.heroes.forEachIndexed { index, hero ->
+                        FilterChip(
+                            selected = hero.id == buyerId,
+                            onClick = { buyerId = hero.id },
+                            label = {
+                                Text(
+                                    stringResource(
+                                        R.string.campaign_player_label,
+                                        index + 1,
+                                        hero.name,
+                                        run.state.heroCounter(market.counterId, hero.id),
+                                    ),
+                                )
+                            },
+                        )
+                    }
+                }
+                // The purse, in gold and large: it is the number every decision
+                // on this screen is measured against.
+                Surface(
+                    color = MaterialTheme.colorScheme.tertiaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    shape = RoundedCornerShape(6.dp),
+                    border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline),
+                ) {
+                    Text(
+                        text = pluralStringResource(
+                            R.plurals.campaign_credits_available,
+                            credits,
+                            credits,
+                        ),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                     )
                 }
             }
-            Text(
-                text = pluralStringResource(
-                    R.plurals.campaign_credits_available,
-                    credits,
-                    credits,
-                ),
-                style = MaterialTheme.typography.titleMedium,
-            )
         }
 
         LazyVerticalGrid(
