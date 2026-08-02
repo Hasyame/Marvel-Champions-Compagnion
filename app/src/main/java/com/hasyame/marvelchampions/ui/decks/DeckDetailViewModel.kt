@@ -9,6 +9,8 @@ import com.hasyame.marvelchampions.data.repository.DeckContents
 import com.hasyame.marvelchampions.data.repository.DeckImportError
 import com.hasyame.marvelchampions.data.repository.DeckImportResult
 import com.hasyame.marvelchampions.data.repository.DeckRepository
+import com.hasyame.marvelchampions.domain.deckbuilder.DeckStatistics
+import com.hasyame.marvelchampions.domain.deckbuilder.DeckStatisticsCalculator
 import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.domain.deckbuilder.DeckValidation
 import com.hasyame.marvelchampions.domain.model.CardLocale
@@ -28,6 +30,7 @@ data class CampaignCardRow(
 
 data class DeckDetailUiState(
     val contents: DeckContents? = null,
+    val statistics: DeckStatistics = DeckStatistics(),
     val campaignCards: List<CampaignCardRow> = emptyList(),
     val validation: DeckValidation = DeckValidation(),
     val isLoading: Boolean = true,
@@ -61,6 +64,7 @@ class DeckDetailViewModel @Inject constructor(
             val contents = repository.contents(id, locale)
             state.value = DeckDetailUiState(
                 contents = contents,
+                statistics = contents.statistics(),
                 campaignCards = campaignCards(id, locale),
                 validation = validate(contents, locale),
                 isLoading = false,
@@ -116,6 +120,7 @@ class DeckDetailViewModel @Inject constructor(
             val contents = repository.contents(id, locale)
             state.value = DeckDetailUiState(
                 contents = contents,
+                statistics = contents.statistics(),
                 campaignCards = campaignCards(id, locale),
                 validation = validate(contents, locale),
                 isLoading = false,
@@ -125,3 +130,12 @@ class DeckDetailViewModel @Inject constructor(
         }
     }
 }
+
+/**
+ * Counts the deck, hero excluded: the hero is not part of the deck, has no
+ * cost, and would distort both the curve and the aspect split.
+ */
+private fun DeckContents?.statistics(): DeckStatistics =
+    DeckStatisticsCalculator.calculate(
+        this?.cardsByType?.values?.flatten()?.map { it.card to it.quantity }.orEmpty(),
+    )

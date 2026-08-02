@@ -168,6 +168,9 @@ fun DeckDetailScreen(
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(16.dp),
                     )
+                    DeckStatisticsSection(state.statistics)
+                    HorizontalDivider()
+
                     // Legality is shown here because a campaign refuses an
                     // illegal deck, and finding that out at the campaign screen
                     // would be too late.
