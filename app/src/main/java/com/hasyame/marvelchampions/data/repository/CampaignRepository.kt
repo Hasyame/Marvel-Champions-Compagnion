@@ -64,6 +64,14 @@ data class CampaignRun(
     fun imageSrc(code: String): String? = names.images[code]
 }
 
+/** A card a campaign added to a deck, and which campaign added it. */
+data class CampaignGrantedCard(
+    val cardCode: String,
+    val campaignName: String,
+    val runId: String,
+    val cardListId: String,
+)
+
 sealed interface TemplateImportResult {
     data class Success(val template: CampaignTemplate) : TemplateImportResult
     data class Invalid(val errors: List<TemplateError>) : TemplateImportResult
@@ -324,6 +332,41 @@ class CampaignRepository @Inject constructor(
     suspend fun deleteRun(runId: String) = withContext(ioDispatcher) {
         campaignDao.deleteRun(runId)
     }
+
+    /**
+     * Cards a campaign has granted to a deck, across every run it appears in.
+     *
+     * A campaign never edits the deck itself: the grant lives in the run's event
+     * log and is applied on top, so the imported deck stays the source of truth
+     * and it is always visible exactly what a campaign added.
+     */
+    suspend fun campaignCardsForDeck(deckId: String): List<CampaignGrantedCard> =
+        withContext(ioDispatcher) {
+            campaignDao.getRuns().flatMap { entity ->
+                val template = runCatching {
+                    json.decodeFromString(CampaignTemplate.serializer(), entity.templateJson)
+                }.getOrNull() ?: return@flatMap emptyList()
+
+                val events = campaignDao.getEvents(entity.id).mapNotNull { row ->
+                    runCatching {
+                        json.decodeFromString(CampaignEvent.serializer(), row.payload)
+                    }.getOrNull()
+                }
+                val state = engine.fold(template, events)
+
+                // Hero ids in a run are the deck ids they were built from.
+                state.heroCardLists.flatMap { (listId, byHero) ->
+                    byHero[deckId].orEmpty().map { code ->
+                        CampaignGrantedCard(
+                            cardCode = code,
+                            campaignName = entity.name.ifBlank { entity.templateName },
+                            runId = entity.id,
+                            cardListId = listId,
+                        )
+                    }
+                }
+            }
+        }
 
     fun newEventId(): String = UUID.randomUUID().toString()
 

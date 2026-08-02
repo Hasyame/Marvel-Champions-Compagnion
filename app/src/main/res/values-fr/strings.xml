@@ -272,9 +272,9 @@
     </plurals>
     <string name="campaign_are_you_sure">Êtes-vous sûr ?</string>
     <plurals name="campaign_confirm_purchase">
-        <item quantity="one">Acheter %1$s pour %2$d crédit ? Il est déduit des crédits de ce héros.</item>
-        <item quantity="many">Acheter %1$s pour %2$d de crédits ? Ils sont déduits des crédits de ce héros.</item>
-        <item quantity="other">Acheter %1$s pour %2$d crédits ? Ils sont déduits des crédits de ce héros.</item>
+        <item quantity="one">Acheter %1$s pour %2$d crédit ? Ils sont déduits des crédits de %3$s.</item>
+        <item quantity="many">Acheter %1$s pour %2$d de crédits ? Ils sont déduits des crédits de %3$s.</item>
+        <item quantity="other">Acheter %1$s pour %2$d crédits ? Ils sont déduits des crédits de %3$s.</item>
     </plurals>
     <string name="campaign_see_card">Voir la carte complète</string>
     <string name="campaign_purchased">Déjà achetées</string>
@@ -298,4 +298,13 @@
     <string name="settings_music_browse">Parcourir Melodice</string>
     <string name="campaign_no_scenario">Cette campagne n\'a pas de scénario en cours. Elle est peut-être déjà terminée.</string>
     <string name="campaign_scenario_incomplete">Le scénario « %1$s » n\'a pas encore de questionnaire de victoire dans le modèle de campagne.</string>
+    <string name="decks_campaign_cards">Cartes de campagne</string>
+    <string name="decks_campaign_cards_note">Ajoutées par une campagne. Elles sont stockées sur la campagne, pas dans ce deck, et ne comptent pas dans sa taille.</string>
+    <string name="campaign_who_is_buying">Qui achète ?</string>
+    <string name="campaign_player_label">Joueur %1$d · %2$s · %3$d</string>
+    <plurals name="campaign_deck_illegal">
+        <item quantity="one">Non légal : %1$d problème. Corrigez-le dans l\'onglet Decks.</item>
+        <item quantity="many">Non légal : %1$d de problèmes. Corrigez-les dans l\'onglet Decks.</item>
+        <item quantity="other">Non légal : %1$d problèmes. Corrigez-les dans l\'onglet Decks.</item>
+    </plurals>
 </resources>

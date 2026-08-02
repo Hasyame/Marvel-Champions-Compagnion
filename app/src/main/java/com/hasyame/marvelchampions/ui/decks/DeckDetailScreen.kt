@@ -157,6 +157,33 @@ fun DeckDetailScreen(
                     }
                 }
 
+                if (state.campaignCards.isNotEmpty()) {
+                    item(key = "campaign-cards") {
+                        Text(
+                            text = stringResource(R.string.decks_campaign_cards),
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                        )
+                        Text(
+                            // They live on the campaign run, not in the deck,
+                            // which is also why they are outside the deck size
+                            // limits.
+                            text = stringResource(R.string.decks_campaign_cards_note),
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        )
+                    }
+                    items(state.campaignCards, key = { it.cardCode + it.campaignName }) { granted ->
+                        ListItem(
+                            modifier = Modifier.clickable { onCardClick(granted.cardCode) },
+                            headlineContent = { Text(granted.name) },
+                            supportingContent = { Text(granted.campaignName) },
+                        )
+                        HorizontalDivider()
+                    }
+                }
+
                 contents.cardsByType.forEach { (typeName, cards) ->
                     item(key = "type-$typeName") {
                         Text(

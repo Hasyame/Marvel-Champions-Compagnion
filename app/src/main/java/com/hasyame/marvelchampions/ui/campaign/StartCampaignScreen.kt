@@ -1,6 +1,7 @@
 package com.hasyame.marvelchampions.ui.campaign
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -25,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -33,7 +36,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
 import com.hasyame.marvelchampions.domain.campaign.template.CampaignTemplate
-import com.hasyame.marvelchampions.ui.decks.DecksViewModel
 
 /** Maximum players a campaign supports. */
 private const val MAX_PLAYERS = 4
@@ -41,31 +43,30 @@ private const val MAX_PLAYERS = 4
 /**
  * Page 0. Which campaign, what to call this run, who is playing, and how hard.
  *
- * The roster and difficulty are fixed here for the rest of the campaign, so
- * everything is on one page rather than spread across a wizard.
+ * A deck that is not legal cannot join: a campaign lasts five scenarios and
+ * fixes its roster at the start, so an illegal deck would be a problem you
+ * discover far too late. Cards missing from the collection are not a
+ * legality problem and do not block anything.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartCampaignScreen(
     onBack: () -> Unit,
     onStarted: (String) -> Unit,
-    viewModel: CampaignListViewModel = hiltViewModel(),
-    decksViewModel: DecksViewModel = hiltViewModel(),
+    viewModel: StartCampaignViewModel = hiltViewModel(),
 ) {
-    val available by viewModel.available.collectAsStateWithLifecycle()
-    val decks by decksViewModel.uiState.collectAsStateWithLifecycle()
-    val chosen by viewModel.importedTemplate.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    var chosenTemplateId by remember { mutableStateOf<String?>(null) }
     var name by remember { mutableStateOf("") }
     var difficulty by remember { mutableStateOf("") }
     var roster by remember { mutableStateOf(emptyList<String>()) }
 
-    val template: CampaignTemplate? = chosen?.template ?: available.firstOrNull()
+    val template: CampaignTemplate? =
+        state.templates.firstOrNull { it.id == chosenTemplateId } ?: state.templates.firstOrNull()
     val difficulties = template?.difficulties.orEmpty()
     val effectiveDifficulty = difficulty.ifBlank { difficulties.firstOrNull().orEmpty() }
-    val canStart = template != null &&
-        roster.isNotEmpty() &&
-        effectiveDifficulty.isNotBlank()
+    val canStart = template != null && roster.isNotEmpty() && effectiveDifficulty.isNotBlank()
 
     Scaffold(
         topBar = {
@@ -82,6 +83,14 @@ fun StartCampaignScreen(
             )
         },
     ) { padding ->
+        if (state.isLoading) {
+            Box(
+                Modifier.fillMaxSize().padding(padding),
+                contentAlignment = Alignment.Center,
+            ) { CircularProgressIndicator() }
+            return@Scaffold
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -91,20 +100,20 @@ fun StartCampaignScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Section(stringResource(R.string.campaign_which)) {
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    available.forEach { candidate ->
-                        FilterChip(
-                            selected = template?.id == candidate.id,
-                            onClick = { viewModel.choose(candidate) },
-                            label = { Text(candidate.name.resolve("fr")) },
-                        )
-                    }
-                }
-                if (available.isEmpty()) {
+                if (state.templates.isEmpty()) {
                     Text(
                         text = stringResource(R.string.campaign_none_bundled),
                         style = MaterialTheme.typography.bodyMedium,
                     )
+                }
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    state.templates.forEach { candidate ->
+                        FilterChip(
+                            selected = template?.id == candidate.id,
+                            onClick = { chosenTemplateId = candidate.id },
+                            label = { Text(candidate.name.resolve("fr")) },
+                        )
+                    }
                 }
             }
 
@@ -119,26 +128,44 @@ fun StartCampaignScreen(
             }
 
             Section(stringResource(R.string.campaign_roster)) {
-                if (decks.decks.isEmpty()) {
+                if (state.candidates.isEmpty()) {
                     Text(
                         text = stringResource(R.string.campaign_no_decks),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error,
                     )
                 }
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    decks.decks.forEach { deck ->
-                        val selected = deck.id in roster
+                state.candidates.forEach { candidate ->
+                    val selected = candidate.deck.id in roster
+                    Column {
                         FilterChip(
                             selected = selected,
-                            // Four players is the ceiling, so a fifth pick is
-                            // refused rather than silently dropped later.
-                            enabled = selected || roster.size < MAX_PLAYERS,
+                            // Four players is the ceiling, and an illegal deck
+                            // never joins at all.
+                            enabled = candidate.isLegal &&
+                                (selected || roster.size < MAX_PLAYERS),
                             onClick = {
-                                roster = if (selected) roster - deck.id else roster + deck.id
+                                roster = if (selected) {
+                                    roster - candidate.deck.id
+                                } else {
+                                    roster + candidate.deck.id
+                                }
                             },
-                            label = { Text("${deck.name} — ${deck.heroName}") },
+                            label = {
+                                Text("${candidate.deck.name} — ${candidate.deck.heroName}")
+                            },
                         )
+                        if (!candidate.isLegal) {
+                            Text(
+                                text = pluralStringResource(
+                                    R.plurals.campaign_deck_illegal,
+                                    candidate.problems.size,
+                                    candidate.problems.size,
+                                ),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
                     }
                 }
                 Text(
@@ -169,8 +196,9 @@ fun StartCampaignScreen(
 
             Button(
                 onClick = {
-                    template?.let { viewModel.choose(it) }
-                    viewModel.startRun(effectiveDifficulty, roster, name, onStarted)
+                    template?.let {
+                        viewModel.start(it, effectiveDifficulty, roster, name, onStarted)
+                    }
                 },
                 enabled = canStart,
                 modifier = Modifier.fillMaxWidth(),

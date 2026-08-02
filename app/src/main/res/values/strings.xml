@@ -256,8 +256,8 @@
     </plurals>
     <string name="campaign_are_you_sure">Are you sure?</string>
     <plurals name="campaign_confirm_purchase">
-        <item quantity="one">Buy %1$s for %2$d unit? It comes out of this hero\'s units.</item>
-        <item quantity="other">Buy %1$s for %2$d units? It comes out of this hero\'s units.</item>
+        <item quantity="one">Buy %1$s for %2$d unit? It comes out of %3$s\'s units.</item>
+        <item quantity="other">Buy %1$s for %2$d units? It comes out of %3$s\'s units.</item>
     </plurals>
     <string name="campaign_see_card">See the full card</string>
     <string name="campaign_purchased">Already bought</string>
@@ -280,4 +280,12 @@
     <string name="settings_music_browse">Browse Melodice</string>
     <string name="campaign_no_scenario">This campaign has no current scenario. It may already be finished.</string>
     <string name="campaign_scenario_incomplete">Scenario “%1$s” has no victory questionnaire yet in the campaign template.</string>
+    <string name="decks_campaign_cards">Campaign cards</string>
+    <string name="decks_campaign_cards_note">Added by a campaign. They are stored on the campaign, not in this deck, and do not count towards its size.</string>
+    <string name="campaign_who_is_buying">Who is buying?</string>
+    <string name="campaign_player_label">Player %1$d · %2$s · %3$d</string>
+    <plurals name="campaign_deck_illegal">
+        <item quantity="one">Not legal: %1$d problem. Fix it in the Decks tab.</item>
+        <item quantity="other">Not legal: %1$d problems. Fix them in the Decks tab.</item>
+    </plurals>
 </resources>

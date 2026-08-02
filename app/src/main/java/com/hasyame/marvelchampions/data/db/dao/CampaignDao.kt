@@ -53,6 +53,9 @@ interface CampaignDao {
     @Query("SELECT * FROM campaign_runs ORDER BY finished, createdAt DESC")
     fun observeRuns(): Flow<List<CampaignRunEntity>>
 
+    @Query("SELECT * FROM campaign_runs ORDER BY finished, createdAt DESC")
+    suspend fun getRuns(): List<CampaignRunEntity>
+
     @Query("SELECT * FROM campaign_runs WHERE id = :id")
     suspend fun getRun(id: String): CampaignRunEntity?
 

@@ -81,20 +81,28 @@ fun MarketPage(
                 text = stringResource(R.string.campaign_market),
                 style = MaterialTheme.typography.headlineSmall,
             )
-            if (run.state.heroes.size > 1) {
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    run.state.heroes.forEach { hero ->
-                        FilterChip(
-                            selected = hero.id == buyerId,
-                            onClick = { buyerId = hero.id },
-                            label = {
-                                Text(
-                                    "${hero.name} · " +
-                                        run.state.heroCounter(market.counterId, hero.id),
-                                )
-                            },
-                        )
-                    }
+            // Always shown, even solo: a purchase spends one specific player's
+            // units, so who is buying must never be a guess.
+            Text(
+                text = stringResource(R.string.campaign_who_is_buying),
+                style = MaterialTheme.typography.titleSmall,
+            )
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                run.state.heroes.forEachIndexed { index, hero ->
+                    FilterChip(
+                        selected = hero.id == buyerId,
+                        onClick = { buyerId = hero.id },
+                        label = {
+                            Text(
+                                stringResource(
+                                    R.string.campaign_player_label,
+                                    index + 1,
+                                    hero.name,
+                                    run.state.heroCounter(market.counterId, hero.id),
+                                ),
+                            )
+                        },
+                    )
                 }
             }
             Text(
@@ -252,6 +260,9 @@ fun MarketPage(
                         offer?.entry?.cost ?: 0,
                         run.names.card(code),
                         offer?.entry?.cost ?: 0,
+                        // Naming the buyer here is the last chance to notice
+                        // the wrong player is selected.
+                        run.state.heroes.firstOrNull { it.id == buyerId }?.name.orEmpty(),
                     ),
                 )
             },

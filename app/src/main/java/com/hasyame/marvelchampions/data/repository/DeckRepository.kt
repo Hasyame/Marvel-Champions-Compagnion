@@ -77,6 +77,9 @@ class DeckRepository @Inject constructor(
 
     fun observeDeck(id: String): Flow<SavedDeckEntity?> = savedDeckDao.observeDeck(id)
 
+    suspend fun getDecks(): List<SavedDeckEntity> =
+        withContext(ioDispatcher) { savedDeckDao.getDecks() }
+
     suspend fun delete(id: String) = withContext(ioDispatcher) { savedDeckDao.delete(id) }
 
     suspend fun import(reference: DeckReference): DeckImportResult = withContext(ioDispatcher) {
