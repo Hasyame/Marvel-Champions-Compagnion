@@ -158,6 +158,26 @@ class CardDaoTest {
         assertEquals(1500, dao.countForLocale("en"))
     }
 
+    @Test
+    fun `a card missing a translation still resolves in the asked-for locale`() = runTest {
+        // MarvelCDB has not translated every pack. An exact-locale lookup
+        // returns nothing for those, which made untranslated cards vanish from
+        // decks and campaign lists instead of merely showing in English.
+        dao.insertAll(
+            listOf(
+                card(code = "01064", locale = "en", name = "Surveillance Team"),
+                card(code = "01064", locale = "fr", name = "Équipe de Surveillance"),
+                card(code = "45001", locale = "en", name = "Untranslated Ally"),
+            ),
+        )
+
+        assertEquals("Équipe de Surveillance", dao.getCardPreferringLocale("01064", "fr")?.name)
+        // Falls back rather than returning nothing at all.
+        assertEquals("Untranslated Ally", dao.getCardPreferringLocale("45001", "fr")?.name)
+        assertNull(dao.getCard("45001", "fr"))
+        assertNull(dao.getCardPreferringLocale("99999", "fr"))
+    }
+
     private fun card(
         code: String,
         locale: String,

@@ -54,6 +54,24 @@ interface CardDao {
     @Query("SELECT * FROM cards WHERE code = :code AND locale = :locale")
     suspend fun getCard(code: String, locale: String): CardEntity?
 
+    /**
+     * The card in the requested language, or in whatever language it exists in.
+     *
+     * MarvelCDB has not translated everything — several packs are only partly
+     * localised — and an exact-locale lookup returns nothing at all for those.
+     * That made untranslated cards vanish from decks and lists rather than
+     * merely appear in English, which is much the worse failure.
+     */
+    @Query(
+        """
+        SELECT * FROM cards
+        WHERE code = :code
+        ORDER BY CASE WHEN locale = :locale THEN 0 ELSE 1 END
+        LIMIT 1
+        """,
+    )
+    suspend fun getCardPreferringLocale(code: String, locale: String): CardEntity?
+
     @Query("SELECT * FROM cards WHERE code = :code AND locale = :locale")
     fun observeCard(code: String, locale: String): Flow<CardEntity?>
 

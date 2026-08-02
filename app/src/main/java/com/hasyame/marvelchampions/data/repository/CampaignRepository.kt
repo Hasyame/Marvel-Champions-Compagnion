@@ -338,7 +338,7 @@ class CampaignRepository @Inject constructor(
         }
 
         val resolved = cardCodes.mapNotNull { code ->
-            cardDao.getCard(code, locale.code)?.let { code to it }
+            cardDao.getCardPreferringLocale(code, locale.code)?.let { code to it }
         }
 
         val setNames = SET_TYPES.flatMap { type -> cardDao.getCardSets(type, locale.code) }

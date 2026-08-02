@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
@@ -192,18 +196,12 @@ fun QuestionsPage(
                             }
                         }
 
-                        PromptType.DECK_CARD_SELECT -> {
-                            Text(label, style = MaterialTheme.typography.titleSmall)
-                            DeckCardPicker(
-                                deckCards = run.deckCards,
-                                selected = cardSelections[prompt.id].orEmpty(),
-                                onToggle = { code, on ->
-                                    val current = cardSelections[prompt.id].orEmpty()
-                                    cardSelections[prompt.id] =
-                                        if (on) current + code else current - code
-                                },
-                            )
-                        }
+                        PromptType.DECK_CARD_SELECT -> DeckCardField(
+                            label = label,
+                            deckCards = run.deckCards,
+                            selected = cardSelections[prompt.id].orEmpty(),
+                            onSelectionChange = { cardSelections[prompt.id] = it },
+                        )
 
                         PromptType.CARD_LIST -> OutlinedTextField(
                             value = cardLists[prompt.id].orEmpty(),
@@ -282,71 +280,149 @@ fun QuestionsPage(
 }
 
 /**
- * Picks cards out of the decks in play, grouped by the player who owns them.
+ * The chosen cards, with a button that opens the decks to change them.
  *
- * Typing card titles was the alternative, and it fails in both directions: a
- * misspelling records something no later scenario can match, and a player with
- * two identical titles across decks cannot say whose copy it was. Grouping by
- * hero answers that, and the filter keeps a fifty-card deck usable on a phone.
+ * Listing every card of every deck inline buried the rest of the
+ * questionnaire — two players is a hundred rows before the next question. The
+ * page now shows only what was picked, and the list is somewhere you go.
  */
 @Composable
-private fun DeckCardPicker(
+private fun DeckCardField(
+    label: String,
     deckCards: List<CampaignDeckCard>,
     selected: Set<String>,
-    onToggle: (String, Boolean) -> Unit,
+    onSelectionChange: (Set<String>) -> Unit,
 ) {
-    if (deckCards.isEmpty()) {
+    var picking by remember { mutableStateOf(false) }
+
+    Text(label, style = MaterialTheme.typography.titleSmall)
+
+    if (selected.isEmpty()) {
         Text(
-            text = stringResource(R.string.campaign_no_deck_cards),
+            text = stringResource(R.string.campaign_no_cards_selected),
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.error,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        return
+    } else {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            // Tapping a chip removes that card, so a mistake is undone where it
+            // is seen rather than by reopening the list.
+            selected.forEach { code ->
+                val card = deckCards.firstOrNull { it.cardCode == code }
+                FilterChip(
+                    selected = true,
+                    onClick = { onSelectionChange(selected - code) },
+                    label = { Text(card?.cardName ?: code) },
+                )
+            }
+        }
     }
 
+    Button(onClick = { picking = true }, modifier = Modifier.fillMaxWidth()) {
+        Text(stringResource(R.string.campaign_choose_cards, selected.size))
+    }
+
+    if (picking) {
+        DeckCardPickerSheet(
+            deckCards = deckCards,
+            selected = selected,
+            onSelectionChange = onSelectionChange,
+            onDismiss = { picking = false },
+        )
+    }
+}
+
+/**
+ * The decks in play, grouped by the player who owns them.
+ *
+ * Grouping by hero is what lets two players say whose copy of a card it was,
+ * which typing a title never could. The filter keeps a fifty-card deck usable
+ * on a phone.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DeckCardPickerSheet(
+    deckCards: List<CampaignDeckCard>,
+    selected: Set<String>,
+    onSelectionChange: (Set<String>) -> Unit,
+    onDismiss: () -> Unit,
+) {
     var filter by remember { mutableStateOf("") }
 
-    OutlinedTextField(
-        value = filter,
-        onValueChange = { filter = it },
-        label = { Text(stringResource(R.string.campaign_filter_cards)) },
-        singleLine = true,
-        modifier = Modifier.fillMaxWidth(),
-    )
+    ModalBottomSheet(onDismissRequest = onDismiss) {
+        Column(
+            Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(bottom = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            if (deckCards.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.campaign_no_deck_cards),
+                    color = MaterialTheme.colorScheme.error,
+                )
+                return@Column
+            }
 
-    val matching = deckCards.filter { it.cardName.contains(filter, ignoreCase = true) }
+            OutlinedTextField(
+                value = filter,
+                onValueChange = { filter = it },
+                label = { Text(stringResource(R.string.campaign_filter_cards)) },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+            )
 
-    // Selected cards stay visible even when the filter would hide them, so a
-    // choice cannot be silently lost behind a search term.
-    val visible = (matching + deckCards.filter { it.cardCode in selected }).distinct()
+            val matching = deckCards.filter { it.cardName.contains(filter, ignoreCase = true) }
+            // Chosen cards stay listed even when the filter would hide them, so
+            // a selection cannot be lost behind a search term.
+            val visible = (matching + deckCards.filter { it.cardCode in selected }).distinct()
 
-    visible.groupBy { it.heroId }.forEach { (_, cards) ->
-        Text(
-            text = cards.first().heroName,
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(top = 8.dp),
-        )
-        cards.sortedBy { it.cardName }.forEach { entry ->
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column(Modifier.weight(1f)) {
-                    Text(entry.cardName)
-                    entry.typeName?.let {
+            LazyColumn(Modifier.fillMaxWidth()) {
+                visible.groupBy { it.heroId }.forEach { (heroId, cards) ->
+                    item(key = "hero-$heroId") {
                         Text(
-                            text = it,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            text = cards.first().heroName,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(top = 8.dp),
                         )
                     }
+                    items(
+                        items = cards.sortedBy { it.cardName },
+                        key = { "$heroId-${it.cardCode}" },
+                    ) { entry ->
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column(Modifier.weight(1f)) {
+                                Text(entry.cardName)
+                                entry.typeName?.let {
+                                    Text(
+                                        text = it,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                }
+                            }
+                            Switch(
+                                checked = entry.cardCode in selected,
+                                onCheckedChange = { on ->
+                                    onSelectionChange(
+                                        if (on) {
+                                            selected + entry.cardCode
+                                        } else {
+                                            selected - entry.cardCode
+                                        },
+                                    )
+                                },
+                            )
+                        }
+                    }
                 }
-                Switch(
-                    checked = entry.cardCode in selected,
-                    onCheckedChange = { on -> onToggle(entry.cardCode, on) },
-                )
+            }
+
+            Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.action_done))
             }
         }
     }

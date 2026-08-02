@@ -238,7 +238,7 @@ class DeckRepository @Inject constructor(
             val resolved = mutableListOf<DeckCard>()
             val unknown = mutableListOf<String>()
             for ((code, quantity) in slots) {
-                val card = cardDao.getCard(code, locale.code)
+                val card = cardDao.getCardPreferringLocale(code, locale.code)
                 if (card == null) {
                     unknown += code
                 } else {

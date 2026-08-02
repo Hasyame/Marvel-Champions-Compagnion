@@ -352,4 +352,7 @@
     <string name="cards_loading">Fouille dans les archives</string>
     <string name="campaign_filter_cards">Filtrer les cartes</string>
     <string name="campaign_no_deck_cards">Aucune carte de deck disponible pour cette partie.</string>
+    <string name="campaign_no_cards_selected">Aucune carte sélectionnée.</string>
+    <string name="campaign_choose_cards">Choisir des cartes (%1$d)</string>
+    <string name="action_done">Terminé</string>
 </resources>
