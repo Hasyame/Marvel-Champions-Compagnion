@@ -294,4 +294,6 @@
         <item quantity="one">Not legal: %1$d problem. A campaign will not accept it.</item>
         <item quantity="other">Not legal: %1$d problems. A campaign will not accept it.</item>
     </plurals>
+    <string name="campaign_nothing_recorded">Nothing recorded</string>
+    <string name="campaign_nobody">Nobody</string>
 </resources>

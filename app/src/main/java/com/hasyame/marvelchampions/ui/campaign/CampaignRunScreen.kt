@@ -232,6 +232,39 @@ private fun BriefingPage(
                         .forEach { step ->
                             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                 Text("• " + step.text.resolve("fr"))
+
+                                // Values the campaign log carries forward from
+                                // earlier scenarios, so the step can be
+                                // followed without leafing back through it.
+                                step.showCounter?.let { counterId ->
+                                    Text(
+                                        text = "$counterId: ${run.state.counter(counterId)}",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
+                                step.showCardList?.let { listId ->
+                                    val recorded = run.state.cardLists[listId].orEmpty()
+                                    Text(
+                                        text = recorded.takeIf { it.isNotEmpty() }
+                                            ?.joinToString(", ")
+                                            ?: stringResource(R.string.campaign_nothing_recorded),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
+                                step.showHeroesWith?.let { counterId ->
+                                    val holders = run.state.heroes
+                                        .filter { run.state.heroCounter(counterId, it.id) > 0 }
+                                    Text(
+                                        text = holders.takeIf { it.isNotEmpty() }
+                                            ?.joinToString(", ") { it.name }
+                                            ?: stringResource(R.string.campaign_nobody),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
+
                                 if (step.cards.isNotEmpty()) {
                                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                         step.cards.forEach { code ->

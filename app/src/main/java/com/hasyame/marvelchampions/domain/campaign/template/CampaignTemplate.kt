@@ -148,6 +148,18 @@ data class SetupStep(
      * prose would be unreadable and would not translate.
      */
     val cards: List<String> = emptyList(),
+
+    /**
+     * Shows a counter's current value alongside the step, for instructions that
+     * depend on something recorded earlier in the campaign.
+     */
+    val showCounter: String? = null,
+
+    /** Shows what was recorded into a card list in an earlier scenario. */
+    val showCardList: String? = null,
+
+    /** Names the heroes whose value for this counter is above zero. */
+    val showHeroesWith: String? = null,
 )
 
 @Serializable

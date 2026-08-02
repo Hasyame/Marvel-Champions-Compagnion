@@ -130,7 +130,13 @@ class BundledCampaignsTest {
     }
 
     private companion object {
-        /** Long enough for a mechanical instruction, short enough to exclude a rule. */
-        const val MAX_STEP_LENGTH = 80
+        /**
+         * Long enough for a mechanical instruction that names a condition from
+         * the campaign log, short enough that a paragraph of book text cannot
+         * hide in one. A step that needs more than this is doing too much and
+         * should be split — which is how the four Galactic Artifacts
+         * instructions became four steps rather than one.
+         */
+        const val MAX_STEP_LENGTH = 140
     }
 }

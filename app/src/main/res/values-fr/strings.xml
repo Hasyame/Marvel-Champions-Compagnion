@@ -314,4 +314,6 @@
         <item quantity="many">Non légal : %1$d de problèmes. Une campagne le refusera.</item>
         <item quantity="other">Non légal : %1$d problèmes. Une campagne le refusera.</item>
     </plurals>
+    <string name="campaign_nothing_recorded">Rien d\'enregistré</string>
+    <string name="campaign_nobody">Personne</string>
 </resources>

@@ -67,6 +67,11 @@ data class Effect(
     val boolValue: Boolean? = null,
     /** Answer id supplying the value. */
     val from: String? = null,
+    /**
+     * Floor-divides the value before it is applied, for rules of the shape
+     * "for every 2 of these, gain 1". Applied before [max] and [min].
+     */
+    val divideBy: Int? = null,
     /** Upper bound applied to this operation only. */
     val max: Int? = null,
     val min: Int? = null,
@@ -81,6 +86,12 @@ data class Effect(
 
 enum class EffectOp(val token: String) {
     ADD_COUNTER("addcounter"),
+    /**
+     * Takes a value away from a counter, which is how "3 minus what was
+     * recorded" is expressed: set it to 3, then subtract. Two small steps
+     * rather than a formula in the schema.
+     */
+    SUBTRACT_COUNTER("subtractcounter"),
     SET_COUNTER("setcounter"),
     SET_HERO_COUNTER("setherocounter"),
     ADD_HERO_COUNTER("addherocounter"),

@@ -191,7 +191,7 @@ object TemplateValidator {
             }
         }
         when (effect.operation) {
-            EffectOp.ADD_COUNTER, EffectOp.SET_COUNTER,
+            EffectOp.ADD_COUNTER, EffectOp.SUBTRACT_COUNTER, EffectOp.SET_COUNTER,
             EffectOp.ADD_HERO_COUNTER, EffectOp.SET_HERO_COUNTER,
             -> {
                 if (effect.counter == null) {

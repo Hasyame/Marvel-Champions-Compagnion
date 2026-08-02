@@ -216,7 +216,7 @@ class CampaignEngine(
         )
 
         return when (effect.operation) {
-            EffectOp.ADD_COUNTER, EffectOp.SET_COUNTER -> {
+            EffectOp.ADD_COUNTER, EffectOp.SUBTRACT_COUNTER, EffectOp.SET_COUNTER -> {
                 if (!ConditionEvaluator.evaluate(effect.condition, baseContext)) {
                     return state
                 }
@@ -233,7 +233,11 @@ class CampaignEngine(
                 } else {
                     val id = effect.counter ?: return state
                     val existing = state.counter(id)
-                    val raw = if (effect.operation == EffectOp.ADD_COUNTER) existing + delta else delta
+                    val raw = when (effect.operation) {
+                        EffectOp.ADD_COUNTER -> existing + delta
+                        EffectOp.SUBTRACT_COUNTER -> existing - delta
+                        else -> delta
+                    }
                     state.copy(counters = state.counters + (id to clamp(raw, template, id)))
                 }
             }
@@ -325,6 +329,9 @@ class CampaignEngine(
             ?: state.heroes.map { it.id }.filter { it !in eliminated }
 
         val perHeroAnswers = answers.perHeroNumbers[effect.from]
+            // A yes/no per hero doubles as a marker: "which hero holds this?"
+            // becomes 1 for that hero and 0 for the rest.
+            ?: answers.perHeroBooleans[effect.from]?.mapValues { if (it.value) 1 else 0 }
         val current = state.heroCounters[counterId].orEmpty().toMutableMap()
 
         for (heroId in targets) {
@@ -351,7 +358,9 @@ class CampaignEngine(
 
     private fun resolveValue(effect: Effect, answers: AnswerSet): Int? {
         val raw = effect.from?.let { answers.numbers[it] } ?: effect.value ?: return null
-        val capped = effect.max?.let { minOf(raw, it) } ?: raw
+        // Division first, so "for every 2, gain 1, up to 3" reads in that order.
+        val divided = effect.divideBy?.takeIf { it > 0 }?.let { raw / it } ?: raw
+        val capped = effect.max?.let { minOf(divided, it) } ?: divided
         return effect.min?.let { maxOf(capped, it) } ?: capped
     }
 
