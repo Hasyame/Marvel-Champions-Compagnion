@@ -72,6 +72,16 @@ interface CardDao {
     )
     suspend fun getCardPreferringLocale(code: String, locale: String): CardEntity?
 
+    /**
+     * Every row for a set of codes, in every language they exist in.
+     *
+     * Resolving a campaign's card names one code at a time was around seventy
+     * round trips per load, on the path that runs after every action. One query
+     * returns them all and the caller picks the language it wants.
+     */
+    @Query("SELECT * FROM cards WHERE code IN (:codes)")
+    suspend fun getCardsByCodes(codes: List<String>): List<CardEntity>
+
     @Query("SELECT * FROM cards WHERE code = :code AND locale = :locale")
     fun observeCard(code: String, locale: String): Flow<CardEntity?>
 

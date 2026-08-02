@@ -135,6 +135,10 @@ class CampaignRepository @Inject constructor(
 
     private val engine = CampaignEngine()
 
+    /** Parsed campaign assets, held for the life of the process. */
+    @Volatile
+    private var bundledCache: List<CampaignTemplate>? = null
+
     fun observeRuns(): Flow<List<CampaignRunEntity>> = campaignDao.observeRuns()
 
     /**
@@ -148,8 +152,16 @@ class CampaignRepository @Inject constructor(
      * is the path that reports problems, because there the user is watching.
      */
     suspend fun bundledTemplates(): List<CampaignTemplate> = withContext(ioDispatcher) {
+        // Parsed once per process. These are assets, so they cannot change while
+        // the app runs, and every campaign load consults them to pick up
+        // corrected rules — reading, decoding and fully validating each one on
+        // every action was pure waste.
+        bundledCache ?: readBundledTemplates().also { bundledCache = it }
+    }
+
+    private fun readBundledTemplates(): List<CampaignTemplate> {
         val names = runCatching { context.assets.list(CAMPAIGN_ASSET_DIR) }.getOrNull().orEmpty()
-        names.filter { it.endsWith(".json", ignoreCase = true) }
+        return names.filter { it.endsWith(".json", ignoreCase = true) }
             .mapNotNull { name ->
                 runCatching {
                     val text = context.assets.open("$CAMPAIGN_ASSET_DIR/$name").use {
@@ -337,9 +349,20 @@ class CampaignRepository @Inject constructor(
             }
         }
 
-        val resolved = cardCodes.mapNotNull { code ->
-            cardDao.getCardPreferringLocale(code, locale.code)?.let { code to it }
-        }
+        // One query rather than one per code. This runs on every load, which is
+        // after every action in a run, and a campaign names around seventy
+        // cards. Chunked because SQLite caps the number of bound variables.
+        val rows = cardCodes.chunked(SQLITE_VARIABLE_LIMIT)
+            .flatMap { cardDao.getCardsByCodes(it) }
+
+        // The preferred language where it exists, whatever exists otherwise —
+        // the same rule as getCardPreferringLocale, applied in memory.
+        val resolved = rows.groupBy { it.code }
+            .mapNotNull { (code, versions) ->
+                val card = versions.firstOrNull { it.locale == locale.code }
+                    ?: versions.firstOrNull()
+                card?.let { code to it }
+            }
 
         val setNames = SET_TYPES.flatMap { type -> cardDao.getCardSets(type, locale.code) }
             .mapNotNull { summary -> summary.name?.let { summary.code to it } }
@@ -527,6 +550,13 @@ class CampaignRepository @Inject constructor(
 
     private companion object {
         const val CAMPAIGN_ASSET_DIR = "campaigns"
+
+        /**
+         * SQLite refuses more than 999 bound variables in one statement, and
+         * older devices are stricter. Well under it, since the only cost of
+         * chunking is an extra query.
+         */
+        const val SQLITE_VARIABLE_LIMIT = 400
 
         /** Card set kinds a scenario's encounter and modular sets can come from. */
         val SET_TYPES = listOf("villain", "modular", "standard", "expert", "nemesis")
