@@ -16,7 +16,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -44,6 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.ComicPanel
+import com.hasyame.marvelchampions.core.designsystem.component.halftone
 import com.hasyame.marvelchampions.data.repository.CampaignRun
 import com.hasyame.marvelchampions.domain.campaign.engine.ConditionEvaluator
 import com.hasyame.marvelchampions.domain.campaign.engine.EvaluationContext
@@ -105,7 +106,15 @@ fun CampaignRunScreen(
                 contentAlignment = Alignment.Center,
             ) { Text(stringResource(R.string.campaign_run_not_found)) }
 
-            else -> Box(Modifier.fillMaxSize().padding(padding)) {
+            // The campaign tab is the part of the app that is looked at rather
+            // than read, so it gets the printed-paper texture. Card and deck
+            // lists deliberately stay plain.
+            else -> Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .halftone(MaterialTheme.colorScheme.onBackground),
+            ) {
                 when (state.page) {
                     RunPage.BRIEFING -> BriefingPage(
                         run = run,
@@ -187,7 +196,7 @@ private fun BriefingPage(
         }
 
         scenario.baseSetup?.let { setup ->
-            Card(Modifier.fillMaxWidth()) {
+            ComicPanel(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(
                         text = stringResource(R.string.campaign_pre_setup),
@@ -224,7 +233,7 @@ private fun BriefingPage(
 
         if (scenario.campaignSetup.isNotEmpty()) {
             val context = EvaluationContext(run.state, scenario.id)
-            Card(Modifier.fillMaxWidth()) {
+            ComicPanel(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(
                         text = stringResource(R.string.campaign_setup_label),

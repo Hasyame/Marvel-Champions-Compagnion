@@ -150,3 +150,39 @@ private fun StarburstBadge(word: String) {
         )
     }
 }
+
+/**
+ * An empty state, as a caption box on halftone paper.
+ *
+ * Empty is the state a new install spends its first minutes in, so it is worth
+ * more than centred grey text. The wording still carries it — this only gives
+ * the words somewhere to sit.
+ */
+@Composable
+fun ComicEmptyState(
+    message: String,
+    modifier: Modifier = Modifier,
+    action: (@Composable () -> Unit)? = null,
+) {
+    Box(
+        modifier
+            .fillMaxSize()
+            .halftone(MaterialTheme.colorScheme.onBackground),
+        contentAlignment = Alignment.Center,
+    ) {
+        ComicPanel(Modifier.padding(32.dp)) {
+            Column(
+                Modifier.padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.titleSmall,
+                    textAlign = TextAlign.Center,
+                )
+                action?.invoke()
+            }
+        }
+    }
+}

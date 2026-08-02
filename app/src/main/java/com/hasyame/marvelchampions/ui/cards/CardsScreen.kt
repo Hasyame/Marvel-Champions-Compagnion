@@ -38,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.ComicEmptyState
 import com.hasyame.marvelchampions.core.designsystem.component.ComicLoadingScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -211,14 +212,7 @@ private fun SearchBar(
 
 @Composable
 private fun EmptyMessage(message: String) {
-    Box(
-        modifier = Modifier.fillMaxSize().padding(32.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
+    // "No results" and "no cards yet" are screens the user actually reads, so
+    // they are where the comic styling earns its keep. The list stays plain.
+    ComicEmptyState(message)
 }
