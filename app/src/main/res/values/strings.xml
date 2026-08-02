@@ -353,4 +353,5 @@
     <string name="about_version">Version %1$s</string>
     <string name="about_disclaimer">An unofficial fan-made app, free and not for sale. Not produced by, endorsed by, or affiliated with Marvel, Fantasy Flight Games or Asmodee. Marvel Champions: The Card Game and all related names and artwork belong to their respective owners. You need the physical game to play; this app does not replace the rules or the cards.</string>
     <string name="about_data_source">Card data comes from MarvelCDB, whose contributors maintain it. Thank you to them.</string>
+    <string name="about_no_ads">This app carries no advertising, and it never will. I turn down every advertising offer and sponsorship proposal I receive for it. It is free, it collects nothing about you, and it exists so that a game night runs a little more smoothly.</string>
 </resources>

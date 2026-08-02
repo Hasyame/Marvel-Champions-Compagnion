@@ -110,6 +110,14 @@ fun AboutScreen(
                 }
             }
 
+            ComicPanel(Modifier.fillMaxWidth()) {
+                Text(
+                    text = stringResource(R.string.about_no_ads),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(16.dp),
+                )
+            }
+
             OutlinedButton(
                 onClick = { noMailApp = !sendContactEmail(context, state.lastCardSync) },
                 modifier = Modifier.fillMaxWidth(),

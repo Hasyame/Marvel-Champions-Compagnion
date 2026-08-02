@@ -371,4 +371,5 @@
     <string name="about_version">Version %1$s</string>
     <string name="about_disclaimer">Application non officielle réalisée par un fan, gratuite et non commercialisée. Elle n\'est ni produite, ni approuvée par Marvel, Fantasy Flight Games ou Asmodee, et n\'y est pas affiliée. Marvel Champions : Le Jeu de Cartes ainsi que les noms et illustrations associés appartiennent à leurs propriétaires respectifs. Le jeu physique reste nécessaire pour jouer : cette application ne remplace ni les règles ni les cartes.</string>
     <string name="about_data_source">Les données des cartes proviennent de MarvelCDB, maintenu par ses contributeurs. Merci à eux.</string>
+    <string name="about_no_ads">Cette application ne contient aucune publicité, et n\'en contiendra jamais. Je refuse toutes les offres publicitaires et les propositions de sponsoring que je reçois à son sujet. Elle est gratuite, ne collecte rien sur vous, et existe pour qu\'une soirée de jeu se passe un peu mieux.</string>
 </resources>
