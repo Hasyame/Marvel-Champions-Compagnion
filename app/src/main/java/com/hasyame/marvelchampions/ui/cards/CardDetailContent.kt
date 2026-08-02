@@ -11,6 +11,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,8 +23,10 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.hasyame.marvelchampions.R
 import com.hasyame.marvelchampions.data.db.entity.CardEntity
+import com.hasyame.marvelchampions.data.db.entity.PackEntity
 import com.hasyame.marvelchampions.data.marvelcdb.MarvelCdbUrls
 import com.hasyame.marvelchampions.domain.model.CardLocale
+import com.hasyame.marvelchampions.domain.model.PackType
 import com.hasyame.marvelchampions.ui.util.stripHtml
 
 /**
@@ -38,6 +41,7 @@ fun CardDetailContent(
     onLocaleToggle: () -> Unit,
     onLinkedCardClick: (String) -> Unit,
     modifier: Modifier = Modifier,
+    pack: PackEntity? = null,
 ) {
     Column(
         modifier = modifier
@@ -78,14 +82,11 @@ fun CardDetailContent(
         }
 
         Text(
-            text = listOfNotNull(
-                card.typeName,
-                card.factionName,
-                card.packName,
-                card.cardSetName,
-            ).joinToString(" · "),
+            text = listOfNotNull(card.typeName, card.factionName).joinToString(" · "),
             style = MaterialTheme.typography.labelLarge,
         )
+
+        CardOrigin(card = card, pack = pack)
 
         card.traits?.takeIf { it.isNotBlank() }?.let {
             Text(it, style = MaterialTheme.typography.titleSmall)
@@ -174,3 +175,61 @@ private fun StatRow(card: CardEntity) {
 
 private fun CardLocale.other(): CardLocale =
     if (this == CardLocale.FRENCH) CardLocale.ENGLISH else CardLocale.FRENCH
+
+/**
+ * Where the card comes from: which product to open, and which scenario it
+ * belongs to if it is an encounter card.
+ *
+ * This used to be two entries in a dot-separated line alongside type and
+ * faction, which is where a reader's eye stops looking. It is the question
+ * actually being asked of a card database — "do I own this, and where is it?"
+ * — so it gets its own labelled block.
+ *
+ * The kind of pack is not in the MarvelCDB API; it comes from the curated pack
+ * metadata, and is simply omitted when unknown rather than guessed at.
+ */
+@Composable
+private fun CardOrigin(card: CardEntity, pack: PackEntity?) {
+    val packType = pack?.let { PackType.fromName(it.type) }?.takeIf { it != PackType.UNKNOWN }
+
+    OutlinedCard(Modifier.fillMaxWidth()) {
+        Column(
+            Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Text(
+                text = stringResource(R.string.card_origin),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Text(card.packName, style = MaterialTheme.typography.titleSmall)
+
+            packType?.let {
+                Text(
+                    text = stringResource(
+                        when (it) {
+                            PackType.CORE -> R.string.pack_type_core
+                            PackType.HERO_PACK -> R.string.pack_type_hero
+                            PackType.SCENARIO_PACK -> R.string.pack_type_scenario
+                            PackType.CAMPAIGN_BOX -> R.string.pack_type_campaign_box
+                            PackType.MODULAR_SET -> R.string.pack_type_modular_set
+                            PackType.UNKNOWN -> R.string.pack_type_unknown
+                        },
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
+
+            // Encounter cards carry the set they belong to, which is the
+            // scenario or modular they are shuffled into. Player cards have no
+            // set, so the row is simply absent for them.
+            card.cardSetName?.takeIf { it.isNotBlank() }?.let {
+                Text(
+                    text = stringResource(R.string.card_encounter_set, it),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+        }
+    }
+}

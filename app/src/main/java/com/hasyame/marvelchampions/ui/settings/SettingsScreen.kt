@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -36,6 +37,7 @@ import com.hasyame.marvelchampions.R
 import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.data.sync.CardSyncState
 import com.hasyame.marvelchampions.domain.model.CardLocale
+import com.hasyame.marvelchampions.domain.model.ThemeChoice
 import com.hasyame.marvelchampions.ui.util.openExternalUrl
 import com.hasyame.marvelchampions.ui.util.CONTACT_ADDRESS
 import com.hasyame.marvelchampions.ui.util.sendContactEmail
@@ -99,6 +101,38 @@ fun SettingsScreen(
             }
             HorizontalDivider()
 
+            Text(
+                text = stringResource(R.string.settings_theme),
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier.padding(start = 16.dp, top = 16.dp),
+            )
+            Row(
+                modifier = Modifier.padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                ThemeChoice.entries.forEach { choice ->
+                    FilterChip(
+                        selected = state.themeChoice == choice,
+                        onClick = { viewModel.setThemeChoice(choice) },
+                        label = {
+                            Text(
+                                when (choice) {
+                                    ThemeChoice.SYSTEM ->
+                                        stringResource(R.string.settings_theme_system)
+
+                                    ThemeChoice.LIGHT ->
+                                        stringResource(R.string.settings_theme_light)
+
+                                    ThemeChoice.DARK ->
+                                        stringResource(R.string.settings_theme_dark)
+                                },
+                            )
+                        },
+                    )
+                }
+            }
+            HorizontalDivider()
+
             CardUpdateSection(
                 state = state,
                 onSync = viewModel::syncCards,
@@ -129,10 +163,28 @@ fun SettingsScreen(
             }
             HorizontalDivider()
 
+            var donateOpen by remember { mutableStateOf(false) }
+
             ListItem(
                 headlineContent = { Text(stringResource(R.string.settings_donate)) },
                 supportingContent = { Text(stringResource(R.string.settings_donate_summary)) },
+                modifier = Modifier.clickable { donateOpen = true },
             )
+
+            // A row that does nothing when tapped reads as broken rather than as
+            // unfinished, so it says which it is.
+            if (donateOpen) {
+                AlertDialog(
+                    onDismissRequest = { donateOpen = false },
+                    title = { Text(stringResource(R.string.settings_donate)) },
+                    text = { Text(stringResource(R.string.settings_donate_pending)) },
+                    confirmButton = {
+                        TextButton(onClick = { donateOpen = false }) {
+                            Text(stringResource(R.string.action_done))
+                        }
+                    },
+                )
+            }
         }
     }
 }

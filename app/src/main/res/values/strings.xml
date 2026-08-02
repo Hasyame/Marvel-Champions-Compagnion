@@ -337,4 +337,11 @@
     <string name="campaign_no_cards_selected">No cards selected.</string>
     <string name="campaign_choose_cards">Choose cards (%1$d)</string>
     <string name="action_done">Done</string>
+    <string name="card_origin">Comes from</string>
+    <string name="card_encounter_set">Encounter set: %1$s</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_donate_pending">Donations are not set up yet. If the app is useful to you, that is already plenty — this entry is here so you know it is planned, not forgotten.</string>
 </resources>

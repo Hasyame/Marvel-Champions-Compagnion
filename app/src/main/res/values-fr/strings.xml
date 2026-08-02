@@ -355,4 +355,11 @@
     <string name="campaign_no_cards_selected">Aucune carte sélectionnée.</string>
     <string name="campaign_choose_cards">Choisir des cartes (%1$d)</string>
     <string name="action_done">Terminé</string>
+    <string name="card_origin">Provenance</string>
+    <string name="card_encounter_set">Set rencontre : %1$s</string>
+    <string name="settings_theme">Thème</string>
+    <string name="settings_theme_system">Système</string>
+    <string name="settings_theme_light">Clair</string>
+    <string name="settings_theme_dark">Sombre</string>
+    <string name="settings_donate_pending">Les dons ne sont pas encore en place. Si l\'application vous est utile, c\'est déjà beaucoup — cette entrée est là pour indiquer que c\'est prévu, pas oublié.</string>
 </resources>

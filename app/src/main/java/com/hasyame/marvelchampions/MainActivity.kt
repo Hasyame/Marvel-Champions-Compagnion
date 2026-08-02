@@ -5,12 +5,17 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.core.designsystem.theme.MarvelChampionsTheme
 import com.hasyame.marvelchampions.domain.deeplink.MarvelCdbDeckUrl
+import com.hasyame.marvelchampions.domain.model.ThemeChoice
 import com.hasyame.marvelchampions.ui.MarvelChampionsApp
+import com.hasyame.marvelchampions.ui.ThemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -30,7 +35,16 @@ class MainActivity : AppCompatActivity() {
         sharedLink = extractDeckLink(intent)
 
         setContent {
-            MarvelChampionsTheme {
+            val themeViewModel: ThemeViewModel = hiltViewModel()
+            val choice by themeViewModel.themeChoice.collectAsStateWithLifecycle()
+
+            MarvelChampionsTheme(
+                darkTheme = when (choice) {
+                    ThemeChoice.LIGHT -> false
+                    ThemeChoice.DARK -> true
+                    ThemeChoice.SYSTEM -> isSystemInDarkTheme()
+                },
+            ) {
                 MarvelChampionsApp(
                     sharedLink = sharedLink,
                     onSharedLinkHandled = { sharedLink = null },

@@ -49,4 +49,4 @@ fun sendContactEmail(context: Context, lastSyncEpochMillis: Long?): Boolean {
     }
 }
 
-const val CONTACT_ADDRESS: String = "marvelchampcompagnion@protonmail.com"
+const val CONTACT_ADDRESS: String = "marvelchampcompanion@proton.me"

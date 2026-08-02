@@ -3,6 +3,7 @@ package com.hasyame.marvelchampions.ui.cards
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hasyame.marvelchampions.data.db.entity.CardEntity
+import com.hasyame.marvelchampions.data.db.entity.PackEntity
 import com.hasyame.marvelchampions.data.repository.CardSearchRepository
 import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.domain.model.CardLocale
@@ -16,6 +17,8 @@ import javax.inject.Inject
 data class CardDetailUiState(
     val card: CardEntity? = null,
     val linkedCard: CardEntity? = null,
+    /** The pack the card came out of, for the origin section. */
+    val pack: PackEntity? = null,
     val locale: CardLocale = CardLocale.FRENCH,
     val isLoading: Boolean = true,
 )
@@ -62,6 +65,7 @@ class CardDetailViewModel @Inject constructor(
         state.value = CardDetailUiState(
             card = card,
             linkedCard = card?.let { repository.getLinkedCard(it, locale) },
+            pack = card?.let { repository.getPack(it.packCode) },
             locale = locale,
             isLoading = false,
         )

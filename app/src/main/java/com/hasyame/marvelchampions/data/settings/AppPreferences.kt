@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.hasyame.marvelchampions.domain.model.CardLocale
+import com.hasyame.marvelchampions.domain.model.ThemeChoice
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -47,6 +48,15 @@ class AppPreferences @Inject constructor(
         preferences[KEY_MUSIC_URL] ?: DEFAULT_MUSIC_URL
     }
 
+    /** Light, dark, or whatever the system is doing. */
+    val themeChoice: Flow<ThemeChoice> = context.dataStore.data.map { preferences ->
+        ThemeChoice.fromCode(preferences[KEY_THEME])
+    }
+
+    suspend fun setThemeChoice(choice: ThemeChoice) {
+        context.dataStore.edit { it[KEY_THEME] = choice.code }
+    }
+
     suspend fun currentCardLocale(): CardLocale = cardLocale.first()
 
     suspend fun setCardLocale(locale: CardLocale) {
@@ -79,5 +89,6 @@ class AppPreferences @Inject constructor(
         private val KEY_CARD_LOCALE = stringPreferencesKey("card_locale")
         private val KEY_LAST_SYNC = longPreferencesKey("last_card_sync")
         private val KEY_MUSIC_URL = stringPreferencesKey("music_url")
+        private val KEY_THEME = stringPreferencesKey("theme_choice")
     }
 }

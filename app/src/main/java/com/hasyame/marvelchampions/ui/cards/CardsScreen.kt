@@ -149,6 +149,7 @@ private fun CardDetailPane(code: String) {
     } else {
         CardDetailContent(
             card = card,
+            pack = state.pack,
             linkedCard = state.linkedCard,
             locale = state.locale,
             onLocaleToggle = viewModel::toggleLocale,

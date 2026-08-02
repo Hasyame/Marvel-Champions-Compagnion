@@ -61,6 +61,7 @@ fun CardDetailScreen(
 
             else -> CardDetailContent(
                 card = card,
+                pack = state.pack,
                 linkedCard = state.linkedCard,
                 locale = state.locale,
                 onLocaleToggle = viewModel::toggleLocale,

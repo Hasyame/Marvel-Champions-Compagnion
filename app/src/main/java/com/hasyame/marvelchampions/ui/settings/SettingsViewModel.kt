@@ -6,6 +6,7 @@ import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.data.sync.CardSyncManager
 import com.hasyame.marvelchampions.data.sync.CardSyncState
 import com.hasyame.marvelchampions.domain.model.CardLocale
+import com.hasyame.marvelchampions.domain.model.ThemeChoice
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +20,7 @@ data class SettingsUiState(
     val lastCardSync: Long? = null,
     val syncState: CardSyncState = CardSyncState.Idle,
     val musicUrl: String = AppPreferences.DEFAULT_MUSIC_URL,
+    val themeChoice: ThemeChoice = ThemeChoice.SYSTEM,
 )
 
 @HiltViewModel
@@ -32,12 +34,14 @@ class SettingsViewModel @Inject constructor(
         preferences.lastCardSync,
         syncManager.observeState(),
         preferences.musicUrl,
-    ) { locale, lastSync, syncState, musicUrl ->
+        preferences.themeChoice,
+    ) { locale, lastSync, syncState, musicUrl, theme ->
         SettingsUiState(
             cardLocale = locale,
             lastCardSync = lastSync,
             syncState = syncState,
             musicUrl = musicUrl,
+            themeChoice = theme,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -47,6 +51,10 @@ class SettingsViewModel @Inject constructor(
 
     fun setCardLocale(locale: CardLocale) {
         viewModelScope.launch { preferences.setCardLocale(locale) }
+    }
+
+    fun setThemeChoice(choice: ThemeChoice) {
+        viewModelScope.launch { preferences.setThemeChoice(choice) }
     }
 
     fun setMusicUrl(url: String) {

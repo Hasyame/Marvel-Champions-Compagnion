@@ -2,7 +2,9 @@ package com.hasyame.marvelchampions.data.repository
 
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.hasyame.marvelchampions.data.db.dao.CardDao
+import com.hasyame.marvelchampions.data.db.dao.PackDao
 import com.hasyame.marvelchampions.data.db.entity.CardEntity
+import com.hasyame.marvelchampions.data.db.entity.PackEntity
 import com.hasyame.marvelchampions.domain.model.CardFilter
 import com.hasyame.marvelchampions.domain.model.CardLocale
 import com.hasyame.marvelchampions.domain.search.CardQueryBuilder
@@ -22,9 +24,20 @@ data class CardFilterOptions(
 @Singleton
 class CardSearchRepository @Inject constructor(
     private val cardDao: CardDao,
+    private val packDao: PackDao,
     private val collectionRepository: CollectionRepository,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
+
+    /**
+     * The pack a card came out of.
+     *
+     * A separate lookup because the thing worth showing — whether it is the
+     * Core Set, a hero pack, a scenario pack — is not in the MarvelCDB API at
+     * all. It comes from the curated pack metadata held on the pack row.
+     */
+    suspend fun getPack(packCode: String): PackEntity? =
+        withContext(ioDispatcher) { packDao.getPack(packCode) }
 
     /**
      * Searches name and card text with the filters applied.
