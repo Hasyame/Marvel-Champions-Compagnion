@@ -252,6 +252,9 @@ class CampaignRepository @Inject constructor(
                     addAll(setup.mainScheme)
                 }
                 scenario.campaignSetup.forEach { addAll(it.cards) }
+                listOfNotNull(scenario.onVictory, scenario.onDefeat).forEach { outcome ->
+                    outcome.prompts.forEach { addAll(it.cards) }
+                }
             }
         }
         val setCodes = buildSet {

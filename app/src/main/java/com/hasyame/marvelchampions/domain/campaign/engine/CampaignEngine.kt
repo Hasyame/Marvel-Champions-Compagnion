@@ -217,20 +217,23 @@ class CampaignEngine(
 
         return when (effect.operation) {
             EffectOp.ADD_COUNTER, EffectOp.SUBTRACT_COUNTER, EffectOp.SET_COUNTER -> {
-                if (!ConditionEvaluator.evaluate(effect.condition, baseContext)) {
-                    return state
-                }
-                val delta = resolveValue(effect, answers) ?: return state
                 val counterDef = template.counters.firstOrNull { it.id == effect.counter }
                     // The validator rejects undeclared counters, so this only
                     // happens when an old event log is replayed against a
                     // template that has since dropped one. Resurrecting it would
                     // put a counter on screen that the campaign no longer has.
                     ?: return state
-                val isHeroScoped = counterDef.counterScope == CounterScope.HERO
-                if (isHeroScoped) {
+                val delta = resolveValue(effect, answers) ?: return state
+
+                if (counterDef.counterScope == CounterScope.HERO) {
+                    // The condition is judged per hero inside, not here: a
+                    // per-hero condition has no answer without a hero, so
+                    // testing it once up front would fail for everyone.
                     applyPerHeroCounter(template, state, effect, delta, scenarioId, answers, heroStats, actingHeroId)
                 } else {
+                    if (!ConditionEvaluator.evaluate(effect.condition, baseContext)) {
+                        return state
+                    }
                     val id = effect.counter ?: return state
                     val existing = state.counter(id)
                     val raw = when (effect.operation) {

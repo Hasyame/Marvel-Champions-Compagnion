@@ -163,6 +163,81 @@ class CampaignLogTest {
     }
 
     @Test
+    fun `a per-hero reward lands only on the heroes who earned it`() {
+        // The Collection rule: each player counts their own cards, so one can
+        // earn the unit while the other does not.
+        val perHero = json.decodeFromString(
+            CampaignTemplate.serializer(),
+            """
+            {
+              "id": "ph", "schemaVersion": 1, "name": { "fr": "PH" },
+              "counters": [{ "id": "credits", "scope": "hero", "initial": 0, "min": 0 }],
+              "startScenarioId": "a",
+              "scenarios": [{
+                "id": "a",
+                "onVictory": {
+                  "prompts": [{ "id": "few", "type": "perHeroBoolean" }],
+                  "effects": [
+                    { "op": "addCounter", "counter": "credits", "value": 1,
+                      "when": { "heroAnswer": "few" } }
+                  ],
+                  "next": [{ "end": true }]
+                }
+              }]
+            }
+            """.trimIndent(),
+        )
+
+        val state = engine.fold(
+            perHero,
+            listOf(
+                CampaignEvent.CampaignStarted("e0", 1, "ph", "standard", heroes, "a"),
+                CampaignEvent.ScenarioCompleted(
+                    "e1", 2, "a", victory = true,
+                    answers = AnswerSet(
+                        perHeroBooleans = mapOf("few" to mapOf("h1" to true, "h2" to false)),
+                    ),
+                ),
+            ),
+            stats,
+        )
+
+        assertEquals(1, state.heroCounter("credits", "h1"))
+        assertEquals(0, state.heroCounter("credits", "h2"))
+    }
+
+    @Test
+    fun `a setup step applies only when its card was recorded earlier`() {
+        val ticked = engine.fold(
+            template,
+            listOf(start(), victory(AnswerSet(cardLists = mapOf("names" to listOf("16128"))))),
+            stats,
+        )
+        val context = com.hasyame.marvelchampions.domain.campaign.engine.EvaluationContext(
+            state = ticked,
+            scenarioId = "b",
+        )
+
+        val teapot = com.hasyame.marvelchampions.domain.campaign.template.Condition(
+            cardList = "artifacts",
+            contains = "16128",
+        )
+        val crystalBall = com.hasyame.marvelchampions.domain.campaign.template.Condition(
+            cardList = "artifacts",
+            contains = "16130",
+        )
+
+        assertTrue(
+            com.hasyame.marvelchampions.domain.campaign.engine.ConditionEvaluator
+                .evaluate(teapot, context),
+        )
+        assertTrue(
+            !com.hasyame.marvelchampions.domain.campaign.engine.ConditionEvaluator
+                .evaluate(crystalBall, context),
+        )
+    }
+
+    @Test
     fun `a defeat ends the campaign on expert but replays on standard`() {
         val loss = CampaignEvent.ScenarioCompleted("e2", 3, "b", victory = false)
         val reachB = listOf(start(), victory(AnswerSet()))

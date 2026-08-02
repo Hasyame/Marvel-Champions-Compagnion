@@ -54,6 +54,7 @@ fun QuestionsPage(
     val booleans = remember { mutableStateMapOf<String, Boolean>() }
     val choices = remember { mutableStateMapOf<String, String>() }
     val cardLists = remember { mutableStateMapOf<String, String>() }
+    val cardSelections = remember { mutableStateMapOf<String, Set<String>>() }
     val perHeroNumbers = remember { mutableStateMapOf<String, String>() }
     val perHeroBooleans = remember { mutableStateMapOf<String, Boolean>() }
 
@@ -150,6 +151,34 @@ fun QuestionsPage(
                             }
                         }
 
+                        PromptType.CARD_SELECT -> {
+                            Text(label, style = MaterialTheme.typography.titleSmall)
+                            // Codes are recorded, names are shown, so a later
+                            // scenario can act on the answer rather than only
+                            // repeat it back.
+                            prompt.cards.forEach { code ->
+                                val selected = cardSelections[prompt.id].orEmpty().contains(code)
+                                Row(
+                                    Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(run.names.card(code), Modifier.weight(1f))
+                                    Switch(
+                                        checked = selected,
+                                        onCheckedChange = { on ->
+                                            val current = cardSelections[prompt.id].orEmpty()
+                                            cardSelections[prompt.id] = if (on) {
+                                                current + code
+                                            } else {
+                                                current - code
+                                            }
+                                        },
+                                    )
+                                }
+                            }
+                        }
+
                         PromptType.CARD_LIST -> OutlinedTextField(
                             value = cardLists[prompt.id].orEmpty(),
                             onValueChange = { cardLists[prompt.id] = it },
@@ -198,7 +227,7 @@ fun QuestionsPage(
                         choices = choices.toMap(),
                         cardLists = cardLists.mapValues { (_, v) ->
                             v.split(',').map { it.trim() }.filter { it.isNotEmpty() }
-                        },
+                        } + cardSelections.mapValues { (_, codes) -> codes.toList() },
                         perHeroNumbers = perHeroNumbers.entries
                             .mapNotNull { (key, value) ->
                                 val parts = key.split('|')

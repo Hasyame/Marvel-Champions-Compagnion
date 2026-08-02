@@ -37,6 +37,22 @@ object ConditionEvaluator {
             if (context.answers.booleans[it] == true) return false
         }
 
+        // Per-hero answers are read for whichever hero is being evaluated, so a
+        // reward can land on one player and not another.
+        condition.heroAnswer?.let { promptId ->
+            val heroId = context.heroId ?: return false
+            if (context.answers.perHeroBooleans[promptId]?.get(heroId) != true) return false
+        }
+        condition.notHeroAnswer?.let { promptId ->
+            val heroId = context.heroId ?: return false
+            if (context.answers.perHeroBooleans[promptId]?.get(heroId) == true) return false
+        }
+
+        condition.cardList?.let { listId ->
+            val wanted = condition.contains ?: return@let
+            if (wanted !in state.cardLists[listId].orEmpty()) return false
+        }
+
         condition.flag?.let {
             if (!resolveFlag(it, state, context.scenarioId)) return false
         }

@@ -205,6 +205,14 @@ enum class PromptType {
     PER_HERO_NUMBER,
     PER_HERO_BOOLEAN,
     CARD_LIST,
+
+    /**
+     * Tick which of a known set of cards applies.
+     *
+     * Records card codes rather than typed titles, so a later scenario can act
+     * on the answer instead of only showing it back.
+     */
+    CARD_SELECT,
     CHOICE,
     UNKNOWN,
 }
@@ -219,6 +227,8 @@ data class Prompt(
     val max: Int? = null,
     /** For `choice`. */
     val options: List<PromptOption> = emptyList(),
+    /** For `cardSelect`: the cards that may be ticked, by MarvelCDB code. */
+    val cards: List<String> = emptyList(),
 ) {
     val promptType: PromptType
         get() = when (type.lowercase().replace("_", "")) {
@@ -227,6 +237,7 @@ data class Prompt(
             "perheronumber" -> PromptType.PER_HERO_NUMBER
             "perheroboolean" -> PromptType.PER_HERO_BOOLEAN
             "cardlist" -> PromptType.CARD_LIST
+            "cardselect" -> PromptType.CARD_SELECT
             "choice" -> PromptType.CHOICE
             else -> PromptType.UNKNOWN
         }

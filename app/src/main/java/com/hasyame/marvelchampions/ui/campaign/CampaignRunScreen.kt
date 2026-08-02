@@ -246,8 +246,11 @@ private fun BriefingPage(
                                 step.showCardList?.let { listId ->
                                     val recorded = run.state.cardLists[listId].orEmpty()
                                     Text(
+                                        // Entries may be card codes or free
+                                        // text; a code resolves to its name,
+                                        // anything else shows as typed.
                                         text = recorded.takeIf { it.isNotEmpty() }
-                                            ?.joinToString(", ")
+                                            ?.joinToString(", ") { run.names.card(it) }
                                             ?: stringResource(R.string.campaign_nothing_recorded),
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.primary,

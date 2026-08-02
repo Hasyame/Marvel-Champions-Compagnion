@@ -22,6 +22,19 @@ data class Condition(
     /** The same, negated. */
     val notAnswer: String? = null,
 
+    /**
+     * A yes/no answer given **for the hero being evaluated**.
+     *
+     * The difference from [answer] matters whenever a reward is per player: one
+     * hero can earn it while another does not.
+     */
+    val heroAnswer: String? = null,
+    val notHeroAnswer: String? = null,
+
+    /** A recorded card list must contain [contains]. */
+    val cardList: String? = null,
+    val contains: String? = null,
+
     /** A flag must be set. `flagSet.scenarioId`, or just `flagSet`. */
     val flag: String? = null,
     val notFlag: String? = null,

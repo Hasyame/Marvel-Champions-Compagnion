@@ -539,10 +539,10 @@
           },
           {
             "id": "fewCollection",
-            "type": "boolean",
+            "type": "perHeroBoolean",
             "label": {
-              "fr": "Y a-t-il au plus 1 carte par joueur dans La Collection ?",
-              "en": "Is there at most 1 card per player in The Collection?"
+              "fr": "Ce héros a-t-il au plus 1 carte dans La Collection ?",
+              "en": "Does this hero have at most 1 card in The Collection?"
             }
           },
           {
@@ -601,7 +601,7 @@
             "counter": "credits",
             "value": 1,
             "when": {
-              "answer": "fewCollection"
+              "heroAnswer": "fewCollection"
             }
           },
           {
@@ -808,11 +808,17 @@
           },
           {
             "id": "artifactNames",
-            "type": "cardList",
+            "type": "cardSelect",
             "label": {
-              "fr": "Titres de ces complots Galactic Artifacts",
-              "en": "Titles of those Galactic Artifacts side schemes"
-            }
+              "fr": "Quels complots Galactic Artifacts sont dans votre zone de victoire ?",
+              "en": "Which Galactic Artifacts side schemes are in your victory display?"
+            },
+            "cards": [
+              "16127",
+              "16128",
+              "16129",
+              "16130"
+            ]
           },
           {
             "id": "headhunterInVictoryDisplay",
@@ -952,39 +958,55 @@
         },
         {
           "text": {
-            "fr": "Si mélangé : 1 jeton évasion sur le vaisseau de Nebula",
-            "en": "If shuffled in: 1 evasion counter on Nebula’s Ship"
+            "fr": "Placer 1 jeton évasion sur le vaisseau de Nebula",
+            "en": "Place 1 evasion counter on Nebula’s Ship"
           },
           "cards": [
             "16127"
-          ]
+          ],
+          "when": {
+            "cardList": "artifacts",
+            "contains": "16127"
+          }
         },
         {
           "text": {
-            "fr": "Si mélangé : 1 carte rencontre face cachée au premier joueur",
-            "en": "If shuffled in: 1 facedown encounter card to the first player"
+            "fr": "Donner 1 carte rencontre face cachée au premier joueur",
+            "en": "Deal the first player 1 facedown encounter card"
           },
           "cards": [
             "16128"
-          ]
+          ],
+          "when": {
+            "cardList": "artifacts",
+            "contains": "16128"
+          }
         },
         {
           "text": {
-            "fr": "Si mélangé : 1 carte boost face cachée à Nebula",
-            "en": "If shuffled in: 1 facedown boost card to Nebula"
+            "fr": "Donner 1 carte boost face cachée à Nebula",
+            "en": "Give Nebula 1 facedown boost card"
           },
           "cards": [
             "16129"
-          ]
+          ],
+          "when": {
+            "cardList": "artifacts",
+            "contains": "16129"
+          }
         },
         {
           "text": {
-            "fr": "Si mélangé : statut « tough » à Nebula",
-            "en": "If shuffled in: a tough status on Nebula"
+            "fr": "Donner un statut « tough » à Nebula",
+            "en": "Give Nebula a tough status card"
           },
           "cards": [
             "16130"
-          ]
+          ],
+          "when": {
+            "cardList": "artifacts",
+            "contains": "16130"
+          }
         },
         {
           "text": {

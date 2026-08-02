@@ -140,6 +140,9 @@ object TemplateValidator {
             if (prompt.promptType == PromptType.CHOICE && prompt.options.isEmpty()) {
                 errors += TemplateError("$path.prompts[$index]", "a choice prompt needs options")
             }
+            if (prompt.promptType == PromptType.CARD_SELECT && prompt.cards.isEmpty()) {
+                errors += TemplateError("$path.prompts[$index]", "a cardSelect prompt needs cards")
+            }
         }
 
         outcome.effects.forEachIndexed { index, effect ->
