@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.domain.campaign.template.CampaignTemplate
 
 /** Maximum players a campaign supports. */
@@ -71,6 +72,7 @@ fun StartCampaignScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+            colors = comicTopBarColors(),
                 title = { Text(stringResource(R.string.campaign_start)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {

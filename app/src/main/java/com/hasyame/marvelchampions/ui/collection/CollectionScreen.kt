@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.data.repository.PackOwnership
 import com.hasyame.marvelchampions.domain.model.PackType
 
@@ -49,6 +50,7 @@ fun CollectionScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+            colors = comicTopBarColors(),
                 title = { Text(stringResource(R.string.collection_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {

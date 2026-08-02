@@ -1,8 +1,10 @@
 package com.hasyame.marvelchampions
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -30,7 +32,10 @@ class MainActivity : AppCompatActivity() {
     private var sharedLink by mutableStateOf<String?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
+        // The top bar is now solid red and runs under the status bar, so the
+        // status icons have to be light in both themes. The default picks them
+        // from the theme, which puts dark icons on red in light mode.
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT))
         super.onCreate(savedInstanceState)
         sharedLink = extractDeckLink(intent)
 

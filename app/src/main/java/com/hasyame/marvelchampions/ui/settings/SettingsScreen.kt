@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.data.sync.CardSyncState
 import com.hasyame.marvelchampions.domain.model.CardLocale
@@ -53,7 +54,8 @@ fun SettingsScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.destination_settings)) }) },
+        topBar = { TopAppBar(
+            colors = comicTopBarColors(),title = { Text(stringResource(R.string.destination_settings)) }) },
     ) { padding ->
         Column(
             modifier = Modifier

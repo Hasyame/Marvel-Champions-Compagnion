@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.data.repository.RandomizerRepository
 import com.hasyame.marvelchampions.domain.randomizer.Difficulty
 import com.hasyame.marvelchampions.domain.randomizer.DrawField
@@ -47,7 +48,8 @@ fun RandomizerScreen(viewModel: RandomizerViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.destination_randomizer)) }) },
+        topBar = { TopAppBar(
+            colors = comicTopBarColors(),title = { Text(stringResource(R.string.destination_randomizer)) }) },
     ) { padding ->
         when {
             state.isLoading -> Box(

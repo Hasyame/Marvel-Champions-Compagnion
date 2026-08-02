@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,6 +58,7 @@ fun NewDeckScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+            colors = comicTopBarColors(),
                 title = { Text(stringResource(R.string.decks_new)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {

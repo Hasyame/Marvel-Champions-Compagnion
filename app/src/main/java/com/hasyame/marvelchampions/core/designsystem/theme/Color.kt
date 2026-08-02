@@ -40,3 +40,15 @@ val PaperShade = Color(0xFFF3DDDB)
 val NightLacquer = Color(0xFF161011)
 val NightRaised = Color(0xFF2A211F)
 val NightOutline = Color(0xFFE8D8D5)
+
+/**
+ * Aspect colours, as the game prints them.
+ *
+ * Kept separate from the app palette above: these carry meaning a player
+ * already knows, so they are not ours to restyle.
+ */
+val AspectAggression = Color(0xFFC0392B)
+val AspectJustice = Color(0xFFD4A017)
+val AspectLeadership = Color(0xFF2E6DA4)
+val AspectProtection = Color(0xFF3E8E5A)
+val AspectBasic = Color(0xFF7A7A7A)

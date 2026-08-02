@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.data.repository.DeckImportError
 import com.hasyame.marvelchampions.data.repository.DeckRepository
 
@@ -72,7 +73,8 @@ fun DecksScreen(
     }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.destination_decks)) }) },
+        topBar = { TopAppBar(
+            colors = comicTopBarColors(),title = { Text(stringResource(R.string.destination_decks)) }) },
         floatingActionButton = {
             FloatingActionButton(onClick = { addDialogOpen = true }) {
                 Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.decks_add))

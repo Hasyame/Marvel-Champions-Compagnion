@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,6 +36,7 @@ fun CardDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+            colors = comicTopBarColors(),
                 title = { Text(state.card?.name ?: stringResource(R.string.destination_cards)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {

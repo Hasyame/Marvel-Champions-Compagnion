@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.core.designsystem.component.ComicPanel
 import com.hasyame.marvelchampions.core.designsystem.component.halftone
 import com.hasyame.marvelchampions.data.repository.CampaignRun
@@ -78,6 +79,7 @@ fun CampaignRunScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+            colors = comicTopBarColors(),
                 title = {
                     Text(
                         scenario?.name?.resolve("fr")?.takeIf { it.isNotBlank() }

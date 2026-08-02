@@ -38,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.core.designsystem.component.ComicEmptyState
 import com.hasyame.marvelchampions.core.designsystem.component.ComicLoadingScreen
 
@@ -58,7 +59,8 @@ fun CardsScreen(
     // This was the one tab without a title bar, so its search field started
     // hard against the status bar while every other screen began below one.
     Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.destination_cards)) }) },
+        topBar = { TopAppBar(
+            colors = comicTopBarColors(),title = { Text(stringResource(R.string.destination_cards)) }) },
     ) { padding ->
         Column(Modifier.fillMaxSize().padding(padding)) {
             SearchBar(

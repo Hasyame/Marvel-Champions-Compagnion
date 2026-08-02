@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.data.repository.CampaignSummary
 import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
 
@@ -58,7 +59,8 @@ fun CampaignScreen(
     val finished = summaries.filter { it.entity.finished }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(stringResource(R.string.destination_campaign)) }) },
+        topBar = { TopAppBar(
+            colors = comicTopBarColors(),title = { Text(stringResource(R.string.destination_campaign)) }) },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = onStartCampaign,
