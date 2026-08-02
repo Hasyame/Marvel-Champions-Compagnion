@@ -235,7 +235,8 @@
         "en": "Drang has beat you!"
       },
       "flavour": {
-        "en": "The Brotherhood of Badoon has mounted a surprise attack against Earth! You and the other Guardians of the Galaxy rush to Earth's aid, teaming up with the mighty Avengers in the process to beat back the Badoon. However, the Brotherhood of Badoon's leader, Drang, is a skilled tactician with a fleet of powerful ships and an overwhelming number of soldiers at his side. This won't be an easy fight."
+        "fr": "Les Badoon attaquent la Terre. Les Gardiens rejoignent les Vengeurs pour repousser la flotte de Drang.",
+        "en": "The Badoon are attacking Earth. The Guardians join the Avengers to push back Drang’s fleet."
       },
       "baseSetup": {
         "villainDeck": {
@@ -425,7 +426,8 @@
         "en": "The Collector has beaten you!"
       },
       "flavour": {
-        "en": "Though the Badoon were formidable, the teamwork and coordination between the Avengers and Guardians was enough to quell Drang’s onslaught. After the battle, Gamora is able to extract critical information from Drang about why they attacked Earth by using a few… persuasive… interrogation techniques. As it turns out, Taneleer Tivan—better known as the Collector—heard about the Reality Stone on Earth. Already having the Power Stone in his possession, and always looking to expand his collection, he hired the Badoon to steal Earth’s Stone. Deciding it best if the Collector has no Stones at all, you set out toward his museum."
+        "fr": "Drang a parlé : le Collectionneur convoitait la Pierre de Réalité. Direction son musée, avant qu’il ne réunisse les Pierres.",
+        "en": "Drang talked: the Collector was after the Reality Stone. You head for his museum before he can gather the Stones."
       },
       "baseSetup": {
         "villainDeck": {
@@ -665,7 +667,8 @@
         "en": "The Collector holds you!"
       },
       "flavour": {
-        "en": "So... things didn’t go as planned. The good: you broke into the Collector’s museum; you beat the Collector; you know the Power Stone was here. The bad: an alarm went off as soon as you arrived, alerting the Collector to your presence; after you beat the Collector, he used his Elder God magic to trap you in his collection; also, someone else seems to have stolen the Power Stone. Kind of a mixed bag here. On the bright side, whoever took the Power Stone cut the museum’s power as a distraction, giving you enough time to get out of captivity. Maybe, just maybe, you can leverage this luck and escape the museum before the Collector realizes what’s going on."
+        "fr": "Le Collectionneur est vaincu, mais vous êtes prisonniers de sa collection — et quelqu’un a emporté la Pierre de Pouvoir avant vous. La panne qu’il a provoquée vous laisse une chance de sortir.",
+        "en": "The Collector is beaten, but you are trapped in his collection — and someone took the Power Stone before you did. The blackout they caused is your chance to get out."
       },
       "baseSetup": {
         "villainDeck": {
@@ -918,7 +921,8 @@
         "en": "Nebula got away!"
       },
       "flavour": {
-        "en": "As you get out of range of the museum, the Milano’s sensors pick up another speeding ship within your vicinity. Assuming it must be the thief who stole the Stone, you crank up the hyper thrusters and ride the ship’s tail. When you get close, you realize you’re chasing Nebula, daughter of Thanos, and Gamora’s dear sister. It would be best if she didn’t have the Power Stone, either."
+        "fr": "Les capteurs du Milano repèrent le vaisseau du voleur. À sa poursuite, vous reconnaissez Nebula, la sœur de Gamora.",
+        "en": "The Milano’s sensors pick up the thief’s ship. Giving chase, you recognise Nebula, Gamora’s sister."
       },
       "baseSetup": {
         "villainDeck": {
@@ -1273,7 +1277,8 @@
         "en": "Ronan has beaten you!"
       },
       "flavour": {
-        "en": "With a sigh of relief, you kick back in your pilot seat and set course for Knowhere. You have the Power Stone and you’ve captured Nebula. After a discussion with the other Guardians, you decide it best to hand both over to the authorities... because it’s the right thing to do. The reward money may also be an incentive. As Knowhere comes into sight, a massive Kree warship suddenly drops out of hyperspace in front of you, intercepting your course. Ronan the Accuser. He sends a brief transmission through your comms relay—something about standing accused? Yeah, that seems appropriate. Then, he attacks."
+        "fr": "Cap sur Knowhere, la Pierre et Nebula à bord. Un vaisseau kree vous coupe la route : Ronan l’Accusateur.",
+        "en": "You set course for Knowhere with the Stone and Nebula aboard. A Kree warship cuts you off: Ronan the Accuser."
       },
       "baseSetup": {
         "villainDeck": {

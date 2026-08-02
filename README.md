@@ -129,8 +129,9 @@ Card data is fetched from MarvelCDB at build or run time and cached on the
 device.
 
 Campaign templates in `app/src/main/assets/campaigns/` hold **mechanics only** —
-card codes, counters, conditions and effects, plus short labels written for this
-app. They contain no rules text and no flavour text. They are a play aid for
+card codes, counters, conditions and effects, plus short labels and a
+two-sentence blurb per scenario, all written for this app. They contain no rules
+text and reproduce no text from the campaign book. They are a play aid for
 someone who already owns the campaign box and has the book to hand; on their own
 they do not explain how to play a campaign, and they are not a substitute for
 either the book or the game.

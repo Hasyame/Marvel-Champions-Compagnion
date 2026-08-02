@@ -90,11 +90,31 @@ class BundledCampaignsTest {
     }
 
     @Test
+    fun `scenario blurbs are written for the app, not copied from the book`() {
+        // The blurbs were once whole passages lifted from the campaign book —
+        // several hundred characters each — while the README claimed the
+        // templates held no flavour text. A blurb says where you are in the
+        // story; two sentences do that, and anything at paragraph length is
+        // somebody else's writing.
+        templates().forEach { (name, template) ->
+            template.scenarios.forEach { scenario ->
+                listOfNotNull(scenario.flavour?.fr, scenario.flavour?.en).forEach { text ->
+                    assertTrue(
+                        "$name/${scenario.id} blurb is ${text.length} chars, " +
+                            "which is passage length rather than a blurb: \"$text\"",
+                        text.length <= MAX_FLAVOUR_LENGTH,
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
     fun `setup steps stay mechanical rather than restating the rules`() {
-        // The line this project works to: no rules text. Narrative flavour is
-        // fine — it tells nobody how to play — but a setup step long enough to
-        // be a paragraph is a rule copied from the book, and someone without
-        // the book must not be able to play from the app alone.
+        // The line this project works to: no rules text. A short blurb is fine
+        // — it tells nobody how to play — but a setup step long enough to be a
+        // paragraph is a rule copied from the book, and someone without the
+        // book must not be able to play from the app alone.
         templates().forEach { (name, template) ->
             template.scenarios.forEach { scenario ->
                 scenario.campaignSetup.forEach { step ->
@@ -138,5 +158,12 @@ class BundledCampaignsTest {
          * instructions became four steps rather than one.
          */
         const val MAX_STEP_LENGTH = 140
+
+        /**
+         * Two sentences of scene-setting. The copied passages this replaced ran
+         * from 383 to 659 characters, so the cap is well clear of anything
+         * written for the app and well under anything lifted from the book.
+         */
+        const val MAX_FLAVOUR_LENGTH = 250
     }
 }
