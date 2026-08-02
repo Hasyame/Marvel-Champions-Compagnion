@@ -117,13 +117,13 @@ private fun ValidationSummary(state: DeckEditorUiState) {
                 ),
                 style = MaterialTheme.typography.titleMedium,
             )
-            if (!state.isEditable) {
+            if (state.hasLocalEdits) {
                 Text(
-                    text = stringResource(R.string.decks_imported_readonly),
+                    text = stringResource(R.string.decks_locally_edited),
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
-            if (validation.isLegal && state.isEditable) {
+            if (validation.isLegal) {
                 Text(
                     text = stringResource(R.string.decks_legal),
                     style = MaterialTheme.typography.bodyMedium,

@@ -19,12 +19,17 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
@@ -45,8 +50,30 @@ fun DeckDetailScreen(
     viewModel: DeckDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    var confirmRefresh by remember { mutableStateOf(false) }
 
     LaunchedEffect(deckId) { viewModel.load(deckId) }
+
+    if (confirmRefresh) {
+        AlertDialog(
+            onDismissRequest = { confirmRefresh = false },
+            title = { Text(stringResource(R.string.decks_refresh)) },
+            text = { Text(stringResource(R.string.decks_refresh_discards_edits)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        confirmRefresh = false
+                        viewModel.refresh()
+                    },
+                ) { Text(stringResource(R.string.decks_refresh)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmRefresh = false }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            },
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -62,15 +89,24 @@ fun DeckDetailScreen(
                 },
                 actions = {
                     val deck = state.contents?.deck
-                    if (deck != null && DeckRepository.isLocal(deck)) {
-                        IconButton(onClick = { onEdit(deckId) }) {
-                            Icon(
-                                Icons.Filled.Edit,
-                                contentDescription = stringResource(R.string.decks_edit),
-                            )
-                        }
-                    } else {
-                        IconButton(onClick = viewModel::refresh) {
+                    // Every deck is editable now, imported ones included.
+                    IconButton(onClick = { onEdit(deckId) }) {
+                        Icon(
+                            Icons.Filled.Edit,
+                            contentDescription = stringResource(R.string.decks_edit),
+                        )
+                    }
+                    if (deck != null && !DeckRepository.isLocal(deck)) {
+                        IconButton(
+                            onClick = {
+                                // Only ask when there is something to lose.
+                                if (state.hasLocalEdits) {
+                                    confirmRefresh = true
+                                } else {
+                                    viewModel.refresh()
+                                }
+                            },
+                        ) {
                             Icon(
                                 Icons.Filled.Refresh,
                                 contentDescription = stringResource(R.string.decks_refresh),
@@ -130,6 +166,39 @@ fun DeckDetailScreen(
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(16.dp),
                     )
+                    // Legality is shown here because a campaign refuses an
+                    // illegal deck, and finding that out at the campaign screen
+                    // would be too late.
+                    if (state.validation.isLegal) {
+                        Text(
+                            text = stringResource(R.string.decks_legal),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        )
+                    } else {
+                        Text(
+                            text = pluralStringResource(
+                                R.plurals.decks_not_legal,
+                                state.validation.problems.size,
+                                state.validation.problems.size,
+                            ),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        )
+                    }
+                    if (state.hasLocalEdits) {
+                        Text(
+                            text = stringResource(R.string.decks_locally_edited),
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        )
+                        TextButton(
+                            onClick = viewModel::revertToImported,
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                        ) { Text(stringResource(R.string.decks_revert)) }
+                    }
                     if (contents.missingCards.isNotEmpty()) {
                         Text(
                             text = pluralStringResource(

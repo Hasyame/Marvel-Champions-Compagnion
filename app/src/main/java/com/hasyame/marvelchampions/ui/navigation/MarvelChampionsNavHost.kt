@@ -50,6 +50,12 @@ fun MarvelChampionsNavHost(
             composable<DecksRoute> {
                 DecksScreen(
                     onDeckClick = { deckId -> navController.navigate(DeckDetailRoute(deckId)) },
+                    // A freshly imported deck opens straight in the editor, so
+                    // its legality is visible and fixable there and then.
+                    onDeckImported = { deckId ->
+                        navController.navigate(DeckDetailRoute(deckId))
+                        navController.navigate(DeckEditorRoute(deckId))
+                    },
                     onBuildDeck = { navController.navigate(NewDeckRoute) },
                     sharedLink = sharedLink,
                     onSharedLinkHandled = onSharedLinkHandled,

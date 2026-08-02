@@ -1,5 +1,6 @@
 package com.hasyame.marvelchampions.data.db.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -32,4 +33,13 @@ data class SavedDeckEntity(
     val tags: String?,
     val rawJson: String,
     val lastSyncedAt: Long,
+    /**
+     * True once the deck has been changed here.
+     *
+     * Imported decks are editable, so a refresh from MarvelCDB would overwrite
+     * those changes. Rather than forbid editing, the deck remembers and the
+     * refresh asks first. [rawJson] still holds the response as imported, so
+     * the original is never lost.
+     */
+    @ColumnInfo(defaultValue = "0") val locallyEdited: Boolean = false,
 )

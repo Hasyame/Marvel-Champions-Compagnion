@@ -44,6 +44,7 @@ import com.hasyame.marvelchampions.data.repository.DeckRepository
 @Composable
 fun DecksScreen(
     onDeckClick: (String) -> Unit,
+    onDeckImported: (String) -> Unit,
     onBuildDeck: () -> Unit,
     /** A link shared into the app, imported once on arrival. */
     sharedLink: String? = null,
@@ -65,7 +66,7 @@ fun DecksScreen(
     LaunchedEffect(state.importedDeckId) {
         state.importedDeckId?.let { deckId ->
             addDialogOpen = false
-            onDeckClick(deckId)
+            onDeckImported(deckId)
             viewModel.consumeImportedDeck()
         }
     }

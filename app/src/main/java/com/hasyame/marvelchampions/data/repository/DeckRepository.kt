@@ -172,9 +172,6 @@ class DeckRepository @Inject constructor(
     suspend fun setCardQuantity(deckId: String, cardCode: String, quantity: Int): Boolean =
         withContext(ioDispatcher) {
             val deck = savedDeckDao.getDeck(deckId) ?: return@withContext false
-            if (deck.kind != LOCAL_KIND) {
-                return@withContext false
-            }
             val slots = parseSlots(deck.slots).toMutableMap()
             if (quantity <= 0) {
                 slots.remove(cardCode)
@@ -182,13 +179,39 @@ class DeckRepository @Inject constructor(
                 slots[cardCode] = quantity
             }
             savedDeckDao.upsert(
-                deck.copy(slots = slots.entries.joinToString(",") { "${it.key}=${it.value}" }),
+                deck.copy(
+                    slots = slots.entries.joinToString(",") { "${it.key}=${it.value}" },
+                    // Remembered so a later refresh can warn rather than
+                    // quietly throwing the change away.
+                    locallyEdited = true,
+                ),
             )
             true
         }
 
     suspend fun renameDeck(deckId: String, name: String) = withContext(ioDispatcher) {
-        savedDeckDao.getDeck(deckId)?.let { savedDeckDao.upsert(it.copy(name = name)) }
+        savedDeckDao.getDeck(deckId)?.let {
+            savedDeckDao.upsert(it.copy(name = name, locallyEdited = true))
+        }
+    }
+
+    /** Puts an imported deck back to exactly what MarvelCDB returned. */
+    suspend fun revertToImported(deckId: String): Boolean = withContext(ioDispatcher) {
+        val deck = savedDeckDao.getDeck(deckId) ?: return@withContext false
+        if (deck.kind == LOCAL_KIND) {
+            return@withContext false
+        }
+        val dto = runCatching {
+            json.decodeFromString(DeckDto.serializer(), deck.rawJson)
+        }.getOrNull() ?: return@withContext false
+
+        savedDeckDao.upsert(
+            deck.copy(
+                slots = dto.slots.entries.joinToString(",") { "${it.key}=${it.value}" },
+                locallyEdited = false,
+            ),
+        )
+        true
     }
 
     suspend fun setAspects(deckId: String, aspects: List<String>) = withContext(ioDispatcher) {

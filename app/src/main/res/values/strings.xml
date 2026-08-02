@@ -190,7 +190,6 @@
         <item quantity="other">%1$d cards</item>
     </plurals>
     <string name="decks_legal">This deck is legal.</string>
-    <string name="decks_imported_readonly">Imported from MarvelCDB, so it is read only. Refresh it to pick up changes made there.</string>
     <plurals name="decks_problem_too_few">
         <item quantity="one">Only %1$d card, %2$d required.</item>
         <item quantity="other">Only %1$d cards, %2$d required.</item>
@@ -287,5 +286,12 @@
     <plurals name="campaign_deck_illegal">
         <item quantity="one">Not legal: %1$d problem. Fix it in the Decks tab.</item>
         <item quantity="other">Not legal: %1$d problems. Fix them in the Decks tab.</item>
+    </plurals>
+    <string name="decks_locally_edited">Changed here since it was imported.</string>
+    <string name="decks_revert">Revert to the imported version</string>
+    <string name="decks_refresh_discards_edits">Refreshing replaces this deck with the MarvelCDB version and discards the changes made here.</string>
+    <plurals name="decks_not_legal">
+        <item quantity="one">Not legal: %1$d problem. A campaign will not accept it.</item>
+        <item quantity="other">Not legal: %1$d problems. A campaign will not accept it.</item>
     </plurals>
 </resources>

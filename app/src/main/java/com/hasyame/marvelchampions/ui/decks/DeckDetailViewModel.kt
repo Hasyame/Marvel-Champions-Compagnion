@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hasyame.marvelchampions.data.repository.CampaignRepository
 import com.hasyame.marvelchampions.data.repository.CardSearchRepository
+import com.hasyame.marvelchampions.data.repository.DeckBuilderRepository
 import com.hasyame.marvelchampions.data.repository.DeckContents
 import com.hasyame.marvelchampions.data.repository.DeckImportError
 import com.hasyame.marvelchampions.data.repository.DeckImportResult
 import com.hasyame.marvelchampions.data.repository.DeckRepository
 import com.hasyame.marvelchampions.data.settings.AppPreferences
+import com.hasyame.marvelchampions.domain.deckbuilder.DeckValidation
 import com.hasyame.marvelchampions.domain.model.CardLocale
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,16 +29,22 @@ data class CampaignCardRow(
 data class DeckDetailUiState(
     val contents: DeckContents? = null,
     val campaignCards: List<CampaignCardRow> = emptyList(),
+    val validation: DeckValidation = DeckValidation(),
     val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val error: DeckImportError? = null,
-)
+) {
+    /** True when refreshing would discard changes made in the app. */
+    val hasLocalEdits: Boolean
+        get() = contents?.deck?.let { !DeckRepository.isLocal(it) && it.locallyEdited } == true
+}
 
 @HiltViewModel
 class DeckDetailViewModel @Inject constructor(
     private val repository: DeckRepository,
     private val campaignRepository: CampaignRepository,
     private val cardSearchRepository: CardSearchRepository,
+    private val builderRepository: DeckBuilderRepository,
     private val preferences: AppPreferences,
 ) : ViewModel() {
 
@@ -54,8 +62,32 @@ class DeckDetailViewModel @Inject constructor(
             state.value = DeckDetailUiState(
                 contents = contents,
                 campaignCards = campaignCards(id, locale),
+                validation = validate(contents, locale),
                 isLoading = false,
             )
+        }
+    }
+
+    /**
+     * Legality is shown for every deck, imported ones included: a campaign
+     * refuses an illegal deck, so it has to be visible before you get there.
+     */
+    private suspend fun validate(contents: DeckContents?, locale: CardLocale): DeckValidation {
+        val deck = contents?.deck ?: return DeckValidation()
+        val rules = builderRepository.heroRules(deck.heroCode, locale) ?: return DeckValidation()
+        return builderRepository.validate(
+            rules = rules,
+            aspects = DeckRepository.parseAspects(deck.aspects),
+            slots = DeckRepository.parseSlots(deck.slots),
+            locale = locale,
+        )
+    }
+
+    fun revertToImported() {
+        val id = deckId ?: return
+        viewModelScope.launch {
+            repository.revertToImported(id)
+            load(id)
         }
     }
 
@@ -73,15 +105,19 @@ class DeckDetailViewModel @Inject constructor(
             )
         }
 
+    /** Re-fetches from MarvelCDB, replacing whatever is stored locally. */
     fun refresh() {
         val id = deckId ?: return
         viewModelScope.launch {
             state.value = state.value.copy(isRefreshing = true, error = null)
             val result = repository.refresh(id)
             val error = (result as? DeckImportResult.Failure)?.error
-            val contents = repository.contents(id, preferences.currentCardLocale())
+            val locale = preferences.currentCardLocale()
+            val contents = repository.contents(id, locale)
             state.value = DeckDetailUiState(
                 contents = contents,
+                campaignCards = campaignCards(id, locale),
+                validation = validate(contents, locale),
                 isLoading = false,
                 isRefreshing = false,
                 error = error,

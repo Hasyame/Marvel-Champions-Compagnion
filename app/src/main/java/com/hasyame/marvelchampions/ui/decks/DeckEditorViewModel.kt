@@ -31,7 +31,16 @@ data class DeckEditorUiState(
     val ownedOnly: Boolean = true,
     val isLoading: Boolean = true,
 ) {
-    val isEditable: Boolean get() = deck?.let { DeckRepository.isLocal(it) } == true
+    /**
+     * Every deck can be edited, imported ones included. An imported deck that
+     * turns out to be illegal would otherwise be unfixable, and a campaign
+     * refuses illegal decks.
+     */
+    val isEditable: Boolean get() = deck != null
+
+    /** True when a refresh would discard changes made here. */
+    val hasLocalEdits: Boolean
+        get() = deck?.let { !DeckRepository.isLocal(it) && it.locallyEdited } == true
 }
 
 @OptIn(FlowPreview::class)

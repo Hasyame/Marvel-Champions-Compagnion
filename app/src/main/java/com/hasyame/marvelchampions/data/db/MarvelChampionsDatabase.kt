@@ -42,7 +42,7 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
         CampaignRunEntity::class,
         CampaignEventEntity::class,
     ],
-    version = 5,
+    version = 6,
     exportSchema = true,
     // Both migrations so far only add a table, so Room can generate them from
     // the exported schemas. Anything that alters an existing table needs a
@@ -52,6 +52,7 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5),
+        AutoMigration(from = 5, to = 6),
     ],
 )
 abstract class MarvelChampionsDatabase : RoomDatabase() {
