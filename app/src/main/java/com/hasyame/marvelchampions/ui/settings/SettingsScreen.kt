@@ -37,6 +37,8 @@ import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.data.sync.CardSyncState
 import com.hasyame.marvelchampions.domain.model.CardLocale
 import com.hasyame.marvelchampions.ui.util.openExternalUrl
+import com.hasyame.marvelchampions.ui.util.CONTACT_ADDRESS
+import com.hasyame.marvelchampions.ui.util.sendContactEmail
 import java.text.DateFormat
 import java.util.Date
 
@@ -105,6 +107,32 @@ fun SettingsScreen(
             HorizontalDivider()
 
             MusicSection(state = state, onMusicUrlChange = viewModel::setMusicUrl)
+            HorizontalDivider()
+
+            val context = LocalContext.current
+            var noMailApp by remember { mutableStateOf(false) }
+
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_contact)) },
+                supportingContent = { Text(stringResource(R.string.settings_contact_summary)) },
+                modifier = Modifier.clickable {
+                    noMailApp = !sendContactEmail(context, state.lastCardSync)
+                },
+            )
+            if (noMailApp) {
+                Text(
+                    text = stringResource(R.string.settings_no_mail_app, CONTACT_ADDRESS),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+            }
+            HorizontalDivider()
+
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_donate)) },
+                supportingContent = { Text(stringResource(R.string.settings_donate_summary)) },
+            )
         }
     }
 }

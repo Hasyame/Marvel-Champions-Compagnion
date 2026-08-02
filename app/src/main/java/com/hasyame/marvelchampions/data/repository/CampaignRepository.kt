@@ -64,6 +64,33 @@ data class CampaignRun(
     fun imageSrc(code: String): String? = names.images[code]
 }
 
+/**
+ * A finished or in-progress run, with what it amounted to.
+ *
+ * Everything here is folded from the event log rather than stored, so a
+ * finished campaign's record cannot drift from what actually happened.
+ */
+data class CampaignSummary(
+    val entity: CampaignRunEntity,
+    val totalTimeMillis: Long = 0,
+    val totalVictoryPoints: Int = 0,
+    val heroNames: List<String> = emptyList(),
+    val scenariosWon: Int = 0,
+    val scenariosLost: Int = 0,
+    val creditsRemaining: Int = 0,
+    val cardsBought: Int = 0,
+    val scenarios: List<ScenarioLogEntry> = emptyList(),
+)
+
+/** One scenario as it was played, with what was recorded for it. */
+data class ScenarioLogEntry(
+    val scenarioName: String,
+    val victory: Boolean,
+    val elapsedMillis: Long,
+    /** The questionnaire, as label-and-value pairs ready to display. */
+    val answers: List<Pair<String, String>> = emptyList(),
+)
+
 /** A card a campaign added to a deck, and which campaign added it. */
 data class CampaignGrantedCard(
     val cardCode: String,
@@ -95,11 +122,9 @@ class CampaignRepository @Inject constructor(
     /**
      * Campaign templates bundled into this build, from `assets/campaigns/`.
      *
-     * That folder is **gitignored**, so the templates are baked into the APK on
-     * the machine that builds it and never reach the repository — the same
-     * arrangement as the card seed. It means a campaign is ready to start
-     * without importing anything, while Fantasy Flight's text stays out of
-     * version control.
+     * Templates describe mechanics only — counters, rewards, setup steps — and
+     * never reproduce campaign book text, so they ship with the app and a
+     * campaign is ready to start without importing anything.
      *
      * An invalid file is skipped rather than crashing the tab; [importTemplate]
      * is the path that reports problems, because there the user is watching.
@@ -121,11 +146,11 @@ class CampaignRepository @Inject constructor(
     }
 
     /**
-     * Reads a campaign template the user picked from device storage.
+     * Reads a campaign template the user picked from device storage, for
+     * campaigns [bundledTemplates] does not cover yet.
      *
-     * Templates are never bundled in the APK: they contain verbatim campaign
-     * book text. Validation is strict and every problem is reported at once, so
-     * a hand-written file can be fixed in one pass rather than one error at a
+     * Validation is strict and every problem is reported at once, so a
+     * hand-written file can be fixed in one pass rather than one error at a
      * time.
      */
     suspend fun importTemplate(uri: Uri): TemplateImportResult = withContext(ioDispatcher) {
@@ -370,6 +395,84 @@ class CampaignRepository @Inject constructor(
                 }
             }
         }
+
+    /** Every run with its statistics, newest first, unfinished ones on top. */
+    suspend fun summaries(): List<CampaignSummary> = withContext(ioDispatcher) {
+        campaignDao.getRuns().map { entity ->
+            val template = runCatching {
+                json.decodeFromString(CampaignTemplate.serializer(), entity.templateJson)
+            }.getOrNull() ?: return@map CampaignSummary(entity)
+
+            val events = campaignDao.getEvents(entity.id).mapNotNull { row ->
+                runCatching {
+                    json.decodeFromString(CampaignEvent.serializer(), row.payload)
+                }.getOrNull()
+            }
+            val state = engine.fold(template, events)
+            val creditsCounter = template.market?.counterId ?: CampaignEngine.MARKET_COUNTER_FALLBACK
+
+            CampaignSummary(
+                entity = entity,
+                totalTimeMillis = state.totalPlayTimeMillis,
+                // Victory points are recorded per scenario and never carried,
+                // so the campaign total is the sum of what was recorded.
+                totalVictoryPoints = state.completedScenarios
+                    .filter { it.victory }
+                    .sumOf { it.answers.numbers["vp"] ?: 0 },
+                heroNames = state.heroes.map { it.name },
+                scenariosWon = state.completedScenarios.count { it.victory },
+                scenariosLost = state.completedScenarios.count { !it.victory },
+                creditsRemaining = state.heroes.sumOf { state.heroCounter(creditsCounter, it.id) },
+                cardsBought = state.purchases.size,
+                scenarios = state.completedScenarios.map { result ->
+                    val scenario = template.scenarios.firstOrNull { it.id == result.scenarioId }
+                    ScenarioLogEntry(
+                        scenarioName = scenario?.name?.resolve("fr")?.takeIf { it.isNotBlank() }
+                            ?: result.scenarioId,
+                        victory = result.victory,
+                        elapsedMillis = result.elapsedMillis,
+                        answers = describeAnswers(scenario, result.answers, state),
+                    )
+                },
+            )
+        }
+    }
+
+    /**
+     * Turns raw answers into label-and-value pairs.
+     *
+     * Labels come from the template's prompts, so the record reads as the
+     * questions that were asked rather than as internal ids.
+     */
+    private fun describeAnswers(
+        scenario: com.hasyame.marvelchampions.domain.campaign.template.ScenarioTemplate?,
+        answers: com.hasyame.marvelchampions.domain.campaign.engine.AnswerSet,
+        state: CampaignState,
+    ): List<Pair<String, String>> {
+        val prompts = scenario?.onVictory?.prompts.orEmpty()
+        fun label(id: String) =
+            prompts.firstOrNull { it.id == id }?.label?.resolve("fr")?.takeIf { it.isNotBlank() }
+                ?: id
+
+        fun heroName(heroId: String) =
+            state.heroes.firstOrNull { it.id == heroId }?.name ?: heroId
+
+        return buildList {
+            answers.numbers.forEach { (id, value) -> add(label(id) to value.toString()) }
+            answers.booleans.forEach { (id, value) -> add(label(id) to if (value) "✔" else "✘") }
+            answers.choices.forEach { (id, value) -> add(label(id) to value) }
+            answers.cardLists.forEach { (id, codes) ->
+                add(label(id) to codes.joinToString(", "))
+            }
+            answers.perHeroNumbers.forEach { (id, byHero) ->
+                add(label(id) to byHero.entries.joinToString(", ") { "${heroName(it.key)} ${it.value}" })
+            }
+            answers.perHeroBooleans.forEach { (id, byHero) ->
+                val yes = byHero.filterValues { it }.keys.map(::heroName)
+                add(label(id) to yes.takeIf { it.isNotEmpty() }?.joinToString(", ").orEmpty())
+            }
+        }.filter { it.second.isNotBlank() }
+    }
 
     fun newEventId(): String = UUID.randomUUID().toString()
 

@@ -245,6 +245,15 @@ class CampaignRunViewModel @Inject constructor(
         }
     }
 
+    /** Deletes the run and everything recorded for it. */
+    fun forgetCampaign(onDone: () -> Unit) {
+        val id = runId ?: return
+        viewModelScope.launch {
+            repository.deleteRun(id)
+            onDone()
+        }
+    }
+
     /** "I can do this all day" — same scenario, clock from zero. */
     fun replayScenario() {
         state.value = state.value.copy(summary = null, page = RunPage.BRIEFING)

@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.hasyame.marvelchampions.ui.campaign.CampaignRecordScreen
 import com.hasyame.marvelchampions.ui.campaign.CampaignRunScreen
 import com.hasyame.marvelchampions.ui.campaign.CampaignScreen
 import com.hasyame.marvelchampions.ui.campaign.StartCampaignScreen
@@ -99,7 +100,14 @@ fun MarvelChampionsNavHost(
             composable<CampaignRoute> {
                 CampaignScreen(
                     onOpenRun = { runId -> navController.navigate(CampaignRunRoute(runId)) },
+                    onOpenRecord = { runId -> navController.navigate(CampaignRecordRoute(runId)) },
                     onStartCampaign = { navController.navigate(StartCampaignRoute) },
+                )
+            }
+            composable<CampaignRecordRoute> { entry ->
+                CampaignRecordScreen(
+                    runId = entry.toRoute<CampaignRecordRoute>().runId,
+                    onBack = { navController.popBackStack() },
                 )
             }
             composable<StartCampaignRoute> {

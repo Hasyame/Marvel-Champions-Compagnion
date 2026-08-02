@@ -149,8 +149,6 @@
     </plurals>
     <!-- Campaign -->
     <string name="campaign_start">Démarrer une campagne</string>
-    <string name="campaign_in_progress">En cours</string>
-    <string name="campaign_finished">Terminée</string>
     <string name="campaign_difficulty">Difficulté pour toute la campagne</string>
     <string name="campaign_roster">Liste des héros</string>
     <string name="campaign_roster_locked">La liste des héros et la difficulté sont fixées au démarrage.</string>
@@ -316,4 +314,26 @@
     </plurals>
     <string name="campaign_nothing_recorded">Rien d\'enregistré</string>
     <string name="campaign_nobody">Personne</string>
+    <string name="settings_contact">Contact</string>
+    <string name="settings_contact_summary">Signaler un bug par e-mail, version et appareil déjà remplis.</string>
+    <string name="settings_no_mail_app">Aucune application de messagerie. Écrivez à %1$s.</string>
+    <string name="settings_donate">Faire un don</string>
+    <string name="settings_donate_summary">Pas encore en place.</string>
+    <string name="campaign_in_progress_section">En cours</string>
+    <string name="campaign_finished_section">Campagnes terminées</string>
+    <string name="campaign_delete_title">Oublier cette campagne ?</string>
+    <string name="campaign_delete_message">%1$s et tout ce qui a été enregistré seront supprimés. Action irréversible.</string>
+    <string name="campaign_forget_warning">Cette campagne et tout ce qui a été enregistré seront supprimés. Action irréversible.</string>
+    <string name="campaign_keep_or_forget">Conserver cette campagne dans vos campagnes terminées, ou l oublier ?</string>
+    <string name="campaign_save_it">Conserver cette campagne</string>
+    <string name="campaign_forget_it">Oublier cette campagne</string>
+    <string name="campaign_stat_difficulty">Difficulté</string>
+    <string name="campaign_stat_time">Temps total</string>
+    <string name="campaign_stat_vp">Points de victoire</string>
+    <string name="campaign_stat_vp_short">%1$d PV</string>
+    <string name="campaign_stat_heroes">Héros</string>
+    <string name="campaign_stat_scenarios">Scénarios gagnés</string>
+    <string name="campaign_stat_cards_bought">Cartes du marché achetées</string>
+    <string name="campaign_stat_credits_left">Crédits restants</string>
+    <string name="campaign_log">Journal de campagne</string>
 </resources>

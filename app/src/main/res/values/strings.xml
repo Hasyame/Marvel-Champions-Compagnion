@@ -145,8 +145,6 @@
     </plurals>
     <!-- Campaign -->
     <string name="campaign_start">Start a campaign</string>
-    <string name="campaign_in_progress">In progress</string>
-    <string name="campaign_finished">Finished</string>
     <string name="campaign_difficulty">Difficulty for the whole campaign</string>
     <string name="campaign_roster">Hero roster</string>
     <string name="campaign_roster_locked">The roster and difficulty are fixed once the campaign starts.</string>
@@ -296,4 +294,26 @@
     </plurals>
     <string name="campaign_nothing_recorded">Nothing recorded</string>
     <string name="campaign_nobody">Nobody</string>
+    <string name="settings_contact">Contact</string>
+    <string name="settings_contact_summary">Report a bug by email, with the version and device details filled in.</string>
+    <string name="settings_no_mail_app">No mail app installed. Write to %1$s.</string>
+    <string name="settings_donate">Donate</string>
+    <string name="settings_donate_summary">Not set up yet.</string>
+    <string name="campaign_in_progress_section">In progress</string>
+    <string name="campaign_finished_section">Finished campaigns</string>
+    <string name="campaign_delete_title">Forget this campaign?</string>
+    <string name="campaign_delete_message">%1$s and everything recorded for it will be deleted. This cannot be undone.</string>
+    <string name="campaign_forget_warning">This campaign and everything recorded for it will be deleted. This cannot be undone.</string>
+    <string name="campaign_keep_or_forget">Keep this campaign in your finished list, or forget it?</string>
+    <string name="campaign_save_it">Save this campaign</string>
+    <string name="campaign_forget_it">Forget this campaign</string>
+    <string name="campaign_stat_difficulty">Difficulty</string>
+    <string name="campaign_stat_time">Total time</string>
+    <string name="campaign_stat_vp">Victory points</string>
+    <string name="campaign_stat_vp_short">%1$d VP</string>
+    <string name="campaign_stat_heroes">Heroes</string>
+    <string name="campaign_stat_scenarios">Scenarios won</string>
+    <string name="campaign_stat_cards_bought">Market cards bought</string>
+    <string name="campaign_stat_credits_left">Units left</string>
+    <string name="campaign_log">Campaign log</string>
 </resources>

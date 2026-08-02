@@ -14,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -25,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -137,6 +139,7 @@ fun CampaignRunScreen(
                         onNext = viewModel::continueToNextScenario,
                         onMarket = { viewModel.goTo(RunPage.MARKET) },
                         onBreak = onBack,
+                        onForget = { viewModel.forgetCampaign(onBack) },
                     )
 
                     RunPage.DEFEAT -> DefeatPage(
@@ -417,7 +420,31 @@ private fun ResultPage(
     onNext: () -> Unit,
     onMarket: () -> Unit,
     onBreak: () -> Unit,
+    onForget: () -> Unit,
 ) {
+    var confirmForget by remember { mutableStateOf(false) }
+
+    if (confirmForget) {
+        AlertDialog(
+            onDismissRequest = { confirmForget = false },
+            title = { Text(stringResource(R.string.campaign_delete_title)) },
+            text = { Text(stringResource(R.string.campaign_forget_warning)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        confirmForget = false
+                        onForget()
+                    },
+                ) { Text(stringResource(R.string.action_delete)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmForget = false }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            },
+        )
+    }
+
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -463,6 +490,17 @@ private fun ResultPage(
                 text = stringResource(R.string.campaign_complete),
                 style = MaterialTheme.typography.titleMedium,
             )
+            Text(
+                text = stringResource(R.string.campaign_keep_or_forget),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Button(onClick = onBreak, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.campaign_save_it))
+            }
+            OutlinedButton(
+                onClick = { confirmForget = true },
+                modifier = Modifier.fillMaxWidth(),
+            ) { Text(stringResource(R.string.campaign_forget_it)) }
         } else {
             Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) {
                 Text(

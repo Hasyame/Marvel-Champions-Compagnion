@@ -48,6 +48,10 @@ data object CampaignRoute
 @Serializable
 data object StartCampaignRoute
 
+/** A finished campaign, read only. */
+@Serializable
+data class CampaignRecordRoute(val runId: String)
+
 /** One campaign run. */
 @Serializable
 data class CampaignRunRoute(val runId: String)

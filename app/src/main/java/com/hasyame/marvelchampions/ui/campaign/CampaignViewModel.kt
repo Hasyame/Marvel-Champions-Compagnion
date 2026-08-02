@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hasyame.marvelchampions.data.db.entity.CampaignRunEntity
 import com.hasyame.marvelchampions.data.repository.CampaignRepository
+import com.hasyame.marvelchampions.data.repository.CampaignSummary
 import com.hasyame.marvelchampions.data.repository.TemplateImportResult
 import com.hasyame.marvelchampions.domain.campaign.template.CampaignTemplate
 import com.hasyame.marvelchampions.domain.campaign.template.TemplateError
@@ -11,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,11 +32,17 @@ class CampaignListViewModel @Inject constructor(
     private val importErrors = MutableStateFlow<List<TemplateError>>(emptyList())
     private val importMessage = MutableStateFlow<String?>(null)
 
-    val runs: StateFlow<List<CampaignRunEntity>> = repository.observeRuns().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
-        initialValue = emptyList(),
-    )
+    /**
+     * Runs with their statistics. Folded per run, which is cheap at this scale
+     * and means a finished campaign's record cannot drift from its log.
+     */
+    val summaries: StateFlow<List<CampaignSummary>> = repository.observeRuns()
+        .map { repository.summaries() }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
+            initialValue = emptyList(),
+        )
 
     val errors: StateFlow<List<TemplateError>> = importErrors
     val message: StateFlow<String?> = importMessage

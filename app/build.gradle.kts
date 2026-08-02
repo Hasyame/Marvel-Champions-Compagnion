@@ -1,5 +1,6 @@
 import java.io.File
 import java.net.URI
+import java.util.Properties
 
 plugins {
     // AGP 9 ships Kotlin support built in; the standalone
@@ -21,7 +22,7 @@ android {
         minSdk = 28
         targetSdk = 37
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -32,6 +33,33 @@ android {
         localeFilters += listOf("en", "fr")
     }
 
+    /**
+     * Release signing.
+     *
+     * Uses `keystore.properties` when it exists, which is gitignored so no key
+     * or password reaches the repository. Without it the release is signed with
+     * the debug key instead: not something to publish, but installable on a
+     * device, which is what this app is for. See README.
+     */
+    val keystoreProperties = Properties().apply {
+        val file = rootProject.file("keystore.properties")
+        if (file.exists()) {
+            file.inputStream().use { load(it) }
+        }
+    }
+    val hasReleaseKeystore = keystoreProperties.getProperty("storeFile") != null
+
+    signingConfigs {
+        if (hasReleaseKeystore) {
+            create("release") {
+                storeFile = rootProject.file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -40,6 +68,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            signingConfig = if (hasReleaseKeystore) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 
