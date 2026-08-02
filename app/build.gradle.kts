@@ -47,12 +47,27 @@ android {
             file.inputStream().use { load(it) }
         }
     }
-    val hasReleaseKeystore = keystoreProperties.getProperty("storeFile") != null
+
+    val declaredKeystore = keystoreProperties.getProperty("storeFile")
+        ?.let { rootProject.file(it) }
+
+    // A keystore.properties naming a file that is not there is a typo or a key
+    // left behind on another machine. Failing here beats shipping a build that
+    // is quietly debug-signed because a path was wrong.
+    if (declaredKeystore != null && !declaredKeystore.exists()) {
+        throw GradleException(
+            "keystore.properties points at ${declaredKeystore.absolutePath}, " +
+                "which does not exist. Fix storeFile, or delete keystore.properties " +
+                "to fall back to the debug key.",
+        )
+    }
+
+    val hasReleaseKeystore = declaredKeystore != null
 
     signingConfigs {
         if (hasReleaseKeystore) {
             create("release") {
-                storeFile = rootProject.file(keystoreProperties.getProperty("storeFile"))
+                storeFile = declaredKeystore
                 storePassword = keystoreProperties.getProperty("storePassword")
                 keyAlias = keystoreProperties.getProperty("keyAlias")
                 keyPassword = keystoreProperties.getProperty("keyPassword")
@@ -71,6 +86,19 @@ android {
             signingConfig = if (hasReleaseKeystore) {
                 signingConfigs.getByName("release")
             } else {
+                // A debug-signed release looks exactly like a real one, and the
+                // mistake only surfaces when a properly signed build refuses to
+                // install over it and takes every campaign with it. Say so.
+                logger.warn(
+                    "\n" +
+                        "  ==============================================================\n" +
+                        "   RELEASE IS BEING SIGNED WITH THE DEBUG KEY\n" +
+                        "   No keystore.properties found.\n" +
+                        "   Fine for testing on your own device. Do not distribute it:\n" +
+                        "   a real signed build cannot upgrade over it, and installing\n" +
+                        "   one means uninstalling first, which erases all app data.\n" +
+                        "  ==============================================================\n",
+                )
                 signingConfigs.getByName("debug")
             }
         }

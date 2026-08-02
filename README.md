@@ -63,9 +63,34 @@ template come from experience rather than from a reading of the book.
 `local.properties` is not committed; create it with your SDK path, or set
 `ANDROID_HOME`.
 
-Release builds are signed with a keystore described by a gitignored
-`keystore.properties`. Without one the build falls back to the debug key, which
-is fine for local testing and not for distribution.
+### Release signing
+
+Without a keystore the release build falls back to the **debug** key and says so
+loudly. That is fine for testing on your own device and must never be
+distributed: a properly signed build cannot upgrade over a debug-signed one, so
+installing the real thing later means uninstalling first, which erases every
+campaign, deck and collection setting on the device.
+
+Create a key once:
+
+```bash
+keytool -genkeypair -v -keystore release.jks -keyalg RSA -keysize 4096 -validity 10000 -alias mcc
+```
+
+Then copy `keystore.properties.example` to `keystore.properties` and fill it in.
+Both the key and that file are gitignored.
+
+**Back the keystore up somewhere other than this machine.** It cannot be
+regenerated or recovered. Losing it means no future build can ever update an
+installed copy of the app.
+
+Verify which key a build actually used:
+
+```bash
+keytool -printcert -jarfile app/build/outputs/apk/release/app-release.apk
+```
+
+A debug-signed build shows `CN=Android Debug`.
 
 ## Card data
 
