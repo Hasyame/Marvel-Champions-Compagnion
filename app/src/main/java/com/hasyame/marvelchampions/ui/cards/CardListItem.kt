@@ -1,5 +1,6 @@
 package com.hasyame.marvelchampions.ui.cards
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -24,7 +25,9 @@ fun CardListItem(
     modifier: Modifier = Modifier,
 ) {
     ListItem(
-        modifier = modifier,
+        // The parameter existed and was never used, so every card in the list
+        // simply ignored taps.
+        modifier = modifier.clickable(onClick = onClick),
         colors = if (selected) {
             ListItemDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
