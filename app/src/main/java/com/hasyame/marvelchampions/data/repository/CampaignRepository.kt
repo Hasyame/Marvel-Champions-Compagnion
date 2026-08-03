@@ -6,6 +6,7 @@ import com.hasyame.marvelchampions.data.db.dao.CampaignDao
 import com.hasyame.marvelchampions.data.db.dao.CardDao
 import com.hasyame.marvelchampions.data.db.entity.CampaignEventEntity
 import com.hasyame.marvelchampions.data.db.entity.CampaignRunEntity
+import com.hasyame.marvelchampions.data.db.entity.PlayEntity
 import com.hasyame.marvelchampions.domain.campaign.engine.CampaignEngine
 import com.hasyame.marvelchampions.domain.campaign.engine.CampaignEvent
 import com.hasyame.marvelchampions.domain.campaign.engine.CampaignHero
@@ -129,6 +130,7 @@ class CampaignRepository @Inject constructor(
     private val campaignDao: CampaignDao,
     private val cardDao: CardDao,
     private val deckRepository: DeckRepository,
+    private val playRepository: PlayRepository,
     private val json: Json,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
@@ -402,6 +404,58 @@ class CampaignRepository @Inject constructor(
                 printedHealth = cardDao.getCard(hero.heroCardCode, locale.code)?.health,
             )
         }
+    }
+
+    /**
+     * Records a finished campaign scenario in the play log.
+     *
+     * A campaign scenario is a game that was played, and leaving it out would
+     * make win rates a statement about one-off games only — which is not what
+     * anyone reads them as. Tagged with the run id so a play can be traced back
+     * to the campaign it belongs to.
+     *
+     * Assembled here rather than in the screen because this is where the decks
+     * are: aspects live on the deck, not on the campaign.
+     */
+    suspend fun recordScenarioPlay(
+        runId: String,
+        scenarioId: String,
+        won: Boolean,
+        elapsedMillis: Long,
+        locale: CardLocale,
+    ): PlayRecorded = withContext(ioDispatcher) {
+        val run = load(runId, locale) ?: return@withContext PlayRecorded.SavedOnly
+        val scenario = run.template.scenarios.firstOrNull { it.id == scenarioId }
+        val heroes = run.state.heroes
+
+        val aspects = heroes.mapNotNull { it.deckId }
+            .mapNotNull { deckRepository.getDeck(it)?.aspects }
+            .flatMap { DeckRepository.parseAspects(it) }
+            .distinct()
+
+        val first = heroes.firstOrNull()
+
+        playRepository.record(
+            PlayEntity(
+                id = playRepository.newPlayId(),
+                playedAt = System.currentTimeMillis(),
+                scenarioCode = scenarioId,
+                // The campaign's own name for the scenario, resolved now, so
+                // the history stays readable if the template later changes.
+                scenarioName = scenario?.name?.resolve(locale.code)
+                    ?: scenario?.name?.resolve("en")
+                    ?: scenarioId,
+                difficulty = run.state.difficulty,
+                heroCode = first?.heroCardCode.orEmpty(),
+                heroName = first?.name.orEmpty(),
+                aspects = aspects.joinToString(", "),
+                otherHeroes = heroes.drop(1).joinToString(", ") { it.name },
+                players = heroes.size.coerceAtLeast(1),
+                won = won,
+                elapsedMillis = elapsedMillis,
+                campaignRunId = runId,
+            ),
+        )
     }
 
     suspend fun append(runId: String, event: CampaignEvent) = withContext(ioDispatcher) {

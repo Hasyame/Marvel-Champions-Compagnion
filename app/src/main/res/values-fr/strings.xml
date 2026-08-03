@@ -393,4 +393,27 @@
     <string name="settings_bgg_off_detail">Rien n\'est envoyé et votre mot de passe n\'est pas utilisé.</string>
     <string name="settings_bgg_ask_detail">À la fin d\'une partie, vous choisissez de l\'envoyer ou non.</string>
     <string name="settings_bgg_always_detail">Chaque partie terminée est envoyée sans demander.</string>
+    <string name="plays_title">Parties</string>
+    <string name="plays_empty">Aucune partie enregistrée. Jouez-en une, puis enregistrez-la depuis le tirage aléatoire.</string>
+    <string name="plays_history">Historique</string>
+    <string name="plays_by_hero">Par héros</string>
+    <string name="plays_by_aspect">Par aspect</string>
+    <string name="plays_by_scenario">Par scénario</string>
+    <string name="plays_by_difficulty">Par difficulté</string>
+    <string name="plays_stat_played">Jouées</string>
+    <string name="plays_stat_won">Gagnées</string>
+    <string name="plays_stat_rate">Taux de victoire</string>
+    <string name="plays_won">Victoire contre %1$s</string>
+    <string name="plays_lost">Défaite contre %1$s</string>
+    <string name="plays_send_title">Envoyer sur BoardGameGeek ?</string>
+    <string name="plays_send_message">Enregistrer cette partie contre %1$s dans votre historique BoardGameGeek ?</string>
+    <string name="plays_send_yes">Envoyer</string>
+    <string name="plays_send_no">Pas celle-ci</string>
+    <string name="plays_send_short">Envoyer</string>
+    <string name="plays_log_title">Enregistrer cette partie</string>
+    <string name="plays_log_minutes">Durée de la partie (minutes)</string>
+    <string name="plays_log_win">Victoire</string>
+    <string name="plays_log_loss">Défaite</string>
+    <string name="randomizer_log_play">Enregistrer la partie</string>
+    <string name="randomizer_open_plays">Parties et stats</string>
 </resources>

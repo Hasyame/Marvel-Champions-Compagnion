@@ -79,3 +79,7 @@ data object CollectionRoute
 /** Who made this, why, and what it is not. */
 @Serializable
 data object AboutRoute
+
+/** Logged games and what they add up to. */
+@Serializable
+data object PlaysRoute

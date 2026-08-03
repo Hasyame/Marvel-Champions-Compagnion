@@ -174,6 +174,9 @@ class CampaignRunViewModel @Inject constructor(
                 ),
             )
             repository.updateTimer(id, TimerState(), scenarioId)
+            // A lost scenario is still a game that was played, so it counts
+            // towards win rates like any other.
+            recordPlay(id, scenarioId, won = false, elapsedMillis = elapsed)
             reload()
             state.value = state.value.copy(
                 page = RunPage.DEFEAT,
@@ -206,6 +209,7 @@ class CampaignRunViewModel @Inject constructor(
                 ),
             )
             repository.updateTimer(id, TimerState(), scenarioId)
+            recordPlay(id, scenarioId, won = true, elapsedMillis = elapsed)
             reload()
 
             val reloaded = state.value.run
@@ -345,6 +349,30 @@ class CampaignRunViewModel @Inject constructor(
                 ),
             )
             reload()
+        }
+    }
+
+    /**
+     * Adds a finished scenario to the play log.
+     *
+     * Deliberately not allowed to disturb the campaign: the scenario result is
+     * already recorded in the event log, and a failure to also file it as a
+     * play must never leave the run in a strange state.
+     */
+    private suspend fun recordPlay(
+        id: String,
+        scenarioId: String,
+        won: Boolean,
+        elapsedMillis: Long,
+    ) {
+        runCatching {
+            repository.recordScenarioPlay(
+                runId = id,
+                scenarioId = scenarioId,
+                won = won,
+                elapsedMillis = elapsedMillis,
+                locale = preferences.currentCardLocale(),
+            )
         }
     }
 }

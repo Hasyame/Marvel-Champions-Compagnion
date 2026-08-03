@@ -375,4 +375,27 @@
     <string name="settings_bgg_off_detail">Nothing is sent, and your password is not used.</string>
     <string name="settings_bgg_ask_detail">At the end of a game you choose whether to send it.</string>
     <string name="settings_bgg_always_detail">Every finished game is sent without asking.</string>
+    <string name="plays_title">Plays</string>
+    <string name="plays_empty">No games logged yet. Play one, then log it from the randomiser.</string>
+    <string name="plays_history">History</string>
+    <string name="plays_by_hero">By hero</string>
+    <string name="plays_by_aspect">By aspect</string>
+    <string name="plays_by_scenario">By scenario</string>
+    <string name="plays_by_difficulty">By difficulty</string>
+    <string name="plays_stat_played">Played</string>
+    <string name="plays_stat_won">Won</string>
+    <string name="plays_stat_rate">Win rate</string>
+    <string name="plays_won">Beat %1$s</string>
+    <string name="plays_lost">Lost to %1$s</string>
+    <string name="plays_send_title">Send to BoardGameGeek?</string>
+    <string name="plays_send_message">Log this game against %1$s in your BoardGameGeek play history?</string>
+    <string name="plays_send_yes">Send</string>
+    <string name="plays_send_no">Not this one</string>
+    <string name="plays_send_short">Send</string>
+    <string name="plays_log_title">Log this game</string>
+    <string name="plays_log_minutes">How long did it take? (minutes)</string>
+    <string name="plays_log_win">We won</string>
+    <string name="plays_log_loss">We lost</string>
+    <string name="randomizer_log_play">Log this game</string>
+    <string name="randomizer_open_plays">Plays and stats</string>
 </resources>

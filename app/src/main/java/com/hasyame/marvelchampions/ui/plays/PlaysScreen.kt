@@ -1,0 +1,260 @@
+package com.hasyame.marvelchampions.ui.plays
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hasyame.marvelchampions.R
+import com.hasyame.marvelchampions.core.designsystem.component.ComicEmptyState
+import com.hasyame.marvelchampions.core.designsystem.component.ComicPanel
+import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
+import com.hasyame.marvelchampions.data.db.dao.WinRateRow
+import com.hasyame.marvelchampions.data.db.entity.PlayEntity
+import java.text.DateFormat
+import java.util.Date
+
+/**
+ * Everything played, and what it adds up to.
+ *
+ * Statistics first, history below: after a few dozen games the interesting
+ * question is "which heroes actually win for me", not "what did I play in
+ * March".
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PlaysScreen(
+    onBack: () -> Unit,
+    viewModel: PlaysViewModel = hiltViewModel(),
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val message by viewModel.message.collectAsStateWithLifecycle()
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                colors = comicTopBarColors(),
+                title = { Text(stringResource(R.string.plays_title)) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.action_back),
+                        )
+                    }
+                },
+            )
+        },
+    ) { padding ->
+        if (state.plays.isEmpty()) {
+            ComicEmptyState(
+                message = stringResource(R.string.plays_empty),
+                modifier = Modifier.padding(padding),
+            )
+            return@Scaffold
+        }
+
+        // Resolved out here: the lazy list scope is not composable, so a
+        // stringResource call inside it does not compile.
+        val sections = listOf(
+            stringResource(R.string.plays_by_hero) to state.byHero,
+            stringResource(R.string.plays_by_aspect) to state.byAspect,
+            stringResource(R.string.plays_by_scenario) to state.byScenario,
+            stringResource(R.string.plays_by_difficulty) to state.byDifficulty,
+        )
+        val historyTitle = stringResource(R.string.plays_history)
+
+        LazyColumn(Modifier.fillMaxSize().padding(padding)) {
+            item { Overall(state) }
+
+            sections.forEach { (title, rows) -> winRateSection(title, rows) }
+
+            item {
+                Text(
+                    text = historyTitle,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(16.dp),
+                )
+            }
+            items(state.plays, key = { it.id }) { play ->
+                PlayRow(
+                    play = play,
+                    onDelete = { viewModel.delete(play.id) },
+                    onReport = { viewModel.reportLater(play.id) },
+                )
+                HorizontalDivider()
+            }
+        }
+    }
+
+    viewModel.pendingReport.collectAsStateWithLifecycle().value?.let { pending ->
+        AlertDialog(
+            onDismissRequest = viewModel::dismissReport,
+            title = { Text(stringResource(R.string.plays_send_title)) },
+            text = { Text(stringResource(R.string.plays_send_message, pending.summary)) },
+            confirmButton = {
+                TextButton(onClick = { viewModel.confirmReport(pending.playId) }) {
+                    Text(stringResource(R.string.plays_send_yes))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = viewModel::dismissReport) {
+                    Text(stringResource(R.string.plays_send_no))
+                }
+            },
+        )
+    }
+
+    message?.let {
+        AlertDialog(
+            onDismissRequest = viewModel::dismissMessage,
+            text = { Text(it) },
+            confirmButton = {
+                TextButton(onClick = viewModel::dismissMessage) {
+                    Text(stringResource(R.string.action_done))
+                }
+            },
+        )
+    }
+}
+
+@Composable
+private fun Overall(state: PlaysUiState) {
+    ComicPanel(Modifier.fillMaxWidth().padding(12.dp)) {
+        Row(
+            Modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(24.dp),
+        ) {
+            Stat(state.totalPlayed.toString(), stringResource(R.string.plays_stat_played))
+            Stat(state.totalWon.toString(), stringResource(R.string.plays_stat_won))
+            Stat(
+                value = percent(state.totalWon, state.totalPlayed),
+                label = stringResource(R.string.plays_stat_rate),
+            )
+        }
+    }
+}
+
+@Composable
+private fun Stat(value: String, label: String) {
+    Column {
+        Text(value, style = MaterialTheme.typography.headlineSmall)
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+}
+
+private fun androidx.compose.foundation.lazy.LazyListScope.winRateSection(
+    title: String,
+    rows: List<WinRateRow>,
+) {
+    if (rows.isEmpty()) {
+        return
+    }
+    item {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+        )
+    }
+    items(rows, key = { "$title-${it.key}" }) { row ->
+        ListItem(
+            headlineContent = { Text(row.key) },
+            trailingContent = {
+                Text(
+                    // Both the rate and the raw counts: a single win from one
+                    // game is 100%, and the counts are what stop that reading
+                    // as a fact about the hero.
+                    text = "${percent(row.won, row.played)}  (${row.won}/${row.played})",
+                    style = MaterialTheme.typography.labelLarge,
+                )
+            },
+        )
+    }
+}
+
+@Composable
+private fun PlayRow(play: PlayEntity, onDelete: () -> Unit, onReport: () -> Unit) {
+    val heroes = listOfNotNull(
+        play.heroName.takeIf { it.isNotBlank() },
+        play.otherHeroes.takeIf { it.isNotBlank() },
+    ).joinToString(", ")
+
+    ListItem(
+        overlineContent = {
+            Text(DateFormat.getDateInstance().format(Date(play.playedAt)))
+        },
+        headlineContent = {
+            Text(
+                text = stringResource(
+                    if (play.won) R.string.plays_won else R.string.plays_lost,
+                    play.scenarioName,
+                ),
+                color = if (play.won) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
+            )
+        },
+        supportingContent = {
+            Text(
+                listOfNotNull(
+                    heroes.takeIf { it.isNotBlank() },
+                    play.aspects.takeIf { it.isNotBlank() },
+                    play.difficulty,
+                ).joinToString(" · "),
+            )
+        },
+        trailingContent = {
+            Row {
+                // Only offered for a play that has not been sent, so the button
+                // is never a way to file the same game twice.
+                if (!play.reportedToBgg) {
+                    TextButton(onClick = onReport) {
+                        Text(stringResource(R.string.plays_send_short))
+                    }
+                }
+                IconButton(onClick = onDelete) {
+                    Icon(
+                        Icons.Filled.Clear,
+                        contentDescription = stringResource(R.string.action_delete),
+                    )
+                }
+            }
+        },
+    )
+}
+
+private fun percent(part: Int, whole: Int): String =
+    if (whole == 0) "—" else "${part * 100 / whole}%"

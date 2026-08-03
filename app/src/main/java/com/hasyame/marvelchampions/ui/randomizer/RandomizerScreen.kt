@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -25,27 +27,40 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
 import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
+import com.hasyame.marvelchampions.data.db.entity.PlayEntity
 import com.hasyame.marvelchampions.data.repository.RandomizerRepository
 import com.hasyame.marvelchampions.domain.randomizer.Difficulty
 import com.hasyame.marvelchampions.domain.randomizer.DrawField
+import com.hasyame.marvelchampions.ui.plays.PlaysViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RandomizerScreen(viewModel: RandomizerViewModel = hiltViewModel()) {
+fun RandomizerScreen(
+    onOpenPlays: () -> Unit,
+    viewModel: RandomizerViewModel = hiltViewModel(),
+    playsViewModel: PlaysViewModel = hiltViewModel(),
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    var logOutcome by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -88,6 +103,27 @@ fun RandomizerScreen(viewModel: RandomizerViewModel = hiltViewModel()) {
                             modifier = Modifier.weight(1f),
                         ) {
                             Text(stringResource(R.string.randomizer_save_draw))
+                        }
+                    }
+                }
+
+                // Logging the game you just played is a different act from
+                // saving the draw you are about to play, so it is its own
+                // button rather than a mode of the one above.
+                item {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Button(
+                            onClick = { logOutcome = true },
+                            enabled = state.draw.isComplete,
+                            modifier = Modifier.weight(1f),
+                        ) {
+                            Text(stringResource(R.string.randomizer_log_play))
+                        }
+                        OutlinedButton(onClick = onOpenPlays, modifier = Modifier.weight(1f)) {
+                            Text(stringResource(R.string.randomizer_open_plays))
                         }
                     }
                 }
@@ -351,3 +387,80 @@ private fun aspectLabel(aspect: String): String = stringResource(
         else -> R.string.randomizer_none
     },
 )
+
+/**
+ * Asks only what the app cannot know: did you win, and how long did it take.
+ *
+ * Everything else — scenario, difficulty, heroes, aspects, player count — is
+ * already on screen in the draw, so re-asking for it would be a form the player
+ * has to fill in twice.
+ */
+@Composable
+private fun LogPlayDialog(
+    state: RandomizerUiState,
+    onDismiss: () -> Unit,
+    onLog: (won: Boolean, minutes: Int) -> Unit,
+) {
+    var minutes by remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.plays_log_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(
+                    text = state.names.scenarios[state.draw.scenarioCode].orEmpty(),
+                    style = MaterialTheme.typography.titleSmall,
+                )
+                OutlinedTextField(
+                    value = minutes,
+                    onValueChange = { minutes = it.filter(Char::isDigit) },
+                    label = { Text(stringResource(R.string.plays_log_minutes)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onLog(true, minutes.toIntOrNull() ?: 0) }) {
+                Text(stringResource(R.string.plays_log_win))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { onLog(false, minutes.toIntOrNull() ?: 0) }) {
+                Text(stringResource(R.string.plays_log_loss))
+            }
+        },
+    )
+}
+
+/**
+ * Turns the draw on screen into a recorded play.
+ *
+ * The first hero is the one the statistics group by; the rest are kept as text
+ * for the history to show. Names are resolved now rather than looked up later,
+ * so the record stays legible whatever happens to the card database.
+ */
+private fun RandomizerUiState.toPlay(won: Boolean, minutes: Int, id: String): PlayEntity {
+    val assignments = draw.heroes
+    val first = assignments.firstOrNull()
+
+    return PlayEntity(
+        id = id,
+        playedAt = System.currentTimeMillis(),
+        scenarioCode = draw.scenarioCode.orEmpty(),
+        scenarioName = names.scenarios[draw.scenarioCode] ?: draw.scenarioCode.orEmpty(),
+        difficulty = draw.difficulty?.name?.lowercase().orEmpty(),
+        heroCode = first?.heroCode.orEmpty(),
+        heroName = first?.let { names.heroes[it.heroCode] ?: it.heroCode }.orEmpty(),
+        aspects = assignments.map { it.aspect }.distinct().joinToString(", "),
+        otherHeroes = assignments.drop(1)
+            .joinToString(", ") { names.heroes[it.heroCode] ?: it.heroCode },
+        players = draw.playerCount,
+        won = won,
+        elapsedMillis = minutes * MILLIS_PER_MINUTE,
+    )
+}
+
+private const val MILLIS_PER_MINUTE = 60_000L
