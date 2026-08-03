@@ -1,5 +1,6 @@
 package com.hasyame.marvelchampions.data.db.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -54,6 +55,18 @@ data class PlayEntity(
     val won: Boolean,
     val elapsedMillis: Long = 0,
     val notes: String = "",
+
+    /**
+     * Victory points, which BoardGameGeek records as the player score.
+     *
+     * Zero for a game that has none — most one-off games — rather than absent,
+     * because BGG wants a number and nought is the honest one.
+     *
+     * The SQL default is what lets the migration add this column to rows that
+     * already exist; a Kotlin default only covers new objects.
+     */
+    @ColumnInfo(defaultValue = "0")
+    val victoryPoints: Int = 0,
 
     /** Set when the play came from a campaign, so it can be traced back. */
     val campaignRunId: String? = null,

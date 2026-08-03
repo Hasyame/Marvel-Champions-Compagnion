@@ -209,6 +209,23 @@ class GameSessionViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Throws the game away without recording it anywhere.
+     *
+     * A game gets abandoned, misconfigured, or started by accident, and there
+     * has to be a way out that does not put a false row in the history and a
+     * false play on BoardGameGeek. Nothing is written, so there is nothing to
+     * undo afterwards.
+     */
+    fun discard() {
+        state.value = state.value.copy(
+            phase = SessionPhase.SETUP,
+            timer = TimerState(),
+            elapsedMillis = 0,
+            isFinishing = false,
+        )
+    }
+
     /** Back to setup, keeping the choices so a rematch is one tap. */
     fun reset() {
         finished.value = null

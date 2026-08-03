@@ -452,4 +452,8 @@
     <string name="session_saving">Enregistrement de la partie…</string>
     <string name="campaign_validating">Enregistrement…</string>
     <string name="session_back_to_menu">Retour au menu</string>
+    <string name="session_discard">Ignorer cette partie</string>
+    <string name="session_discard_title">Ignorer cette partie ?</string>
+    <string name="session_discard_message">Rien ne sera enregistré : aucune partie dans votre historique, et rien envoyé sur BoardGameGeek.</string>
+    <string name="session_discard_yes">Ignorer</string>
 </resources>

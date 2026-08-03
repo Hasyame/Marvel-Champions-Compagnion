@@ -302,6 +302,29 @@ private fun PlayingPhase(
     viewModel: GameSessionViewModel,
     modifier: Modifier = Modifier,
 ) {
+    var confirmDiscard by remember { mutableStateOf(false) }
+
+    if (confirmDiscard) {
+        AlertDialog(
+            onDismissRequest = { confirmDiscard = false },
+            title = { Text(stringResource(R.string.session_discard_title)) },
+            text = { Text(stringResource(R.string.session_discard_message)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        confirmDiscard = false
+                        viewModel.discard()
+                    },
+                ) { Text(stringResource(R.string.session_discard_yes)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmDiscard = false }) {
+                    Text(stringResource(R.string.session_leave_no))
+                }
+            },
+        )
+    }
+
     Box(
         modifier
             .fillMaxSize()
@@ -374,6 +397,12 @@ private fun PlayingPhase(
                     modifier = Modifier.weight(1f),
                 ) { Text(stringResource(R.string.session_lost)) }
             }
+
+            TextButton(
+                onClick = { confirmDiscard = true },
+                enabled = !state.isFinishing,
+                modifier = Modifier.fillMaxWidth(),
+            ) { Text(stringResource(R.string.session_discard)) }
 
             if (state.isFinishing) {
                 Row(

@@ -227,7 +227,15 @@ class CampaignRunViewModel @Inject constructor(
                 ),
             )
             repository.updateTimer(id, TimerState(), scenarioId)
-            recordPlay(id, scenarioId, won = true, elapsedMillis = elapsed)
+            recordPlay(
+                id,
+                scenarioId,
+                won = true,
+                elapsedMillis = elapsed,
+                // The questionnaire already asked; BoardGameGeek records it as
+                // the player score.
+                victoryPoints = answers.numbers["vp"] ?: 0,
+            )
             reload()
 
             val reloaded = state.value.run
@@ -383,6 +391,7 @@ class CampaignRunViewModel @Inject constructor(
         scenarioId: String,
         won: Boolean,
         elapsedMillis: Long,
+        victoryPoints: Int = 0,
     ) {
         runCatching {
             repository.recordScenarioPlay(
@@ -390,6 +399,7 @@ class CampaignRunViewModel @Inject constructor(
                 scenarioId = scenarioId,
                 won = won,
                 elapsedMillis = elapsedMillis,
+                victoryPoints = victoryPoints,
                 locale = preferences.currentCardLocale(),
             )
         }

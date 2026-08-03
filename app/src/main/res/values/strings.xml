@@ -434,4 +434,8 @@
     <string name="session_saving">Recording the game…</string>
     <string name="campaign_validating">Recording…</string>
     <string name="session_back_to_menu">Back to the menu</string>
+    <string name="session_discard">Ignore this game</string>
+    <string name="session_discard_title">Ignore this game?</string>
+    <string name="session_discard_message">Nothing will be recorded: no play in your history, and nothing sent to BoardGameGeek.</string>
+    <string name="session_discard_yes">Ignore it</string>
 </resources>

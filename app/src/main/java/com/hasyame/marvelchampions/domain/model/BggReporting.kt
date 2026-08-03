@@ -24,14 +24,32 @@ enum class BggReportingMode(val code: String) {
     }
 }
 
+/** One seat at the table, as BoardGameGeek records it. */
+data class BggPlayer(
+    /** The BGG account, for the player who owns it. Blank for a guest. */
+    val username: String,
+    val name: String,
+    /** Victory points. BGG calls this the score. */
+    val score: Int,
+    val won: Boolean,
+    /** BGG shows this beside the name; the hero played is what belongs there. */
+    val color: String,
+)
+
 /** A finished game, in the shape BoardGameGeek records one. */
 data class BggPlay(
     /** Calendar day the game was played, as `yyyy-MM-dd`. */
     val playedOn: String,
     /** Minutes. BGG stores play length in minutes, not seconds. */
     val lengthMinutes: Int,
-    val players: Int,
-    /** BGG has no win flag on the play itself, so the outcome goes in the comment. */
+    /**
+     * The people at the table.
+     *
+     * A count is not enough: a play posted with only a number lands in BGG
+     * with nobody in it, which is what happened. At least the logged-in player
+     * has to be here for the play to show up as theirs.
+     */
+    val players: List<BggPlayer>,
     val won: Boolean,
     val comment: String,
 )

@@ -423,6 +423,7 @@ class CampaignRepository @Inject constructor(
         won: Boolean,
         elapsedMillis: Long,
         locale: CardLocale,
+        victoryPoints: Int = 0,
     ): PlayRecorded = withContext(ioDispatcher) {
         val run = load(runId, locale) ?: return@withContext PlayRecorded.SavedOnly
         val scenario = run.template.scenarios.firstOrNull { it.id == scenarioId }
@@ -453,6 +454,7 @@ class CampaignRepository @Inject constructor(
                 players = heroes.size.coerceAtLeast(1),
                 won = won,
                 elapsedMillis = elapsedMillis,
+                victoryPoints = victoryPoints,
                 campaignRunId = runId,
             ),
         )

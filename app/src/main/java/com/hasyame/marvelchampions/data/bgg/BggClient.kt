@@ -84,10 +84,27 @@ class BggClient @Inject constructor(
             .add("playdate", play.playedOn)
             .add("length", play.lengthMinutes.toString())
             .add("quantity", "1")
-            .add("players", play.players.toString())
+
             .add("incomplete", "0")
             .add("nowinstats", "0")
             .add("comments", play.comment)
+            .apply {
+                // Player rows, not a count. A play posted with only a number
+                // lands in BGG with nobody in it — which is exactly what
+                // happened — and never shows as the account holder's play.
+                play.players.forEachIndexed { index, player ->
+                    add("players[$index][username]", player.username)
+                    add("players[$index][userid]", "0")
+                    add("players[$index][name]", player.name)
+                    add("players[$index][score]", player.score.toString())
+                    add("players[$index][win]", if (player.won) "1" else "0")
+                    add("players[$index][new]", "0")
+                    add("players[$index][rating]", "0")
+                    // BGG shows colour beside the name, which is where the hero
+                    // belongs: it is what distinguishes one seat from another.
+                    add("players[$index][color]", player.color)
+                }
+            }
             .build()
 
         val request = Request.Builder()

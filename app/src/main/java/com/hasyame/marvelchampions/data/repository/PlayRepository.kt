@@ -8,6 +8,7 @@ import com.hasyame.marvelchampions.data.db.dao.PlayDao
 import com.hasyame.marvelchampions.data.db.dao.WinRateRow
 import com.hasyame.marvelchampions.data.db.entity.PlayEntity
 import com.hasyame.marvelchampions.domain.model.BggPlay
+import com.hasyame.marvelchampions.domain.model.BggPlayer
 import com.hasyame.marvelchampions.domain.model.BggReportingMode
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -93,7 +94,7 @@ class PlayRepository @Inject constructor(
         val result = bggClient.reportPlay(
             username = credentials.first,
             password = credentials.second,
-            play = play.toBggPlay(),
+            play = play.toBggPlay(credentials.first),
         )
 
         when (result) {
@@ -116,7 +117,7 @@ class PlayRepository @Inject constructor(
      * BoardGameGeek has no win flag on a play, so the outcome and the details
      * that make the entry worth reading go in the comment.
      */
-    private fun PlayEntity.toBggPlay(): BggPlay {
+    private fun PlayEntity.toBggPlay(bggUsername: String): BggPlay {
         val heroes = listOfNotNull(
             heroName.takeIf { it.isNotBlank() },
             otherHeroes.takeIf { it.isNotBlank() },
@@ -137,13 +138,31 @@ class PlayRepository @Inject constructor(
             }
         }
 
+        // The account holder takes the first seat, playing the hero recorded
+        // against this play. Anyone else at the table is deliberately left for
+        // the player to add on BGG afterwards: this app does not know their
+        // accounts, and inventing guest rows makes a play harder to correct
+        // rather than easier.
+        val seats = listOf(
+            BggPlayer(
+                username = bggUsername,
+                name = bggUsername,
+                score = victoryPoints,
+                won = won,
+                color = listOfNotNull(
+                    heroName.takeIf { it.isNotBlank() },
+                    aspects.takeIf { it.isNotBlank() },
+                ).joinToString(" / "),
+            ),
+        )
+
         return BggPlay(
             playedOn = DATE_FORMAT.format(Date(playedAt)),
             // BGG records length in minutes. A game shorter than a minute is
             // almost certainly a mistimed entry, so it reports as zero rather
             // than rounding up to something that looks deliberate.
             lengthMinutes = TimeUnit.MILLISECONDS.toMinutes(elapsedMillis).toInt(),
-            players = players,
+            players = seats,
             won = won,
             comment = comment,
         )
