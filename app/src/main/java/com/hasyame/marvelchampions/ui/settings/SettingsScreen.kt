@@ -150,6 +150,35 @@ fun SettingsScreen(
             MusicSection(state = state, onMusicUrlChange = viewModel::setMusicUrl)
             HorizontalDivider()
 
+            val imageProgress by viewModel.imagePrefetchProgress.collectAsStateWithLifecycle()
+            Column(
+                Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Text(
+                    text = stringResource(R.string.settings_images),
+                    style = MaterialTheme.typography.titleSmall,
+                )
+                Text(
+                    text = stringResource(R.string.settings_images_summary),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                if (imageProgress != null) {
+                    Text(
+                        text = stringResource(R.string.settings_images_running, imageProgress!!),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                    LinearProgressIndicator(Modifier.fillMaxWidth())
+                } else {
+                    Button(
+                        onClick = viewModel::prefetchImages,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) { Text(stringResource(R.string.settings_images_download)) }
+                }
+            }
+            HorizontalDivider()
+
             BackupSection(
                 pendingRestore = viewModel.pendingRestore.collectAsStateWithLifecycle().value,
                 message = viewModel.backupMessage.collectAsStateWithLifecycle().value,

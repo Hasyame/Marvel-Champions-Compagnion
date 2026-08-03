@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.hasyame.marvelchampions.data.db.MarvelChampionsDatabase
 import com.hasyame.marvelchampions.data.db.dao.CampaignDao
+import coil3.ImageLoader
+import coil3.SingletonImageLoader
 import com.hasyame.marvelchampions.data.db.dao.FavouriteDao
 import com.hasyame.marvelchampions.data.db.dao.PlayDao
 import com.hasyame.marvelchampions.data.db.dao.CardDao
@@ -100,6 +102,13 @@ object DataModule {
     @Provides
     fun providePlayDao(database: MarvelChampionsDatabase): PlayDao =
         database.playDao()
+
+    @Provides
+    @Singleton
+    fun provideImageLoader(@ApplicationContext context: Context): ImageLoader =
+        // The singleton the app already configured, with its disk cache, rather
+        // than a second loader writing to a second cache.
+        SingletonImageLoader.get(context)
 
     @Provides
     fun provideFavouriteDao(database: MarvelChampionsDatabase): FavouriteDao =

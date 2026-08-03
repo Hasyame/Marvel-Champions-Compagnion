@@ -466,4 +466,8 @@
     <string name="decks_share_no_app">No app on this device can share text.</string>
     <string name="plays_by_players">Solo or group</string>
     <string name="plays_by_hero_aspect">Hero and aspect together</string>
+    <string name="settings_images">Card images offline</string>
+    <string name="settings_images_summary">Card text already works offline; pictures are fetched the first time you open a card. Download them now and every card in your collection will show at a table with no signal. Hundreds of files — best on wi-fi.</string>
+    <string name="settings_images_download">Download images for my packs</string>
+    <string name="settings_images_running">Downloading %1$s</string>
 </resources>

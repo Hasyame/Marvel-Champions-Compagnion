@@ -484,4 +484,8 @@
     <string name="decks_share_no_app">Aucune application de cet appareil ne peut partager du texte.</string>
     <string name="plays_by_players">Solo ou en groupe</string>
     <string name="plays_by_hero_aspect">Héros et aspect ensemble</string>
+    <string name="settings_images">Images hors ligne</string>
+    <string name="settings_images_summary">Le texte des cartes fonctionne déjà hors ligne ; les images sont téléchargées à la première ouverture d\'une carte. Téléchargez-les maintenant et toutes les cartes de votre collection s\'afficheront sans réseau. Des centaines de fichiers : préférez le wi-fi.</string>
+    <string name="settings_images_download">Télécharger les images de mes extensions</string>
+    <string name="settings_images_running">Téléchargement %1$s</string>
 </resources>

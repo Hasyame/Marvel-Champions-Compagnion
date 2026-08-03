@@ -3,6 +3,8 @@ package com.hasyame.marvelchampions.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hasyame.marvelchampions.data.settings.AppPreferences
+import com.hasyame.marvelchampions.data.repository.CollectionRepository
+import com.hasyame.marvelchampions.data.sync.CardImagePrefetcher
 import com.hasyame.marvelchampions.data.sync.CardSyncManager
 import com.hasyame.marvelchampions.data.sync.CardSyncState
 import com.hasyame.marvelchampions.data.backup.Backup
@@ -45,6 +47,8 @@ class SettingsViewModel @Inject constructor(
     private val bggClient: BggClient,
     private val syncManager: CardSyncManager,
     private val backupRepository: BackupRepository,
+    private val imagePrefetcher: CardImagePrefetcher,
+    private val collectionRepository: CollectionRepository,
 ) : ViewModel() {
 
     /** Verifying and error are moments, not settings, so they are not persisted. */
@@ -177,6 +181,33 @@ class SettingsViewModel @Inject constructor(
 
     fun dismissBackupMessage() {
         backupMessages.value = null
+    }
+
+    private val imageProgress = MutableStateFlow<String?>(null)
+
+    /** Non-null while images are downloading, holding what to show. */
+    val imagePrefetchProgress: StateFlow<String?> = imageProgress.asStateFlow()
+
+    /**
+     * Downloads card images for the packs the player owns.
+     *
+     * An explicit action rather than part of the card sync: it is hundreds of
+     * files and tens of megabytes, and doing that unasked to somebody on mobile
+     * data would be indefensible.
+     */
+    fun prefetchImages() {
+        if (imageProgress.value != null) {
+            return
+        }
+        viewModelScope.launch {
+            imageProgress.value = "…"
+            runCatching {
+                imagePrefetcher.prefetchOwned(
+                    ownedPackCodes = collectionRepository.getOwnedCodes().toSet(),
+                ) { done, total -> imageProgress.value = "$done / $total" }
+            }
+            imageProgress.value = null
+        }
     }
 
     fun setCardLocale(locale: CardLocale) {

@@ -187,4 +187,13 @@ interface CardDao {
         """,
     )
     suspend fun getCardSet(cardSetCode: String, locale: String): List<CardEntity>
+
+    /**
+     * Image paths for the packs a player owns, for pre-caching.
+     *
+     * Distinct is left to the caller: the same card has a row per language and
+     * they share one image.
+     */
+    @Query("SELECT imageSrc FROM cards WHERE packCode IN (:packCodes) AND imageSrc IS NOT NULL")
+    suspend fun getImageSources(packCodes: List<String>): List<String>
 }
