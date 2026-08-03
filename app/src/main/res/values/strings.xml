@@ -297,8 +297,6 @@
     <string name="settings_contact">Contact</string>
     <string name="settings_contact_summary">Report a bug by email, with the version and device details filled in.</string>
     <string name="settings_no_mail_app">No mail app installed. Write to %1$s.</string>
-    <string name="settings_donate">Donate</string>
-    <string name="settings_donate_summary">Not set up yet.</string>
     <string name="campaign_in_progress_section">In progress</string>
     <string name="campaign_finished_section">Finished campaigns</string>
     <string name="campaign_delete_title">Forget this campaign?</string>
@@ -343,7 +341,6 @@
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_dark">Dark</string>
-    <string name="settings_donate_pending">Donations are not set up yet. If the app is useful to you, that is already plenty — this entry is here so you know it is planned, not forgotten.</string>
     <string name="settings_about">About</string>
     <string name="settings_about_summary">Who made this app, and why</string>
     <string name="about_story">I\'m a hobbyist developer, and to be honest this app was put together with the help of Claude Code, because time is the thing I have least of.\n\nIt started as something for myself: I wanted to stop digging through web apps in the middle of a game and just be comfortable while playing.</string>

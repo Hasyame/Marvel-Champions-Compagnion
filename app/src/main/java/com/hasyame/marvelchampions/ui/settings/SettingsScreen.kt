@@ -185,30 +185,9 @@ fun SettingsScreen(
                 supportingContent = { Text(stringResource(R.string.settings_about_summary)) },
                 modifier = Modifier.clickable(onClick = onOpenAbout),
             )
-            HorizontalDivider()
-
-            var donateOpen by remember { mutableStateOf(false) }
-
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.settings_donate)) },
-                supportingContent = { Text(stringResource(R.string.settings_donate_summary)) },
-                modifier = Modifier.clickable { donateOpen = true },
-            )
-
-            // A row that does nothing when tapped reads as broken rather than as
-            // unfinished, so it says which it is.
-            if (donateOpen) {
-                AlertDialog(
-                    onDismissRequest = { donateOpen = false },
-                    title = { Text(stringResource(R.string.settings_donate)) },
-                    text = { Text(stringResource(R.string.settings_donate_pending)) },
-                    confirmButton = {
-                        TextButton(onClick = { donateOpen = false }) {
-                            Text(stringResource(R.string.action_done))
-                        }
-                    },
-                )
-            }
+            // No donate entry, deliberately. This project's standing is that it
+            // is an unofficial, non-commercial fan work, and money coming in is
+            // the thing most likely to undermine that.
         }
     }
 }
