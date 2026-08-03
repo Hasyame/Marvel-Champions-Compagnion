@@ -438,4 +438,5 @@
     <string name="session_discard_title">Ignore this game?</string>
     <string name="session_discard_message">Nothing will be recorded: no play in your history, and nothing sent to BoardGameGeek.</string>
     <string name="session_discard_yes">Ignore it</string>
+    <string name="session_modular_sets">Modular sets</string>
 </resources>

@@ -115,8 +115,10 @@ fun MarvelChampionsNavHost(
             composable<RandomizerRoute> {
                 RandomizerScreen(
                     onBack = { navController.popBackStack() },
-                    onPlayDraw = { heroes ->
-                        navController.navigate(GameSessionRoute(heroes = heroes))
+                    onPlayDraw = { heroes, modulars ->
+                        navController.navigate(
+                            GameSessionRoute(heroes = heroes, modularSets = modulars),
+                        )
                     },
                 )
             }
@@ -126,6 +128,7 @@ fun MarvelChampionsNavHost(
                     scenarioCode = args.scenarioCode,
                     difficulty = args.difficulty,
                     heroes = args.heroes,
+                    modularSets = args.modularSets,
                     onBack = { navController.popBackStack() },
                     onOpenPlays = { navController.navigate(PlaysRoute) },
                 )

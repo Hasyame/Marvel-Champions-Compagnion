@@ -113,4 +113,5 @@ data class GameSessionRoute(
     val scenarioCode: String? = null,
     val difficulty: String? = null,
     val heroes: String? = null,
+    val modularSets: String? = null,
 )

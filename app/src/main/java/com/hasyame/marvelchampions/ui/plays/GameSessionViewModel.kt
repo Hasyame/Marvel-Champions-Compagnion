@@ -36,6 +36,8 @@ data class GameSessionUiState(
     val scenarioCode: String? = null,
     val difficulty: String = "standard",
     val heroes: List<SessionHero> = emptyList(),
+    /** Modular sets shuffled into the encounter deck. */
+    val modularSetCodes: List<String> = emptyList(),
     val timer: TimerState = TimerState(),
     val elapsedMillis: Long = 0,
     val isLoading: Boolean = true,
@@ -85,7 +87,12 @@ class GameSessionViewModel @Inject constructor(
      * Applied once: a configuration change must not wipe choices the player
      * has changed since arriving.
      */
-    fun prefill(scenarioCode: String?, difficulty: String?, heroes: String?) {
+    fun prefill(
+        scenarioCode: String?,
+        difficulty: String?,
+        heroes: String?,
+        modularSets: String? = null,
+    ) {
         if (prefilled) {
             return
         }
@@ -105,6 +112,9 @@ class GameSessionViewModel @Inject constructor(
             scenarioCode = scenarioCode ?: state.value.scenarioCode,
             difficulty = difficulty ?: state.value.difficulty,
             heroes = parsed.ifEmpty { state.value.heroes },
+            modularSetCodes = modularSets.orEmpty().split(",")
+                .filter { it.isNotBlank() }
+                .ifEmpty { state.value.modularSetCodes },
         )
     }
 
@@ -114,6 +124,14 @@ class GameSessionViewModel @Inject constructor(
 
     fun setDifficulty(difficulty: String) {
         state.value = state.value.copy(difficulty = difficulty)
+    }
+
+    /** Modular sets are a free choice: some scenarios take one, some several. */
+    fun toggleModularSet(code: String) {
+        val current = state.value.modularSetCodes
+        state.value = state.value.copy(
+            modularSetCodes = if (code in current) current - code else current + code,
+        )
     }
 
     fun addHero(heroCode: String, aspect: String) {
@@ -204,6 +222,13 @@ class GameSessionViewModel @Inject constructor(
                     players = current.heroes.size,
                     won = won,
                     elapsedMillis = elapsed,
+                    // Which modulars were in play changes a scenario enough that
+                    // a win rate without them is only half the story.
+                    notes = current.modularSetCodes
+                        .map { current.names.modularSets[it] ?: it }
+                        .sorted()
+                        .joinToString(", ")
+                        .let { if (it.isBlank()) "" else "Modular sets: $it" },
                 ),
             )
         }

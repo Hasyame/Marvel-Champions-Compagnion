@@ -57,7 +57,7 @@ import com.hasyame.marvelchampions.ui.plays.PlaysViewModel
 @Composable
 fun RandomizerScreen(
     onBack: () -> Unit,
-    onPlayDraw: (String) -> Unit,
+    onPlayDraw: (heroes: String, modularSets: String) -> Unit,
     viewModel: RandomizerViewModel = hiltViewModel(),
     playsViewModel: PlaysViewModel = hiltViewModel(),
 ) {
@@ -121,7 +121,12 @@ fun RandomizerScreen(
                 // asking for it again.
                 item {
                     Button(
-                        onClick = { onPlayDraw(state.draw.asSessionHeroes()) },
+                        onClick = {
+                            onPlayDraw(
+                                state.draw.asSessionHeroes(),
+                                state.draw.modularSetCodes.joinToString(","),
+                            )
+                        },
                         enabled = state.draw.isComplete,
                         modifier = Modifier.fillMaxWidth(),
                     ) {

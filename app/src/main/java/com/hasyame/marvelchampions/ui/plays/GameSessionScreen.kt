@@ -62,6 +62,7 @@ fun GameSessionScreen(
     scenarioCode: String? = null,
     difficulty: String? = null,
     heroes: String? = null,
+    modularSets: String? = null,
     onOpenPlays: () -> Unit,
     viewModel: GameSessionViewModel = hiltViewModel(),
 ) {
@@ -77,8 +78,8 @@ fun GameSessionScreen(
     }
 
     // A draw handed over from the randomiser, applied once.
-    LaunchedEffect(scenarioCode, difficulty, heroes) {
-        viewModel.prefill(scenarioCode, difficulty, heroes)
+    LaunchedEffect(scenarioCode, difficulty, heroes, modularSets) {
+        viewModel.prefill(scenarioCode, difficulty, heroes, modularSets)
     }
 
     // Only while the clock is actually running, so a paused or finished game
@@ -229,6 +230,16 @@ private fun SetupPhase(
             }
         }
 
+        PickerSection(stringResource(R.string.session_modular_sets)) {
+            state.pools.modularSets.forEach { set ->
+                FilterChip(
+                    selected = set.code in state.modularSetCodes,
+                    onClick = { viewModel.toggleModularSet(set.code) },
+                    label = { Text(state.names.modularSets[set.code] ?: set.code) },
+                )
+            }
+        }
+
         // Hero then aspect, in that order: picking a hero first and an aspect
         // second is how a player actually decides, and it keeps the chip list
         // to one long list rather than every hero-aspect pairing.
@@ -355,6 +366,16 @@ private fun PlayingPhase(
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
+                    if (state.modularSetCodes.isNotEmpty()) {
+                        Text(
+                            text = state.modularSetCodes
+                                .map { state.names.modularSets[it] ?: it }
+                                .sorted()
+                                .joinToString(", "),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
             }
 
