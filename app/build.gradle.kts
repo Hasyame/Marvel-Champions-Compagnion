@@ -21,8 +21,11 @@ android {
         applicationId = "com.hasyame.marvelchampions"
         minSdk = 28
         targetSdk = 37
-        versionCode = 1
-        versionName = "1.0.0"
+        // Must increase for every release. v1.0.0 is already published, and a
+        // device refuses an install whose versionCode is not higher than the
+        // one it already has — silently, from the user's point of view.
+        versionCode = 2
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
