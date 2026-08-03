@@ -51,6 +51,7 @@ import com.hasyame.marvelchampions.domain.campaign.engine.CampaignEngine
 import com.hasyame.marvelchampions.domain.campaign.engine.ConditionEvaluator
 import com.hasyame.marvelchampions.domain.campaign.engine.EvaluationContext
 import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
+import com.hasyame.marvelchampions.domain.campaign.template.CounterScope
 import com.hasyame.marvelchampions.domain.campaign.template.ScenarioTemplate
 import com.hasyame.marvelchampions.ui.util.openExternalUrl
 import kotlinx.coroutines.delay
@@ -264,8 +265,17 @@ private fun BriefingPage(
                                 // earlier scenarios, so the step can be
                                 // followed without leafing back through it.
                                 step.showCounter?.let { counterId ->
+                                    val perHero = run.template.counters
+                                        .firstOrNull { it.id == counterId }
+                                        ?.counterScope == CounterScope.HERO
                                     Text(
-                                        text = "$counterId: ${run.state.counter(counterId)}",
+                                        text = if (perHero) {
+                                            run.state.heroes.joinToString("   ") {
+                                                "${it.name} ${run.state.heroCounter(counterId, it.id)}"
+                                            }
+                                        } else {
+                                            "$counterId: ${run.state.counter(counterId)}"
+                                        },
                                         style = MaterialTheme.typography.titleMedium,
                                         color = MaterialTheme.colorScheme.primary,
                                     )
@@ -299,14 +309,13 @@ private fun BriefingPage(
                                 // else. Listing the whole pool beside it would
                                 // put the player back to picking one, which is
                                 // the job the app just did for them.
-                                val drawn = step.draw?.let {
-                                    CampaignEngine.drawnCard(
+                                val chips = step.draw?.let {
+                                    CampaignEngine.drawnCards(
                                         run.state,
                                         run.state.currentScenarioId,
                                         it.id,
                                     )
-                                }
-                                val chips = if (step.draw != null) listOfNotNull(drawn) else step.cards
+                                } ?: step.cards
 
                                 if (chips.isNotEmpty()) {
                                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

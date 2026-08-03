@@ -66,7 +66,7 @@ class CampaignEngine(
                 is CampaignEvent.SetupDrawn -> state.copy(
                     draws = state.draws + (
                         event.scenarioId to
-                            (state.draws[event.scenarioId].orEmpty() + (event.drawId to event.cardCode))
+                            (state.draws[event.scenarioId].orEmpty() + (event.drawId to event.cardCodes))
                         ),
                 )
                 is CampaignEvent.ManualAdjustment -> applyManual(state, event)
@@ -322,14 +322,13 @@ class CampaignEngine(
                 val drawId = effect.from ?: return state
                 // Read against the scenario being resolved, so a strike records
                 // what that scenario drew rather than whatever is current now.
-                val code = state.draws[scenarioId].orEmpty()[drawId] ?: return state
-                if (code in state.cardLists[listId].orEmpty()) {
+                val drawn = state.draws[scenarioId].orEmpty()[drawId].orEmpty()
+                val already = state.cardLists[listId].orEmpty()
+                val fresh = drawn.filterNot { it in already }
+                if (fresh.isEmpty()) {
                     return state
                 }
-                state.copy(
-                    cardLists = state.cardLists +
-                        (listId to (state.cardLists[listId].orEmpty() + code)),
-                )
+                state.copy(cardLists = state.cardLists + (listId to (already + fresh)))
             }
 
             EffectOp.ELIMINATE_HERO -> {
@@ -544,9 +543,9 @@ class CampaignEngine(
             return draw.from.filterNot { it in spent }.ifEmpty { draw.from }
         }
 
-        /** What a scenario has already drawn, if anything. */
-        fun drawnCard(state: CampaignState, scenarioId: String?, drawId: String): String? =
-            state.draws[scenarioId].orEmpty()[drawId]
+        /** What a scenario has already drawn, in the order drawn. */
+        fun drawnCards(state: CampaignState, scenarioId: String?, drawId: String): List<String> =
+            state.draws[scenarioId].orEmpty()[drawId].orEmpty()
         /** Prompt id the engine treats as "was this hero eliminated". */
         const val ELIMINATED_PROMPT_ID: String = "eliminated"
         const val HERO_HEALTH_REFERENCE: String = "heroCard.health"

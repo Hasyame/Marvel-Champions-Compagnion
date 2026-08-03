@@ -233,6 +233,11 @@ data class DrawDefinition(
      * requires a card must still get one.
      */
     val excluding: String? = null,
+    /**
+     * How many to draw, in order. More than one is for a setup that arranges
+     * several cards, such as villains laid out in a row.
+     */
+    val count: Int = 1,
 )
 
 @Serializable

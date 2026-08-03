@@ -54,13 +54,13 @@ class AgeOfApocalypseCarryOverTest {
     )
 
     /** The app drawing a card for a scenario's setup. */
-    private fun drew(scenarioId: String, drawId: String, code: String, at: Long) =
+    private fun drew(scenarioId: String, drawId: String, vararg codes: String, at: Long) =
         CampaignEvent.SetupDrawn(
             id = "draw-$scenarioId-$drawId",
             timestamp = at,
             scenarioId = scenarioId,
             drawId = drawId,
-            cardCode = code,
+            cardCodes = codes.toList(),
         )
 
     private fun won(scenarioId: String, overseerDefeated: Boolean, at: Long) =
@@ -94,9 +94,9 @@ class AgeOfApocalypseCarryOverTest {
             t,
             listOf(
                 started(t),
-                drew("s1_unus", "mission", "45166a", 1),
+                drew("s1_unus", "mission", "45166a", at = 1),
                 won("s1_unus", overseerDefeated = false, at = 2),
-                drew("s2_four_horsemen", "mission", "45167a", 3),
+                drew("s2_four_horsemen", "mission", "45167a", at = 3),
                 won("s2_four_horsemen", overseerDefeated = false, at = 4),
             ),
         )
@@ -114,9 +114,9 @@ class AgeOfApocalypseCarryOverTest {
             t,
             listOf(
                 started(t),
-                drew("s1_unus", "overseer", "45179a", 1),
+                drew("s1_unus", "overseer", "45179a", at = 1),
                 won("s1_unus", overseerDefeated = false, at = 2),
-                drew("s2_four_horsemen", "overseer", "45180a", 3),
+                drew("s2_four_horsemen", "overseer", "45180a", at = 3),
                 won("s2_four_horsemen", overseerDefeated = true, at = 4),
             ),
         )
@@ -136,7 +136,7 @@ class AgeOfApocalypseCarryOverTest {
             t,
             listOf(
                 started(t),
-                drew("s1_unus", "mission", "45166a", 1),
+                drew("s1_unus", "mission", "45166a", at = 1),
                 won("s1_unus", overseerDefeated = false, at = 2),
             ),
         )
@@ -164,12 +164,12 @@ class AgeOfApocalypseCarryOverTest {
             t,
             listOf(
                 started(t),
-                drew("s1_unus", "mission", "45166a", 1),
+                drew("s1_unus", "mission", "45166a", at = 1),
                 lost("s1_unus", at = 2),
             ),
         )
 
-        assertNull(CampaignEngine.drawnCard(state, "s1_unus", "mission"))
+        assertTrue(CampaignEngine.drawnCards(state, "s1_unus", "mission").isEmpty())
         // And the mission was never spent, so the replay can draw it again.
         assertTrue(state.cardLists["missionsUsed"].orEmpty().isEmpty())
         assertEquals("s1_unus", state.currentScenarioId)
@@ -178,9 +178,9 @@ class AgeOfApocalypseCarryOverTest {
     @Test
     fun `a draw survives being read back`() {
         val t = template()
-        val state = engine.fold(t, listOf(started(t), drew("s1_unus", "mission", "45168a", 1)))
+        val state = engine.fold(t, listOf(started(t), drew("s1_unus", "mission", "45168a", at = 1)))
 
-        assertEquals("45168a", CampaignEngine.drawnCard(state, "s1_unus", "mission"))
+        assertEquals(listOf("45168a"), CampaignEngine.drawnCards(state, "s1_unus", "mission"))
         assertNotNull(state.draws["s1_unus"])
     }
 
@@ -207,6 +207,33 @@ class AgeOfApocalypseCarryOverTest {
         assertTrue(
             "the last scenario must not draw its mission at random",
             last.campaignSetup.none { it.draw?.id == "mission" },
+        )
+    }
+
+    @Test
+    fun `the four horsemen are dealt an order rather than described as random`() {
+        val t = template()
+        val draw = t.scenarios.single { it.id == "s2_four_horsemen" }
+            .campaignSetup.mapNotNull { it.draw }.single { it.id == "horsemen" }
+
+        // All four, so the draw is an arrangement rather than a pick.
+        assertEquals(4, draw.count)
+        assertEquals(4, draw.from.size)
+        assertNull("an arrangement spends nothing across the campaign", draw.excluding)
+
+        val state = engine.fold(
+            t,
+            listOf(
+                started(t),
+                drew("s2_four_horsemen", "horsemen", "45083a", "45081a", "45084a", "45082a", at = 1),
+            ),
+        )
+
+        // Kept in the order drawn: that is the row they are set out in, and a
+        // set would lose it.
+        assertEquals(
+            listOf("45083a", "45081a", "45084a", "45082a"),
+            CampaignEngine.drawnCards(state, "s2_four_horsemen", "horsemen"),
         )
     }
 

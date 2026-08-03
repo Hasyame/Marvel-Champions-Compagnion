@@ -22,10 +22,8 @@ def t(fr, en):
 def standard_iii_step():
     return {
         "text": t(
-            "Le Standard III peut remplacer le Standard : la trahison Shadow of the Past "
-            "cède la place à cet environnement permanent",
-            "Standard III may replace Standard: the Shadow of the Past treachery gives way "
-            "to this permanent environment",
+            "Choisir Standard I ou Standard III (identique pour tous les scénarios)",
+            "Choose Standard I or Standard III (same for every scenario)",
         ),
         "cards": [PURSUED_BY_THE_PAST],
     }
@@ -43,32 +41,29 @@ def mission_steps(scenario_number):
         },
         {
             "text": t(
-                "Révéler cette mission dans la zone de mission (tirée parmi les disponibles)",
-                "Reveal this MISSION side scheme in the mission area (drawn from those available)",
+                "Placer cette mission dans la zone de mission — voir sa mise en place dans le journal",
+                "Put this MISSION side scheme in the mission area — see its setup in the log",
             ),
             "draw": {"id": "mission", "from": MISSIONS, "excluding": "missionsUsed"},
         },
         {
             "text": t(
-                "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
-                "Put this OVERSEER minion in the mission area, then put the Mission Rules card "
-                "into play beside it",
+                "Placer cet Overseer dans la zone de mission, avec la carte Mission Rules à côté",
+                "Put this OVERSEER minion in the mission area, Mission Rules card beside it",
             ),
             "draw": {"id": "overseer", "from": OVERSEERS, "excluding": "overseersDefeated"},
         },
         {
             "text": t(
                 "Le premier joueur prend ce soutien, face MISSION visible",
-                "The first player takes this support, MISSION side faceup",
+                "First player takes this support, MISSION side faceup",
             ),
             "cards": [MISSION_TEAM],
         },
         {
             "text": t(
-                "Chaque joueur cherche un allié dans son deck et l'ajoute à sa main "
-                "(il compte dans la taille de main)",
-                "Each player searches their deck for an ally and adds it to their hand "
-                "(it counts towards hand size)",
+                "Chaque joueur cherche un allié dans son deck et le prend en main",
+                "Each player searches their deck for an ally and takes it into hand",
             ),
         },
     ]
@@ -80,16 +75,16 @@ def expert_steps(first_scenario=False):
     if not first_scenario:
         steps.append({
             "text": t(
-                "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
-                "Expert campaign: set each hit point total to the value recorded last scenario",
+                "Expert : régler les points de vie de chaque héros sur la valeur ci-dessous",
+                "Expert: set each hero's hit points to the value below",
             ),
             "when": {"difficulty": "expert"},
             "showCounter": "hp",
         })
         steps.append({
             "text": t(
-                "Campagne Expert : placer 3 menaces sur la mission pour revenir aux points de vie imprimés",
-                "Expert campaign: place 3 threat on the MISSION side scheme to heal to printed hit points",
+                "Expert : placer 3 menaces sur la mission pour soigner un héros à fond",
+                "Expert: place 3 threat on the mission to heal a hero to full",
             ),
             "when": {"difficulty": "expert"},
             "action": {
@@ -183,19 +178,17 @@ scenarios.append({
         {"include": "standardIII"},
         {
             "text": t(
-                "Gene Pool commence en jeu et ne peut pas la quitter. Unus et l'Infinite Soldier "
-                "changent de force selon la menace qui s'y trouve",
-                "Gene Pool starts in play and cannot leave it. Unus and the Infinite Soldier get "
-                "stronger or weaker with the threat on it",
+                "Mettre Gene Pool en jeu",
+                "Put Gene Pool into play",
             ),
             "cards": ["45071"],
         },
         {
             "text": t(
-                "Difficulté ajustable : menace par joueur sur Gene Pool — 0 Escarmouche, "
-                "1 Standard, 2 Expert, 3 Héroïque",
-                "Adjustable difficulty: threat per player on Gene Pool — 0 Skirmish, "
-                "1 Standard, 2 Expert, 3 Heroic",
+                "Placer la menace par joueur sur Gene Pool — "
+                "Escarmouche 0, Standard 1, Expert 2, Héroïque 3",
+                "Place threat per player on Gene Pool — "
+                "Skirmish 0, Standard 1, Expert 2, Heroic 3",
             ),
             "cards": ["45071"],
         },
@@ -234,27 +227,25 @@ scenarios.append({
         {"include": "standardIII"},
         {
             "text": t(
-                "Révéler les quatre vilains dans un ordre aléatoire et les aligner, chacun avec "
-                "son propre compteur de points de vie",
-                "Reveal all four villains in random order and set them in a row, each with its own "
-                "hit point dial",
+                "Aligner ces quatre vilains dans cet ordre, chacun avec son compteur de points de vie",
+                "Set these four villains in a row in this order, each with its own hit point dial",
             ),
-            "cards": ["45081a", "45082a", "45083a", "45084a"],
+            "draw": {
+                "id": "horsemen",
+                "from": ["45081a", "45082a", "45083a", "45084a"],
+                "count": 4,
+            },
         },
         {
             "text": t(
-                "Face A en Escarmouche et Standard, face B en Expert et Héroïque — un mélange des "
-                "deux est permis",
-                "Side A on Skirmish and Standard, side B on Expert and Heroic — a mix of the two "
-                "is allowed",
+                "Face A en Escarmouche et Standard, face B en Expert et Héroïque",
+                "Use side A for Skirmish and Standard, side B for Expert and Heroic",
             ),
         },
         {
             "text": t(
-                "Donner le marqueur d'activation au vilain le plus à gauche : lui seul s'active, "
-                "puis le marqueur passe au suivant vers la droite",
-                "Give the active counter to the leftmost villain: only it activates, then the "
-                "counter passes to the next villain to its right",
+                "Donner le marqueur d'activation au vilain le plus à gauche",
+                "Give the active counter to the leftmost villain",
             ),
         },
     ] + [{"include": "missions"}, {"include": "expertHp"}],
@@ -289,29 +280,10 @@ scenarios.append({
         {"include": "standardIII"},
         {
             "text": t(
-                "Commencer sur la face Apocalypse (II). Pour une partie plus facile, commencer "
-                "sur la face (I)",
-                "Begin on the Apocalypse (II) side. For an easier game, begin on side (I)",
+                "Commencer Apocalypse sur la face (II) — face (I) pour une partie plus facile",
+                "Start Apocalypse on side (II) — side (I) for an easier game",
             ),
             "cards": ["45101a"],
-        },
-        {
-            "text": t(
-                "Les prélats sont au dos des Overseers : vaincre un prélat ne retire pas son "
-                "Overseer de la campagne",
-                "The prelates are the reverse of the overseers: defeating a prelate does not "
-                "remove its overseer from the campaign",
-            ),
-            "cards": OVERSEERS,
-        },
-        {
-            "text": t(
-                "Apocalypse ne peut être vaincu tant que No Longer Worthy, au dos de ce complot, "
-                "ne lui est pas attaché",
-                "Apocalypse cannot be defeated until No Longer Worthy, on the reverse of this "
-                "side scheme, is attached to him",
-            ),
-            "cards": ["45105a"],
         },
     ] + [{"include": "missions"}, {"include": "expertHp"}],
     "onVictory": {
@@ -372,6 +344,26 @@ scenarios.append({
         {"include": "standardIII"},
         {
             "text": t(
+                "Mettre Ancient Ritual en jeu",
+                "Put Ancient Ritual into play",
+            ),
+            "cards": ["45163"],
+        },
+        {
+            "text": t(
+                "Commencer Apocalypse sur sa face BIOMORPH",
+                "Start Apocalypse on his BIOMORPH side",
+            ),
+            "cards": ["45184a"],
+        },
+        {
+            "text": t(
+                "Le Professeur X ne peut pas entrer en jeu cette partie",
+                "Professor X cannot enter play this game",
+            ),
+        },
+        {
+            "text": t(
                 "Mélanger le set Age of Apocalypse dans le deck rencontre",
                 "Shuffle the Age of Apocalypse set into the encounter deck",
             ),
@@ -379,56 +371,30 @@ scenarios.append({
         },
         {
             "text": t(
-                "Révéler cette mission : elle est réservée à ce scénario et décide de la campagne",
-                "Reveal this MISSION side scheme: it is reserved for this scenario and decides "
-                "the campaign",
+                "Placer cette mission dans la zone de mission — voir sa mise en place dans le journal",
+                "Put this MISSION side scheme in the mission area — see its setup in the log",
             ),
             "cards": [PROTECT_THE_PROFESSOR],
         },
         {
             "text": t(
-                "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
-                "Put this OVERSEER minion in the mission area, then put the Mission Rules card "
-                "into play beside it",
+                "Placer cet Overseer dans la zone de mission, avec la carte Mission Rules à côté",
+                "Put this OVERSEER minion in the mission area, Mission Rules card beside it",
             ),
             "draw": {"id": "overseer", "from": OVERSEERS, "excluding": "overseersDefeated"},
         },
         {
             "text": t(
                 "Le premier joueur prend ce soutien, face MISSION visible",
-                "The first player takes this support, MISSION side faceup",
+                "First player takes this support, MISSION side faceup",
             ),
             "cards": [MISSION_TEAM],
         },
         {
             "text": t(
-                "Chaque joueur cherche un allié dans son deck et l'ajoute à sa main "
-                "(il compte dans la taille de main)",
-                "Each player searches their deck for an ally and adds it to their hand "
-                "(it counts towards hand size)",
+                "Chaque joueur cherche un allié dans son deck et le prend en main",
+                "Each player searches their deck for an ally and takes it into hand",
             ),
-        },
-        {
-            "text": t(
-                "Le Professeur X ne peut pas entrer en jeu pendant cette partie",
-                "Professor X cannot enter play during this game",
-            ),
-        },
-        {
-            "text": t(
-                "Ancient Ritual commence en jeu et ne peut pas la quitter",
-                "Ancient Ritual starts in play and cannot leave it",
-            ),
-            "cards": ["45163"],
-        },
-        {
-            "text": t(
-                "Apocalypse commence sous sa forme BIOMORPH. Changer de forme ne réinitialise "
-                "ni ses points de vie ni ses attachements",
-                "Apocalypse starts in his BIOMORPH form. Changing form resets neither his hit "
-                "points nor his attachments",
-            ),
-            "cards": ["45184a"],
         },
     ] + [{"include": "expertHp"}],
     "onVictory": {
@@ -437,8 +403,8 @@ scenarios.append({
                 "id": "professorSaved",
                 "type": "boolean",
                 "label": t(
-                    "Protect the Professor a-t-elle été vaincue ? Elle seule décide de la campagne",
-                    "Was Protect the Professor defeated? It alone decides the campaign",
+                    "Protect the Professor a-t-elle été vaincue ?",
+                    "Was Protect the Professor defeated?",
                 ),
             },
         ],

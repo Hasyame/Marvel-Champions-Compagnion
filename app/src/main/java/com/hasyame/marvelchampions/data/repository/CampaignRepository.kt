@@ -515,21 +515,29 @@ class CampaignRepository @Inject constructor(
             // twice in the same setup.
             var state = run.state
             for (definition in scenario.campaignSetup.mapNotNull { it.draw }) {
-                if (CampaignEngine.drawnCard(state, scenarioId, definition.id) != null) {
+                if (CampaignEngine.drawnCards(state, scenarioId, definition.id).isNotEmpty()) {
                     continue
                 }
-                val code = CampaignEngine.drawPool(definition, state).randomOrNull() ?: continue
+                // Shuffled rather than picked one at a time: a draw of several
+                // is an arrangement, and the order it comes out in is the order
+                // the cards are set out in.
+                val codes = CampaignEngine.drawPool(definition, state)
+                    .shuffled()
+                    .take(definition.count.coerceAtLeast(1))
+                if (codes.isEmpty()) {
+                    continue
+                }
                 val event = CampaignEvent.SetupDrawn(
                     id = UUID.randomUUID().toString(),
                     timestamp = System.currentTimeMillis(),
                     scenarioId = scenarioId,
                     drawId = definition.id,
-                    cardCode = code,
+                    cardCodes = codes,
                 )
                 append(runId, event)
                 state = state.copy(
                     draws = state.draws + (
-                        scenarioId to (state.draws[scenarioId].orEmpty() + (definition.id to code))
+                        scenarioId to (state.draws[scenarioId].orEmpty() + (definition.id to codes))
                         ),
                 )
                 drawn = true

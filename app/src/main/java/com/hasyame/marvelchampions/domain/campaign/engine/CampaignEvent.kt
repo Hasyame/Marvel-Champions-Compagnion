@@ -87,7 +87,8 @@ sealed interface CampaignEvent {
         override val timestamp: Long,
         val scenarioId: String,
         val drawId: String,
-        val cardCode: String,
+        /** In the order drawn, which is the order they are set out in. */
+        val cardCodes: List<String>,
     ) : CampaignEvent
 
     /** Any hand adjustment. Logged as such so it never looks like a rules result. */

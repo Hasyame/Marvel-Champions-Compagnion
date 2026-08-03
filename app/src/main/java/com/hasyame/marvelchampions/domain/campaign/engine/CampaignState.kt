@@ -31,7 +31,7 @@ data class CampaignState(
      * code. Cleared when the scenario is finished, so replaying after a defeat
      * draws afresh rather than repeating the setup that just went wrong.
      */
-    val draws: Map<String, Map<String, String>> = emptyMap(),
+    val draws: Map<String, Map<String, List<String>>> = emptyMap(),
 
     val currentScenarioId: String? = null,
     val completedScenarios: List<ScenarioResult> = emptyList(),
