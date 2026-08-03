@@ -119,10 +119,15 @@ class BundledCampaignsTest {
             template.scenarios.forEach { scenario ->
                 scenario.campaignSetup.forEach { step ->
                     listOfNotNull(step.text.fr, step.text.en).forEach { text ->
-                        assertTrue(
-                            "$name/${scenario.id} setup step reads like a rule: \"$text\"",
-                            text.length <= MAX_STEP_LENGTH,
-                        )
+                        // Per line, not per step: a step may lay out a short
+                        // table — the four difficulty modes, say — and that is
+                        // still setup rather than a paragraph of rules.
+                        text.lines().forEach { line ->
+                            assertTrue(
+                                "$name/${scenario.id} setup line reads like a rule: \"$line\"",
+                                line.length <= MAX_STEP_LENGTH,
+                            )
+                        }
                     }
                 }
             }

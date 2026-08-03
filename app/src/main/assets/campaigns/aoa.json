@@ -44,27 +44,20 @@
     "text": {
      "fr": "Choisir Standard I ou Standard III (identique pour tous les scénarios)",
      "en": "Choose Standard I or Standard III (same for every scenario)"
-    },
-    "cards": [
-     "45075a"
-    ]
+    }
    }
   ],
   "missions": [
    {
     "text": {
-     "fr": "Mélanger le set Age of Apocalypse dans le deck rencontre",
-     "en": "Shuffle the Age of Apocalypse set into the encounter deck"
-    },
-    "cards": [
-     "45164",
-     "45165"
-    ]
+     "fr": "Mélanger le set modulaire Age of Apocalypse dans le deck rencontre",
+     "en": "Shuffle the Age of Apocalypse modular set into the encounter deck"
+    }
    },
    {
     "text": {
-     "fr": "Placer cette mission dans la zone de mission — voir sa mise en place dans le journal",
-     "en": "Put this MISSION side scheme in the mission area — see its setup in the log"
+     "fr": "Jouer avec cette mission et suivre sa mise en place dans le journal de campagne",
+     "en": "Play with this MISSION side scheme and follow its setup in the campaign log"
     },
     "draw": {
      "id": "mission",
@@ -79,8 +72,8 @@
    },
    {
     "text": {
-     "fr": "Placer cet Overseer dans la zone de mission, avec la carte Mission Rules à côté",
-     "en": "Put this OVERSEER minion in the mission area, Mission Rules card beside it"
+     "fr": "Ajouter cet Overseer à la zone de mission et poser la carte Mission Rules à côté",
+     "en": "Add this OVERSEER minion to the mission area and put Mission Rules beside it"
     },
     "draw": {
      "id": "overseer",
@@ -96,8 +89,8 @@
    },
    {
     "text": {
-     "fr": "Le premier joueur prend ce soutien, face MISSION visible",
-     "en": "First player takes this support, MISSION side faceup"
+     "fr": "Le premier joueur prend le contrôle de ce soutien, face MISSION visible",
+     "en": "First player takes control of this support card, MISSION side faceup"
     },
     "cards": [
      "45171a"
@@ -194,17 +187,8 @@
     },
     {
      "text": {
-      "fr": "Mettre Gene Pool en jeu",
-      "en": "Put Gene Pool into play"
-     },
-     "cards": [
-      "45071"
-     ]
-    },
-    {
-     "text": {
-      "fr": "Placer la menace par joueur sur Gene Pool — Escarmouche 0, Standard 1, Expert 2, Héroïque 3",
-      "en": "Place threat per player on Gene Pool — Skirmish 0, Standard 1, Expert 2, Heroic 3"
+      "fr": "Mettre Gene Pool en jeu et y placer la menace de la difficulté choisie :\n  Escarmouche : 0\n  Standard : 1 par joueur\n  Expert : 2 par joueur\n  Héroïque : 3 par joueur",
+      "en": "Put Gene Pool into play and place the threat for your difficulty on it:\n  Skirmish: 0\n  Standard: 1 per player\n  Expert: 2 per player\n  Heroic: 3 per player"
      },
      "cards": [
       "45071"
@@ -745,18 +729,14 @@
     },
     {
      "text": {
-      "fr": "Mélanger le set Age of Apocalypse dans le deck rencontre",
-      "en": "Shuffle the Age of Apocalypse set into the encounter deck"
-     },
-     "cards": [
-      "45164",
-      "45165"
-     ]
+      "fr": "Mélanger le set modulaire Age of Apocalypse dans le deck rencontre",
+      "en": "Shuffle the Age of Apocalypse modular set into the encounter deck"
+     }
     },
     {
      "text": {
-      "fr": "Placer cette mission dans la zone de mission — voir sa mise en place dans le journal",
-      "en": "Put this MISSION side scheme in the mission area — see its setup in the log"
+      "fr": "Jouer avec cette mission et suivre sa mise en place dans le journal de campagne",
+      "en": "Play with this MISSION side scheme and follow its setup in the campaign log"
      },
      "cards": [
       "45170a"
@@ -764,8 +744,8 @@
     },
     {
      "text": {
-      "fr": "Placer cet Overseer dans la zone de mission, avec la carte Mission Rules à côté",
-      "en": "Put this OVERSEER minion in the mission area, Mission Rules card beside it"
+      "fr": "Ajouter cet Overseer à la zone de mission et poser la carte Mission Rules à côté",
+      "en": "Add this OVERSEER minion to the mission area and put Mission Rules beside it"
      },
      "draw": {
       "id": "overseer",
@@ -781,8 +761,8 @@
     },
     {
      "text": {
-      "fr": "Le premier joueur prend ce soutien, face MISSION visible",
-      "en": "First player takes this support, MISSION side faceup"
+      "fr": "Le premier joueur prend le contrôle de ce soutien, face MISSION visible",
+      "en": "First player takes control of this support card, MISSION side faceup"
      },
      "cards": [
       "45171a"

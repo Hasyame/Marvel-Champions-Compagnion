@@ -25,7 +25,6 @@ def standard_iii_step():
             "Choisir Standard I ou Standard III (identique pour tous les scénarios)",
             "Choose Standard I or Standard III (same for every scenario)",
         ),
-        "cards": [PURSUED_BY_THE_PAST],
     }
 
 
@@ -34,29 +33,28 @@ def mission_steps(scenario_number):
     return [
         {
             "text": t(
-                "Mélanger le set Age of Apocalypse dans le deck rencontre",
-                "Shuffle the Age of Apocalypse set into the encounter deck",
+                "Mélanger le set modulaire Age of Apocalypse dans le deck rencontre",
+                "Shuffle the Age of Apocalypse modular set into the encounter deck",
             ),
-            "cards": AOA_MODULAR,
         },
         {
             "text": t(
-                "Placer cette mission dans la zone de mission — voir sa mise en place dans le journal",
-                "Put this MISSION side scheme in the mission area — see its setup in the log",
+                "Jouer avec cette mission et suivre sa mise en place dans le journal de campagne",
+                "Play with this MISSION side scheme and follow its setup in the campaign log",
             ),
             "draw": {"id": "mission", "from": MISSIONS, "excluding": "missionsUsed"},
         },
         {
             "text": t(
-                "Placer cet Overseer dans la zone de mission, avec la carte Mission Rules à côté",
-                "Put this OVERSEER minion in the mission area, Mission Rules card beside it",
+                "Ajouter cet Overseer à la zone de mission et poser la carte Mission Rules à côté",
+                "Add this OVERSEER minion to the mission area and put Mission Rules beside it",
             ),
             "draw": {"id": "overseer", "from": OVERSEERS, "excluding": "overseersDefeated"},
         },
         {
             "text": t(
-                "Le premier joueur prend ce soutien, face MISSION visible",
-                "First player takes this support, MISSION side faceup",
+                "Le premier joueur prend le contrôle de ce soutien, face MISSION visible",
+                "First player takes control of this support card, MISSION side faceup",
             ),
             "cards": [MISSION_TEAM],
         },
@@ -178,17 +176,16 @@ scenarios.append({
         {"include": "standardIII"},
         {
             "text": t(
-                "Mettre Gene Pool en jeu",
-                "Put Gene Pool into play",
-            ),
-            "cards": ["45071"],
-        },
-        {
-            "text": t(
-                "Placer la menace par joueur sur Gene Pool — "
-                "Escarmouche 0, Standard 1, Expert 2, Héroïque 3",
-                "Place threat per player on Gene Pool — "
-                "Skirmish 0, Standard 1, Expert 2, Heroic 3",
+                "Mettre Gene Pool en jeu et y placer la menace de la difficulté choisie :\n"
+                "  Escarmouche : 0\n"
+                "  Standard : 1 par joueur\n"
+                "  Expert : 2 par joueur\n"
+                "  Héroïque : 3 par joueur",
+                "Put Gene Pool into play and place the threat for your difficulty on it:\n"
+                "  Skirmish: 0\n"
+                "  Standard: 1 per player\n"
+                "  Expert: 2 per player\n"
+                "  Heroic: 3 per player",
             ),
             "cards": ["45071"],
         },
@@ -364,29 +361,28 @@ scenarios.append({
         },
         {
             "text": t(
-                "Mélanger le set Age of Apocalypse dans le deck rencontre",
-                "Shuffle the Age of Apocalypse set into the encounter deck",
+                "Mélanger le set modulaire Age of Apocalypse dans le deck rencontre",
+                "Shuffle the Age of Apocalypse modular set into the encounter deck",
             ),
-            "cards": AOA_MODULAR,
         },
         {
             "text": t(
-                "Placer cette mission dans la zone de mission — voir sa mise en place dans le journal",
-                "Put this MISSION side scheme in the mission area — see its setup in the log",
+                "Jouer avec cette mission et suivre sa mise en place dans le journal de campagne",
+                "Play with this MISSION side scheme and follow its setup in the campaign log",
             ),
             "cards": [PROTECT_THE_PROFESSOR],
         },
         {
             "text": t(
-                "Placer cet Overseer dans la zone de mission, avec la carte Mission Rules à côté",
-                "Put this OVERSEER minion in the mission area, Mission Rules card beside it",
+                "Ajouter cet Overseer à la zone de mission et poser la carte Mission Rules à côté",
+                "Add this OVERSEER minion to the mission area and put Mission Rules beside it",
             ),
             "draw": {"id": "overseer", "from": OVERSEERS, "excluding": "overseersDefeated"},
         },
         {
             "text": t(
-                "Le premier joueur prend ce soutien, face MISSION visible",
-                "First player takes this support, MISSION side faceup",
+                "Le premier joueur prend le contrôle de ce soutien, face MISSION visible",
+                "First player takes control of this support card, MISSION side faceup",
             ),
             "cards": [MISSION_TEAM],
         },

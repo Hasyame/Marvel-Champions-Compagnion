@@ -340,7 +340,13 @@ class CampaignRepository @Inject constructor(
                     setup.villainDeck.values.forEach { addAll(it) }
                     addAll(setup.mainScheme)
                 }
-                scenario.campaignSetup.forEach { addAll(it.cards) }
+                scenario.campaignSetup.forEach { step ->
+                    addAll(step.cards)
+                    // Everything a draw might come up with. Without these the
+                    // card the app picked had no name to show and fell back to
+                    // its code, which is the one thing a player cannot read.
+                    step.draw?.let { addAll(it.from) }
+                }
                 listOfNotNull(scenario.onVictory, scenario.onDefeat).forEach { outcome ->
                     outcome.prompts.forEach { addAll(it.cards) }
                 }
