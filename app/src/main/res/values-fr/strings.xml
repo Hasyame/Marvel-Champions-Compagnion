@@ -422,4 +422,23 @@
     <string name="plays_stat_streak">Série en cours</string>
     <string name="plays_stat_best_streak">Meilleure série</string>
     <string name="plays_stat_campaign">Campagne</string>
+    <string name="randomizer_new_game">Créer ma partie</string>
+    <string name="session_title">Nouvelle partie</string>
+    <string name="session_scenario">Scénario</string>
+    <string name="session_difficulty">Difficulté</string>
+    <string name="session_hero">Ajouter un héros</string>
+    <string name="session_aspect">…avec quel aspect ?</string>
+    <string name="session_table">À la table</string>
+    <string name="session_start">Commencer la partie</string>
+    <string name="session_pause">Pause</string>
+    <string name="session_resume">Reprendre</string>
+    <string name="session_won">Victoire</string>
+    <string name="session_lost">Défaite</string>
+    <string name="session_saved_title">Partie enregistrée</string>
+    <string name="session_saved">Enregistrée dans votre historique.</string>
+    <string name="session_saved_sent">Enregistrée et envoyée sur BoardGameGeek.</string>
+    <string name="session_saved_can_send">Enregistrée. Vous pouvez l\'envoyer sur BoardGameGeek depuis l\'écran des parties.</string>
+    <string name="session_saved_not_sent">Enregistrée. Non envoyée sur BoardGameGeek : %1$s</string>
+    <string name="session_see_stats">Voir mes stats</string>
+    <string name="session_another">Rejouer</string>
 </resources>

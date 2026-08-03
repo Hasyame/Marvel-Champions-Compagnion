@@ -56,6 +56,7 @@ import com.hasyame.marvelchampions.ui.plays.PlaysViewModel
 @Composable
 fun RandomizerScreen(
     onOpenPlays: () -> Unit,
+    onNewGame: () -> Unit,
     viewModel: RandomizerViewModel = hiltViewModel(),
     playsViewModel: PlaysViewModel = hiltViewModel(),
 ) {
@@ -121,6 +122,9 @@ fun RandomizerScreen(
                             modifier = Modifier.weight(1f),
                         ) {
                             Text(stringResource(R.string.randomizer_log_play))
+                        }
+                        OutlinedButton(onClick = onNewGame, modifier = Modifier.weight(1f)) {
+                            Text(stringResource(R.string.randomizer_new_game))
                         }
                         OutlinedButton(onClick = onOpenPlays, modifier = Modifier.weight(1f)) {
                             Text(stringResource(R.string.randomizer_open_plays))

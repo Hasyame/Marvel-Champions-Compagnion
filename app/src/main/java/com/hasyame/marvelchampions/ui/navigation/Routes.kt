@@ -83,3 +83,7 @@ data object AboutRoute
 /** Logged games and what they add up to. */
 @Serializable
 data object PlaysRoute
+
+/** A game the player sets up and the app times. */
+@Serializable
+data object GameSessionRoute

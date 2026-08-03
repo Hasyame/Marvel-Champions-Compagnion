@@ -1,0 +1,170 @@
+package com.hasyame.marvelchampions.ui.plays
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.hasyame.marvelchampions.data.db.entity.PlayEntity
+import com.hasyame.marvelchampions.data.repository.PlayRecorded
+import com.hasyame.marvelchampions.data.repository.PlayRepository
+import com.hasyame.marvelchampions.data.repository.RandomizerNames
+import com.hasyame.marvelchampions.data.repository.RandomizerRepository
+import com.hasyame.marvelchampions.data.settings.AppPreferences
+import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
+import com.hasyame.marvelchampions.domain.randomizer.RandomizerPools
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+/** One player at the table: who they are and which aspect they brought. */
+data class SessionHero(val heroCode: String, val aspect: String)
+
+/** Which half of the screen is showing. */
+enum class SessionPhase {
+    /** Choosing the game. */
+    SETUP,
+
+    /** Clock running. */
+    PLAYING,
+}
+
+data class GameSessionUiState(
+    val phase: SessionPhase = SessionPhase.SETUP,
+    val pools: RandomizerPools = RandomizerPools(),
+    val names: RandomizerNames = RandomizerNames(),
+    val scenarioCode: String? = null,
+    val difficulty: String = "standard",
+    val heroes: List<SessionHero> = emptyList(),
+    val timer: TimerState = TimerState(),
+    val elapsedMillis: Long = 0,
+    val isLoading: Boolean = true,
+) {
+    /** A game needs somewhere to happen and someone to play it. */
+    val canStart: Boolean get() = scenarioCode != null && heroes.isNotEmpty()
+}
+
+/**
+ * A game the player sets up themselves, timed by the app.
+ *
+ * The timer is the point. Asking someone how long a game took after the fact
+ * gets a guess, and a guess is a poor thing to build years of statistics on;
+ * a clock that ran while they played does not need remembering.
+ */
+@HiltViewModel
+class GameSessionViewModel @Inject constructor(
+    private val randomizerRepository: RandomizerRepository,
+    private val playRepository: PlayRepository,
+    private val preferences: AppPreferences,
+) : ViewModel() {
+
+    private val state = MutableStateFlow(GameSessionUiState())
+    val uiState: StateFlow<GameSessionUiState> = state.asStateFlow()
+
+    private val finished = MutableStateFlow<PlayRecorded?>(null)
+    val recorded: StateFlow<PlayRecorded?> = finished.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            val locale = preferences.currentCardLocale()
+            state.value = state.value.copy(
+                pools = randomizerRepository.loadPools(locale),
+                names = randomizerRepository.loadNames(locale),
+                isLoading = false,
+            )
+        }
+    }
+
+    fun setScenario(code: String) {
+        state.value = state.value.copy(scenarioCode = code)
+    }
+
+    fun setDifficulty(difficulty: String) {
+        state.value = state.value.copy(difficulty = difficulty)
+    }
+
+    fun addHero(heroCode: String, aspect: String) {
+        state.value = state.value.copy(
+            heroes = state.value.heroes + SessionHero(heroCode, aspect),
+        )
+    }
+
+    fun removeHero(index: Int) {
+        state.value = state.value.copy(
+            heroes = state.value.heroes.filterIndexed { at, _ -> at != index },
+        )
+    }
+
+    fun start() {
+        if (!state.value.canStart) {
+            return
+        }
+        state.value = state.value.copy(
+            phase = SessionPhase.PLAYING,
+            timer = TimerState().start(System.currentTimeMillis()),
+        )
+    }
+
+    /** Called on a ticker while the clock runs, so the display keeps up. */
+    fun tick() {
+        val timer = state.value.timer
+        if (!timer.isRunning) {
+            return
+        }
+        state.value = state.value.copy(elapsedMillis = timer.elapsedAt(System.currentTimeMillis()))
+    }
+
+    fun pause() = updateTimer { it.pause(System.currentTimeMillis()) }
+
+    fun resume() = updateTimer { it.start(System.currentTimeMillis()) }
+
+    private fun updateTimer(transform: (TimerState) -> TimerState) {
+        val next = transform(state.value.timer)
+        state.value = state.value.copy(
+            timer = next,
+            elapsedMillis = next.elapsedAt(System.currentTimeMillis()),
+        )
+    }
+
+    /** Ends the game and files it. The measured time is used, not a typed one. */
+    fun finish(won: Boolean) {
+        val current = state.value
+        val scenarioCode = current.scenarioCode ?: return
+        val first = current.heroes.firstOrNull() ?: return
+        val elapsed = current.timer.elapsedAt(System.currentTimeMillis())
+
+        viewModelScope.launch {
+            finished.value = playRepository.record(
+                PlayEntity(
+                    id = playRepository.newPlayId(),
+                    playedAt = System.currentTimeMillis(),
+                    scenarioCode = scenarioCode,
+                    scenarioName = current.names.scenarios[scenarioCode] ?: scenarioCode,
+                    difficulty = current.difficulty,
+                    heroCode = first.heroCode,
+                    heroName = current.names.heroes[first.heroCode] ?: first.heroCode,
+                    aspects = current.heroes.map { it.aspect }.distinct().joinToString(", "),
+                    otherHeroes = current.heroes.drop(1)
+                        .joinToString(", ") { current.names.heroes[it.heroCode] ?: it.heroCode },
+                    players = current.heroes.size,
+                    won = won,
+                    elapsedMillis = elapsed,
+                ),
+            )
+        }
+    }
+
+    /** Back to setup, keeping the choices so a rematch is one tap. */
+    fun reset() {
+        finished.value = null
+        state.value = state.value.copy(
+            phase = SessionPhase.SETUP,
+            timer = TimerState(),
+            elapsedMillis = 0,
+        )
+    }
+
+    fun dismissRecorded() {
+        finished.value = null
+    }
+}

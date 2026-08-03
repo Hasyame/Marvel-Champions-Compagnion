@@ -18,6 +18,7 @@ import com.hasyame.marvelchampions.ui.decks.DeckDetailScreen
 import com.hasyame.marvelchampions.ui.decks.DeckEditorScreen
 import com.hasyame.marvelchampions.ui.decks.DecksScreen
 import com.hasyame.marvelchampions.ui.decks.NewDeckScreen
+import com.hasyame.marvelchampions.ui.plays.GameSessionScreen
 import com.hasyame.marvelchampions.ui.plays.PlaysScreen
 import com.hasyame.marvelchampions.ui.randomizer.RandomizerScreen
 import com.hasyame.marvelchampions.ui.settings.AboutScreen
@@ -138,10 +139,19 @@ fun MarvelChampionsNavHost(
         }
         navigation<RandomizerGraph>(startDestination = RandomizerRoute) {
             composable<RandomizerRoute> {
-                RandomizerScreen(onOpenPlays = { navController.navigate(PlaysRoute) })
+                RandomizerScreen(
+                    onOpenPlays = { navController.navigate(PlaysRoute) },
+                    onNewGame = { navController.navigate(GameSessionRoute) },
+                )
             }
             composable<PlaysRoute> {
                 PlaysScreen(onBack = { navController.popBackStack() })
+            }
+            composable<GameSessionRoute> {
+                GameSessionScreen(
+                    onBack = { navController.popBackStack() },
+                    onOpenPlays = { navController.navigate(PlaysRoute) },
+                )
             }
         }
         navigation<SettingsGraph>(startDestination = SettingsRoute) {
