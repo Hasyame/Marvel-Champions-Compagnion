@@ -33,4 +33,8 @@ interface SavedDeckDao {
 
     @Query("SELECT COUNT(*) FROM saved_decks")
     suspend fun count(): Int
+
+    /** For a restore, which replaces rather than merges. */
+    @Query("DELETE FROM saved_decks")
+    suspend fun deleteAll()
 }

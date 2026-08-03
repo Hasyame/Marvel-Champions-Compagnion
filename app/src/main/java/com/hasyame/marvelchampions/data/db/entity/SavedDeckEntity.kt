@@ -1,5 +1,7 @@
 package com.hasyame.marvelchampions.data.db.entity
 
+import kotlinx.serialization.Serializable
+
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -14,6 +16,7 @@ import androidx.room.PrimaryKey
  * truth and can always be re-derived without another fetch.
  */
 @Entity(tableName = "saved_decks")
+@Serializable
 data class SavedDeckEntity(
     /** `decklist-12345` or `deck-12345`; the two id spaces are separate. */
     @PrimaryKey val id: String,

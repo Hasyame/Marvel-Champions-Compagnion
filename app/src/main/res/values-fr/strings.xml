@@ -459,4 +459,12 @@
     <string name="session_modular_sets">Sets modulaires</string>
     <string name="plays_delete_title">Supprimer cette partie ?</string>
     <string name="plays_delete_message">La partie contre %1$s sera retirée de votre historique et de vos statistiques. Cette action est irréversible et ne supprime rien sur BoardGameGeek.</string>
+    <string name="settings_backup">Sauvegarde</string>
+    <string name="settings_backup_summary">Cette application n\'a ni compte ni serveur : cet appareil contient donc l\'unique copie de votre collection, de vos decks, de vos campagnes et de votre historique. Enregistrez une sauvegarde ailleurs.</string>
+    <string name="settings_backup_export">Enregistrer une sauvegarde</string>
+    <string name="settings_backup_restore">Restaurer</string>
+    <string name="settings_restore_title">Restaurer cette sauvegarde ?</string>
+    <string name="settings_restore_contents">Enregistrée le %1$s.\n\nDecks : %2$d\nCampagnes : %3$d\nParties : %4$d\nExtensions possédées : %5$d</string>
+    <string name="settings_restore_warning">Cela remplace tout ce que contient actuellement l\'application. Tout ce qui ne figure pas dans la sauvegarde sera perdu, et l\'opération est irréversible.</string>
+    <string name="settings_restore_confirm">Remplacer mes données</string>
 </resources>

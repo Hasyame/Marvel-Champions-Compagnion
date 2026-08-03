@@ -1,5 +1,7 @@
 package com.hasyame.marvelchampions.data.db.entity
 
+import kotlinx.serialization.Serializable
+
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -64,6 +66,7 @@ data class PackTranslationEntity(
  * them before the API catches up.
  */
 @Entity(tableName = "owned_packs")
+@Serializable
 data class OwnedPackEntity(
     @PrimaryKey val packCode: String,
     val quantity: Int,

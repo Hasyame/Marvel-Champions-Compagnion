@@ -150,6 +150,18 @@ fun SettingsScreen(
             MusicSection(state = state, onMusicUrlChange = viewModel::setMusicUrl)
             HorizontalDivider()
 
+            BackupSection(
+                pendingRestore = viewModel.pendingRestore.collectAsStateWithLifecycle().value,
+                message = viewModel.backupMessage.collectAsStateWithLifecycle().value,
+                suggestedFileName = viewModel.suggestedBackupName,
+                onExport = viewModel::exportBackup,
+                onFileChosen = viewModel::openBackup,
+                onConfirmRestore = viewModel::confirmRestore,
+                onCancelRestore = viewModel::cancelRestore,
+                onDismissMessage = viewModel::dismissBackupMessage,
+            )
+            HorizontalDivider()
+
             BggSection(
                 state = state.bgg,
                 isVerifying = state.bggVerifying,

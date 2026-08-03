@@ -1,5 +1,7 @@
 package com.hasyame.marvelchampions.data.db.entity
 
+import kotlinx.serialization.Serializable
+
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -14,6 +16,7 @@ import androidx.room.PrimaryKey
  * progress is stored — storing it would let the two disagree.
  */
 @Entity(tableName = "campaign_runs")
+@Serializable
 data class CampaignRunEntity(
     @PrimaryKey val id: String,
     val templateId: String,
@@ -57,6 +60,7 @@ data class CampaignRunEntity(
     ],
     indices = [Index("runId"), Index("timestamp")],
 )
+@Serializable
 data class CampaignEventEntity(
     @PrimaryKey val id: String,
     val runId: String,

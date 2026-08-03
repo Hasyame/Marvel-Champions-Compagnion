@@ -5,6 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.data.sync.CardSyncManager
 import com.hasyame.marvelchampions.data.sync.CardSyncState
+import com.hasyame.marvelchampions.data.backup.Backup
+import com.hasyame.marvelchampions.data.backup.BackupRepository
+import com.hasyame.marvelchampions.data.backup.BackupResult
+import com.hasyame.marvelchampions.data.backup.BackupSummary
 import com.hasyame.marvelchampions.data.bgg.BggAccount
 import com.hasyame.marvelchampions.data.bgg.BggAccountState
 import com.hasyame.marvelchampions.data.bgg.BggClient
@@ -16,7 +20,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,6 +44,7 @@ class SettingsViewModel @Inject constructor(
     private val bggAccount: BggAccount,
     private val bggClient: BggClient,
     private val syncManager: CardSyncManager,
+    private val backupRepository: BackupRepository,
 ) : ViewModel() {
 
     /** Verifying and error are moments, not settings, so they are not persisted. */
@@ -112,6 +119,64 @@ class SettingsViewModel @Inject constructor(
 
     fun setBggMode(mode: BggReportingMode) {
         viewModelScope.launch { bggAccount.setMode(mode) }
+    }
+
+    val suggestedBackupName: String get() = backupRepository.suggestedFileName()
+
+    private val pendingBackup = MutableStateFlow<Backup?>(null)
+
+    /** What a chosen file contains, shown before anything is replaced. */
+    val pendingRestore: StateFlow<BackupSummary?> = pendingBackup
+        .map { it?.summary() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS), null)
+
+    private val backupMessages = MutableStateFlow<String?>(null)
+    val backupMessage: StateFlow<String?> = backupMessages.asStateFlow()
+
+    fun exportBackup(destination: android.net.Uri) {
+        viewModelScope.launch {
+            backupMessages.value = when (val result = backupRepository.export(destination)) {
+                is BackupResult.Exported -> "Backup saved."
+                is BackupResult.Failed -> "Could not save the backup: ${result.detail}"
+                else -> null
+            }
+        }
+    }
+
+    /** Reads the file but changes nothing, so the restore can be confirmed. */
+    fun openBackup(source: android.net.Uri) {
+        viewModelScope.launch {
+            backupRepository.peek(source).fold(
+                onSuccess = { pendingBackup.value = it },
+                onFailure = {
+                    backupMessages.value = "That file is not a backup: ${it.message}"
+                },
+            )
+        }
+    }
+
+    fun confirmRestore() {
+        val backup = pendingBackup.value ?: return
+        pendingBackup.value = null
+        viewModelScope.launch {
+            backupMessages.value = when (val result = backupRepository.restore(backup)) {
+                is BackupResult.Restored ->
+                    "Restored ${result.summary.decks} decks, " +
+                        "${result.summary.campaigns} campaigns and " +
+                        "${result.summary.plays} games."
+
+                is BackupResult.Failed -> "Could not restore: ${result.detail}"
+                else -> null
+            }
+        }
+    }
+
+    fun cancelRestore() {
+        pendingBackup.value = null
+    }
+
+    fun dismissBackupMessage() {
+        backupMessages.value = null
     }
 
     fun setCardLocale(locale: CardLocale) {

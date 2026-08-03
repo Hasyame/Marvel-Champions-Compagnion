@@ -73,6 +73,13 @@ interface PlayDao {
      */
     @Query("SELECT aspects, won, elapsedMillis FROM plays")
     fun observeAspectRows(): Flow<List<AspectRow>>
+
+    /** For a restore, which replaces rather than merges. */
+    @Query("DELETE FROM plays")
+    suspend fun deleteAll()
+
+    @Query("SELECT * FROM plays")
+    suspend fun getAllPlays(): List<PlayEntity>
 }
 
 data class AspectRow(val aspects: String, val won: Boolean, val elapsedMillis: Long)

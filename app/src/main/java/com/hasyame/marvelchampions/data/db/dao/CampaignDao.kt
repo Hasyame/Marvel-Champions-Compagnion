@@ -84,4 +84,12 @@ interface CampaignDao {
 
     @Query("SELECT COUNT(*) FROM campaign_events WHERE runId = :runId")
     suspend fun countEvents(runId: String): Int
+
+    /**
+     * For a restore, which replaces rather than merges.
+     *
+     * Events cascade with their run, so this empties both tables.
+     */
+    @Query("DELETE FROM campaign_runs")
+    suspend fun deleteAllRuns()
 }

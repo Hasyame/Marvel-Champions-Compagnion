@@ -441,4 +441,12 @@
     <string name="session_modular_sets">Modular sets</string>
     <string name="plays_delete_title">Delete this game?</string>
     <string name="plays_delete_message">The game against %1$s will be removed from your history and your statistics. This cannot be undone, and it does not remove anything from BoardGameGeek.</string>
+    <string name="settings_backup">Backup</string>
+    <string name="settings_backup_summary">This app has no account and no server, so this device holds the only copy of your collection, decks, campaigns and play history. Save a backup somewhere else.</string>
+    <string name="settings_backup_export">Save a backup</string>
+    <string name="settings_backup_restore">Restore</string>
+    <string name="settings_restore_title">Restore this backup?</string>
+    <string name="settings_restore_contents">Saved %1$s.\n\nDecks: %2$d\nCampaigns: %3$d\nGames: %4$d\nOwned packs: %5$d</string>
+    <string name="settings_restore_warning">This replaces everything currently in the app. Anything not in the backup will be lost, and it cannot be undone.</string>
+    <string name="settings_restore_confirm">Replace my data</string>
 </resources>

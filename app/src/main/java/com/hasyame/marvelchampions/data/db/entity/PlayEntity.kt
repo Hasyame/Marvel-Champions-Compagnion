@@ -1,5 +1,7 @@
 package com.hasyame.marvelchampions.data.db.entity
 
+import kotlinx.serialization.Serializable
+
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
@@ -25,6 +27,7 @@ import androidx.room.PrimaryKey
         Index("scenarioCode"),
     ],
 )
+@Serializable
 data class PlayEntity(
     @PrimaryKey val id: String,
 

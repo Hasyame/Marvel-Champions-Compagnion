@@ -110,4 +110,8 @@ interface OwnedPackDao {
         clear()
         upsertAll(ownedPacks)
     }
+
+    /** For a restore, which replaces rather than merges. */
+    @Query("DELETE FROM owned_packs")
+    suspend fun clearOwned()
 }

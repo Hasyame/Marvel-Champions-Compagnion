@@ -1,5 +1,7 @@
 package com.hasyame.marvelchampions.data.db.entity
 
+import kotlinx.serialization.Serializable
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -13,6 +15,7 @@ import androidx.room.PrimaryKey
  * hero, so a join would buy nothing.
  */
 @Entity(tableName = "randomizer_history")
+@Serializable
 data class RandomizerHistoryEntity(
     @PrimaryKey val id: String,
     val createdAt: Long,
