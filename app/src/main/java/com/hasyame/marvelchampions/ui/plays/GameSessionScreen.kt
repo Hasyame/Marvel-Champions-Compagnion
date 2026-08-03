@@ -67,6 +67,14 @@ fun GameSessionScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val recorded by viewModel.recorded.collectAsStateWithLifecycle()
 
+    // Leaving mid-game throws away a running clock and everything set up, so
+    // it asks first. Only while playing: backing out of the setup loses nothing
+    // worth confirming.
+    var confirmLeave by remember { mutableStateOf(false) }
+    val leave = {
+        if (state.phase == SessionPhase.PLAYING) confirmLeave = true else onBack()
+    }
+
     // A draw handed over from the randomiser, applied once.
     LaunchedEffect(scenarioCode, difficulty, heroes) {
         viewModel.prefill(scenarioCode, difficulty, heroes)
@@ -87,7 +95,7 @@ fun GameSessionScreen(
                 colors = comicTopBarColors(),
                 title = { Text(stringResource(R.string.session_title)) },
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
+                    IconButton(onClick = leave) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.action_back),
@@ -115,6 +123,27 @@ fun GameSessionScreen(
                 modifier = Modifier.padding(padding),
             )
         }
+    }
+
+    if (confirmLeave) {
+        AlertDialog(
+            onDismissRequest = { confirmLeave = false },
+            title = { Text(stringResource(R.string.session_leave_title)) },
+            text = { Text(stringResource(R.string.session_leave_message)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        confirmLeave = false
+                        onBack()
+                    },
+                ) { Text(stringResource(R.string.session_leave_yes)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmLeave = false }) {
+                    Text(stringResource(R.string.session_leave_no))
+                }
+            },
+        )
     }
 
     recorded?.let { outcome ->

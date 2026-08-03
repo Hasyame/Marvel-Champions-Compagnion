@@ -135,6 +135,7 @@ fun MarvelChampionsNavHost(
             }
             composable<CampaignRoute> {
                 CampaignScreen(
+                    onBack = { navController.popBackStack() },
                     onOpenRun = { runId -> navController.navigate(CampaignRunRoute(runId)) },
                     onOpenRecord = { runId -> navController.navigate(CampaignRecordRoute(runId)) },
                     onStartCampaign = { navController.navigate(StartCampaignRoute) },

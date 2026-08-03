@@ -445,4 +445,8 @@
     <string name="play_campaign">Campagne</string>
     <string name="play_campaign_detail">Démarrez une campagne, ou ouvrez-en une terminée.</string>
     <string name="randomizer_play_this">Jouer cette partie</string>
+    <string name="session_leave_title">Quitter cette partie ?</string>
+    <string name="session_leave_message">Le chronomètre tourne. Quitter maintenant abandonne la partie et rien ne sera enregistré.</string>
+    <string name="session_leave_yes">Abandonner</string>
+    <string name="session_leave_no">Continuer à jouer</string>
 </resources>

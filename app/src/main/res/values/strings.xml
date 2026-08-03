@@ -427,4 +427,8 @@
     <string name="play_campaign">Campaign</string>
     <string name="play_campaign_detail">Start a campaign, or open one you have finished.</string>
     <string name="randomizer_play_this">Play this game</string>
+    <string name="session_leave_title">Leave this game?</string>
+    <string name="session_leave_message">The clock is running. Leaving now discards the game and nothing is recorded.</string>
+    <string name="session_leave_yes">Discard it</string>
+    <string name="session_leave_no">Keep playing</string>
 </resources>

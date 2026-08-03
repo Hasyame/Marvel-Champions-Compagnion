@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.AlertDialog
@@ -49,6 +50,7 @@ import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CampaignScreen(
+    onBack: () -> Unit,
     onOpenRun: (String) -> Unit,
     onOpenRecord: (String) -> Unit,
     onStartCampaign: () -> Unit,
@@ -67,6 +69,16 @@ fun CampaignScreen(
             TopAppBar(
                 colors = comicTopBarColors(),
                 title = { Text(stringResource(R.string.destination_campaign)) },
+                // Reached from the Play hub since Campaign stopped being a tab,
+                // so it needs a way back like any other pushed screen.
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.action_back),
+                        )
+                    }
+                },
             )
         },
         floatingActionButton = {
