@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -424,6 +425,25 @@ private fun PlayingPhase(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
+                }
+            }
+
+            // Only at a table with more than one player, and drawn once when
+            // the game started rather than here — a value computed during
+            // composition would pick a new player on every recomposition, so
+            // the clock ticking would keep changing who goes first.
+            state.firstPlayerIndex?.let { index ->
+                val hero = state.heroes.getOrNull(index)
+                if (hero != null) {
+                    Text(
+                        text = stringResource(
+                            R.string.session_first_player,
+                            state.names.heroes[hero.heroCode] ?: hero.heroCode,
+                        ),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.Center,
+                    )
                 }
             }
 

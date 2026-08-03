@@ -472,4 +472,5 @@
     <string name="settings_images_running">Downloading %1$s</string>
     <string name="plays_players_solo">Solo</string>
     <string name="plays_players_group">Group</string>
+    <string name="session_first_player">First player: %1$s</string>
 </resources>

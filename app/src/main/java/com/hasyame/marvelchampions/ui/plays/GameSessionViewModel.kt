@@ -48,6 +48,11 @@ data class GameSessionUiState(
     /** Modular sets shuffled into the encounter deck. */
     val modularSetCodes: List<String> = emptyList(),
     val timer: TimerState = TimerState(),
+    /**
+     * Who takes the first turn, as an index into [heroes]. Drawn when the game
+     * starts and null in solo, where the question does not arise.
+     */
+    val firstPlayerIndex: Int? = null,
     val elapsedMillis: Long = 0,
     val isLoading: Boolean = true,
     /** True from the moment a result is tapped until it has been filed. */
@@ -155,13 +160,22 @@ class GameSessionViewModel @Inject constructor(
         )
     }
 
+    /**
+     * Starts the clock, and settles who goes first.
+     *
+     * The rules have the players decide that between them, which at a real
+     * table is a pause and a shrug. Drawn here instead, once, and only when
+     * there is more than one player.
+     */
     fun start() {
-        if (!state.value.canStart) {
+        val current = state.value
+        if (!current.canStart) {
             return
         }
-        state.value = state.value.copy(
+        state.value = current.copy(
             phase = SessionPhase.PLAYING,
             timer = TimerState().start(System.currentTimeMillis()),
+            firstPlayerIndex = if (current.heroes.size > 1) current.heroes.indices.random() else null,
         )
     }
 
@@ -270,6 +284,7 @@ class GameSessionViewModel @Inject constructor(
         state.value = state.value.copy(
             phase = SessionPhase.SETUP,
             timer = TimerState(),
+            firstPlayerIndex = null,
             elapsedMillis = 0,
             isFinishing = false,
         )
@@ -281,6 +296,7 @@ class GameSessionViewModel @Inject constructor(
         state.value = state.value.copy(
             phase = SessionPhase.SETUP,
             timer = TimerState(),
+            firstPlayerIndex = null,
             elapsedMillis = 0,
             // Cleared, or a rematch could never be finished.
             isFinishing = false,
