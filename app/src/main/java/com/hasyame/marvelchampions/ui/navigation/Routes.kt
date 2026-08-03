@@ -100,6 +100,17 @@ data object AboutRoute
 @Serializable
 data object PlaysRoute
 
-/** A game the player sets up and the app times. */
+/**
+ * A game the player sets up and the app times.
+ *
+ * The arguments let a randomiser draw hand its result straight over, so
+ * "play this now" does not mean "type all of that in again". Heroes travel as
+ * `code:aspect` pairs separated by commas, which survives a route argument
+ * where a list would not.
+ */
 @Serializable
-data object GameSessionRoute
+data class GameSessionRoute(
+    val scenarioCode: String? = null,
+    val difficulty: String? = null,
+    val heroes: String? = null,
+)

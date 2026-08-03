@@ -61,6 +61,8 @@ class GameSessionViewModel @Inject constructor(
     private val state = MutableStateFlow(GameSessionUiState())
     val uiState: StateFlow<GameSessionUiState> = state.asStateFlow()
 
+    private var prefilled = false
+
     private val finished = MutableStateFlow<PlayRecorded?>(null)
     val recorded: StateFlow<PlayRecorded?> = finished.asStateFlow()
 
@@ -73,6 +75,35 @@ class GameSessionViewModel @Inject constructor(
                 isLoading = false,
             )
         }
+    }
+
+    /**
+     * Fills the setup in from a randomiser draw.
+     *
+     * Applied once: a configuration change must not wipe choices the player
+     * has changed since arriving.
+     */
+    fun prefill(scenarioCode: String?, difficulty: String?, heroes: String?) {
+        if (prefilled) {
+            return
+        }
+        prefilled = true
+
+        val parsed = heroes.orEmpty().split(",")
+            .mapNotNull { pair ->
+                val parts = pair.split(":")
+                if (parts.size == 2 && parts[0].isNotBlank()) {
+                    SessionHero(parts[0], parts[1])
+                } else {
+                    null
+                }
+            }
+
+        state.value = state.value.copy(
+            scenarioCode = scenarioCode ?: state.value.scenarioCode,
+            difficulty = difficulty ?: state.value.difficulty,
+            heroes = parsed.ifEmpty { state.value.heroes },
+        )
     }
 
     fun setScenario(code: String) {

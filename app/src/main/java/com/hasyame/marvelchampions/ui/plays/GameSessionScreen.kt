@@ -58,11 +58,19 @@ import kotlinx.coroutines.delay
 @Composable
 fun GameSessionScreen(
     onBack: () -> Unit,
+    scenarioCode: String? = null,
+    difficulty: String? = null,
+    heroes: String? = null,
     onOpenPlays: () -> Unit,
     viewModel: GameSessionViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val recorded by viewModel.recorded.collectAsStateWithLifecycle()
+
+    // A draw handed over from the randomiser, applied once.
+    LaunchedEffect(scenarioCode, difficulty, heroes) {
+        viewModel.prefill(scenarioCode, difficulty, heroes)
+    }
 
     // Only while the clock is actually running, so a paused or finished game
     // is not waking the composition once a second for nothing.

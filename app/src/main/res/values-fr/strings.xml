@@ -410,19 +410,12 @@
     <string name="plays_send_yes">Envoyer</string>
     <string name="plays_send_no">Pas celle-ci</string>
     <string name="plays_send_short">Envoyer</string>
-    <string name="plays_log_title">Enregistrer cette partie</string>
-    <string name="plays_log_minutes">Durée de la partie (minutes)</string>
-    <string name="plays_log_win">Victoire</string>
-    <string name="plays_log_loss">Défaite</string>
-    <string name="randomizer_log_play">Enregistrer la partie</string>
-    <string name="randomizer_open_plays">Parties et stats</string>
     <string name="plays_stat_total_time">Temps total</string>
     <string name="plays_stat_average">Moyenne</string>
     <string name="plays_stat_longest">Plus longue</string>
     <string name="plays_stat_streak">Série en cours</string>
     <string name="plays_stat_best_streak">Meilleure série</string>
     <string name="plays_stat_campaign">Campagne</string>
-    <string name="randomizer_new_game">Créer ma partie</string>
     <string name="session_title">Nouvelle partie</string>
     <string name="session_scenario">Scénario</string>
     <string name="session_difficulty">Difficulté</string>
@@ -451,4 +444,5 @@
     <string name="play_own_detail">Choisissez tout vous-même. L\'application chronomètre la partie.</string>
     <string name="play_campaign">Campagne</string>
     <string name="play_campaign_detail">Démarrez une campagne, ou ouvrez-en une terminée.</string>
+    <string name="randomizer_play_this">Jouer cette partie</string>
 </resources>

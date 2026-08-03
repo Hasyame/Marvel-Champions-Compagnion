@@ -392,19 +392,12 @@
     <string name="plays_send_yes">Send</string>
     <string name="plays_send_no">Not this one</string>
     <string name="plays_send_short">Send</string>
-    <string name="plays_log_title">Log this game</string>
-    <string name="plays_log_minutes">How long did it take? (minutes)</string>
-    <string name="plays_log_win">We won</string>
-    <string name="plays_log_loss">We lost</string>
-    <string name="randomizer_log_play">Log this game</string>
-    <string name="randomizer_open_plays">Plays and stats</string>
     <string name="plays_stat_total_time">Total time</string>
     <string name="plays_stat_average">Average</string>
     <string name="plays_stat_longest">Longest</string>
     <string name="plays_stat_streak">Win streak</string>
     <string name="plays_stat_best_streak">Best streak</string>
     <string name="plays_stat_campaign">Campaign</string>
-    <string name="randomizer_new_game">Set up my own game</string>
     <string name="session_title">New game</string>
     <string name="session_scenario">Scenario</string>
     <string name="session_difficulty">Difficulty</string>
@@ -433,4 +426,5 @@
     <string name="play_own_detail">Choose everything yourself. The app times the game.</string>
     <string name="play_campaign">Campaign</string>
     <string name="play_campaign_detail">Start a campaign, or open one you have finished.</string>
+    <string name="randomizer_play_this">Play this game</string>
 </resources>

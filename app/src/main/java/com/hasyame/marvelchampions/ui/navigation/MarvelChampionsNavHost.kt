@@ -105,7 +105,7 @@ fun MarvelChampionsNavHost(
             composable<PlayRoute> {
                 PlayScreen(
                     onRandomDraw = { navController.navigate(RandomizerRoute) },
-                    onOwnSetup = { navController.navigate(GameSessionRoute) },
+                    onOwnSetup = { navController.navigate(GameSessionRoute()) },
                     onCampaigns = { navController.navigate(CampaignRoute) },
                     onResumeCampaign = { runId ->
                         navController.navigate(CampaignRunRoute(runId))
@@ -114,12 +114,18 @@ fun MarvelChampionsNavHost(
             }
             composable<RandomizerRoute> {
                 RandomizerScreen(
-                    onOpenPlays = { navController.navigate(PlaysRoute) },
-                    onNewGame = { navController.navigate(GameSessionRoute) },
+                    onBack = { navController.popBackStack() },
+                    onPlayDraw = { heroes ->
+                        navController.navigate(GameSessionRoute(heroes = heroes))
+                    },
                 )
             }
-            composable<GameSessionRoute> {
+            composable<GameSessionRoute> { entry ->
+                val args = entry.toRoute<GameSessionRoute>()
                 GameSessionScreen(
+                    scenarioCode = args.scenarioCode,
+                    difficulty = args.difficulty,
+                    heroes = args.heroes,
                     onBack = { navController.popBackStack() },
                     onOpenPlays = { navController.navigate(PlaysRoute) },
                 )
