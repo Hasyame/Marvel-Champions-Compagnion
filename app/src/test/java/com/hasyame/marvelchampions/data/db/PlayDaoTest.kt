@@ -43,6 +43,7 @@ class PlayDaoTest {
         aspects: String = "Justice",
         won: Boolean = true,
         at: Long = 1L,
+        elapsedMillis: Long = 0L,
     ) = PlayEntity(
         id = id,
         playedAt = at,
@@ -53,6 +54,7 @@ class PlayDaoTest {
         heroName = hero,
         aspects = aspects,
         won = won,
+        elapsedMillis = elapsedMillis,
     )
 
     @Test
@@ -124,5 +126,17 @@ class PlayDaoTest {
 
         assertEquals(1, dao.observeCount().first())
         assertEquals(1, dao.observeByHero().first().single().won)
+    }
+
+    @Test
+    fun `time played is totalled per hero`() = runTest {
+        dao.insert(play("a", heroCode = "h1", elapsedMillis = 30 * 60_000L))
+        dao.insert(play("b", heroCode = "h1", elapsedMillis = 50 * 60_000L))
+        dao.insert(play("c", heroCode = "h2", hero = "She-Hulk", elapsedMillis = 0L))
+
+        val byHero = dao.observeByHero().first().associateBy { it.key }
+        assertEquals(80 * 60_000L, byHero.getValue("Spider-Man").totalMillis)
+        // An untimed game contributes nothing rather than breaking the sum.
+        assertEquals(0L, byHero.getValue("She-Hulk").totalMillis)
     }
 }

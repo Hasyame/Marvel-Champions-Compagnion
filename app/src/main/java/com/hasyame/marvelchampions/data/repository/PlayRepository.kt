@@ -153,6 +153,8 @@ class PlayRepository @Inject constructor(
         val played = mutableMapOf<String, Int>()
         val won = mutableMapOf<String, Int>()
 
+        val millis = mutableMapOf<String, Long>()
+
         for (row in rows) {
             row.aspects.split(',')
                 .map { it.trim() }
@@ -163,14 +165,16 @@ class PlayRepository @Inject constructor(
                 .distinct()
                 .forEach { aspect ->
                     played[aspect] = (played[aspect] ?: 0) + 1
+                    millis[aspect] = (millis[aspect] ?: 0) + row.elapsedMillis
                     if (row.won) {
                         won[aspect] = (won[aspect] ?: 0) + 1
                     }
                 }
         }
 
-        return played.map { (aspect, count) -> WinRateRow(aspect, count, won[aspect] ?: 0) }
-            .sortedWith(compareByDescending<WinRateRow> { it.played }.thenBy { it.key })
+        return played.map { (aspect, count) ->
+            WinRateRow(aspect, count, won[aspect] ?: 0, millis[aspect] ?: 0)
+        }.sortedWith(compareByDescending<WinRateRow> { it.played }.thenBy { it.key })
     }
 
     private companion object {

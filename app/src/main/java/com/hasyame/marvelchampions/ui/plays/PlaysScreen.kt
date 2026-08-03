@@ -146,16 +146,31 @@ fun PlaysScreen(
 @Composable
 private fun Overall(state: PlaysUiState) {
     ComicPanel(Modifier.fillMaxWidth().padding(12.dp)) {
-        Row(
+        Column(
             Modifier.padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Stat(state.totalPlayed.toString(), stringResource(R.string.plays_stat_played))
-            Stat(state.totalWon.toString(), stringResource(R.string.plays_stat_won))
-            Stat(
-                value = percent(state.totalWon, state.totalPlayed),
-                label = stringResource(R.string.plays_stat_rate),
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                Stat(state.totalPlayed.toString(), stringResource(R.string.plays_stat_played))
+                Stat(state.totalWon.toString(), stringResource(R.string.plays_stat_won))
+                Stat(
+                    value = percent(state.totalWon, state.totalPlayed),
+                    label = stringResource(R.string.plays_stat_rate),
+                )
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                Stat(duration(state.totalMillis), stringResource(R.string.plays_stat_total_time))
+                Stat(duration(state.averageMillis), stringResource(R.string.plays_stat_average))
+                Stat(duration(state.longestMillis), stringResource(R.string.plays_stat_longest))
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                Stat(state.currentStreak.toString(), stringResource(R.string.plays_stat_streak))
+                Stat(state.bestStreak.toString(), stringResource(R.string.plays_stat_best_streak))
+                Stat(
+                    value = state.campaignPlays.toString(),
+                    label = stringResource(R.string.plays_stat_campaign),
+                )
+            }
         }
     }
 }
@@ -195,7 +210,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.winRateSection(
                     // Both the rate and the raw counts: a single win from one
                     // game is 100%, and the counts are what stop that reading
                     // as a fact about the hero.
-                    text = "${percent(row.won, row.played)}  (${row.won}/${row.played})",
+                    text = "${percent(row.won, row.played)}  (${row.won}/${row.played})  ·  ${duration(row.totalMillis)}",
                     style = MaterialTheme.typography.labelLarge,
                 )
             },
@@ -258,3 +273,20 @@ private fun PlayRow(play: PlayEntity, onDelete: () -> Unit, onReport: () -> Unit
 
 private fun percent(part: Int, whole: Int): String =
     if (whole == 0) "—" else "${part * 100 / whole}%"
+
+/**
+ * A duration a person would say out loud: "12h 30m", "45m", or a dash when
+ * nothing was timed. Seconds are never interesting at this scale.
+ */
+private fun duration(millis: Long): String {
+    if (millis <= 0L) {
+        return "—"
+    }
+    val totalMinutes = millis / 60_000L
+    val hours = totalMinutes / 60
+    val minutes = totalMinutes % 60
+    return when {
+        hours > 0 -> "${hours}h ${minutes}m"
+        else -> "${minutes}m"
+    }
+}

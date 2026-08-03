@@ -416,4 +416,10 @@
     <string name="plays_log_loss">Défaite</string>
     <string name="randomizer_log_play">Enregistrer la partie</string>
     <string name="randomizer_open_plays">Parties et stats</string>
+    <string name="plays_stat_total_time">Temps total</string>
+    <string name="plays_stat_average">Moyenne</string>
+    <string name="plays_stat_longest">Plus longue</string>
+    <string name="plays_stat_streak">Série en cours</string>
+    <string name="plays_stat_best_streak">Meilleure série</string>
+    <string name="plays_stat_campaign">Campagne</string>
 </resources>

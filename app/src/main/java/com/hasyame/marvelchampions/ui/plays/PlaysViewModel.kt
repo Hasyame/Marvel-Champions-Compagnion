@@ -25,6 +25,45 @@ data class PlaysUiState(
 ) {
     val totalPlayed: Int get() = plays.size
     val totalWon: Int get() = plays.count { it.won }
+
+    /** Every minute spent playing, which is the headline number for a tracker. */
+    val totalMillis: Long get() = plays.sumOf { it.elapsedMillis }
+
+    /**
+     * Timed games only.
+     *
+     * A play logged without a duration is not a nought-minute game, it is a
+     * game nobody timed, and averaging it in would drag the figure towards
+     * meaninglessness.
+     */
+    val averageMillis: Long
+        get() = plays.filter { it.elapsedMillis > 0 }
+            .takeIf { it.isNotEmpty() }
+            ?.let { timed -> timed.sumOf { it.elapsedMillis } / timed.size }
+            ?: 0L
+
+    val longestMillis: Long get() = plays.maxOfOrNull { it.elapsedMillis } ?: 0L
+
+    /** How many of these came from a campaign rather than a one-off game. */
+    val campaignPlays: Int get() = plays.count { it.campaignRunId != null }
+
+    /** Consecutive wins counting back from the most recent game. */
+    val currentStreak: Int get() = plays.takeWhile { it.won }.size
+
+    val bestStreak: Int
+        get() {
+            var best = 0
+            var running = 0
+            // The list is newest first, but the longest run is the same read in
+            // either direction, so it is not reversed.
+            for (play in plays) {
+                running = if (play.won) running + 1 else 0
+                if (running > best) {
+                    best = running
+                }
+            }
+            return best
+        }
 }
 
 /** A play saved but not yet sent, while the app asks whether to send it. */

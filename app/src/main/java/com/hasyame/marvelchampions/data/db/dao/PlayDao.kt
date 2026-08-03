@@ -12,6 +12,8 @@ data class WinRateRow(
     val key: String,
     val played: Int,
     val won: Int,
+    /** Total time spent on these games, so "hours with this hero" is answerable. */
+    val totalMillis: Long = 0,
 )
 
 @Dao
@@ -44,7 +46,7 @@ interface PlayDao {
 
     @Query(
         """
-        SELECT heroName AS `key`, COUNT(*) AS played, SUM(won) AS won
+        SELECT heroName AS `key`, COUNT(*) AS played, SUM(won) AS won, SUM(elapsedMillis) AS totalMillis
         FROM plays GROUP BY heroCode ORDER BY played DESC, `key` ASC
         """,
     )
@@ -52,7 +54,7 @@ interface PlayDao {
 
     @Query(
         """
-        SELECT scenarioName AS `key`, COUNT(*) AS played, SUM(won) AS won
+        SELECT scenarioName AS `key`, COUNT(*) AS played, SUM(won) AS won, SUM(elapsedMillis) AS totalMillis
         FROM plays GROUP BY scenarioCode ORDER BY played DESC, `key` ASC
         """,
     )
@@ -60,7 +62,7 @@ interface PlayDao {
 
     @Query(
         """
-        SELECT difficulty AS `key`, COUNT(*) AS played, SUM(won) AS won
+        SELECT difficulty AS `key`, COUNT(*) AS played, SUM(won) AS won, SUM(elapsedMillis) AS totalMillis
         FROM plays GROUP BY difficulty ORDER BY played DESC, `key` ASC
         """,
     )
@@ -72,8 +74,8 @@ interface PlayDao {
      * SQL. The rows are small — one per play — and splitting a list in SQLite
      * would need a recursive CTE for no benefit.
      */
-    @Query("SELECT aspects, won FROM plays")
+    @Query("SELECT aspects, won, elapsedMillis FROM plays")
     fun observeAspectRows(): Flow<List<AspectRow>>
 }
 
-data class AspectRow(val aspects: String, val won: Boolean)
+data class AspectRow(val aspects: String, val won: Boolean, val elapsedMillis: Long)
