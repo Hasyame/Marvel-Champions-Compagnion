@@ -47,8 +47,8 @@ content rather than machinery.
 - **Campaign tracker.** An append-only event log with all state folded from it,
   so a record can never drift from what was played. Counters, flags, card lists,
   a market, per-scenario questionnaires, and setup steps for one scenario that
-  depend on what was recorded in the ones before it. The Galaxy's Most Wanted
-  ships with the app.
+  depend on what was recorded in the ones before it. **The Galaxy's Most Wanted**
+  and **Age of Apocalypse** ship with the app.
 - **Finished campaigns.** Saved runs keep total time, victory points, heroes,
   credits and a per-scenario log of the answers given.
 - **Backup and restore.** Collection, decks, campaigns, play history and
@@ -61,7 +61,6 @@ content rather than machinery.
 Campaign templates, in the order they get played:
 
 - **The Mad Titan's Shadow**
-- **Age of Apocalypse**
 - **Fear No Evil**
 
 Campaigns are added after they have been played, so that the mechanics in the

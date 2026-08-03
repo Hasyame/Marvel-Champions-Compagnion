@@ -1,0 +1,1162 @@
+{
+ "_note": "Mechanics only, written for this app: no rules text and no text from the campaign book. Card codes are MarvelCDB codes for pack 'aoa'; names are resolved from the card database at runtime so they appear in the player's language.",
+ "id": "aoa",
+ "schemaVersion": 1,
+ "name": {
+  "fr": "L'Ère d'Apocalypse",
+  "en": "Age of Apocalypse"
+ },
+ "packCode": "aoa",
+ "difficulties": [
+  "standard",
+  "expert"
+ ],
+ "counters": [
+  {
+   "id": "hp",
+   "scope": "hero",
+   "initial": 0,
+   "maxFrom": "heroCard.health",
+   "activeWhen": {
+    "difficulty": "expert"
+   }
+  }
+ ],
+ "flagSets": [
+  {
+   "id": "professorSaved",
+   "scope": "campaign"
+  }
+ ],
+ "cardLists": [
+  {
+   "id": "missionsUsed",
+   "scope": "campaign"
+  },
+  {
+   "id": "overseersDefeated",
+   "scope": "campaign"
+  }
+ ],
+ "startScenarioId": "s1_unus",
+ "scenarios": [
+  {
+   "id": "s1_unus",
+   "name": {
+    "fr": "Unus",
+    "en": "Unus"
+   },
+   "flavour": {
+    "fr": "X-Force est bloquée dans une ligne temporelle où Apocalypse règne, et le prélat Unus les a déjà trouvés.",
+    "en": "X-Force is stranded in a timeline ruled by Apocalypse, and the prelate Unus has already found them."
+   },
+   "victoryLabel": {
+    "fr": "Unus est vaincu !",
+    "en": "Unus is beaten!"
+   },
+   "defeatLabel": {
+    "fr": "Unus vous a vaincus !",
+    "en": "Unus has beaten you!"
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "45059",
+      "45060"
+     ],
+     "expert": [
+      "45060",
+      "45061"
+     ]
+    },
+    "mainScheme": [
+     "45062a"
+    ],
+    "encounterSets": [
+     "unus",
+     "infinites",
+     "dystopian_nightmare",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Le Standard III peut remplacer le Standard : la trahison Shadow of the Past cède la place à cet environnement permanent",
+      "en": "Standard III may replace Standard: the Shadow of the Past treachery gives way to this permanent environment"
+     },
+     "cards": [
+      "45075a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Gene Pool commence en jeu et ne peut pas la quitter. Unus et l'Infinite Soldier changent de force selon la menace qui s'y trouve",
+      "en": "Gene Pool starts in play and cannot leave it. Unus and the Infinite Soldier get stronger or weaker with the threat on it"
+     },
+     "cards": [
+      "45071"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Difficulté ajustable : menace par joueur sur Gene Pool — 0 Escarmouche, 1 Standard, 2 Expert, 3 Héroïque",
+      "en": "Adjustable difficulty: threat per player on Gene Pool — 0 Skirmish, 1 Standard, 2 Expert, 3 Heroic"
+     },
+     "cards": [
+      "45071"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger le set Age of Apocalypse dans le deck rencontre",
+      "en": "Shuffle the Age of Apocalypse set into the encounter deck"
+     },
+     "cards": [
+      "45164",
+      "45165"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Choisir au hasard une mission encore disponible et la révéler dans la zone de mission",
+      "en": "Randomly select an available MISSION side scheme and reveal it in the mission area"
+     },
+     "cards": [
+      "45166a",
+      "45167a",
+      "45168a",
+      "45169a"
+     ],
+     "showCardList": "missionsUsed"
+    },
+    {
+     "text": {
+      "fr": "Choisir au hasard un Overseer encore disponible et le placer dans la zone de mission, puis y poser la carte Mission Rules",
+      "en": "Randomly select an available OVERSEER minion, put it in the mission area, then put the Mission Rules card into play beside it"
+     },
+     "cards": [
+      "45179a",
+      "45180a",
+      "45181a",
+      "45182a",
+      "45183a"
+     ],
+     "showCardList": "overseersDefeated"
+    },
+    {
+     "text": {
+      "fr": "Le premier joueur prend ce soutien, face MISSION visible",
+      "en": "The first player takes this support, MISSION side faceup"
+     },
+     "cards": [
+      "45171a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur cherche un allié dans son deck et l'ajoute à sa main (il compte dans la taille de main)",
+      "en": "Each player searches their deck for an ally and adds it to their hand (it counts towards hand size)"
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "mission",
+      "type": "cardSelect",
+      "label": {
+       "fr": "Quelle mission était en jeu ? (elle est rayée du journal, vaincue ou non)",
+       "en": "Which MISSION side scheme was in play? (it is struck from the log either way)"
+      },
+      "cards": [
+       "45166a",
+       "45167a",
+       "45168a",
+       "45169a"
+      ]
+     },
+     {
+      "id": "missionDefeated",
+      "type": "boolean",
+      "label": {
+       "fr": "La mission a-t-elle été vaincue ?",
+       "en": "Was the MISSION side scheme defeated?"
+      }
+     },
+     {
+      "id": "overseer",
+      "type": "cardSelect",
+      "label": {
+       "fr": "Quel Overseer a été vaincu ? (le laisser vide s'il a survécu)",
+       "en": "Which OVERSEER minion was defeated? (leave empty if it survived)"
+      },
+      "cards": [
+       "45179a",
+       "45180a",
+       "45181a",
+       "45182a",
+       "45183a"
+      ]
+     },
+     {
+      "id": "hpPerHero",
+      "type": "perHeroNumber",
+      "label": {
+       "fr": "Points de vie restants",
+       "en": "Remaining hit points"
+      },
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "effects": [
+     {
+      "op": "addCardsFromAnswer",
+      "cardList": "missionsUsed",
+      "from": "mission"
+     },
+     {
+      "op": "addCardsFromAnswer",
+      "cardList": "overseersDefeated",
+      "from": "overseer"
+     },
+     {
+      "op": "setHeroCounter",
+      "counter": "hp",
+      "from": "hpPerHero",
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "next": [
+     {
+      "goto": "s2_four_horsemen"
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "goto": "s1_unus"
+     }
+    ]
+   }
+  },
+  {
+   "id": "s2_four_horsemen",
+   "name": {
+    "fr": "Les Quatre Cavaliers",
+    "en": "Four Horsemen"
+   },
+   "flavour": {
+    "fr": "Magneto accueille X-Force au quartier général des X-Men. Apocalypse le trouve aussitôt et lance ses quatre cavaliers.",
+    "en": "Magneto takes X-Force into the X-Men's headquarters. Apocalypse finds it at once and sends his four horsemen."
+   },
+   "victoryLabel": {
+    "fr": "Les cavaliers sont vaincus !",
+    "en": "The horsemen are beaten!"
+   },
+   "defeatLabel": {
+    "fr": "Les cavaliers vous ont vaincus !",
+    "en": "The horsemen have beaten you!"
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "45081a",
+      "45082a",
+      "45083a",
+      "45084a"
+     ],
+     "expert": [
+      "45081a",
+      "45082a",
+      "45083a",
+      "45084a"
+     ]
+    },
+    "mainScheme": [
+     "45085a"
+    ],
+    "encounterSets": [
+     "four_horsemen",
+     "hounds",
+     "dystopian_nightmare",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Le Standard III peut remplacer le Standard : la trahison Shadow of the Past cède la place à cet environnement permanent",
+      "en": "Standard III may replace Standard: the Shadow of the Past treachery gives way to this permanent environment"
+     },
+     "cards": [
+      "45075a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Révéler les quatre vilains dans un ordre aléatoire et les aligner, chacun avec son propre compteur de points de vie",
+      "en": "Reveal all four villains in random order and set them in a row, each with its own hit point dial"
+     },
+     "cards": [
+      "45081a",
+      "45082a",
+      "45083a",
+      "45084a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Face A en Escarmouche et Standard, face B en Expert et Héroïque — un mélange des deux est permis",
+      "en": "Side A on Skirmish and Standard, side B on Expert and Heroic — a mix of the two is allowed"
+     }
+    },
+    {
+     "text": {
+      "fr": "Donner le marqueur d'activation au vilain le plus à gauche : lui seul s'active, puis le marqueur passe au suivant vers la droite",
+      "en": "Give the active counter to the leftmost villain: only it activates, then the counter passes to the next villain to its right"
+     }
+    },
+    {
+     "text": {
+      "fr": "Mélanger le set Age of Apocalypse dans le deck rencontre",
+      "en": "Shuffle the Age of Apocalypse set into the encounter deck"
+     },
+     "cards": [
+      "45164",
+      "45165"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Choisir au hasard une mission encore disponible et la révéler dans la zone de mission",
+      "en": "Randomly select an available MISSION side scheme and reveal it in the mission area"
+     },
+     "cards": [
+      "45166a",
+      "45167a",
+      "45168a",
+      "45169a"
+     ],
+     "showCardList": "missionsUsed"
+    },
+    {
+     "text": {
+      "fr": "Choisir au hasard un Overseer encore disponible et le placer dans la zone de mission, puis y poser la carte Mission Rules",
+      "en": "Randomly select an available OVERSEER minion, put it in the mission area, then put the Mission Rules card into play beside it"
+     },
+     "cards": [
+      "45179a",
+      "45180a",
+      "45181a",
+      "45182a",
+      "45183a"
+     ],
+     "showCardList": "overseersDefeated"
+    },
+    {
+     "text": {
+      "fr": "Le premier joueur prend ce soutien, face MISSION visible",
+      "en": "The first player takes this support, MISSION side faceup"
+     },
+     "cards": [
+      "45171a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur cherche un allié dans son deck et l'ajoute à sa main (il compte dans la taille de main)",
+      "en": "Each player searches their deck for an ally and adds it to their hand (it counts towards hand size)"
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
+      "en": "Expert campaign: set each hit point total to the value recorded last scenario"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "showCounter": "hp"
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : placer 3 menaces sur la mission pour revenir aux points de vie imprimés",
+      "en": "Expert campaign: place 3 threat on the MISSION side scheme to heal to printed hit points"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "action": {
+      "id": "heal",
+      "label": {
+       "fr": "Soigner",
+       "en": "Heal"
+      },
+      "perHero": true,
+      "effects": [
+       {
+        "op": "setHeroCounter",
+        "counter": "hp",
+        "value": 999
+       }
+      ]
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "mission",
+      "type": "cardSelect",
+      "label": {
+       "fr": "Quelle mission était en jeu ? (elle est rayée du journal, vaincue ou non)",
+       "en": "Which MISSION side scheme was in play? (it is struck from the log either way)"
+      },
+      "cards": [
+       "45166a",
+       "45167a",
+       "45168a",
+       "45169a"
+      ]
+     },
+     {
+      "id": "missionDefeated",
+      "type": "boolean",
+      "label": {
+       "fr": "La mission a-t-elle été vaincue ?",
+       "en": "Was the MISSION side scheme defeated?"
+      }
+     },
+     {
+      "id": "overseer",
+      "type": "cardSelect",
+      "label": {
+       "fr": "Quel Overseer a été vaincu ? (le laisser vide s'il a survécu)",
+       "en": "Which OVERSEER minion was defeated? (leave empty if it survived)"
+      },
+      "cards": [
+       "45179a",
+       "45180a",
+       "45181a",
+       "45182a",
+       "45183a"
+      ]
+     },
+     {
+      "id": "hpPerHero",
+      "type": "perHeroNumber",
+      "label": {
+       "fr": "Points de vie restants",
+       "en": "Remaining hit points"
+      },
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "effects": [
+     {
+      "op": "addCardsFromAnswer",
+      "cardList": "missionsUsed",
+      "from": "mission"
+     },
+     {
+      "op": "addCardsFromAnswer",
+      "cardList": "overseersDefeated",
+      "from": "overseer"
+     },
+     {
+      "op": "setHeroCounter",
+      "counter": "hp",
+      "from": "hpPerHero",
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "next": [
+     {
+      "goto": "s3_apocalypse"
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "goto": "s2_four_horsemen"
+     }
+    ]
+   }
+  },
+  {
+   "id": "s3_apocalypse",
+   "name": {
+    "fr": "Apocalypse",
+    "en": "Apocalypse"
+   },
+   "flavour": {
+    "fr": "Les X-Men marchent sur la citadelle d'Apocalypse, à travers le cœur de son empire et ses prélats les plus solides.",
+    "en": "The X-Men march on Apocalypse's citadel, through the heart of his empire and his strongest prelates."
+   },
+   "victoryLabel": {
+    "fr": "Apocalypse est vaincu !",
+    "en": "Apocalypse is beaten!"
+   },
+   "defeatLabel": {
+    "fr": "Apocalypse vous a vaincus !",
+    "en": "Apocalypse has beaten you!"
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "45101a",
+      "45102a"
+     ],
+     "expert": [
+      "45102a"
+     ]
+    },
+    "mainScheme": [
+     "45103a"
+    ],
+    "encounterSets": [
+     "apocalypse",
+     "overseer",
+     "dark_riders",
+     "infinites",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Le Standard III peut remplacer le Standard : la trahison Shadow of the Past cède la place à cet environnement permanent",
+      "en": "Standard III may replace Standard: the Shadow of the Past treachery gives way to this permanent environment"
+     },
+     "cards": [
+      "45075a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Commencer sur la face Apocalypse (II). Pour une partie plus facile, commencer sur la face (I)",
+      "en": "Begin on the Apocalypse (II) side. For an easier game, begin on side (I)"
+     },
+     "cards": [
+      "45101a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Les prélats sont au dos des Overseers : vaincre un prélat ne retire pas son Overseer de la campagne",
+      "en": "The prelates are the reverse of the overseers: defeating a prelate does not remove its overseer from the campaign"
+     },
+     "cards": [
+      "45179a",
+      "45180a",
+      "45181a",
+      "45182a",
+      "45183a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Apocalypse ne peut être vaincu tant que No Longer Worthy, au dos de ce complot, ne lui est pas attaché",
+      "en": "Apocalypse cannot be defeated until No Longer Worthy, on the reverse of this side scheme, is attached to him"
+     },
+     "cards": [
+      "45105a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger le set Age of Apocalypse dans le deck rencontre",
+      "en": "Shuffle the Age of Apocalypse set into the encounter deck"
+     },
+     "cards": [
+      "45164",
+      "45165"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Choisir au hasard une mission encore disponible et la révéler dans la zone de mission",
+      "en": "Randomly select an available MISSION side scheme and reveal it in the mission area"
+     },
+     "cards": [
+      "45166a",
+      "45167a",
+      "45168a",
+      "45169a"
+     ],
+     "showCardList": "missionsUsed"
+    },
+    {
+     "text": {
+      "fr": "Choisir au hasard un Overseer encore disponible et le placer dans la zone de mission, puis y poser la carte Mission Rules",
+      "en": "Randomly select an available OVERSEER minion, put it in the mission area, then put the Mission Rules card into play beside it"
+     },
+     "cards": [
+      "45179a",
+      "45180a",
+      "45181a",
+      "45182a",
+      "45183a"
+     ],
+     "showCardList": "overseersDefeated"
+    },
+    {
+     "text": {
+      "fr": "Le premier joueur prend ce soutien, face MISSION visible",
+      "en": "The first player takes this support, MISSION side faceup"
+     },
+     "cards": [
+      "45171a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur cherche un allié dans son deck et l'ajoute à sa main (il compte dans la taille de main)",
+      "en": "Each player searches their deck for an ally and adds it to their hand (it counts towards hand size)"
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
+      "en": "Expert campaign: set each hit point total to the value recorded last scenario"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "showCounter": "hp"
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : placer 3 menaces sur la mission pour revenir aux points de vie imprimés",
+      "en": "Expert campaign: place 3 threat on the MISSION side scheme to heal to printed hit points"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "action": {
+      "id": "heal",
+      "label": {
+       "fr": "Soigner",
+       "en": "Heal"
+      },
+      "perHero": true,
+      "effects": [
+       {
+        "op": "setHeroCounter",
+        "counter": "hp",
+        "value": 999
+       }
+      ]
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "mission",
+      "type": "cardSelect",
+      "label": {
+       "fr": "Quelle mission était en jeu ? (elle est rayée du journal, vaincue ou non)",
+       "en": "Which MISSION side scheme was in play? (it is struck from the log either way)"
+      },
+      "cards": [
+       "45166a",
+       "45167a",
+       "45168a",
+       "45169a"
+      ]
+     },
+     {
+      "id": "missionDefeated",
+      "type": "boolean",
+      "label": {
+       "fr": "La mission a-t-elle été vaincue ?",
+       "en": "Was the MISSION side scheme defeated?"
+      }
+     },
+     {
+      "id": "overseer",
+      "type": "cardSelect",
+      "label": {
+       "fr": "Quel Overseer a été vaincu ? (le laisser vide s'il a survécu)",
+       "en": "Which OVERSEER minion was defeated? (leave empty if it survived)"
+      },
+      "cards": [
+       "45179a",
+       "45180a",
+       "45181a",
+       "45182a",
+       "45183a"
+      ]
+     },
+     {
+      "id": "hpPerHero",
+      "type": "perHeroNumber",
+      "label": {
+       "fr": "Points de vie restants",
+       "en": "Remaining hit points"
+      },
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "effects": [
+     {
+      "op": "addCardsFromAnswer",
+      "cardList": "missionsUsed",
+      "from": "mission"
+     },
+     {
+      "op": "addCardsFromAnswer",
+      "cardList": "overseersDefeated",
+      "from": "overseer"
+     },
+     {
+      "op": "setHeroCounter",
+      "counter": "hp",
+      "from": "hpPerHero",
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "next": [
+     {
+      "goto": "s4_dark_beast"
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "goto": "s3_apocalypse"
+     }
+    ]
+   }
+  },
+  {
+   "id": "s4_dark_beast",
+   "name": {
+    "fr": "Dark Beast",
+    "en": "Dark Beast"
+   },
+   "flavour": {
+    "fr": "Sous la citadelle se trouve une machine à voyager dans le temps, et le Fauve qui la manœuvre n'est pas le leur.",
+    "en": "Beneath the citadel is a time machine, and the Beast operating it is not theirs."
+   },
+   "victoryLabel": {
+    "fr": "Dark Beast est vaincu !",
+    "en": "Dark Beast is beaten!"
+   },
+   "defeatLabel": {
+    "fr": "Dark Beast vous a vaincus !",
+    "en": "Dark Beast has beaten you!"
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "45118",
+      "45119"
+     ],
+     "expert": [
+      "45119",
+      "45120"
+     ]
+    },
+    "mainScheme": [
+     "45121a"
+    ],
+    "encounterSets": [
+     "dark_beast",
+     "blue_moon",
+     "genosha",
+     "savage_land",
+     "dystopian_nightmare",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Le Standard III peut remplacer le Standard : la trahison Shadow of the Past cède la place à cet environnement permanent",
+      "en": "Standard III may replace Standard: the Shadow of the Past treachery gives way to this permanent environment"
+     },
+     "cards": [
+      "45075a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger le set Age of Apocalypse dans le deck rencontre",
+      "en": "Shuffle the Age of Apocalypse set into the encounter deck"
+     },
+     "cards": [
+      "45164",
+      "45165"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Choisir au hasard une mission encore disponible et la révéler dans la zone de mission",
+      "en": "Randomly select an available MISSION side scheme and reveal it in the mission area"
+     },
+     "cards": [
+      "45166a",
+      "45167a",
+      "45168a",
+      "45169a"
+     ],
+     "showCardList": "missionsUsed"
+    },
+    {
+     "text": {
+      "fr": "Choisir au hasard un Overseer encore disponible et le placer dans la zone de mission, puis y poser la carte Mission Rules",
+      "en": "Randomly select an available OVERSEER minion, put it in the mission area, then put the Mission Rules card into play beside it"
+     },
+     "cards": [
+      "45179a",
+      "45180a",
+      "45181a",
+      "45182a",
+      "45183a"
+     ],
+     "showCardList": "overseersDefeated"
+    },
+    {
+     "text": {
+      "fr": "Le premier joueur prend ce soutien, face MISSION visible",
+      "en": "The first player takes this support, MISSION side faceup"
+     },
+     "cards": [
+      "45171a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur cherche un allié dans son deck et l'ajoute à sa main (il compte dans la taille de main)",
+      "en": "Each player searches their deck for an ally and adds it to their hand (it counts towards hand size)"
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
+      "en": "Expert campaign: set each hit point total to the value recorded last scenario"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "showCounter": "hp"
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : placer 3 menaces sur la mission pour revenir aux points de vie imprimés",
+      "en": "Expert campaign: place 3 threat on the MISSION side scheme to heal to printed hit points"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "action": {
+      "id": "heal",
+      "label": {
+       "fr": "Soigner",
+       "en": "Heal"
+      },
+      "perHero": true,
+      "effects": [
+       {
+        "op": "setHeroCounter",
+        "counter": "hp",
+        "value": 999
+       }
+      ]
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "mission",
+      "type": "cardSelect",
+      "label": {
+       "fr": "Quelle mission était en jeu ? (elle est rayée du journal, vaincue ou non)",
+       "en": "Which MISSION side scheme was in play? (it is struck from the log either way)"
+      },
+      "cards": [
+       "45166a",
+       "45167a",
+       "45168a",
+       "45169a"
+      ]
+     },
+     {
+      "id": "missionDefeated",
+      "type": "boolean",
+      "label": {
+       "fr": "La mission a-t-elle été vaincue ?",
+       "en": "Was the MISSION side scheme defeated?"
+      }
+     },
+     {
+      "id": "overseer",
+      "type": "cardSelect",
+      "label": {
+       "fr": "Quel Overseer a été vaincu ? (le laisser vide s'il a survécu)",
+       "en": "Which OVERSEER minion was defeated? (leave empty if it survived)"
+      },
+      "cards": [
+       "45179a",
+       "45180a",
+       "45181a",
+       "45182a",
+       "45183a"
+      ]
+     },
+     {
+      "id": "hpPerHero",
+      "type": "perHeroNumber",
+      "label": {
+       "fr": "Points de vie restants",
+       "en": "Remaining hit points"
+      },
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "effects": [
+     {
+      "op": "addCardsFromAnswer",
+      "cardList": "missionsUsed",
+      "from": "mission"
+     },
+     {
+      "op": "addCardsFromAnswer",
+      "cardList": "overseersDefeated",
+      "from": "overseer"
+     },
+     {
+      "op": "setHeroCounter",
+      "counter": "hp",
+      "from": "hpPerHero",
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "next": [
+     {
+      "goto": "s5_en_sabah_nur"
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "goto": "s4_dark_beast"
+     }
+    ]
+   }
+  },
+  {
+   "id": "s5_en_sabah_nur",
+   "name": {
+    "fr": "En Sabah Nur",
+    "en": "En Sabah Nur"
+   },
+   "flavour": {
+    "fr": "De retour dans leur passé, l'équipe doit arracher à Apocalypse l'antidote qui sauvera le Professeur X.",
+    "en": "Back in their own past, the team must take from Apocalypse the antidote that will save Professor X."
+   },
+   "victoryLabel": {
+    "fr": "Apocalypse est vaincu !",
+    "en": "Apocalypse is beaten!"
+   },
+   "defeatLabel": {
+    "fr": "Apocalypse vous a vaincus !",
+    "en": "Apocalypse has beaten you!"
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "45184a",
+      "45185a"
+     ],
+     "expert": [
+      "45185a",
+      "45186a"
+     ]
+    },
+    "mainScheme": [
+     "45147a",
+     "45148a"
+    ],
+    "encounterSets": [
+     "en_sabah_nur",
+     "celestial_tech",
+     "clan_akkaba",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Le Standard III peut remplacer le Standard : la trahison Shadow of the Past cède la place à cet environnement permanent",
+      "en": "Standard III may replace Standard: the Shadow of the Past treachery gives way to this permanent environment"
+     },
+     "cards": [
+      "45075a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger le set Age of Apocalypse dans le deck rencontre",
+      "en": "Shuffle the Age of Apocalypse set into the encounter deck"
+     },
+     "cards": [
+      "45164",
+      "45165"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Révéler cette mission : elle est réservée à ce scénario et décide de la campagne",
+      "en": "Reveal this MISSION side scheme: it is reserved for this scenario and decides the campaign"
+     },
+     "cards": [
+      "45170a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Choisir au hasard un Overseer encore disponible et le placer dans la zone de mission, puis y poser la carte Mission Rules",
+      "en": "Randomly select an available OVERSEER minion, put it in the mission area, then put the Mission Rules card into play beside it"
+     },
+     "cards": [
+      "45179a",
+      "45180a",
+      "45181a",
+      "45182a",
+      "45183a"
+     ],
+     "showCardList": "overseersDefeated"
+    },
+    {
+     "text": {
+      "fr": "Le premier joueur prend ce soutien, face MISSION visible",
+      "en": "The first player takes this support, MISSION side faceup"
+     },
+     "cards": [
+      "45171a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur cherche un allié dans son deck et l'ajoute à sa main (il compte dans la taille de main)",
+      "en": "Each player searches their deck for an ally and adds it to their hand (it counts towards hand size)"
+     }
+    },
+    {
+     "text": {
+      "fr": "Le Professeur X ne peut pas entrer en jeu pendant cette partie",
+      "en": "Professor X cannot enter play during this game"
+     }
+    },
+    {
+     "text": {
+      "fr": "Ancient Ritual commence en jeu et ne peut pas la quitter",
+      "en": "Ancient Ritual starts in play and cannot leave it"
+     },
+     "cards": [
+      "45163"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Apocalypse commence sous sa forme BIOMORPH. Changer de forme ne réinitialise ni ses points de vie ni ses attachements",
+      "en": "Apocalypse starts in his BIOMORPH form. Changing form resets neither his hit points nor his attachments"
+     },
+     "cards": [
+      "45184a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
+      "en": "Expert campaign: set each hit point total to the value recorded last scenario"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "showCounter": "hp"
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : placer 3 menaces sur la mission pour revenir aux points de vie imprimés",
+      "en": "Expert campaign: place 3 threat on the MISSION side scheme to heal to printed hit points"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "action": {
+      "id": "heal",
+      "label": {
+       "fr": "Soigner",
+       "en": "Heal"
+      },
+      "perHero": true,
+      "effects": [
+       {
+        "op": "setHeroCounter",
+        "counter": "hp",
+        "value": 999
+       }
+      ]
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "professorSaved",
+      "type": "boolean",
+      "label": {
+       "fr": "Protect the Professor a-t-elle été vaincue ? Elle seule décide de la campagne",
+       "en": "Was Protect the Professor defeated? It alone decides the campaign"
+      }
+     }
+    ],
+    "effects": [
+     {
+      "op": "setFlag",
+      "flag": "professorSaved",
+      "from": "professorSaved"
+     }
+    ],
+    "next": [
+     {
+      "end": true
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "goto": "s5_en_sabah_nur"
+     }
+    ]
+   }
+  }
+ ]
+}

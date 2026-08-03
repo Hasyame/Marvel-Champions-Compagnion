@@ -10,9 +10,12 @@ import kotlinx.serialization.Serializable
  * JSON file; if you find yourself editing Kotlin to support a campaign, the
  * schema is missing something and that is the thing to fix.
  *
- * Template files are **not** shipped in the APK: they contain verbatim campaign
- * book text, so they are imported from device storage at runtime. See the Legal
- * section of the README.
+ * Templates hold mechanics only — codes, counters, conditions and effects, plus
+ * short labels written for this app — so they ship in `assets/campaigns/` and a
+ * campaign is playable without importing anything. They reproduce no rules text
+ * and no campaign book text; `BundledCampaignsTest` holds that line with a
+ * length cap on blurbs and setup steps. Templates the app does not bundle can
+ * still be imported from device storage. See the Legal section of the README.
  */
 @Serializable
 data class CampaignTemplate(
