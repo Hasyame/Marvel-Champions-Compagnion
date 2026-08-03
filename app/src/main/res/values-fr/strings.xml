@@ -480,4 +480,6 @@
     <string name="cards_filter_favourites">Favoris</string>
     <string name="cards_favourite_add">Ajouter aux favoris</string>
     <string name="cards_favourite_remove">Retirer des favoris</string>
+    <string name="decks_share">Partager ce deck</string>
+    <string name="decks_share_no_app">Aucune application de cet appareil ne peut partager du texte.</string>
 </resources>

@@ -11,6 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -19,10 +21,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -40,6 +42,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
 import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.data.repository.DeckRepository
+import com.hasyame.marvelchampions.domain.deckbuilder.DeckText
+import com.hasyame.marvelchampions.domain.deckbuilder.DeckTextCard
+import com.hasyame.marvelchampions.ui.util.shareText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,9 +56,23 @@ fun DeckDetailScreen(
     viewModel: DeckDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val shareContext = LocalContext.current
+    var noShareApp by remember { mutableStateOf(false) }
     var confirmRefresh by remember { mutableStateOf(false) }
 
     LaunchedEffect(deckId) { viewModel.load(deckId) }
+
+    if (noShareApp) {
+        AlertDialog(
+            onDismissRequest = { noShareApp = false },
+            text = { Text(stringResource(R.string.decks_share_no_app)) },
+            confirmButton = {
+                TextButton(onClick = { noShareApp = false }) {
+                    Text(stringResource(R.string.action_done))
+                }
+            },
+        )
+    }
 
     if (confirmRefresh) {
         AlertDialog(
@@ -91,6 +110,41 @@ fun DeckDetailScreen(
                 },
                 actions = {
                     val deck = state.contents?.deck
+
+                    // Sharing a decklist is what people actually do with one,
+                    // so it sits in the bar rather than behind a menu.
+                    IconButton(
+                        enabled = state.contents != null,
+                        onClick = {
+                            state.contents?.let { contents ->
+                                val shared = shareText(
+                                    context = shareContext,
+                                    subject = contents.deck.name,
+                                    text = DeckText.format(
+                                        deckName = contents.deck.name,
+                                        heroName = contents.deck.heroName,
+                                        aspects = DeckRepository.parseAspects(
+                                            contents.deck.aspects,
+                                        ),
+                                        cardsByType = contents.cardsByType.mapValues { entry ->
+                                            entry.value.map {
+                                                DeckTextCard(it.quantity, it.card.name)
+                                            }
+                                        },
+                                        marvelCdbUrl = contents.deck.url,
+                                    ),
+                                )
+                                if (!shared) {
+                                    noShareApp = true
+                                }
+                            }
+                        },
+                    ) {
+                        Icon(
+                            Icons.Filled.Share,
+                            contentDescription = stringResource(R.string.decks_share),
+                        )
+                    }
                     // Every deck is editable now, imported ones included.
                     IconButton(onClick = { onEdit(deckId) }) {
                         Icon(
