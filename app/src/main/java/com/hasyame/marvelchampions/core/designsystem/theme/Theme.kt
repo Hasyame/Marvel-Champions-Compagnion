@@ -53,11 +53,20 @@ private val LightScheme = lightColorScheme(
     onError = PaperWarm,
 )
 
+/**
+ * The dark scheme, and the one the app opens in.
+ *
+ * Red on near-black is the palette this game is drawn in, and it is what a
+ * table lit for playing wants. The surfaces climb in five steps so a dialog
+ * sits above a card sits above the page; with only two tones everything landed
+ * at the same depth and the screen read flat.
+ */
 private val DarkScheme = darkColorScheme(
     primary = IronRedBright,
     onPrimary = IronRedInk,
     primaryContainer = IronRedDeep,
     onPrimaryContainer = IronRedTint,
+    inversePrimary = IronRed,
 
     secondary = BrassGold,
     onSecondary = BrassGoldInk,
@@ -69,18 +78,29 @@ private val DarkScheme = darkColorScheme(
     tertiaryContainer = ArcGoldDeep,
     onTertiaryContainer = ArcGoldTint,
 
-    background = NightLacquer,
+    background = NightBase,
     onBackground = PaperWarm,
     surface = NightLacquer,
     onSurface = PaperWarm,
     surfaceVariant = NightRaised,
     onSurfaceVariant = PaperShade,
 
+    // The depth ladder. Cards, sheets and dialogs each take a rung.
+    surfaceContainerLowest = NightBase,
+    surfaceContainerLow = NightLacquer,
+    surfaceContainer = NightRaised,
+    surfaceContainerHigh = NightRaisedHigh,
+    surfaceContainerHighest = NightRaisedHighest,
+
     outline = NightOutline,
-    outlineVariant = PanelInkSoft,
+    outlineVariant = NightOutlineSoft,
 
     error = IronRedBright,
     onError = IronRedInk,
+    errorContainer = IronRedDeep,
+    onErrorContainer = IronRedTint,
+
+    scrim = PanelShadow,
 )
 
 @Composable

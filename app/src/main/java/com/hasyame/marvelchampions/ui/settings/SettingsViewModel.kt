@@ -26,7 +26,7 @@ data class SettingsUiState(
     val lastCardSync: Long? = null,
     val syncState: CardSyncState = CardSyncState.Idle,
     val musicUrl: String = AppPreferences.DEFAULT_MUSIC_URL,
-    val themeChoice: ThemeChoice = ThemeChoice.SYSTEM,
+    val themeChoice: ThemeChoice = ThemeChoice.DARK,
     val bgg: BggAccountState = BggAccountState(),
     val bggVerifying: Boolean = false,
     val bggError: String? = null,

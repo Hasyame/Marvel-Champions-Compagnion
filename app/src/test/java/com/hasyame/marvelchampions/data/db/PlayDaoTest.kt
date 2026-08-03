@@ -124,7 +124,7 @@ class PlayDaoTest {
 
         dao.delete("b")
 
-        assertEquals(1, dao.observeCount().first())
+        assertEquals(1, dao.observePlays().first().size)
         assertEquals(1, dao.observeByHero().first().single().won)
     }
 

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#1A1113</color>
+    <color name="ic_launcher_background">#B3000F</color>
+    <!-- NightBase. Painted before the first Compose frame. -->
+    <color name="window_background">#0D0809</color>
 </resources>

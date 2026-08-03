@@ -25,8 +25,8 @@ class ThemeViewModel @Inject constructor(
     val themeChoice: StateFlow<ThemeChoice> = preferences.themeChoice.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
-        // Starting from the system setting means the first frame matches what
-        // the launcher just drew, rather than flashing light and correcting.
-        initialValue = ThemeChoice.SYSTEM,
+        // Dark from the first frame, so the app never flashes white before the
+        // stored preference arrives.
+        initialValue = ThemeChoice.DARK,
     )
 }

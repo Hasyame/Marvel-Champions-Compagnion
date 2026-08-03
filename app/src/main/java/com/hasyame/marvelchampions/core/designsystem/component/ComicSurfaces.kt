@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.hasyame.marvelchampions.core.designsystem.theme.PanelShadow
 
 /**
  * Ben-day dots — the printed-halftone texture that reads as "comic" before any
@@ -74,11 +75,15 @@ fun ComicPanel(
         modifier.drawBehind {
             val dx = offset.toPx()
             drawRoundRect(
-                color = ink,
+                // Always dark, never the outline colour. In the dark theme the
+                // outline is a pale cream, so the drop shadow was drawn as a
+                // bright slab sticking out behind every panel — a glow where a
+                // shadow belonged.
+                color = PanelShadow,
                 topLeft = Offset(dx, dx),
                 size = Size(size.width, size.height),
                 cornerRadius = androidx.compose.ui.geometry.CornerRadius(6.dp.toPx()),
-                alpha = 0.9f,
+                alpha = 0.55f,
             )
         },
     ) {

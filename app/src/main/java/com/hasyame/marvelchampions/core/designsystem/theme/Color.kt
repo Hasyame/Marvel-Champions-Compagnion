@@ -36,10 +36,32 @@ val PanelInkSoft = Color(0xFF534342)
 val PaperWarm = Color(0xFFFFF8F6)
 val PaperShade = Color(0xFFF3DDDB)
 
-/** Night pages. Tinted towards red so the dark theme is not neutral grey. */
-val NightLacquer = Color(0xFF161011)
-val NightRaised = Color(0xFF2A211F)
-val NightOutline = Color(0xFFE8D8D5)
+/**
+ * Night pages, as five steps rather than two.
+ *
+ * Material needs a run of surfaces to place things at different depths; with
+ * only a background and one raised tone, every card, sheet and dialog sat at
+ * the same level and the screen read flat. Each step is warmed towards red so
+ * the dark theme belongs to the same app as the light one rather than being
+ * generic charcoal.
+ */
+val NightBase = Color(0xFF0D0809)
+val NightLacquer = Color(0xFF120C0D)
+val NightRaised = Color(0xFF1A1213)
+val NightRaisedHigh = Color(0xFF241A1A)
+val NightRaisedHighest = Color(0xFF2F2221)
+
+/** Hairlines and borders on night pages. */
+val NightOutline = Color(0xFFB9A6A3)
+val NightOutlineSoft = Color(0xFF5A4A48)
+
+/**
+ * The drop shadow under a panel.
+ *
+ * Always dark, in both themes. Using the outline colour meant the dark theme
+ * drew a pale slab behind every panel.
+ */
+val PanelShadow = Color(0xFF070405)
 
 /**
  * Aspect colours, as the game prints them.

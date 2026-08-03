@@ -38,9 +38,6 @@ interface PlayDao {
     @Query("UPDATE plays SET reportedToBgg = 1 WHERE id = :id")
     suspend fun markReported(id: String)
 
-    @Query("SELECT COUNT(*) FROM plays")
-    fun observeCount(): Flow<Int>
-
     // Counting in SQL rather than in memory: a play history grows for years and
     // there is no reason to carry all of it into the statistics screen.
 
