@@ -3,6 +3,7 @@ package com.hasyame.marvelchampions.ui.plays
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -44,13 +45,12 @@ import java.util.Date
  * Statistics first, history below: after a few dozen games the interesting
  * question is "which heroes actually win for me", not "what did I play in
  * March".
- */
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-/**
+ *
  * [onBack] is null when this is a tab root: a top level destination has nothing
  * to go back to, and an arrow there is a lie.
  */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun PlaysScreen(
     onBack: (() -> Unit)? = null,
     viewModel: PlaysViewModel = hiltViewModel(),
@@ -156,7 +156,7 @@ private fun Overall(state: PlaysUiState) {
             Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Stat(state.totalPlayed.toString(), stringResource(R.string.plays_stat_played))
                 Stat(state.totalWon.toString(), stringResource(R.string.plays_stat_won))
                 Stat(
@@ -164,12 +164,12 @@ private fun Overall(state: PlaysUiState) {
                     label = stringResource(R.string.plays_stat_rate),
                 )
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Stat(duration(state.totalMillis), stringResource(R.string.plays_stat_total_time))
                 Stat(duration(state.averageMillis), stringResource(R.string.plays_stat_average))
                 Stat(duration(state.longestMillis), stringResource(R.string.plays_stat_longest))
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Stat(state.currentStreak.toString(), stringResource(R.string.plays_stat_streak))
                 Stat(state.bestStreak.toString(), stringResource(R.string.plays_stat_best_streak))
                 Stat(
@@ -182,8 +182,10 @@ private fun Overall(state: PlaysUiState) {
 }
 
 @Composable
-private fun Stat(value: String, label: String) {
-    Column {
+private fun RowScope.Stat(value: String, label: String) {
+    // Equal share of the row, so the three columns line up between rows rather
+    // than each being as wide as its own number.
+    Column(Modifier.weight(1f)) {
         Text(value, style = MaterialTheme.typography.headlineSmall)
         Text(
             text = label,

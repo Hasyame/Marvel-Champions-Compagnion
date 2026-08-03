@@ -152,47 +152,54 @@ fun GameSessionScreen(
         AlertDialog(
             onDismissRequest = viewModel::dismissRecorded,
             title = { Text(stringResource(R.string.session_saved_title)) },
+            // Three equal choices, so they live in the body as full-width
+            // buttons. A dialog's confirm slot is pinned to the right and
+            // sized to its content, which left a stack of three squashed
+            // against the right edge.
             text = {
-                Text(
-                    when (outcome) {
-                        is PlayRecorded.SavedOnly -> stringResource(R.string.session_saved)
-                        is PlayRecorded.SavedAndReported ->
-                            stringResource(R.string.session_saved_sent)
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        when (outcome) {
+                            is PlayRecorded.SavedOnly -> stringResource(R.string.session_saved)
+                            is PlayRecorded.SavedAndReported ->
+                                stringResource(R.string.session_saved_sent)
 
-                        is PlayRecorded.SavedAskToReport ->
-                            stringResource(R.string.session_saved_can_send)
+                            is PlayRecorded.SavedAskToReport ->
+                                stringResource(R.string.session_saved_can_send)
 
-                        is PlayRecorded.SavedReportFailed ->
-                            stringResource(R.string.session_saved_not_sent, outcome.detail)
-                    },
-                )
-            },
-            // Three ways on, all equal: play again, look at what it did to the
-            // stats, or stop. A dialog with only two buttons pushed the third
-            // into a back gesture nobody would guess at.
-            confirmButton = {
-                Column {
-                    TextButton(onClick = viewModel::reset) {
-                        Text(stringResource(R.string.session_another))
-                    }
-                    TextButton(
+                            is PlayRecorded.SavedReportFailed ->
+                                stringResource(R.string.session_saved_not_sent, outcome.detail)
+                        },
+                    )
+
+                    Button(
+                        onClick = viewModel::reset,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) { Text(stringResource(R.string.session_another)) }
+
+                    OutlinedButton(
                         onClick = {
                             viewModel.reset()
                             onOpenPlays()
                         },
+                        modifier = Modifier.fillMaxWidth(),
                     ) { Text(stringResource(R.string.session_see_stats)) }
-                    TextButton(
+
+                    OutlinedButton(
                         onClick = {
                             viewModel.reset()
                             onBack()
                         },
+                        modifier = Modifier.fillMaxWidth(),
                     ) { Text(stringResource(R.string.session_back_to_menu)) }
                 }
             },
+            // Required by the dialog, and deliberately empty: every action is
+            // in the body above.
+            confirmButton = {},
         )
     }
 }
-
 @Composable
 private fun SetupPhase(
     state: GameSessionUiState,
