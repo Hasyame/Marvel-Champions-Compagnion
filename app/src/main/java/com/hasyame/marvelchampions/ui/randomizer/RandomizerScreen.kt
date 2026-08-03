@@ -57,7 +57,7 @@ import com.hasyame.marvelchampions.ui.plays.PlaysViewModel
 @Composable
 fun RandomizerScreen(
     onBack: () -> Unit,
-    onPlayDraw: (heroes: String, modularSets: String) -> Unit,
+    onPlayDraw: (heroes: String, modularSets: String, difficulty: String) -> Unit,
     viewModel: RandomizerViewModel = hiltViewModel(),
     playsViewModel: PlaysViewModel = hiltViewModel(),
 ) {
@@ -125,6 +125,9 @@ fun RandomizerScreen(
                             onPlayDraw(
                                 state.draw.asSessionHeroes(),
                                 state.draw.modularSetCodes.joinToString(","),
+                                // Dropped before, so a rolled Expert II game
+                                // was filed as Standard I.
+                                state.draw.difficulty?.name?.lowercase().orEmpty(),
                             )
                         },
                         enabled = state.draw.isComplete,

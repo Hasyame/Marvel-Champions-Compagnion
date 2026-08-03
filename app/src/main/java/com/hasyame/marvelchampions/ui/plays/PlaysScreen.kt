@@ -24,6 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -57,6 +60,10 @@ fun PlaysScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val message by viewModel.message.collectAsStateWithLifecycle()
+
+    // Deleting a play cannot be undone and the history is the whole point of
+    // the screen, so it asks — the same courtesy a campaign already gets.
+    var confirmDelete by remember { mutableStateOf<PlayEntity?>(null) }
 
     Scaffold(
         topBar = {
@@ -110,12 +117,33 @@ fun PlaysScreen(
             items(state.plays, key = { it.id }) { play ->
                 PlayRow(
                     play = play,
-                    onDelete = { viewModel.delete(play.id) },
+                    onDelete = { confirmDelete = play },
                     onReport = { viewModel.reportLater(play.id) },
                 )
                 HorizontalDivider()
             }
         }
+    }
+
+    confirmDelete?.let { play ->
+        AlertDialog(
+            onDismissRequest = { confirmDelete = null },
+            title = { Text(stringResource(R.string.plays_delete_title)) },
+            text = { Text(stringResource(R.string.plays_delete_message, play.scenarioName)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.delete(play.id)
+                        confirmDelete = null
+                    },
+                ) { Text(stringResource(R.string.action_delete)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmDelete = null }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            },
+        )
     }
 
     viewModel.pendingReport.collectAsStateWithLifecycle().value?.let { pending ->

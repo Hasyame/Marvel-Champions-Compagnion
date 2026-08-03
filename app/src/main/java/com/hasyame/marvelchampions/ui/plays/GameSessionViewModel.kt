@@ -9,6 +9,7 @@ import com.hasyame.marvelchampions.data.repository.RandomizerNames
 import com.hasyame.marvelchampions.data.repository.RandomizerRepository
 import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
+import com.hasyame.marvelchampions.domain.randomizer.Difficulty
 import com.hasyame.marvelchampions.domain.randomizer.RandomizerPools
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +35,15 @@ data class GameSessionUiState(
     val pools: RandomizerPools = RandomizerPools(),
     val names: RandomizerNames = RandomizerNames(),
     val scenarioCode: String? = null,
-    val difficulty: String = "standard",
+    /**
+     * Stored as the [Difficulty] name, lower case.
+     *
+     * The randomiser and this screen used different words for the same thing —
+     * standard/expert/heroic here, STANDARD_I/EXPERT_II there — so the same
+     * difficulty produced two rows in the statistics depending on which screen
+     * logged it. One vocabulary, and it is the game's.
+     */
+    val difficulty: String = Difficulty.STANDARD_I.name.lowercase(),
     val heroes: List<SessionHero> = emptyList(),
     /** Modular sets shuffled into the encounter deck. */
     val modularSetCodes: List<String> = emptyList(),

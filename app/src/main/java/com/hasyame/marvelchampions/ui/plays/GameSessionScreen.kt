@@ -46,6 +46,7 @@ import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.core.designsystem.component.halftone
 import com.hasyame.marvelchampions.data.repository.PlayRecorded
 import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
+import com.hasyame.marvelchampions.domain.randomizer.Difficulty
 import kotlinx.coroutines.delay
 
 /**
@@ -228,11 +229,12 @@ private fun SetupPhase(
         }
 
         PickerSection(stringResource(R.string.session_difficulty)) {
-            DIFFICULTIES.forEach { difficulty ->
+            Difficulty.entries.forEach { difficulty ->
+                val stored = difficulty.name.lowercase()
                 FilterChip(
-                    selected = state.difficulty == difficulty,
-                    onClick = { viewModel.setDifficulty(difficulty) },
-                    label = { Text(difficulty.replaceFirstChar(Char::uppercase)) },
+                    selected = state.difficulty == stored,
+                    onClick = { viewModel.setDifficulty(stored) },
+                    label = { Text(stringResource(difficulty.labelRes())) },
                 )
             }
         }
@@ -448,7 +450,12 @@ private fun PlayingPhase(
     }
 }
 
-/** Difficulties as the play log records them, lower case for grouping. */
-private val DIFFICULTIES = listOf("standard", "expert", "heroic")
+/** The game's own names for its four difficulties. */
+private fun Difficulty.labelRes(): Int = when (this) {
+    Difficulty.STANDARD_I -> R.string.difficulty_standard_i
+    Difficulty.STANDARD_II -> R.string.difficulty_standard_ii
+    Difficulty.EXPERT_I -> R.string.difficulty_expert_i
+    Difficulty.EXPERT_II -> R.string.difficulty_expert_ii
+}
 
 private const val TICK_MILLIS = 1_000L

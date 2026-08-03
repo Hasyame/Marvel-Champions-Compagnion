@@ -439,4 +439,6 @@
     <string name="session_discard_message">Nothing will be recorded: no play in your history, and nothing sent to BoardGameGeek.</string>
     <string name="session_discard_yes">Ignore it</string>
     <string name="session_modular_sets">Modular sets</string>
+    <string name="plays_delete_title">Delete this game?</string>
+    <string name="plays_delete_message">The game against %1$s will be removed from your history and your statistics. This cannot be undone, and it does not remove anything from BoardGameGeek.</string>
 </resources>

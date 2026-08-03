@@ -457,4 +457,6 @@
     <string name="session_discard_message">Rien ne sera enregistré : aucune partie dans votre historique, et rien envoyé sur BoardGameGeek.</string>
     <string name="session_discard_yes">Ignorer</string>
     <string name="session_modular_sets">Sets modulaires</string>
+    <string name="plays_delete_title">Supprimer cette partie ?</string>
+    <string name="plays_delete_message">La partie contre %1$s sera retirée de votre historique et de vos statistiques. Cette action est irréversible et ne supprime rien sur BoardGameGeek.</string>
 </resources>
