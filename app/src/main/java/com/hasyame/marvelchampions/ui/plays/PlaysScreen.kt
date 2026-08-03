@@ -246,7 +246,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.winRateSection(
     }
     items(rows, key = { "$title-${it.key}" }) { row ->
         ListItem(
-            headlineContent = { Text(row.key) },
+            headlineContent = { Text(readableKey(row.key)) },
             trailingContent = {
                 Text(
                     // Both the rate and the raw counts: a single win from one
@@ -331,4 +331,25 @@ private fun duration(millis: Long): String {
         hours > 0 -> "${hours}h ${minutes}m"
         else -> "${minutes}m"
     }
+}
+
+/**
+ * Turns a grouping key into something a person reads.
+ *
+ * Some keys are machine tokens: the solo and group split comes straight out of
+ * a CASE expression, and difficulty is stored as the enum name so that two
+ * screens agree on it. Both were being shown raw — "group", "standard_i" —
+ * and neither is translated.
+ */
+@Composable
+private fun readableKey(key: String): String = when (key) {
+    "solo" -> stringResource(R.string.plays_players_solo)
+    "group" -> stringResource(R.string.plays_players_group)
+    "standard_i" -> stringResource(R.string.difficulty_standard_i)
+    "standard_ii" -> stringResource(R.string.difficulty_standard_ii)
+    "expert_i" -> stringResource(R.string.difficulty_expert_i)
+    "expert_ii" -> stringResource(R.string.difficulty_expert_ii)
+    // A campaign records its own difficulty word, and heroes, aspects and
+    // scenarios are already names. Those pass through as they are.
+    else -> key.replaceFirstChar(Char::uppercase)
 }

@@ -42,25 +42,32 @@ class BackupRepository @Inject constructor(
 
     suspend fun export(destination: Uri): BackupResult = withContext(ioDispatcher) {
         runCatching {
+            // Read once and reused: the events are looked up per run, and
+            // fetching the run list a second time to do it was pure waste.
+            val runs = database.campaignDao().getRuns()
+
             val backup = Backup(
                 createdAt = System.currentTimeMillis(),
                 appVersion = appVersion(),
                 ownedPacks = database.ownedPackDao().getOwned(),
                 decks = database.savedDeckDao().getDecks(),
-                campaignRuns = database.campaignDao().getRuns(),
-                campaignEvents = database.campaignDao().getRuns()
-                    .flatMap { database.campaignDao().getEvents(it.id) },
+                campaignRuns = runs,
+                campaignEvents = runs.flatMap { database.campaignDao().getEvents(it.id) },
                 plays = database.playDao().getAllPlays(),
                 randomizerHistory = database.randomizerHistoryDao().getHistory(),
                 favouriteCards = database.favouriteDao().getAll(),
             )
 
-            val text = json.encodeToString(Backup.serializer(), backup)
-            context.contentResolver.openOutputStream(destination)?.use {
-                it.write(text.toByteArray())
+            val bytes = json.encodeToString(Backup.serializer(), backup).toByteArray()
+            // "wt", not the default "w". Several document providers do not
+            // truncate on plain write, so overwriting a longer backup with a
+            // shorter one left the old tail behind and produced a file that no
+            // longer parsed — a corrupt backup being much worse than none.
+            context.contentResolver.openOutputStream(destination, "wt")?.use {
+                it.write(bytes)
             } ?: error("could not open the file for writing")
 
-            BackupResult.Exported(text.length.toLong())
+            BackupResult.Exported(bytes.size.toLong())
         }.getOrElse { BackupResult.Failed(it.message ?: "unknown error") }
     }
 
