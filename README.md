@@ -9,22 +9,41 @@ you can read the app in French and the cards in English, or the reverse.
 
 ## Status
 
-In use, and being played with. The core is complete and the visual pass is
-under way.
+In use, and being played with. Current release: **[v1.2.0](https://github.com/Hasyame/Marvel-Champions-Compagnion/releases/latest)**.
+
+Every feature planned for the app is now in, and the work from here is campaign
+content rather than machinery.
 
 ### Done
 
 - **Card database.** The full MarvelCDB catalogue including encounter cards,
   searchable offline with accent-insensitive prefix matching, filters for type,
-  aspect, cost and traits, and a detail screen showing which product a card
-  comes from and which encounter set it belongs to. A card MarvelCDB has not
-  translated is shown in English rather than hidden.
+  aspect, cost and traits, sorting by set, name or cost, and a detail screen
+  showing which product a card comes from and which encounter set it belongs to.
+  A card MarvelCDB has not translated is shown in English rather than hidden.
+- **Favourites.** Star a card and filter the search down to the starred ones.
+  Kept separately from the card table, so they survive a card data refresh.
+- **Offline images.** Download the pictures for the packs you own, so cards are
+  readable at a table with no signal. Never automatic — it is a large download
+  and asking first is the only decent way to do that on mobile data.
 - **Collection.** Mark the packs you own; the randomiser and deck legality
   follow from it.
 - **Decks.** Import from a MarvelCDB link or a share from the browser, build
-  from scratch, edit, and check legality as you go.
+  from scratch, edit, check legality as you go, see what a deck is made of, and
+  share a decklist as plain text.
 - **Randomiser.** Scenario, difficulty, modular sets, heroes and aspects, drawn
   only from what you own, with locking, rerolls and a history.
+- **Play log.** Finished games are recorded and timed, whether they came from
+  the randomiser, from a campaign, or were set up by hand with your own modular
+  sets. The clock can be corrected afterwards, a game can be thrown away before
+  it is filed, and at a table of two or more the app draws who goes first.
+- **Statistics.** Win rate by hero, by scenario, by aspect, by difficulty, by
+  hero *with* aspect, and solo against multiplayer — kept apart because a
+  blended figure describes neither. Plus total time played, longest game, and
+  current and best winning streak.
+- **BoardGameGeek.** Optionally send finished plays to your account, with a
+  proper player row and the victory points as the score. Credentials are
+  encrypted with a key held in the Android keystore.
 - **Campaign tracker.** An append-only event log with all state folded from it,
   so a record can never drift from what was played. Counters, flags, card lists,
   a market, per-scenario questionnaires, and setup steps for one scenario that
@@ -32,17 +51,23 @@ under way.
   ships with the app.
 - **Finished campaigns.** Saved runs keep total time, victory points, heroes,
   credits and a per-scenario log of the answers given.
+- **Backup and restore.** Collection, decks, campaigns, play history and
+  favourites to a single readable JSON file, and back again on any device.
+  There is no account and no server, so without this the phone is the only copy.
+- **Dark theme**, on by default, and light if you prefer it.
 
 ### Next
 
-- **The Mad Titan's Shadow** — campaign template
-- **Age of Apocalypse** — campaign template
-- **Fear No Evil** — campaign template
-- Finishing the visual pass on the deck screens
-- Signed release builds
+Campaign templates, in the order they get played:
+
+- **The Mad Titan's Shadow**
+- **Age of Apocalypse**
+- **Fear No Evil**
 
 Campaigns are added after they have been played, so that the mechanics in the
-template come from experience rather than from a reading of the book.
+template come from experience rather than from a reading of the book. That is
+the whole roadmap — no further app features are planned, and anything else will
+come from something going wrong at a real table.
 
 ## Requirements
 
