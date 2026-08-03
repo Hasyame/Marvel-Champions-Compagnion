@@ -30,7 +30,7 @@ class BundledCampaignsTest {
             .map { name ->
                 val text = context.assets.open("campaigns/$name").bufferedReader()
                     .use { it.readText() }
-                name to json.decodeFromString(CampaignTemplate.serializer(), text)
+                name to json.decodeFromString(CampaignTemplate.serializer(), text).expanded()
             }
     }
 

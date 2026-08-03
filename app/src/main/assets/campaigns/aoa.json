@@ -38,6 +38,115 @@
    "scope": "campaign"
   }
  ],
+ "setupFragments": {
+  "standardIII": [
+   {
+    "text": {
+     "fr": "Le Standard III peut remplacer le Standard : la trahison Shadow of the Past cède la place à cet environnement permanent",
+     "en": "Standard III may replace Standard: the Shadow of the Past treachery gives way to this permanent environment"
+    },
+    "cards": [
+     "45075a"
+    ]
+   }
+  ],
+  "missions": [
+   {
+    "text": {
+     "fr": "Mélanger le set Age of Apocalypse dans le deck rencontre",
+     "en": "Shuffle the Age of Apocalypse set into the encounter deck"
+    },
+    "cards": [
+     "45164",
+     "45165"
+    ]
+   },
+   {
+    "text": {
+     "fr": "Révéler cette mission dans la zone de mission (tirée parmi les disponibles)",
+     "en": "Reveal this MISSION side scheme in the mission area (drawn from those available)"
+    },
+    "draw": {
+     "id": "mission",
+     "from": [
+      "45166a",
+      "45167a",
+      "45168a",
+      "45169a"
+     ],
+     "excluding": "missionsUsed"
+    }
+   },
+   {
+    "text": {
+     "fr": "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
+     "en": "Put this OVERSEER minion in the mission area, then put the Mission Rules card into play beside it"
+    },
+    "draw": {
+     "id": "overseer",
+     "from": [
+      "45179a",
+      "45180a",
+      "45181a",
+      "45182a",
+      "45183a"
+     ],
+     "excluding": "overseersDefeated"
+    }
+   },
+   {
+    "text": {
+     "fr": "Le premier joueur prend ce soutien, face MISSION visible",
+     "en": "The first player takes this support, MISSION side faceup"
+    },
+    "cards": [
+     "45171a"
+    ]
+   },
+   {
+    "text": {
+     "fr": "Chaque joueur cherche un allié dans son deck et l'ajoute à sa main (il compte dans la taille de main)",
+     "en": "Each player searches their deck for an ally and adds it to their hand (it counts towards hand size)"
+    }
+   }
+  ],
+  "expertHp": [
+   {
+    "text": {
+     "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
+     "en": "Expert campaign: set each hit point total to the value recorded last scenario"
+    },
+    "when": {
+     "difficulty": "expert"
+    },
+    "showCounter": "hp"
+   },
+   {
+    "text": {
+     "fr": "Campagne Expert : placer 3 menaces sur la mission pour revenir aux points de vie imprimés",
+     "en": "Expert campaign: place 3 threat on the MISSION side scheme to heal to printed hit points"
+    },
+    "when": {
+     "difficulty": "expert"
+    },
+    "action": {
+     "id": "heal",
+     "label": {
+      "fr": "Soigner",
+      "en": "Heal"
+     },
+     "perHero": true,
+     "effects": [
+      {
+       "op": "setHeroCounter",
+       "counter": "hp",
+       "value": 999
+      }
+     ]
+    }
+   }
+  ]
+ },
  "startScenarioId": "s1_unus",
  "scenarios": [
   {
@@ -81,13 +190,7 @@
    },
    "campaignSetup": [
     {
-     "text": {
-      "fr": "Le Standard III peut remplacer le Standard : la trahison Shadow of the Past cède la place à cet environnement permanent",
-      "en": "Standard III may replace Standard: the Shadow of the Past treachery gives way to this permanent environment"
-     },
-     "cards": [
-      "45075a"
-     ]
+     "include": "standardIII"
     },
     {
      "text": {
@@ -108,62 +211,7 @@
      ]
     },
     {
-     "text": {
-      "fr": "Mélanger le set Age of Apocalypse dans le deck rencontre",
-      "en": "Shuffle the Age of Apocalypse set into the encounter deck"
-     },
-     "cards": [
-      "45164",
-      "45165"
-     ]
-    },
-    {
-     "text": {
-      "fr": "Révéler cette mission dans la zone de mission (tirée parmi les disponibles)",
-      "en": "Reveal this MISSION side scheme in the mission area (drawn from those available)"
-     },
-     "draw": {
-      "id": "mission",
-      "from": [
-       "45166a",
-       "45167a",
-       "45168a",
-       "45169a"
-      ],
-      "excluding": "missionsUsed"
-     }
-    },
-    {
-     "text": {
-      "fr": "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
-      "en": "Put this OVERSEER minion in the mission area, then put the Mission Rules card into play beside it"
-     },
-     "draw": {
-      "id": "overseer",
-      "from": [
-       "45179a",
-       "45180a",
-       "45181a",
-       "45182a",
-       "45183a"
-      ],
-      "excluding": "overseersDefeated"
-     }
-    },
-    {
-     "text": {
-      "fr": "Le premier joueur prend ce soutien, face MISSION visible",
-      "en": "The first player takes this support, MISSION side faceup"
-     },
-     "cards": [
-      "45171a"
-     ]
-    },
-    {
-     "text": {
-      "fr": "Chaque joueur cherche un allié dans son deck et l'ajoute à sa main (il compte dans la taille de main)",
-      "en": "Each player searches their deck for an ally and adds it to their hand (it counts towards hand size)"
-     }
+     "include": "missions"
     }
    ],
    "onVictory": {
@@ -278,13 +326,7 @@
    },
    "campaignSetup": [
     {
-     "text": {
-      "fr": "Le Standard III peut remplacer le Standard : la trahison Shadow of the Past cède la place à cet environnement permanent",
-      "en": "Standard III may replace Standard: the Shadow of the Past treachery gives way to this permanent environment"
-     },
-     "cards": [
-      "45075a"
-     ]
+     "include": "standardIII"
     },
     {
      "text": {
@@ -311,96 +353,10 @@
      }
     },
     {
-     "text": {
-      "fr": "Mélanger le set Age of Apocalypse dans le deck rencontre",
-      "en": "Shuffle the Age of Apocalypse set into the encounter deck"
-     },
-     "cards": [
-      "45164",
-      "45165"
-     ]
+     "include": "missions"
     },
     {
-     "text": {
-      "fr": "Révéler cette mission dans la zone de mission (tirée parmi les disponibles)",
-      "en": "Reveal this MISSION side scheme in the mission area (drawn from those available)"
-     },
-     "draw": {
-      "id": "mission",
-      "from": [
-       "45166a",
-       "45167a",
-       "45168a",
-       "45169a"
-      ],
-      "excluding": "missionsUsed"
-     }
-    },
-    {
-     "text": {
-      "fr": "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
-      "en": "Put this OVERSEER minion in the mission area, then put the Mission Rules card into play beside it"
-     },
-     "draw": {
-      "id": "overseer",
-      "from": [
-       "45179a",
-       "45180a",
-       "45181a",
-       "45182a",
-       "45183a"
-      ],
-      "excluding": "overseersDefeated"
-     }
-    },
-    {
-     "text": {
-      "fr": "Le premier joueur prend ce soutien, face MISSION visible",
-      "en": "The first player takes this support, MISSION side faceup"
-     },
-     "cards": [
-      "45171a"
-     ]
-    },
-    {
-     "text": {
-      "fr": "Chaque joueur cherche un allié dans son deck et l'ajoute à sa main (il compte dans la taille de main)",
-      "en": "Each player searches their deck for an ally and adds it to their hand (it counts towards hand size)"
-     }
-    },
-    {
-     "text": {
-      "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
-      "en": "Expert campaign: set each hit point total to the value recorded last scenario"
-     },
-     "when": {
-      "difficulty": "expert"
-     },
-     "showCounter": "hp"
-    },
-    {
-     "text": {
-      "fr": "Campagne Expert : placer 3 menaces sur la mission pour revenir aux points de vie imprimés",
-      "en": "Expert campaign: place 3 threat on the MISSION side scheme to heal to printed hit points"
-     },
-     "when": {
-      "difficulty": "expert"
-     },
-     "action": {
-      "id": "heal",
-      "label": {
-       "fr": "Soigner",
-       "en": "Heal"
-      },
-      "perHero": true,
-      "effects": [
-       {
-        "op": "setHeroCounter",
-        "counter": "hp",
-        "value": 999
-       }
-      ]
-     }
+     "include": "expertHp"
     }
    ],
    "onVictory": {
@@ -511,13 +467,7 @@
    },
    "campaignSetup": [
     {
-     "text": {
-      "fr": "Le Standard III peut remplacer le Standard : la trahison Shadow of the Past cède la place à cet environnement permanent",
-      "en": "Standard III may replace Standard: the Shadow of the Past treachery gives way to this permanent environment"
-     },
-     "cards": [
-      "45075a"
-     ]
+     "include": "standardIII"
     },
     {
      "text": {
@@ -551,96 +501,10 @@
      ]
     },
     {
-     "text": {
-      "fr": "Mélanger le set Age of Apocalypse dans le deck rencontre",
-      "en": "Shuffle the Age of Apocalypse set into the encounter deck"
-     },
-     "cards": [
-      "45164",
-      "45165"
-     ]
+     "include": "missions"
     },
     {
-     "text": {
-      "fr": "Révéler cette mission dans la zone de mission (tirée parmi les disponibles)",
-      "en": "Reveal this MISSION side scheme in the mission area (drawn from those available)"
-     },
-     "draw": {
-      "id": "mission",
-      "from": [
-       "45166a",
-       "45167a",
-       "45168a",
-       "45169a"
-      ],
-      "excluding": "missionsUsed"
-     }
-    },
-    {
-     "text": {
-      "fr": "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
-      "en": "Put this OVERSEER minion in the mission area, then put the Mission Rules card into play beside it"
-     },
-     "draw": {
-      "id": "overseer",
-      "from": [
-       "45179a",
-       "45180a",
-       "45181a",
-       "45182a",
-       "45183a"
-      ],
-      "excluding": "overseersDefeated"
-     }
-    },
-    {
-     "text": {
-      "fr": "Le premier joueur prend ce soutien, face MISSION visible",
-      "en": "The first player takes this support, MISSION side faceup"
-     },
-     "cards": [
-      "45171a"
-     ]
-    },
-    {
-     "text": {
-      "fr": "Chaque joueur cherche un allié dans son deck et l'ajoute à sa main (il compte dans la taille de main)",
-      "en": "Each player searches their deck for an ally and adds it to their hand (it counts towards hand size)"
-     }
-    },
-    {
-     "text": {
-      "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
-      "en": "Expert campaign: set each hit point total to the value recorded last scenario"
-     },
-     "when": {
-      "difficulty": "expert"
-     },
-     "showCounter": "hp"
-    },
-    {
-     "text": {
-      "fr": "Campagne Expert : placer 3 menaces sur la mission pour revenir aux points de vie imprimés",
-      "en": "Expert campaign: place 3 threat on the MISSION side scheme to heal to printed hit points"
-     },
-     "when": {
-      "difficulty": "expert"
-     },
-     "action": {
-      "id": "heal",
-      "label": {
-       "fr": "Soigner",
-       "en": "Heal"
-      },
-      "perHero": true,
-      "effects": [
-       {
-        "op": "setHeroCounter",
-        "counter": "hp",
-        "value": 999
-       }
-      ]
-     }
+     "include": "expertHp"
     }
    ],
    "onVictory": {
@@ -753,105 +617,13 @@
    },
    "campaignSetup": [
     {
-     "text": {
-      "fr": "Le Standard III peut remplacer le Standard : la trahison Shadow of the Past cède la place à cet environnement permanent",
-      "en": "Standard III may replace Standard: the Shadow of the Past treachery gives way to this permanent environment"
-     },
-     "cards": [
-      "45075a"
-     ]
+     "include": "standardIII"
     },
     {
-     "text": {
-      "fr": "Mélanger le set Age of Apocalypse dans le deck rencontre",
-      "en": "Shuffle the Age of Apocalypse set into the encounter deck"
-     },
-     "cards": [
-      "45164",
-      "45165"
-     ]
+     "include": "missions"
     },
     {
-     "text": {
-      "fr": "Révéler cette mission dans la zone de mission (tirée parmi les disponibles)",
-      "en": "Reveal this MISSION side scheme in the mission area (drawn from those available)"
-     },
-     "draw": {
-      "id": "mission",
-      "from": [
-       "45166a",
-       "45167a",
-       "45168a",
-       "45169a"
-      ],
-      "excluding": "missionsUsed"
-     }
-    },
-    {
-     "text": {
-      "fr": "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
-      "en": "Put this OVERSEER minion in the mission area, then put the Mission Rules card into play beside it"
-     },
-     "draw": {
-      "id": "overseer",
-      "from": [
-       "45179a",
-       "45180a",
-       "45181a",
-       "45182a",
-       "45183a"
-      ],
-      "excluding": "overseersDefeated"
-     }
-    },
-    {
-     "text": {
-      "fr": "Le premier joueur prend ce soutien, face MISSION visible",
-      "en": "The first player takes this support, MISSION side faceup"
-     },
-     "cards": [
-      "45171a"
-     ]
-    },
-    {
-     "text": {
-      "fr": "Chaque joueur cherche un allié dans son deck et l'ajoute à sa main (il compte dans la taille de main)",
-      "en": "Each player searches their deck for an ally and adds it to their hand (it counts towards hand size)"
-     }
-    },
-    {
-     "text": {
-      "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
-      "en": "Expert campaign: set each hit point total to the value recorded last scenario"
-     },
-     "when": {
-      "difficulty": "expert"
-     },
-     "showCounter": "hp"
-    },
-    {
-     "text": {
-      "fr": "Campagne Expert : placer 3 menaces sur la mission pour revenir aux points de vie imprimés",
-      "en": "Expert campaign: place 3 threat on the MISSION side scheme to heal to printed hit points"
-     },
-     "when": {
-      "difficulty": "expert"
-     },
-     "action": {
-      "id": "heal",
-      "label": {
-       "fr": "Soigner",
-       "en": "Heal"
-      },
-      "perHero": true,
-      "effects": [
-       {
-        "op": "setHeroCounter",
-        "counter": "hp",
-        "value": 999
-       }
-      ]
-     }
+     "include": "expertHp"
     }
    ],
    "onVictory": {
@@ -963,13 +735,7 @@
    },
    "campaignSetup": [
     {
-     "text": {
-      "fr": "Le Standard III peut remplacer le Standard : la trahison Shadow of the Past cède la place à cet environnement permanent",
-      "en": "Standard III may replace Standard: the Shadow of the Past treachery gives way to this permanent environment"
-     },
-     "cards": [
-      "45075a"
-     ]
+     "include": "standardIII"
     },
     {
      "text": {
@@ -1047,38 +813,7 @@
      ]
     },
     {
-     "text": {
-      "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
-      "en": "Expert campaign: set each hit point total to the value recorded last scenario"
-     },
-     "when": {
-      "difficulty": "expert"
-     },
-     "showCounter": "hp"
-    },
-    {
-     "text": {
-      "fr": "Campagne Expert : placer 3 menaces sur la mission pour revenir aux points de vie imprimés",
-      "en": "Expert campaign: place 3 threat on the MISSION side scheme to heal to printed hit points"
-     },
-     "when": {
-      "difficulty": "expert"
-     },
-     "action": {
-      "id": "heal",
-      "label": {
-       "fr": "Soigner",
-       "en": "Heal"
-      },
-      "perHero": true,
-      "effects": [
-       {
-        "op": "setHeroCounter",
-        "counter": "hp",
-        "value": 999
-       }
-      ]
-     }
+     "include": "expertHp"
     }
    ],
    "onVictory": {

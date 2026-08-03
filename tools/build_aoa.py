@@ -180,7 +180,7 @@ scenarios.append({
         "encounterSets": ["unus", "infinites", "dystopian_nightmare", "standard"],
     },
     "campaignSetup": [
-        standard_iii_step(),
+        {"include": "standardIII"},
         {
             "text": t(
                 "Gene Pool commence en jeu et ne peut pas la quitter. Unus et l'Infinite Soldier "
@@ -199,7 +199,7 @@ scenarios.append({
             ),
             "cards": ["45071"],
         },
-    ] + mission_steps(1) + expert_steps(first_scenario=True),
+    ] + [{"include": "missions"}],
     "onVictory": {
         "prompts": mission_outcome_prompts(1),
         "effects": mission_outcome_effects(),
@@ -231,7 +231,7 @@ scenarios.append({
         "encounterSets": ["four_horsemen", "hounds", "dystopian_nightmare", "standard"],
     },
     "campaignSetup": [
-        standard_iii_step(),
+        {"include": "standardIII"},
         {
             "text": t(
                 "Révéler les quatre vilains dans un ordre aléatoire et les aligner, chacun avec "
@@ -257,7 +257,7 @@ scenarios.append({
                 "counter passes to the next villain to its right",
             ),
         },
-    ] + mission_steps(2) + expert_steps(),
+    ] + [{"include": "missions"}, {"include": "expertHp"}],
     "onVictory": {
         "prompts": mission_outcome_prompts(2),
         "effects": mission_outcome_effects(),
@@ -286,7 +286,7 @@ scenarios.append({
         ],
     },
     "campaignSetup": [
-        standard_iii_step(),
+        {"include": "standardIII"},
         {
             "text": t(
                 "Commencer sur la face Apocalypse (II). Pour une partie plus facile, commencer "
@@ -313,7 +313,7 @@ scenarios.append({
             ),
             "cards": ["45105a"],
         },
-    ] + mission_steps(3) + expert_steps(),
+    ] + [{"include": "missions"}, {"include": "expertHp"}],
     "onVictory": {
         "prompts": mission_outcome_prompts(3),
         "effects": mission_outcome_effects(),
@@ -341,7 +341,7 @@ scenarios.append({
             "dystopian_nightmare", "standard",
         ],
     },
-    "campaignSetup": [standard_iii_step()] + mission_steps(4) + expert_steps(),
+    "campaignSetup": [{"include": "standardIII"}, {"include": "missions"}, {"include": "expertHp"}],
     "onVictory": {
         "prompts": mission_outcome_prompts(4),
         "effects": mission_outcome_effects(),
@@ -369,7 +369,7 @@ scenarios.append({
         "encounterSets": ["en_sabah_nur", "celestial_tech", "clan_akkaba", "standard"],
     },
     "campaignSetup": [
-        standard_iii_step(),
+        {"include": "standardIII"},
         {
             "text": t(
                 "Mélanger le set Age of Apocalypse dans le deck rencontre",
@@ -430,7 +430,7 @@ scenarios.append({
             ),
             "cards": ["45184a"],
         },
-    ] + expert_steps(),
+    ] + [{"include": "expertHp"}],
     "onVictory": {
         "prompts": [
             {
@@ -475,6 +475,14 @@ template = {
         {"id": "missionsUsed", "scope": "campaign"},
         {"id": "overseersDefeated", "scope": "campaign"},
     ],
+    # Written once and included where they belong: the side-mission setup is
+    # word for word the same in five scenarios, and five copies of it would be
+    # five things to keep in step.
+    "setupFragments": {
+        "standardIII": [standard_iii_step()],
+        "missions": mission_steps(0),
+        "expertHp": expert_steps(),
+    },
     "startScenarioId": "s1_unus",
     "scenarios": scenarios,
 }

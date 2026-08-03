@@ -172,7 +172,7 @@ class CampaignRepository @Inject constructor(
                     }
                     TemplateValidator.validateOrThrow(
                         json.decodeFromString(CampaignTemplate.serializer(), text),
-                    )
+                    ).expanded()
                 }.getOrNull()
             }
             .sortedBy { it.name.resolve("fr") }
@@ -193,7 +193,7 @@ class CampaignRepository @Inject constructor(
             } ?: return@withContext TemplateImportResult.Unreadable("could not open file")
 
             val template = json.decodeFromString(CampaignTemplate.serializer(), text)
-            TemplateImportResult.Success(TemplateValidator.validateOrThrow(template))
+            TemplateImportResult.Success(TemplateValidator.validateOrThrow(template).expanded())
         } catch (invalid: TemplateValidationException) {
             TemplateImportResult.Invalid(invalid.errors)
         } catch (error: Exception) {
@@ -249,7 +249,7 @@ class CampaignRepository @Inject constructor(
     suspend fun load(runId: String, locale: CardLocale): CampaignRun? = withContext(ioDispatcher) {
         val entity = campaignDao.getRun(runId) ?: return@withContext null
         val stored = runCatching {
-            json.decodeFromString(CampaignTemplate.serializer(), entity.templateJson)
+            json.decodeFromString(CampaignTemplate.serializer(), entity.templateJson).expanded()
         }.getOrNull() ?: return@withContext null
 
         // A run stores its own copy of the template so it survives the file
@@ -566,7 +566,7 @@ class CampaignRepository @Inject constructor(
         withContext(ioDispatcher) {
             campaignDao.getRuns().flatMap { entity ->
                 val template = runCatching {
-                    json.decodeFromString(CampaignTemplate.serializer(), entity.templateJson)
+                    json.decodeFromString(CampaignTemplate.serializer(), entity.templateJson).expanded()
                 }.getOrNull() ?: return@flatMap emptyList()
 
                 val events = campaignDao.getEvents(entity.id).mapNotNull { row ->
@@ -594,7 +594,7 @@ class CampaignRepository @Inject constructor(
     suspend fun summaries(): List<CampaignSummary> = withContext(ioDispatcher) {
         campaignDao.getRuns().map { entity ->
             val template = runCatching {
-                json.decodeFromString(CampaignTemplate.serializer(), entity.templateJson)
+                json.decodeFromString(CampaignTemplate.serializer(), entity.templateJson).expanded()
             }.getOrNull() ?: return@map CampaignSummary(entity)
 
             val events = campaignDao.getEvents(entity.id).mapNotNull { row ->

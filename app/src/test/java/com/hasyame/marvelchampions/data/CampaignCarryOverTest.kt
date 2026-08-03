@@ -33,7 +33,7 @@ class CampaignCarryOverTest {
     private fun gmw(): CampaignTemplate {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val text = context.assets.open("campaigns/gmw.json").bufferedReader().use { it.readText() }
-        return json.decodeFromString(CampaignTemplate.serializer(), text)
+        return json.decodeFromString(CampaignTemplate.serializer(), text).expanded()
     }
 
     private val heroes = listOf(

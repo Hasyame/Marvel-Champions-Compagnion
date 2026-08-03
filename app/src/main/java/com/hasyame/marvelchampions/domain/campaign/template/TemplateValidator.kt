@@ -22,8 +22,25 @@ object TemplateValidator {
 
     private const val SUPPORTED_SCHEMA_VERSION = 1
 
-    fun validate(template: CampaignTemplate): List<TemplateError> {
+    fun validate(input: CampaignTemplate): List<TemplateError> {
         val errors = mutableListOf<TemplateError>()
+
+        // Unresolved includes are reported against the template as written;
+        // every other rule runs on the expanded form, so a step hidden inside a
+        // fragment is held to exactly the same standard as one written inline.
+        input.scenarios.forEach { scenario ->
+            scenario.campaignSetup.forEachIndexed { index, step ->
+                step.include?.let { fragment ->
+                    if (fragment !in input.setupFragments) {
+                        errors += TemplateError(
+                            "scenarios.${scenario.id}.campaignSetup[$index].include",
+                            "unknown setup fragment '$fragment'",
+                        )
+                    }
+                }
+            }
+        }
+        val template = input.expanded()
 
         if (template.id.isBlank()) {
             errors += TemplateError("id", "must not be blank")

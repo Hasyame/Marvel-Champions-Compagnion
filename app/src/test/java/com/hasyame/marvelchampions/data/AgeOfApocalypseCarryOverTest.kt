@@ -37,7 +37,7 @@ class AgeOfApocalypseCarryOverTest {
     private fun template(): CampaignTemplate {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val text = context.assets.open("campaigns/aoa.json").bufferedReader().use { it.readText() }
-        return json.decodeFromString(CampaignTemplate.serializer(), text)
+        return json.decodeFromString(CampaignTemplate.serializer(), text).expanded()
     }
 
     private val heroes = listOf(

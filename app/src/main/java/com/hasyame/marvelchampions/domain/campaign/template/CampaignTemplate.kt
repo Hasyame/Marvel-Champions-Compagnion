@@ -29,10 +29,42 @@ data class CampaignTemplate(
     val flagSets: List<FlagSetDefinition> = emptyList(),
     val cardLists: List<CardListDefinition> = emptyList(),
     val market: MarketDefinition? = null,
+    /**
+     * Setup steps written once and included by the scenarios that share them.
+     *
+     * Campaigns repeat themselves: Age of Apocalypse sets up the same side
+     * mission five times over. Spelling it out per scenario is not just longer,
+     * it lets the five copies drift apart, and a campaign whose scenario 3
+     * quietly disagrees with its scenario 2 is worse than one that is verbose.
+     *
+     * One level deep on purpose — a fragment cannot include another. Nested
+     * includes buy nothing here and make a template hard to read in the order
+     * it is played.
+     */
+    val setupFragments: Map<String, List<SetupStep>> = emptyMap(),
     val scenarios: List<ScenarioTemplate> = emptyList(),
     /** Scenario id the campaign starts on. Defaults to the first. */
     val startScenarioId: String? = null,
-)
+) {
+
+    /**
+     * The same campaign with every [setupFragments] include spelled out.
+     *
+     * Everything downstream — the engine, the validator, the briefing screen —
+     * works on expanded scenarios, so nothing else in the app has to know that
+     * fragments exist. An include naming a fragment that does not exist is left
+     * in place for [TemplateValidator] to report rather than silently dropped.
+     */
+    fun expanded(): CampaignTemplate = copy(
+        scenarios = scenarios.map { scenario ->
+            scenario.copy(
+                campaignSetup = scenario.campaignSetup.flatMap { step ->
+                    step.include?.let { setupFragments[it] } ?: listOf(step)
+                },
+            )
+        },
+    )
+}
 
 /**
  * Content is French first. English can be added later, and a missing string
@@ -140,7 +172,8 @@ data class BaseSetup(
  */
 @Serializable
 data class SetupStep(
-    val text: LocalizedText,
+    /** Empty only on an [include], which is replaced before anything reads it. */
+    val text: LocalizedText = LocalizedText(),
     @SerialName("when") val condition: Condition? = null,
     val action: SetupAction? = null,
     /**
@@ -163,6 +196,12 @@ data class SetupStep(
 
     /** Names the heroes whose value for this counter is above zero. */
     val showHeroesWith: String? = null,
+
+    /**
+     * Replaces this step with the named entry of
+     * [CampaignTemplate.setupFragments]. Every other field is ignored.
+     */
+    val include: String? = null,
 
     /**
      * A card the app draws at random instead of the player.
