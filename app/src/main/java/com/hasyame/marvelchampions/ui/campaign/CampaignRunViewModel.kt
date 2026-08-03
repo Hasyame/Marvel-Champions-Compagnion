@@ -102,7 +102,11 @@ class CampaignRunViewModel @Inject constructor(
 
     private suspend fun reload() {
         val id = runId ?: return
-        val run = repository.load(id, preferences.currentCardLocale())
+        val locale = preferences.currentCardLocale()
+        // Before the run is read, so the briefing shows its drawn cards on the
+        // first frame rather than filling them in a moment later.
+        repository.ensureSetupDraws(id, locale)
+        val run = repository.load(id, locale)
         state.value = state.value.copy(
             run = run,
             elapsedMillis = run?.timer?.elapsedAt(System.currentTimeMillis()) ?: 0,

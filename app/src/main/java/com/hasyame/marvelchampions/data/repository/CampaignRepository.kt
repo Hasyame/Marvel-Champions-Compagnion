@@ -489,6 +489,54 @@ class CampaignRepository @Inject constructor(
         )
     }
 
+    /**
+     * Makes any random pick the current scenario's setup calls for.
+     *
+     * The campaign says "randomly select an available X", and available means
+     * across the whole campaign — so the pool is the template's list minus
+     * whatever the log says is spent. Drawing it here rather than on screen is
+     * what makes it stable: recorded as an event, it survives leaving the
+     * screen, rotating the device and closing the app, and it cannot change
+     * while somebody is reading the setup off it.
+     *
+     * Idempotent. A draw already recorded for this scenario is left alone, so
+     * this can run on every load.
+     */
+    suspend fun ensureSetupDraws(runId: String, locale: CardLocale): Boolean =
+        withContext(ioDispatcher) {
+            val run = load(runId, locale) ?: return@withContext false
+            val scenarioId = run.state.currentScenarioId ?: return@withContext false
+            val scenario = run.template.scenarios.firstOrNull { it.id == scenarioId }
+                ?: return@withContext false
+
+            var drawn = false
+            // Sequential rather than mapped: each draw must see the ones before
+            // it, or two draws over the same pool could come up with one card
+            // twice in the same setup.
+            var state = run.state
+            for (definition in scenario.campaignSetup.mapNotNull { it.draw }) {
+                if (CampaignEngine.drawnCard(state, scenarioId, definition.id) != null) {
+                    continue
+                }
+                val code = CampaignEngine.drawPool(definition, state).randomOrNull() ?: continue
+                val event = CampaignEvent.SetupDrawn(
+                    id = UUID.randomUUID().toString(),
+                    timestamp = System.currentTimeMillis(),
+                    scenarioId = scenarioId,
+                    drawId = definition.id,
+                    cardCode = code,
+                )
+                append(runId, event)
+                state = state.copy(
+                    draws = state.draws + (
+                        scenarioId to (state.draws[scenarioId].orEmpty() + (definition.id to code))
+                        ),
+                )
+                drawn = true
+            }
+            drawn
+        }
+
     suspend fun updateTimer(runId: String, timer: TimerState, scenarioId: String?) =
         withContext(ioDispatcher) {
             campaignDao.updateTimer(

@@ -47,6 +47,7 @@ import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.core.designsystem.component.ComicPanel
 import com.hasyame.marvelchampions.core.designsystem.component.halftone
 import com.hasyame.marvelchampions.data.repository.CampaignRun
+import com.hasyame.marvelchampions.domain.campaign.engine.CampaignEngine
 import com.hasyame.marvelchampions.domain.campaign.engine.ConditionEvaluator
 import com.hasyame.marvelchampions.domain.campaign.engine.EvaluationContext
 import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
@@ -294,9 +295,22 @@ private fun BriefingPage(
                                     )
                                 }
 
-                                if (step.cards.isNotEmpty()) {
+                                // A drawn step shows what came up and nothing
+                                // else. Listing the whole pool beside it would
+                                // put the player back to picking one, which is
+                                // the job the app just did for them.
+                                val drawn = step.draw?.let {
+                                    CampaignEngine.drawnCard(
+                                        run.state,
+                                        run.state.currentScenarioId,
+                                        it.id,
+                                    )
+                                }
+                                val chips = if (step.draw != null) listOfNotNull(drawn) else step.cards
+
+                                if (chips.isNotEmpty()) {
                                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                        step.cards.forEach { code ->
+                                        chips.forEach { code ->
                                             AssistChip(
                                                 onClick = { onCardClick(code) },
                                                 label = { Text(run.names.card(code)) },

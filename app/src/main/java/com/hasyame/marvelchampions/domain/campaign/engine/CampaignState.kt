@@ -26,6 +26,13 @@ data class CampaignState(
     /** Heroes eliminated in the scenario currently being resolved. */
     val eliminatedInScenario: Map<String, Set<String>> = emptyMap(),
 
+    /**
+     * Cards the app drew for a scenario's setup: scenario id to draw id to card
+     * code. Cleared when the scenario is finished, so replaying after a defeat
+     * draws afresh rather than repeating the setup that just went wrong.
+     */
+    val draws: Map<String, Map<String, String>> = emptyMap(),
+
     val currentScenarioId: String? = null,
     val completedScenarios: List<ScenarioResult> = emptyList(),
     val setupActionsTaken: Map<String, Set<String>> = emptyMap(),

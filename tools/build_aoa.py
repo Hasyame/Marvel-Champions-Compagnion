@@ -43,21 +43,18 @@ def mission_steps(scenario_number):
         },
         {
             "text": t(
-                "Choisir au hasard une mission encore disponible et la révéler dans la zone de mission",
-                "Randomly select an available MISSION side scheme and reveal it in the mission area",
+                "Révéler cette mission dans la zone de mission (tirée parmi les disponibles)",
+                "Reveal this MISSION side scheme in the mission area (drawn from those available)",
             ),
-            "cards": MISSIONS,
-            "showCardList": "missionsUsed",
+            "draw": {"id": "mission", "from": MISSIONS, "excluding": "missionsUsed"},
         },
         {
             "text": t(
-                "Choisir au hasard un Overseer encore disponible et le placer dans la zone de mission, "
-                "puis y poser la carte Mission Rules",
-                "Randomly select an available OVERSEER minion, put it in the mission area, "
-                "then put the Mission Rules card into play beside it",
+                "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
+                "Put this OVERSEER minion in the mission area, then put the Mission Rules card "
+                "into play beside it",
             ),
-            "cards": OVERSEERS,
-            "showCardList": "overseersDefeated",
+            "draw": {"id": "overseer", "from": OVERSEERS, "excluding": "overseersDefeated"},
         },
         {
             "text": t(
@@ -106,17 +103,15 @@ def expert_steps(first_scenario=False):
 
 
 def mission_outcome_prompts(scenario_number):
-    """What the campaign log needs recorded after scenarios 1 to 4."""
+    """What the campaign log needs recorded after scenarios 1 to 4.
+
+    The app already knows which mission and overseer were in play — it drew
+    them — so it only asks what it cannot know. Whether the mission fell is
+    recorded for the campaign summary; its reward and its penalty are both
+    printed on the back of the card and resolve inside the scenario, so nothing
+    carries forward from it.
+    """
     return [
-        {
-            "id": "mission",
-            "type": "cardSelect",
-            "label": t(
-                "Quelle mission était en jeu ? (elle est rayée du journal, vaincue ou non)",
-                "Which MISSION side scheme was in play? (it is struck from the log either way)",
-            ),
-            "cards": MISSIONS,
-        },
         {
             "id": "missionDefeated",
             "type": "boolean",
@@ -126,13 +121,12 @@ def mission_outcome_prompts(scenario_number):
             ),
         },
         {
-            "id": "overseer",
-            "type": "cardSelect",
+            "id": "overseerDefeated",
+            "type": "boolean",
             "label": t(
-                "Quel Overseer a été vaincu ? (le laisser vide s'il a survécu)",
-                "Which OVERSEER minion was defeated? (leave empty if it survived)",
+                "L'Overseer a-t-il été vaincu ?",
+                "Was the OVERSEER minion defeated?",
             ),
-            "cards": OVERSEERS,
         },
         {
             "id": "hpPerHero",
@@ -146,11 +140,17 @@ def mission_outcome_prompts(scenario_number):
 def mission_outcome_effects():
     return [
         # Struck whether or not it was defeated: a mission that was attempted is
-        # spent. Only the reward depends on whether it fell.
-        {"op": "addCardsFromAnswer", "cardList": "missionsUsed", "from": "mission"},
-        # An overseer is only struck when it was defeated, so an empty answer
-        # correctly leaves it in the pool for the next scenario.
-        {"op": "addCardsFromAnswer", "cardList": "overseersDefeated", "from": "overseer"},
+        # spent. Whether it fell only decides which of its two backs resolves,
+        # and that happens inside the scenario.
+        {"op": "addDrawnCard", "cardList": "missionsUsed", "from": "mission"},
+        # An overseer is struck only when it fell, so one that survived stays in
+        # the pool for the next scenario.
+        {
+            "op": "addDrawnCard",
+            "cardList": "overseersDefeated",
+            "from": "overseer",
+            "when": {"answer": "overseerDefeated"},
+        },
         {
             "op": "setHeroCounter",
             "counter": "hp",
@@ -387,13 +387,11 @@ scenarios.append({
         },
         {
             "text": t(
-                "Choisir au hasard un Overseer encore disponible et le placer dans la zone de mission, "
-                "puis y poser la carte Mission Rules",
-                "Randomly select an available OVERSEER minion, put it in the mission area, "
-                "then put the Mission Rules card into play beside it",
+                "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
+                "Put this OVERSEER minion in the mission area, then put the Mission Rules card "
+                "into play beside it",
             ),
-            "cards": OVERSEERS,
-            "showCardList": "overseersDefeated",
+            "draw": {"id": "overseer", "from": OVERSEERS, "excluding": "overseersDefeated"},
         },
         {
             "text": t(

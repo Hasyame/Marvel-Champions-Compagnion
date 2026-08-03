@@ -2,6 +2,7 @@ package com.hasyame.marvelchampions.domain.campaign.engine
 
 import com.hasyame.marvelchampions.domain.campaign.template.CampaignTemplate
 import com.hasyame.marvelchampions.domain.campaign.template.CounterScope
+import com.hasyame.marvelchampions.domain.campaign.template.DrawDefinition
 import com.hasyame.marvelchampions.domain.campaign.template.Effect
 import com.hasyame.marvelchampions.domain.campaign.template.EffectOp
 import com.hasyame.marvelchampions.domain.campaign.template.Outcome
@@ -62,6 +63,12 @@ class CampaignEngine(
                     if (event.id in refunded) state else applyPurchase(state, event)
 
                 is CampaignEvent.SetupActionTaken -> applySetupAction(template, state, event, heroStats)
+                is CampaignEvent.SetupDrawn -> state.copy(
+                    draws = state.draws + (
+                        event.scenarioId to
+                            (state.draws[event.scenarioId].orEmpty() + (event.drawId to event.cardCode))
+                        ),
+                )
                 is CampaignEvent.ManualAdjustment -> applyManual(state, event)
                 is CampaignEvent.TimeRecorded ->
                     state.copy(totalPlayTimeMillis = state.totalPlayTimeMillis + event.elapsedMillis)
@@ -148,6 +155,9 @@ class CampaignEngine(
                 timestamp = event.timestamp,
             ),
             totalPlayTimeMillis = next.totalPlayTimeMillis + event.elapsedMillis,
+            // Dropped once the scenario is behind us: a replay after a defeat is
+            // a fresh setup, and should not repeat the draw that just went badly.
+            draws = next.draws - event.scenarioId,
             currentScenarioId = advanced.scenarioId,
             finished = advanced.finished,
         )
@@ -301,6 +311,24 @@ class CampaignEngine(
                 state.copy(
                     cardLists = state.cardLists +
                         (listId to (state.cardLists[listId].orEmpty() + codes)),
+                )
+            }
+
+            EffectOp.ADD_DRAWN_CARD -> {
+                if (!ConditionEvaluator.evaluate(effect.condition, baseContext)) {
+                    return state
+                }
+                val listId = effect.cardList ?: return state
+                val drawId = effect.from ?: return state
+                // Read against the scenario being resolved, so a strike records
+                // what that scenario drew rather than whatever is current now.
+                val code = state.draws[scenarioId].orEmpty()[drawId] ?: return state
+                if (code in state.cardLists[listId].orEmpty()) {
+                    return state
+                }
+                state.copy(
+                    cardLists = state.cardLists +
+                        (listId to (state.cardLists[listId].orEmpty() + code)),
                 )
             }
 
@@ -503,6 +531,22 @@ class CampaignEngine(
     }
 
     companion object {
+
+        /**
+         * The candidates a draw may still come up with.
+         *
+         * Anything already recorded in the excluding list is spent. If that
+         * empties the pool the full set comes back: a scenario that needs a
+         * card must get one, and an empty setup step would read as a bug.
+         */
+        fun drawPool(draw: DrawDefinition, state: CampaignState): List<String> {
+            val spent = draw.excluding?.let { state.cardLists[it].orEmpty() }.orEmpty().toSet()
+            return draw.from.filterNot { it in spent }.ifEmpty { draw.from }
+        }
+
+        /** What a scenario has already drawn, if anything. */
+        fun drawnCard(state: CampaignState, scenarioId: String?, drawId: String): String? =
+            state.draws[scenarioId].orEmpty()[drawId]
         /** Prompt id the engine treats as "was this hero eliminated". */
         const val ELIMINATED_PROMPT_ID: String = "eliminated"
         const val HERO_HEALTH_REFERENCE: String = "heroCard.health"

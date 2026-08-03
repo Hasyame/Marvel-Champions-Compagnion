@@ -83,6 +83,20 @@ object TemplateValidator {
             val path = "scenarios.${scenario.id}"
             scenario.campaignSetup.forEachIndexed { index, step ->
                 validateCondition(step.condition, "$path.campaignSetup[$index].when", counterIds, flagSetIds, cardListIds, errors)
+                step.draw?.let { draw ->
+                    if (draw.from.isEmpty()) {
+                        errors += TemplateError(
+                            "$path.campaignSetup[$index].draw",
+                            "a draw needs cards to choose from",
+                        )
+                    }
+                    if (draw.excluding != null && draw.excluding !in cardListIds) {
+                        errors += TemplateError(
+                            "$path.campaignSetup[$index].draw.excluding",
+                            "unknown card list '${draw.excluding}'",
+                        )
+                    }
+                }
                 step.action?.let { action ->
                     action.cost?.let { cost ->
                         if (cost.counterId !in counterIds) {
@@ -101,8 +115,9 @@ object TemplateValidator {
                     }
                 }
             }
-            validateOutcome(scenario.onVictory, "$path.onVictory", counterIds, flagSetIds, cardListIds, scenarioIds, errors)
-            validateOutcome(scenario.onDefeat, "$path.onDefeat", counterIds, flagSetIds, cardListIds, scenarioIds, errors)
+            val drawIds = scenario.campaignSetup.mapNotNull { it.draw?.id }.toSet()
+            validateOutcome(scenario.onVictory, "$path.onVictory", counterIds, flagSetIds, cardListIds, scenarioIds, drawIds, errors)
+            validateOutcome(scenario.onDefeat, "$path.onDefeat", counterIds, flagSetIds, cardListIds, scenarioIds, drawIds, errors)
         }
 
         return errors
@@ -123,6 +138,7 @@ object TemplateValidator {
         flagSetIds: Set<String>,
         cardListIds: Set<String>,
         scenarioIds: Set<String>,
+        drawIds: Set<String>,
         errors: MutableList<TemplateError>,
     ) {
         if (outcome == null) {
@@ -148,10 +164,17 @@ object TemplateValidator {
         outcome.effects.forEachIndexed { index, effect ->
             validateEffect(effect, "$path.effects[$index]", counterIds, flagSetIds, cardListIds, errors)
             effect.from?.let {
-                if (it !in promptIds) {
+                // A drawn card names a setup draw, not a question: the whole
+                // point is that the player was never asked.
+                val known = if (effect.operation == EffectOp.ADD_DRAWN_CARD) drawIds else promptIds
+                if (it !in known) {
                     errors += TemplateError(
                         "$path.effects[$index].from",
-                        "no prompt with id '$it' in this outcome",
+                        if (effect.operation == EffectOp.ADD_DRAWN_CARD) {
+                            "no setup draw with id '$it' in this scenario"
+                        } else {
+                            "no prompt with id '$it' in this outcome"
+                        },
                     )
                 }
             }

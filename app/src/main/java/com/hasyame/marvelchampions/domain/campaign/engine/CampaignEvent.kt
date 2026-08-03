@@ -73,6 +73,23 @@ sealed interface CampaignEvent {
         val heroId: String? = null,
     ) : CampaignEvent
 
+    /**
+     * A card the app drew at random for a scenario's setup.
+     *
+     * An event rather than a value computed when the screen draws itself: a
+     * random pick made during rendering would come out differently on every
+     * recomposition, so the mission would change while the player was reading it.
+     */
+    @Serializable
+    @SerialName("setup_draw")
+    data class SetupDrawn(
+        override val id: String,
+        override val timestamp: Long,
+        val scenarioId: String,
+        val drawId: String,
+        val cardCode: String,
+    ) : CampaignEvent
+
     /** Any hand adjustment. Logged as such so it never looks like a rules result. */
     @Serializable
     @SerialName("manual")

@@ -119,30 +119,36 @@
     },
     {
      "text": {
-      "fr": "Choisir au hasard une mission encore disponible et la révéler dans la zone de mission",
-      "en": "Randomly select an available MISSION side scheme and reveal it in the mission area"
+      "fr": "Révéler cette mission dans la zone de mission (tirée parmi les disponibles)",
+      "en": "Reveal this MISSION side scheme in the mission area (drawn from those available)"
      },
-     "cards": [
-      "45166a",
-      "45167a",
-      "45168a",
-      "45169a"
-     ],
-     "showCardList": "missionsUsed"
+     "draw": {
+      "id": "mission",
+      "from": [
+       "45166a",
+       "45167a",
+       "45168a",
+       "45169a"
+      ],
+      "excluding": "missionsUsed"
+     }
     },
     {
      "text": {
-      "fr": "Choisir au hasard un Overseer encore disponible et le placer dans la zone de mission, puis y poser la carte Mission Rules",
-      "en": "Randomly select an available OVERSEER minion, put it in the mission area, then put the Mission Rules card into play beside it"
+      "fr": "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
+      "en": "Put this OVERSEER minion in the mission area, then put the Mission Rules card into play beside it"
      },
-     "cards": [
-      "45179a",
-      "45180a",
-      "45181a",
-      "45182a",
-      "45183a"
-     ],
-     "showCardList": "overseersDefeated"
+     "draw": {
+      "id": "overseer",
+      "from": [
+       "45179a",
+       "45180a",
+       "45181a",
+       "45182a",
+       "45183a"
+      ],
+      "excluding": "overseersDefeated"
+     }
     },
     {
      "text": {
@@ -163,20 +169,6 @@
    "onVictory": {
     "prompts": [
      {
-      "id": "mission",
-      "type": "cardSelect",
-      "label": {
-       "fr": "Quelle mission était en jeu ? (elle est rayée du journal, vaincue ou non)",
-       "en": "Which MISSION side scheme was in play? (it is struck from the log either way)"
-      },
-      "cards": [
-       "45166a",
-       "45167a",
-       "45168a",
-       "45169a"
-      ]
-     },
-     {
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
@@ -185,19 +177,12 @@
       }
      },
      {
-      "id": "overseer",
-      "type": "cardSelect",
+      "id": "overseerDefeated",
+      "type": "boolean",
       "label": {
-       "fr": "Quel Overseer a été vaincu ? (le laisser vide s'il a survécu)",
-       "en": "Which OVERSEER minion was defeated? (leave empty if it survived)"
-      },
-      "cards": [
-       "45179a",
-       "45180a",
-       "45181a",
-       "45182a",
-       "45183a"
-      ]
+       "fr": "L'Overseer a-t-il été vaincu ?",
+       "en": "Was the OVERSEER minion defeated?"
+      }
      },
      {
       "id": "hpPerHero",
@@ -213,14 +198,17 @@
     ],
     "effects": [
      {
-      "op": "addCardsFromAnswer",
+      "op": "addDrawnCard",
       "cardList": "missionsUsed",
       "from": "mission"
      },
      {
-      "op": "addCardsFromAnswer",
+      "op": "addDrawnCard",
       "cardList": "overseersDefeated",
-      "from": "overseer"
+      "from": "overseer",
+      "when": {
+       "answer": "overseerDefeated"
+      }
      },
      {
       "op": "setHeroCounter",
@@ -334,30 +322,36 @@
     },
     {
      "text": {
-      "fr": "Choisir au hasard une mission encore disponible et la révéler dans la zone de mission",
-      "en": "Randomly select an available MISSION side scheme and reveal it in the mission area"
+      "fr": "Révéler cette mission dans la zone de mission (tirée parmi les disponibles)",
+      "en": "Reveal this MISSION side scheme in the mission area (drawn from those available)"
      },
-     "cards": [
-      "45166a",
-      "45167a",
-      "45168a",
-      "45169a"
-     ],
-     "showCardList": "missionsUsed"
+     "draw": {
+      "id": "mission",
+      "from": [
+       "45166a",
+       "45167a",
+       "45168a",
+       "45169a"
+      ],
+      "excluding": "missionsUsed"
+     }
     },
     {
      "text": {
-      "fr": "Choisir au hasard un Overseer encore disponible et le placer dans la zone de mission, puis y poser la carte Mission Rules",
-      "en": "Randomly select an available OVERSEER minion, put it in the mission area, then put the Mission Rules card into play beside it"
+      "fr": "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
+      "en": "Put this OVERSEER minion in the mission area, then put the Mission Rules card into play beside it"
      },
-     "cards": [
-      "45179a",
-      "45180a",
-      "45181a",
-      "45182a",
-      "45183a"
-     ],
-     "showCardList": "overseersDefeated"
+     "draw": {
+      "id": "overseer",
+      "from": [
+       "45179a",
+       "45180a",
+       "45181a",
+       "45182a",
+       "45183a"
+      ],
+      "excluding": "overseersDefeated"
+     }
     },
     {
      "text": {
@@ -412,20 +406,6 @@
    "onVictory": {
     "prompts": [
      {
-      "id": "mission",
-      "type": "cardSelect",
-      "label": {
-       "fr": "Quelle mission était en jeu ? (elle est rayée du journal, vaincue ou non)",
-       "en": "Which MISSION side scheme was in play? (it is struck from the log either way)"
-      },
-      "cards": [
-       "45166a",
-       "45167a",
-       "45168a",
-       "45169a"
-      ]
-     },
-     {
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
@@ -434,19 +414,12 @@
       }
      },
      {
-      "id": "overseer",
-      "type": "cardSelect",
+      "id": "overseerDefeated",
+      "type": "boolean",
       "label": {
-       "fr": "Quel Overseer a été vaincu ? (le laisser vide s'il a survécu)",
-       "en": "Which OVERSEER minion was defeated? (leave empty if it survived)"
-      },
-      "cards": [
-       "45179a",
-       "45180a",
-       "45181a",
-       "45182a",
-       "45183a"
-      ]
+       "fr": "L'Overseer a-t-il été vaincu ?",
+       "en": "Was the OVERSEER minion defeated?"
+      }
      },
      {
       "id": "hpPerHero",
@@ -462,14 +435,17 @@
     ],
     "effects": [
      {
-      "op": "addCardsFromAnswer",
+      "op": "addDrawnCard",
       "cardList": "missionsUsed",
       "from": "mission"
      },
      {
-      "op": "addCardsFromAnswer",
+      "op": "addDrawnCard",
       "cardList": "overseersDefeated",
-      "from": "overseer"
+      "from": "overseer",
+      "when": {
+       "answer": "overseerDefeated"
+      }
      },
      {
       "op": "setHeroCounter",
@@ -586,30 +562,36 @@
     },
     {
      "text": {
-      "fr": "Choisir au hasard une mission encore disponible et la révéler dans la zone de mission",
-      "en": "Randomly select an available MISSION side scheme and reveal it in the mission area"
+      "fr": "Révéler cette mission dans la zone de mission (tirée parmi les disponibles)",
+      "en": "Reveal this MISSION side scheme in the mission area (drawn from those available)"
      },
-     "cards": [
-      "45166a",
-      "45167a",
-      "45168a",
-      "45169a"
-     ],
-     "showCardList": "missionsUsed"
+     "draw": {
+      "id": "mission",
+      "from": [
+       "45166a",
+       "45167a",
+       "45168a",
+       "45169a"
+      ],
+      "excluding": "missionsUsed"
+     }
     },
     {
      "text": {
-      "fr": "Choisir au hasard un Overseer encore disponible et le placer dans la zone de mission, puis y poser la carte Mission Rules",
-      "en": "Randomly select an available OVERSEER minion, put it in the mission area, then put the Mission Rules card into play beside it"
+      "fr": "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
+      "en": "Put this OVERSEER minion in the mission area, then put the Mission Rules card into play beside it"
      },
-     "cards": [
-      "45179a",
-      "45180a",
-      "45181a",
-      "45182a",
-      "45183a"
-     ],
-     "showCardList": "overseersDefeated"
+     "draw": {
+      "id": "overseer",
+      "from": [
+       "45179a",
+       "45180a",
+       "45181a",
+       "45182a",
+       "45183a"
+      ],
+      "excluding": "overseersDefeated"
+     }
     },
     {
      "text": {
@@ -664,20 +646,6 @@
    "onVictory": {
     "prompts": [
      {
-      "id": "mission",
-      "type": "cardSelect",
-      "label": {
-       "fr": "Quelle mission était en jeu ? (elle est rayée du journal, vaincue ou non)",
-       "en": "Which MISSION side scheme was in play? (it is struck from the log either way)"
-      },
-      "cards": [
-       "45166a",
-       "45167a",
-       "45168a",
-       "45169a"
-      ]
-     },
-     {
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
@@ -686,19 +654,12 @@
       }
      },
      {
-      "id": "overseer",
-      "type": "cardSelect",
+      "id": "overseerDefeated",
+      "type": "boolean",
       "label": {
-       "fr": "Quel Overseer a été vaincu ? (le laisser vide s'il a survécu)",
-       "en": "Which OVERSEER minion was defeated? (leave empty if it survived)"
-      },
-      "cards": [
-       "45179a",
-       "45180a",
-       "45181a",
-       "45182a",
-       "45183a"
-      ]
+       "fr": "L'Overseer a-t-il été vaincu ?",
+       "en": "Was the OVERSEER minion defeated?"
+      }
      },
      {
       "id": "hpPerHero",
@@ -714,14 +675,17 @@
     ],
     "effects": [
      {
-      "op": "addCardsFromAnswer",
+      "op": "addDrawnCard",
       "cardList": "missionsUsed",
       "from": "mission"
      },
      {
-      "op": "addCardsFromAnswer",
+      "op": "addDrawnCard",
       "cardList": "overseersDefeated",
-      "from": "overseer"
+      "from": "overseer",
+      "when": {
+       "answer": "overseerDefeated"
+      }
      },
      {
       "op": "setHeroCounter",
@@ -809,30 +773,36 @@
     },
     {
      "text": {
-      "fr": "Choisir au hasard une mission encore disponible et la révéler dans la zone de mission",
-      "en": "Randomly select an available MISSION side scheme and reveal it in the mission area"
+      "fr": "Révéler cette mission dans la zone de mission (tirée parmi les disponibles)",
+      "en": "Reveal this MISSION side scheme in the mission area (drawn from those available)"
      },
-     "cards": [
-      "45166a",
-      "45167a",
-      "45168a",
-      "45169a"
-     ],
-     "showCardList": "missionsUsed"
+     "draw": {
+      "id": "mission",
+      "from": [
+       "45166a",
+       "45167a",
+       "45168a",
+       "45169a"
+      ],
+      "excluding": "missionsUsed"
+     }
     },
     {
      "text": {
-      "fr": "Choisir au hasard un Overseer encore disponible et le placer dans la zone de mission, puis y poser la carte Mission Rules",
-      "en": "Randomly select an available OVERSEER minion, put it in the mission area, then put the Mission Rules card into play beside it"
+      "fr": "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
+      "en": "Put this OVERSEER minion in the mission area, then put the Mission Rules card into play beside it"
      },
-     "cards": [
-      "45179a",
-      "45180a",
-      "45181a",
-      "45182a",
-      "45183a"
-     ],
-     "showCardList": "overseersDefeated"
+     "draw": {
+      "id": "overseer",
+      "from": [
+       "45179a",
+       "45180a",
+       "45181a",
+       "45182a",
+       "45183a"
+      ],
+      "excluding": "overseersDefeated"
+     }
     },
     {
      "text": {
@@ -887,20 +857,6 @@
    "onVictory": {
     "prompts": [
      {
-      "id": "mission",
-      "type": "cardSelect",
-      "label": {
-       "fr": "Quelle mission était en jeu ? (elle est rayée du journal, vaincue ou non)",
-       "en": "Which MISSION side scheme was in play? (it is struck from the log either way)"
-      },
-      "cards": [
-       "45166a",
-       "45167a",
-       "45168a",
-       "45169a"
-      ]
-     },
-     {
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
@@ -909,19 +865,12 @@
       }
      },
      {
-      "id": "overseer",
-      "type": "cardSelect",
+      "id": "overseerDefeated",
+      "type": "boolean",
       "label": {
-       "fr": "Quel Overseer a été vaincu ? (le laisser vide s'il a survécu)",
-       "en": "Which OVERSEER minion was defeated? (leave empty if it survived)"
-      },
-      "cards": [
-       "45179a",
-       "45180a",
-       "45181a",
-       "45182a",
-       "45183a"
-      ]
+       "fr": "L'Overseer a-t-il été vaincu ?",
+       "en": "Was the OVERSEER minion defeated?"
+      }
      },
      {
       "id": "hpPerHero",
@@ -937,14 +886,17 @@
     ],
     "effects": [
      {
-      "op": "addCardsFromAnswer",
+      "op": "addDrawnCard",
       "cardList": "missionsUsed",
       "from": "mission"
      },
      {
-      "op": "addCardsFromAnswer",
+      "op": "addDrawnCard",
       "cardList": "overseersDefeated",
-      "from": "overseer"
+      "from": "overseer",
+      "when": {
+       "answer": "overseerDefeated"
+      }
      },
      {
       "op": "setHeroCounter",
@@ -1040,17 +992,20 @@
     },
     {
      "text": {
-      "fr": "Choisir au hasard un Overseer encore disponible et le placer dans la zone de mission, puis y poser la carte Mission Rules",
-      "en": "Randomly select an available OVERSEER minion, put it in the mission area, then put the Mission Rules card into play beside it"
+      "fr": "Placer cet Overseer dans la zone de mission, puis y poser la carte Mission Rules",
+      "en": "Put this OVERSEER minion in the mission area, then put the Mission Rules card into play beside it"
      },
-     "cards": [
-      "45179a",
-      "45180a",
-      "45181a",
-      "45182a",
-      "45183a"
-     ],
-     "showCardList": "overseersDefeated"
+     "draw": {
+      "id": "overseer",
+      "from": [
+       "45179a",
+       "45180a",
+       "45181a",
+       "45182a",
+       "45183a"
+      ],
+      "excluding": "overseersDefeated"
+     }
     },
     {
      "text": {

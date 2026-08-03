@@ -129,6 +129,12 @@ enum class EffectOp(val token: String) {
     SET_FLAG("setflag"),
     ADD_CARD("addcard"),
     ADD_CARDS_FROM_ANSWER("addcardsfromanswer"),
+    /**
+     * Adds whatever a setup draw came up with to a card list, which is how a
+     * randomly chosen card gets struck from the campaign log without asking the
+     * player to tell the app what it already picked.
+     */
+    ADD_DRAWN_CARD("adddrawncard"),
     ELIMINATE_HERO("eliminatehero"),
     UNKNOWN("");
 

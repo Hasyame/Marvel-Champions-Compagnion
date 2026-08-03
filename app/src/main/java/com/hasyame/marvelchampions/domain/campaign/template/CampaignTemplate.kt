@@ -163,6 +163,37 @@ data class SetupStep(
 
     /** Names the heroes whose value for this counter is above zero. */
     val showHeroesWith: String? = null,
+
+    /**
+     * A card the app draws at random instead of the player.
+     *
+     * The draw is made once and recorded as an event, so it survives leaving
+     * the screen and cannot change while the setup is being read.
+     */
+    val draw: DrawDefinition? = null,
+)
+
+/**
+ * A random pick the app makes on the players' behalf.
+ *
+ * Campaigns that say "randomly select an available X" mean available *across
+ * the campaign*: something already used is out of the pool. Doing that by hand
+ * means remembering several scenarios back and re-reading the log every time,
+ * which is exactly the bookkeeping the log exists to end.
+ */
+@Serializable
+data class DrawDefinition(
+    /** Names the draw, so effects can strike whatever came up. */
+    val id: String,
+    /** The candidates, by MarvelCDB code. */
+    val from: List<String> = emptyList(),
+    /**
+     * Card list holding what is already spent; those are removed from the pool.
+     *
+     * When everything has been used the pool refills, because a scenario that
+     * requires a card must still get one.
+     */
+    val excluding: String? = null,
 )
 
 @Serializable
