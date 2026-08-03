@@ -52,6 +52,7 @@ class BackupRepository @Inject constructor(
                     .flatMap { database.campaignDao().getEvents(it.id) },
                 plays = database.playDao().getAllPlays(),
                 randomizerHistory = database.randomizerHistoryDao().getHistory(),
+                favouriteCards = database.favouriteDao().getAll(),
             )
 
             val text = json.encodeToString(Backup.serializer(), backup)
@@ -100,6 +101,7 @@ class BackupRepository @Inject constructor(
                 database.savedDeckDao().deleteAll()
                 database.ownedPackDao().clearOwned()
                 database.randomizerHistoryDao().clear()
+                database.favouriteDao().deleteAll()
 
                 database.ownedPackDao().upsertAll(backup.ownedPacks)
                 database.savedDeckDao().upsertAll(backup.decks)
@@ -109,6 +111,7 @@ class BackupRepository @Inject constructor(
                 database.campaignDao().appendEvents(backup.campaignEvents)
                 backup.plays.forEach { database.playDao().insert(it) }
                 database.randomizerHistoryDao().insertAll(backup.randomizerHistory)
+                database.favouriteDao().addAll(backup.favouriteCards)
             }
             BackupResult.Restored(backup.summary())
         }.getOrElse { BackupResult.Failed(it.message ?: "unknown error") }

@@ -60,6 +60,14 @@ fun CardFilterSheet(
                 label = { Text(stringResource(R.string.cards_filter_owned_only)) },
             )
 
+            FilterChip(
+                selected = filter.favouritesOnly,
+                onClick = {
+                    onFilterChange(filter.copy(favouritesOnly = !filter.favouritesOnly))
+                },
+                label = { Text(stringResource(R.string.cards_filter_favourites)) },
+            )
+
             ChipSection(
                 title = stringResource(R.string.cards_filter_type),
                 values = options.typeCodes,

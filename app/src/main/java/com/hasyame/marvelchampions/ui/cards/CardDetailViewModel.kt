@@ -5,12 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.hasyame.marvelchampions.data.db.entity.CardEntity
 import com.hasyame.marvelchampions.data.db.entity.PackEntity
 import com.hasyame.marvelchampions.data.repository.CardSearchRepository
+import com.hasyame.marvelchampions.data.repository.FavouriteRepository
 import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.domain.model.CardLocale
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +21,7 @@ data class CardDetailUiState(
     val linkedCard: CardEntity? = null,
     /** The pack the card came out of, for the origin section. */
     val pack: PackEntity? = null,
+    val isFavourite: Boolean = false,
     val locale: CardLocale = CardLocale.FRENCH,
     val isLoading: Boolean = true,
 )
@@ -27,6 +30,7 @@ data class CardDetailUiState(
 class CardDetailViewModel @Inject constructor(
     private val repository: CardSearchRepository,
     private val preferences: AppPreferences,
+    private val favourites: FavouriteRepository,
 ) : ViewModel() {
 
     private val state = MutableStateFlow(CardDetailUiState())
@@ -50,6 +54,16 @@ class CardDetailViewModel @Inject constructor(
      * Flips this screen to the other language. Deliberately does not change the
      * stored preference — it is a quick look, not a settings change.
      */
+    /** Stars or unstars the card being shown. */
+    fun toggleFavourite() {
+        val code = currentCode ?: return
+        val next = !state.value.isFavourite
+        // Flipped in the state first: a star that waits on the database before
+        // filling in feels broken, and the write cannot meaningfully fail.
+        state.value = state.value.copy(isFavourite = next)
+        viewModelScope.launch { favourites.toggle(code, next) }
+    }
+
     fun toggleLocale() {
         val code = currentCode ?: return
         val next = if (state.value.locale == CardLocale.FRENCH) {
@@ -66,6 +80,7 @@ class CardDetailViewModel @Inject constructor(
             card = card,
             linkedCard = card?.let { repository.getLinkedCard(it, locale) },
             pack = card?.let { repository.getPack(it.packCode) },
+            isFavourite = code in favourites.observeCodes().first(),
             locale = locale,
             isLoading = false,
         )

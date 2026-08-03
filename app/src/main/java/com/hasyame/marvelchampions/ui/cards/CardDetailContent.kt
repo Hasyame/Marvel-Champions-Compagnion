@@ -7,9 +7,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -42,6 +46,8 @@ fun CardDetailContent(
     onLinkedCardClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     pack: PackEntity? = null,
+    isFavourite: Boolean = false,
+    onToggleFavourite: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -63,6 +69,25 @@ fun CardDetailContent(
             // Reading a card in the other language is genuinely useful when a
             // rules discussion is in English but the cards on the table are in
             // French, so the toggle is on the detail screen itself.
+            IconButton(onClick = onToggleFavourite) {
+                Icon(
+                    imageVector = Icons.Filled.Star,
+                    contentDescription = stringResource(
+                        if (isFavourite) {
+                            R.string.cards_favourite_remove
+                        } else {
+                            R.string.cards_favourite_add
+                        },
+                    ),
+                    // Gold when starred, muted when not: the core icon set has
+                    // no outlined star, and tint carries the state just as well.
+                    tint = if (isFavourite) {
+                        MaterialTheme.colorScheme.tertiary
+                    } else {
+                        MaterialTheme.colorScheme.outlineVariant
+                    },
+                )
+            }
             FilterChip(
                 selected = false,
                 onClick = onLocaleToggle,

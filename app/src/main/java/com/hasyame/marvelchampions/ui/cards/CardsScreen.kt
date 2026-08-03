@@ -177,6 +177,8 @@ private fun CardDetailPane(code: String) {
     } else {
         CardDetailContent(
             card = card,
+            isFavourite = state.isFavourite,
+            onToggleFavourite = viewModel::toggleFavourite,
             pack = state.pack,
             linkedCard = state.linkedCard,
             locale = state.locale,

@@ -75,6 +75,12 @@ object CardQueryBuilder {
             }
         }
 
+        if (filter.favouritesOnly) {
+            // A subquery rather than a join: favourites are keyed by code and a
+            // card has a row per language, so joining would multiply results.
+            where += "cards.code IN (SELECT cardCode FROM favourite_cards)"
+        }
+
         filter.minCost?.let {
             where += "cards.cost >= ?"
             args += it

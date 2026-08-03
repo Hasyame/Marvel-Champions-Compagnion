@@ -14,6 +14,8 @@ data class CardFilter(
     val maxCost: Int? = null,
     /** Restrict to packs the user owns. Off by default, so a new user sees everything. */
     val ownedOnly: Boolean = false,
+    /** Show only starred cards. */
+    val favouritesOnly: Boolean = false,
     /** Ordering. Not part of [isEmpty]: a sort is not a filter. */
     val sort: CardSort = CardSort.SET,
 ) {
@@ -36,5 +38,6 @@ data class CardFilter(
             traits.isNotEmpty(),
             minCost != null || maxCost != null,
             ownedOnly,
+            favouritesOnly,
         ).count { it }
 }

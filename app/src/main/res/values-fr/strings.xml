@@ -477,4 +477,7 @@
     <string name="session_correct_message">Si vous avez lancé le chronomètre en retard, ou oublié de l\'arrêter, indiquez ici la vraie durée.</string>
     <string name="session_correct_minutes">Minutes jouées</string>
     <string name="session_correct_confirm">Valider</string>
+    <string name="cards_filter_favourites">Favoris</string>
+    <string name="cards_favourite_add">Ajouter aux favoris</string>
+    <string name="cards_favourite_remove">Retirer des favoris</string>
 </resources>

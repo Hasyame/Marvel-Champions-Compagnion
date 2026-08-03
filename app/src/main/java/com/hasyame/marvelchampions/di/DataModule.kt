@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.hasyame.marvelchampions.data.db.MarvelChampionsDatabase
 import com.hasyame.marvelchampions.data.db.dao.CampaignDao
+import com.hasyame.marvelchampions.data.db.dao.FavouriteDao
 import com.hasyame.marvelchampions.data.db.dao.PlayDao
 import com.hasyame.marvelchampions.data.db.dao.CardDao
 import com.hasyame.marvelchampions.data.db.dao.OwnedPackDao
@@ -99,4 +100,8 @@ object DataModule {
     @Provides
     fun providePlayDao(database: MarvelChampionsDatabase): PlayDao =
         database.playDao()
+
+    @Provides
+    fun provideFavouriteDao(database: MarvelChampionsDatabase): FavouriteDao =
+        database.favouriteDao()
 }

@@ -2,6 +2,7 @@ package com.hasyame.marvelchampions.data.backup
 
 import com.hasyame.marvelchampions.data.db.entity.CampaignEventEntity
 import com.hasyame.marvelchampions.data.db.entity.CampaignRunEntity
+import com.hasyame.marvelchampions.data.db.entity.FavouriteCardEntity
 import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
 import com.hasyame.marvelchampions.data.db.entity.PlayEntity
 import com.hasyame.marvelchampions.data.db.entity.RandomizerHistoryEntity
@@ -32,6 +33,7 @@ data class Backup(
     val campaignEvents: List<CampaignEventEntity> = emptyList(),
     val plays: List<PlayEntity> = emptyList(),
     val randomizerHistory: List<RandomizerHistoryEntity> = emptyList(),
+    val favouriteCards: List<FavouriteCardEntity> = emptyList(),
 ) {
     /** What a restore is about to bring in, for the confirmation. */
     fun summary(): BackupSummary = BackupSummary(
