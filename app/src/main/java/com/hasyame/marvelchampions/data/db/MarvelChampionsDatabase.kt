@@ -7,6 +7,7 @@ import com.hasyame.marvelchampions.data.db.dao.CampaignDao
 import com.hasyame.marvelchampions.data.db.dao.CardDao
 import com.hasyame.marvelchampions.data.db.dao.OwnedPackDao
 import com.hasyame.marvelchampions.data.db.dao.PackDao
+import com.hasyame.marvelchampions.data.db.dao.PlayDao
 import com.hasyame.marvelchampions.data.db.dao.RandomizerHistoryDao
 import com.hasyame.marvelchampions.data.db.dao.SavedDeckDao
 import com.hasyame.marvelchampions.data.db.entity.CampaignEventEntity
@@ -15,6 +16,7 @@ import com.hasyame.marvelchampions.data.db.entity.CardEntity
 import com.hasyame.marvelchampions.data.db.entity.CardFtsEntity
 import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
 import com.hasyame.marvelchampions.data.db.entity.PackEntity
+import com.hasyame.marvelchampions.data.db.entity.PlayEntity
 import com.hasyame.marvelchampions.data.db.entity.PackTranslationEntity
 import com.hasyame.marvelchampions.data.db.entity.RandomizerHistoryEntity
 import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
@@ -41,8 +43,9 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
         SavedDeckEntity::class,
         CampaignRunEntity::class,
         CampaignEventEntity::class,
+        PlayEntity::class,
     ],
-    version = 6,
+    version = 7,
     exportSchema = true,
     // Both migrations so far only add a table, so Room can generate them from
     // the exported schemas. Anything that alters an existing table needs a
@@ -53,6 +56,7 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5),
         AutoMigration(from = 5, to = 6),
+        AutoMigration(from = 6, to = 7),
     ],
 )
 abstract class MarvelChampionsDatabase : RoomDatabase() {
@@ -62,6 +66,7 @@ abstract class MarvelChampionsDatabase : RoomDatabase() {
     abstract fun randomizerHistoryDao(): RandomizerHistoryDao
     abstract fun savedDeckDao(): SavedDeckDao
     abstract fun campaignDao(): CampaignDao
+    abstract fun playDao(): PlayDao
 
     companion object {
         const val NAME: String = "marvelchampions.db"
