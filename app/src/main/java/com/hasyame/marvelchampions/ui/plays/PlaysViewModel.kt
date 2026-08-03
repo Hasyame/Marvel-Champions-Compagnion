@@ -16,56 +16,81 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * The stats screen, already counted.
+ *
+ * These were computed properties, which meant the headline panel walked the
+ * whole history nine times on every recomposition — once per figure. A play
+ * history is meant to grow for years, so they are worked out once when the
+ * state is built and then just read.
+ */
 data class PlaysUiState(
     val plays: List<PlayEntity> = emptyList(),
     val byHero: List<WinRateRow> = emptyList(),
     val byScenario: List<WinRateRow> = emptyList(),
     val byAspect: List<WinRateRow> = emptyList(),
     val byDifficulty: List<WinRateRow> = emptyList(),
-) {
-    val totalPlayed: Int get() = plays.size
-    val totalWon: Int get() = plays.count { it.won }
+    val totalPlayed: Int = 0,
+    val totalWon: Int = 0,
+    val totalMillis: Long = 0,
+    val averageMillis: Long = 0,
+    val longestMillis: Long = 0,
+    val campaignPlays: Int = 0,
+    val currentStreak: Int = 0,
+    val bestStreak: Int = 0,
+)
 
-    /** Every minute spent playing, which is the headline number for a tracker. */
-    val totalMillis: Long get() = plays.sumOf { it.elapsedMillis }
+/** Counts a history once, so the screen can read the figures rather than derive them. */
+internal fun summarise(
+    plays: List<PlayEntity>,
+    byHero: List<WinRateRow>,
+    byScenario: List<WinRateRow>,
+    byAspect: List<WinRateRow>,
+    byDifficulty: List<WinRateRow>,
+): PlaysUiState {
+    var totalMillis = 0L
+    var timedCount = 0
+    var timedMillis = 0L
+    var longest = 0L
+    var won = 0
+    var campaign = 0
+    var bestStreak = 0
+    var running = 0
 
-    /**
-     * Timed games only.
-     *
-     * A play logged without a duration is not a nought-minute game, it is a
-     * game nobody timed, and averaging it in would drag the figure towards
-     * meaninglessness.
-     */
-    val averageMillis: Long
-        get() = plays.filter { it.elapsedMillis > 0 }
-            .takeIf { it.isNotEmpty() }
-            ?.let { timed -> timed.sumOf { it.elapsedMillis } / timed.size }
-            ?: 0L
-
-    val longestMillis: Long get() = plays.maxOfOrNull { it.elapsedMillis } ?: 0L
-
-    /** How many of these came from a campaign rather than a one-off game. */
-    val campaignPlays: Int get() = plays.count { it.campaignRunId != null }
-
-    /** Consecutive wins counting back from the most recent game. */
-    val currentStreak: Int get() = plays.takeWhile { it.won }.size
-
-    val bestStreak: Int
-        get() {
-            var best = 0
-            var running = 0
-            // The list is newest first, but the longest run is the same read in
-            // either direction, so it is not reversed.
-            for (play in plays) {
-                running = if (play.won) running + 1 else 0
-                if (running > best) {
-                    best = running
-                }
-            }
-            return best
+    for (play in plays) {
+        totalMillis += play.elapsedMillis
+        if (play.elapsedMillis > 0) {
+            // Timed games only for the average: a play logged without a
+            // duration is a game nobody timed, not a nought-minute game.
+            timedCount++
+            timedMillis += play.elapsedMillis
         }
-}
+        if (play.elapsedMillis > longest) longest = play.elapsedMillis
+        if (play.won) won++
+        if (play.campaignRunId != null) campaign++
 
+        running = if (play.won) running + 1 else 0
+        if (running > bestStreak) bestStreak = running
+    }
+
+    return PlaysUiState(
+        plays = plays,
+        byHero = byHero,
+        byScenario = byScenario,
+        byAspect = byAspect,
+        byDifficulty = byDifficulty,
+        totalPlayed = plays.size,
+        totalWon = won,
+        totalMillis = totalMillis,
+        averageMillis = if (timedCount > 0) timedMillis / timedCount else 0L,
+        longestMillis = longest,
+        campaignPlays = campaign,
+        // The list is newest first, so consecutive wins from the front are the
+        // streak the player is currently on.
+        currentStreak = plays.takeWhile { it.won }.size,
+        bestStreak = bestStreak,
+    )
+}
 /** A play saved but not yet sent, while the app asks whether to send it. */
 data class PendingReport(val playId: String, val summary: String)
 
@@ -81,7 +106,7 @@ class PlaysViewModel @Inject constructor(
         repository.observeByAspect(),
         repository.observeByDifficulty(),
     ) { plays, byHero, byScenario, byAspect, byDifficulty ->
-        PlaysUiState(plays, byHero, byScenario, byAspect, byDifficulty)
+        summarise(plays, byHero, byScenario, byAspect, byDifficulty)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
