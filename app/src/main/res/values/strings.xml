@@ -449,4 +449,9 @@
     <string name="settings_restore_contents">Saved %1$s.\n\nDecks: %2$d\nCampaigns: %3$d\nGames: %4$d\nOwned packs: %5$d</string>
     <string name="settings_restore_warning">This replaces everything currently in the app. Anything not in the backup will be lost, and it cannot be undone.</string>
     <string name="settings_restore_confirm">Replace my data</string>
+    <string name="cards_sort">Sort</string>
+    <string name="cards_sort_set">Set order</string>
+    <string name="cards_sort_name">Name</string>
+    <string name="cards_sort_cost_asc">Cost, cheapest first</string>
+    <string name="cards_sort_cost_desc">Cost, dearest first</string>
 </resources>

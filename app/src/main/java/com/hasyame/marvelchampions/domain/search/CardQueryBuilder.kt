@@ -99,7 +99,9 @@ object CardQueryBuilder {
             append(from)
             append(" WHERE ")
             append(where.joinToString(" AND "))
-            append(" ORDER BY cards.packCode, cards.position")
+            // A constant per branch of the enum, never user input, which is
+            // what makes interpolating an ORDER BY safe here.
+            append(" ORDER BY ").append(filter.sort.orderBy)
             append(" LIMIT ? OFFSET ?")
         }
         return CardQuery(sql, args)

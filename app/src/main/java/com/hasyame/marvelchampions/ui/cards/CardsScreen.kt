@@ -1,5 +1,6 @@
 package com.hasyame.marvelchampions.ui.cards
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,15 +11,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -38,9 +43,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.hasyame.marvelchampions.R
-import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.core.designsystem.component.ComicEmptyState
 import com.hasyame.marvelchampions.core.designsystem.component.ComicLoadingScreen
+import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
+import com.hasyame.marvelchampions.domain.model.CardSort
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,6 +56,7 @@ fun CardsScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var filtersOpen by remember { mutableStateOf(false) }
+    var sortOpen by remember { mutableStateOf(false) }
 
     // A 12-inch tablet gets list and detail side by side; a phone navigates to
     // the detail as its own screen.
@@ -72,7 +79,21 @@ fun CardsScreen(
                 activeFilterCount = state.filter.activeCount,
                 onQueryChange = viewModel::onQueryChange,
                 onFiltersClick = { filtersOpen = true },
+                onSortClick = { sortOpen = true },
             )
+
+            // A sort is not a filter — it never hides a card — so it is its own
+            // control rather than another row inside the filter sheet.
+            if (sortOpen) {
+                SortSheet(
+                    current = state.filter.sort,
+                    onPick = {
+                        viewModel.onFilterChange(state.filter.copy(sort = it))
+                        sortOpen = false
+                    },
+                    onDismiss = { sortOpen = false },
+                )
+            }
 
             Box(Modifier.fillMaxSize()) {
                 when {
@@ -173,6 +194,7 @@ private fun SearchBar(
     activeFilterCount: Int,
     onQueryChange: (String) -> Unit,
     onFiltersClick: () -> Unit,
+    onSortClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -199,6 +221,12 @@ private fun SearchBar(
                 }
             },
         )
+        IconButton(onClick = onSortClick) {
+            Icon(
+                Icons.AutoMirrored.Filled.List,
+                contentDescription = stringResource(R.string.cards_sort),
+            )
+        }
         BadgedBox(
             badge = {
                 if (activeFilterCount > 0) {
@@ -221,4 +249,45 @@ private fun EmptyMessage(message: String) {
     // "No results" and "no cards yet" are screens the user actually reads, so
     // they are where the comic styling earns its keep. The list stays plain.
     ComicEmptyState(message)
+}
+
+/** The four orderings, as a sheet rather than a menu so each can carry a reason. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SortSheet(
+    current: CardSort,
+    onPick: (CardSort) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    ModalBottomSheet(onDismissRequest = onDismiss) {
+        Column(Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
+            Text(
+                text = stringResource(R.string.cards_sort),
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier.padding(16.dp),
+            )
+            CardSort.entries.forEach { sort ->
+                ListItem(
+                    headlineContent = { Text(stringResource(sort.labelRes())) },
+                    trailingContent = {
+                        if (sort == current) {
+                            Icon(
+                                Icons.Filled.Check,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                    },
+                    modifier = Modifier.clickable { onPick(sort) },
+                )
+            }
+        }
+    }
+}
+
+private fun CardSort.labelRes(): Int = when (this) {
+    CardSort.SET -> R.string.cards_sort_set
+    CardSort.NAME -> R.string.cards_sort_name
+    CardSort.COST_LOW_TO_HIGH -> R.string.cards_sort_cost_asc
+    CardSort.COST_HIGH_TO_LOW -> R.string.cards_sort_cost_desc
 }

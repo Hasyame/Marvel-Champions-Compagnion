@@ -14,6 +14,8 @@ data class CardFilter(
     val maxCost: Int? = null,
     /** Restrict to packs the user owns. Off by default, so a new user sees everything. */
     val ownedOnly: Boolean = false,
+    /** Ordering. Not part of [isEmpty]: a sort is not a filter. */
+    val sort: CardSort = CardSort.SET,
 ) {
     val isEmpty: Boolean
         get() = query.isBlank() &&

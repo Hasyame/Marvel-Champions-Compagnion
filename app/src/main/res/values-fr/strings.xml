@@ -467,4 +467,9 @@
     <string name="settings_restore_contents">Enregistrée le %1$s.\n\nDecks : %2$d\nCampagnes : %3$d\nParties : %4$d\nExtensions possédées : %5$d</string>
     <string name="settings_restore_warning">Cela remplace tout ce que contient actuellement l\'application. Tout ce qui ne figure pas dans la sauvegarde sera perdu, et l\'opération est irréversible.</string>
     <string name="settings_restore_confirm">Remplacer mes données</string>
+    <string name="cards_sort">Trier</string>
+    <string name="cards_sort_set">Ordre du set</string>
+    <string name="cards_sort_name">Nom</string>
+    <string name="cards_sort_cost_asc">Coût croissant</string>
+    <string name="cards_sort_cost_desc">Coût décroissant</string>
 </resources>
