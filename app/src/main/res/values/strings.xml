@@ -454,4 +454,9 @@
     <string name="cards_sort_name">Name</string>
     <string name="cards_sort_cost_asc">Cost, cheapest first</string>
     <string name="cards_sort_cost_desc">Cost, dearest first</string>
+    <string name="session_tap_to_correct">Tap the time to correct it</string>
+    <string name="session_correct_title">Correct the time</string>
+    <string name="session_correct_message">If you started the clock late, or left it running, set the real length here.</string>
+    <string name="session_correct_minutes">Minutes played</string>
+    <string name="session_correct_confirm">Set it</string>
 </resources>

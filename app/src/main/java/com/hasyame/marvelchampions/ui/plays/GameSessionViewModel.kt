@@ -174,6 +174,21 @@ class GameSessionViewModel @Inject constructor(
         state.value = state.value.copy(elapsedMillis = timer.elapsedAt(System.currentTimeMillis()))
     }
 
+    /**
+     * Corrects the clock.
+     *
+     * People forget to start it, or leave it running through dinner. The
+     * campaign has always allowed this; the timed session did not, so a
+     * mistimed game was recorded wrong with no way back. Blocked once the
+     * result is in, because by then the duration has already been captured.
+     */
+    fun setElapsed(millis: Long) {
+        if (state.value.isFinishing) {
+            return
+        }
+        updateTimer { it.setElapsed(millis.coerceAtLeast(0L), System.currentTimeMillis()) }
+    }
+
     fun pause() = updateTimer { it.pause(System.currentTimeMillis()) }
 
     fun resume() = updateTimer { it.start(System.currentTimeMillis()) }

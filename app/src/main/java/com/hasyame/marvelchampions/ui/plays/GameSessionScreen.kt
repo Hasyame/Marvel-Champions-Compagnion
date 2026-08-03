@@ -1,5 +1,6 @@
 package com.hasyame.marvelchampions.ui.plays
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -24,6 +26,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -37,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -323,6 +327,41 @@ private fun PlayingPhase(
     modifier: Modifier = Modifier,
 ) {
     var confirmDiscard by remember { mutableStateOf(false) }
+    var correctingTime by remember { mutableStateOf(false) }
+
+    if (correctingTime) {
+        var minutes by remember { mutableStateOf((state.elapsedMillis / 60_000L).toString()) }
+        AlertDialog(
+            onDismissRequest = { correctingTime = false },
+            title = { Text(stringResource(R.string.session_correct_title)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(stringResource(R.string.session_correct_message))
+                    OutlinedTextField(
+                        value = minutes,
+                        onValueChange = { minutes = it.filter(Char::isDigit) },
+                        label = { Text(stringResource(R.string.session_correct_minutes)) },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.setElapsed((minutes.toLongOrNull() ?: 0L) * 60_000L)
+                        correctingTime = false
+                    },
+                ) { Text(stringResource(R.string.session_correct_confirm)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { correctingTime = false }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            },
+        )
+    }
 
     if (confirmDiscard) {
         AlertDialog(
@@ -388,9 +427,19 @@ private fun PlayingPhase(
                 }
             }
 
+            // The clock is the control. Tapping it corrects the time, which is
+            // where anyone would look for that.
             Text(
                 text = TimerState.format(state.elapsedMillis),
                 style = MaterialTheme.typography.displayLarge,
+                modifier = Modifier.clickable(enabled = !state.isFinishing) {
+                    correctingTime = true
+                },
+            )
+            Text(
+                text = stringResource(R.string.session_tap_to_correct),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
             OutlinedButton(
