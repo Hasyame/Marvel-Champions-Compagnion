@@ -4,6 +4,7 @@ import com.hasyame.marvelchampions.data.bgg.BggAccount
 import com.hasyame.marvelchampions.data.bgg.BggClient
 import com.hasyame.marvelchampions.data.bgg.BggResult
 import com.hasyame.marvelchampions.data.db.dao.AspectRow
+import com.hasyame.marvelchampions.data.db.dao.HeroAspectRow
 import com.hasyame.marvelchampions.data.db.dao.PlayDao
 import com.hasyame.marvelchampions.data.db.dao.WinRateRow
 import com.hasyame.marvelchampions.data.db.entity.PlayEntity
@@ -52,6 +53,17 @@ class PlayRepository @Inject constructor(
     fun observeByScenario(): Flow<List<WinRateRow>> = playDao.observeByScenario()
 
     fun observeByDifficulty(): Flow<List<WinRateRow>> = playDao.observeByDifficulty()
+
+    fun observeBySoloOrGroup(): Flow<List<WinRateRow>> = playDao.observeBySoloOrGroup()
+
+    /**
+     * Hero and aspect as one key, which is the pairing a player asks about.
+     *
+     * Only combinations played more than once are kept: a table full of
+     * one-game 100% rows tells nobody anything and buries the rows that do.
+     */
+    fun observeByHeroAspect(): Flow<List<WinRateRow>> =
+        playDao.observeHeroAspectRows().map { rows -> countHeroAspects(rows) }
 
     /** Aspects split out of their stored list and counted per aspect. */
     fun observeByAspect(): Flow<List<WinRateRow>> =
@@ -166,6 +178,29 @@ class PlayRepository @Inject constructor(
             won = won,
             comment = comment,
         )
+    }
+
+    private fun countHeroAspects(rows: List<HeroAspectRow>): List<WinRateRow> {
+        data class Tally(var played: Int = 0, var won: Int = 0, var millis: Long = 0)
+
+        val tallies = mutableMapOf<String, Tally>()
+        for (row in rows) {
+            row.aspects.split(",")
+                .map { it.trim() }
+                .filter { it.isNotEmpty() }
+                .distinct()
+                .forEach { aspect ->
+                    val tally = tallies.getOrPut("${row.heroName} · $aspect") { Tally() }
+                    tally.played++
+                    tally.millis += row.elapsedMillis
+                    if (row.won) tally.won++
+                }
+        }
+
+        return tallies
+            .filterValues { it.played > 1 }
+            .map { (key, tally) -> WinRateRow(key, tally.played, tally.won, tally.millis) }
+            .sortedWith(compareByDescending<WinRateRow> { it.played }.thenBy { it.key })
     }
 
     private fun countAspects(rows: List<AspectRow>): List<WinRateRow> {

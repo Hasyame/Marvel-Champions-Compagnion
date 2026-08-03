@@ -26,7 +26,15 @@ class PlaysSummaryTest {
     )
 
     private fun summarise(plays: List<PlayEntity>) =
-        summarise(plays, emptyList(), emptyList(), emptyList(), emptyList())
+        summarise(
+            plays,
+            emptyList(),
+            emptyList(),
+            emptyList(),
+            emptyList(),
+            emptyList(),
+            emptyList(),
+        )
 
     @Test
     fun `an empty history counts to nothing rather than dividing by zero`() {

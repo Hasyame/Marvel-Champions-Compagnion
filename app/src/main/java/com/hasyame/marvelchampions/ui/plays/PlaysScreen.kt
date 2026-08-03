@@ -98,6 +98,12 @@ fun PlaysScreen(
             stringResource(R.string.plays_by_aspect) to state.byAspect,
             stringResource(R.string.plays_by_scenario) to state.byScenario,
             stringResource(R.string.plays_by_difficulty) to state.byDifficulty,
+            // Solo and group win rates differ enormously; a blended figure
+            // describes neither.
+            stringResource(R.string.plays_by_players) to state.bySoloOrGroup,
+            // The pairing a player actually asks about: not how Justice does,
+            // but how Justice does for this hero.
+            stringResource(R.string.plays_by_hero_aspect) to state.byHeroAspect,
         )
         val historyTitle = stringResource(R.string.plays_history)
 

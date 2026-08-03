@@ -66,6 +66,22 @@ interface PlayDao {
     fun observeByDifficulty(): Flow<List<WinRateRow>>
 
     /**
+     * Solo against multiplayer.
+     *
+     * Worth its own split because the win rates differ enormously, and a
+     * single blended figure describes neither: a player who wins two thirds
+     * solo and a third in a group is not a 50% player at anything.
+     */
+    @Query(
+        """
+        SELECT CASE WHEN players <= 1 THEN 'solo' ELSE 'group' END AS `key`,
+               COUNT(*) AS played, SUM(won) AS won, SUM(elapsedMillis) AS totalMillis
+        FROM plays GROUP BY `key` ORDER BY played DESC
+        """,
+    )
+    fun observeBySoloOrGroup(): Flow<List<WinRateRow>>
+
+    /**
      * Aspects are stored as a comma-separated string because a hero can be
      * played with more than one, so they are grouped in memory rather than in
      * SQL. The rows are small — one per play — and splitting a list in SQLite
@@ -73,6 +89,14 @@ interface PlayDao {
      */
     @Query("SELECT aspects, won, elapsedMillis FROM plays")
     fun observeAspectRows(): Flow<List<AspectRow>>
+
+    /**
+     * Hero and aspect together, which is the pairing a player actually asks
+     * about: not "how does Justice do" but "how does Justice do for this
+     * hero". Split in memory for the same reason as aspects alone.
+     */
+    @Query("SELECT heroName, aspects, won, elapsedMillis FROM plays")
+    fun observeHeroAspectRows(): Flow<List<HeroAspectRow>>
 
     /** For a restore, which replaces rather than merges. */
     @Query("DELETE FROM plays")
@@ -83,3 +107,10 @@ interface PlayDao {
 }
 
 data class AspectRow(val aspects: String, val won: Boolean, val elapsedMillis: Long)
+
+data class HeroAspectRow(
+    val heroName: String,
+    val aspects: String,
+    val won: Boolean,
+    val elapsedMillis: Long,
+)

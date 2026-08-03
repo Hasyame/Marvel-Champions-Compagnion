@@ -482,4 +482,6 @@
     <string name="cards_favourite_remove">Retirer des favoris</string>
     <string name="decks_share">Partager ce deck</string>
     <string name="decks_share_no_app">Aucune application de cet appareil ne peut partager du texte.</string>
+    <string name="plays_by_players">Solo ou en groupe</string>
+    <string name="plays_by_hero_aspect">Héros et aspect ensemble</string>
 </resources>

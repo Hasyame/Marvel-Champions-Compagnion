@@ -30,6 +30,8 @@ data class PlaysUiState(
     val byScenario: List<WinRateRow> = emptyList(),
     val byAspect: List<WinRateRow> = emptyList(),
     val byDifficulty: List<WinRateRow> = emptyList(),
+    val bySoloOrGroup: List<WinRateRow> = emptyList(),
+    val byHeroAspect: List<WinRateRow> = emptyList(),
     val totalPlayed: Int = 0,
     val totalWon: Int = 0,
     val totalMillis: Long = 0,
@@ -47,6 +49,8 @@ internal fun summarise(
     byScenario: List<WinRateRow>,
     byAspect: List<WinRateRow>,
     byDifficulty: List<WinRateRow>,
+    bySoloOrGroup: List<WinRateRow>,
+    byHeroAspect: List<WinRateRow>,
 ): PlaysUiState {
     var totalMillis = 0L
     var timedCount = 0
@@ -79,6 +83,8 @@ internal fun summarise(
         byScenario = byScenario,
         byAspect = byAspect,
         byDifficulty = byDifficulty,
+        bySoloOrGroup = bySoloOrGroup,
+        byHeroAspect = byHeroAspect,
         totalPlayed = plays.size,
         totalWon = won,
         totalMillis = totalMillis,
@@ -99,20 +105,41 @@ class PlaysViewModel @Inject constructor(
     private val repository: PlayRepository,
 ) : ViewModel() {
 
-    val uiState: StateFlow<PlaysUiState> = combine(
+    /**
+     * Two combines, because the typed overload takes five flows and there are
+     * seven. A holder rather than a list of Any: casting back out of a list
+     * would mean an unchecked suppression for no gain.
+     */
+    private val counts = combine(
         repository.observePlays(),
         repository.observeByHero(),
         repository.observeByScenario(),
         repository.observeByAspect(),
         repository.observeByDifficulty(),
     ) { plays, byHero, byScenario, byAspect, byDifficulty ->
-        summarise(plays, byHero, byScenario, byAspect, byDifficulty)
+        Counts(plays, byHero, byScenario, byAspect, byDifficulty)
+    }
+
+    private val splits = combine(
+        repository.observeBySoloOrGroup(),
+        repository.observeByHeroAspect(),
+    ) { soloOrGroup, heroAspect -> Splits(soloOrGroup, heroAspect) }
+
+    val uiState: StateFlow<PlaysUiState> = combine(counts, splits) { counted, split ->
+        summarise(
+            plays = counted.plays,
+            byHero = counted.byHero,
+            byScenario = counted.byScenario,
+            byAspect = counted.byAspect,
+            byDifficulty = counted.byDifficulty,
+            bySoloOrGroup = split.soloOrGroup,
+            byHeroAspect = split.heroAspect,
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
         initialValue = PlaysUiState(),
     )
-
     private val pending = MutableStateFlow<PendingReport?>(null)
     val pendingReport: StateFlow<PendingReport?> = pending.asStateFlow()
 
@@ -167,3 +194,18 @@ class PlaysViewModel @Inject constructor(
         const val SENT = "Sent to BoardGameGeek."
     }
 }
+
+/** The five counted flows, carried together through the outer combine. */
+private data class Counts(
+    val plays: List<PlayEntity>,
+    val byHero: List<WinRateRow>,
+    val byScenario: List<WinRateRow>,
+    val byAspect: List<WinRateRow>,
+    val byDifficulty: List<WinRateRow>,
+)
+
+/** The two splits, likewise. */
+private data class Splits(
+    val soloOrGroup: List<WinRateRow>,
+    val heroAspect: List<WinRateRow>,
+)
