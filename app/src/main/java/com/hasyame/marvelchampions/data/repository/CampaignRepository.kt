@@ -7,6 +7,7 @@ import com.hasyame.marvelchampions.data.db.dao.CardDao
 import com.hasyame.marvelchampions.data.db.entity.CampaignEventEntity
 import com.hasyame.marvelchampions.data.db.entity.CampaignRunEntity
 import com.hasyame.marvelchampions.data.db.entity.PlayEntity
+import com.hasyame.marvelchampions.data.db.entity.PlayHero
 import com.hasyame.marvelchampions.domain.campaign.engine.CampaignEngine
 import com.hasyame.marvelchampions.domain.campaign.engine.CampaignEvent
 import com.hasyame.marvelchampions.domain.campaign.engine.CampaignHero
@@ -429,9 +430,25 @@ class CampaignRepository @Inject constructor(
         val scenario = run.template.scenarios.firstOrNull { it.id == scenarioId }
         val heroes = run.state.heroes
 
-        val aspects = heroes.mapNotNull { it.deckId }
-            .mapNotNull { deckRepository.getDeck(it)?.aspects }
-            .flatMap { DeckRepository.parseAspects(it) }
+        // Built per hero rather than pooled, so the statistics can say which
+        // hero played which aspect. Flattening them into one list first is what
+        // made hero-with-aspect pair the first player against every aspect
+        // anybody at the table had brought.
+        val roster = heroes.map { hero ->
+            val heroAspects = hero.deckId
+                ?.let { deckRepository.getDeck(it)?.aspects }
+                ?.let { DeckRepository.parseAspects(it) }
+                .orEmpty()
+            PlayHero(
+                code = hero.heroCardCode.orEmpty(),
+                name = hero.name,
+                aspect = heroAspects.joinToString(", "),
+            )
+        }
+
+        val aspects = roster.flatMap { it.aspect.split(',') }
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
             .distinct()
 
         val first = heroes.firstOrNull()
@@ -451,6 +468,7 @@ class CampaignRepository @Inject constructor(
                 heroName = first?.name.orEmpty(),
                 aspects = aspects.joinToString(", "),
                 otherHeroes = heroes.drop(1).joinToString(", ") { it.name },
+                roster = roster,
                 players = heroes.size.coerceAtLeast(1),
                 won = won,
                 elapsedMillis = elapsedMillis,

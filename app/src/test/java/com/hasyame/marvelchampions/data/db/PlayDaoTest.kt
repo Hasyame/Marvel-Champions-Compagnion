@@ -4,6 +4,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.hasyame.marvelchampions.data.db.dao.PlayDao
 import com.hasyame.marvelchampions.data.db.entity.PlayEntity
+import com.hasyame.marvelchampions.data.db.entity.PlayHero
+import com.hasyame.marvelchampions.data.repository.PlayStats
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -86,7 +88,7 @@ class PlayDaoTest {
         dao.insert(play("b", hero = "Spider-Man", heroCode = "h1", won = false))
         dao.insert(play("c", hero = "She-Hulk", heroCode = "h2", won = true))
 
-        val byHero = dao.observeByHero().first().associateBy { it.key }
+        val byHero = PlayStats.heroes(dao.observeStatsRows().first()).associateBy { it.key }
         assertEquals(2, byHero.getValue("Spider-Man").played)
         assertEquals(1, byHero.getValue("Spider-Man").won)
         assertEquals(1, byHero.getValue("She-Hulk").won)
@@ -104,8 +106,65 @@ class PlayDaoTest {
         dao.insert(play("a", hero = "Spider-Man", heroCode = "h1"))
         dao.insert(play("b", hero = "L'Araignée", heroCode = "h1"))
 
-        assertEquals(1, dao.observeByHero().first().size)
-        assertEquals(2, dao.observeByHero().first().single().played)
+        assertEquals(1, PlayStats.heroes(dao.observeStatsRows().first()).size)
+        assertEquals(2, PlayStats.heroes(dao.observeStatsRows().first()).single().played)
+    }
+
+    @Test
+    fun `a multiplayer game counts for every hero at the table`() = runTest {
+        // The reported bug, end to end: only the first player reached the
+        // statistics, so three of these four heroes were invisible.
+        dao.insert(
+            play("group").copy(
+                heroCode = "h1",
+                heroName = "Spider-Man",
+                aspects = "Justice, Aggression, Protection, Leadership",
+                otherHeroes = "Thor, Ms Marvel, Captain Marvel",
+                players = 4,
+                roster = listOf(
+                    PlayHero("h1", "Spider-Man", "Justice"),
+                    PlayHero("h2", "Thor", "Aggression"),
+                    PlayHero("h3", "Ms Marvel", "Protection"),
+                    PlayHero("h4", "Captain Marvel", "Leadership"),
+                ),
+            ),
+        )
+
+        val byHero = PlayStats.heroes(dao.observeStatsRows().first())
+        assertEquals(4, byHero.size)
+        byHero.forEach { assertEquals(1, it.played) }
+    }
+
+    @Test
+    fun `the roster survives a round trip through the database`() = runTest {
+        // It is stored as JSON in one column, so the converter is the only
+        // thing standing between a recorded table and an empty one.
+        val roster = listOf(
+            PlayHero("h1", "Spider-Man", "Justice"),
+            PlayHero("h2", "L'Araignée d'Acier", "Aggression, Leadership"),
+        )
+        dao.insert(play("p1").copy(roster = roster))
+
+        assertEquals(roster, dao.getPlay("p1")!!.roster)
+    }
+
+    @Test
+    fun `a play written before the roster existed still counts its heroes`() = runTest {
+        // An empty roster is what every play recorded before this migration
+        // has. The names are known even though the pairings are not.
+        dao.insert(
+            play("old").copy(
+                heroName = "Spider-Man",
+                otherHeroes = "Thor",
+                players = 2,
+                roster = emptyList(),
+            ),
+        )
+
+        assertEquals(
+            setOf("Spider-Man", "Thor"),
+            PlayStats.heroes(dao.observeStatsRows().first()).map { it.key }.toSet(),
+        )
     }
 
     @Test
@@ -125,7 +184,7 @@ class PlayDaoTest {
         dao.delete("b")
 
         assertEquals(1, dao.observePlays().first().size)
-        assertEquals(1, dao.observeByHero().first().single().won)
+        assertEquals(1, PlayStats.heroes(dao.observeStatsRows().first()).single().won)
     }
 
     @Test
@@ -134,7 +193,7 @@ class PlayDaoTest {
         dao.insert(play("b", heroCode = "h1", elapsedMillis = 50 * 60_000L))
         dao.insert(play("c", heroCode = "h2", hero = "She-Hulk", elapsedMillis = 0L))
 
-        val byHero = dao.observeByHero().first().associateBy { it.key }
+        val byHero = PlayStats.heroes(dao.observeStatsRows().first()).associateBy { it.key }
         assertEquals(80 * 60_000L, byHero.getValue("Spider-Man").totalMillis)
         // An untimed game contributes nothing rather than breaking the sum.
         assertEquals(0L, byHero.getValue("She-Hulk").totalMillis)

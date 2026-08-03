@@ -3,6 +3,7 @@ package com.hasyame.marvelchampions.ui.plays
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hasyame.marvelchampions.data.db.entity.PlayEntity
+import com.hasyame.marvelchampions.data.db.entity.PlayHero
 import com.hasyame.marvelchampions.data.repository.PlayRecorded
 import com.hasyame.marvelchampions.data.repository.PlayRepository
 import com.hasyame.marvelchampions.data.repository.RandomizerNames
@@ -257,6 +258,16 @@ class GameSessionViewModel @Inject constructor(
                     aspects = current.heroes.map { it.aspect }.distinct().joinToString(", "),
                     otherHeroes = current.heroes.drop(1)
                         .joinToString(", ") { current.names.heroes[it.heroCode] ?: it.heroCode },
+                    // Every seat, each hero with its own aspect. The fields
+                    // above cannot express that, which is why the statistics
+                    // used to credit the first player and nobody else.
+                    roster = current.heroes.map {
+                        PlayHero(
+                            code = it.heroCode,
+                            name = current.names.heroes[it.heroCode] ?: it.heroCode,
+                            aspect = it.aspect,
+                        )
+                    },
                     players = current.heroes.size,
                     won = won,
                     elapsedMillis = elapsed,

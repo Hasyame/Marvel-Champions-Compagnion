@@ -3,8 +3,6 @@ package com.hasyame.marvelchampions.data.repository
 import com.hasyame.marvelchampions.data.bgg.BggAccount
 import com.hasyame.marvelchampions.data.bgg.BggClient
 import com.hasyame.marvelchampions.data.bgg.BggResult
-import com.hasyame.marvelchampions.data.db.dao.AspectRow
-import com.hasyame.marvelchampions.data.db.dao.HeroAspectRow
 import com.hasyame.marvelchampions.data.db.dao.PlayDao
 import com.hasyame.marvelchampions.data.db.dao.WinRateRow
 import com.hasyame.marvelchampions.data.db.entity.PlayEntity
@@ -48,13 +46,21 @@ class PlayRepository @Inject constructor(
 
     fun observePlays(): Flow<List<PlayEntity>> = playDao.observePlays()
 
-    fun observeByHero(): Flow<List<WinRateRow>> = playDao.observeByHero()
-
     fun observeByScenario(): Flow<List<WinRateRow>> = playDao.observeByScenario()
 
     fun observeByDifficulty(): Flow<List<WinRateRow>> = playDao.observeByDifficulty()
 
     fun observeBySoloOrGroup(): Flow<List<WinRateRow>> = playDao.observeBySoloOrGroup()
+
+    /**
+     * Win rate per hero, counting every seat at the table.
+     *
+     * A group game is one game and several heroes. The totals and the
+     * solo/group split stay per game; this is per seat, because "how does this
+     * hero do" is a question about the hero, not about whose turn came first.
+     */
+    fun observeByHero(): Flow<List<WinRateRow>> =
+        playDao.observeStatsRows().map { PlayStats.heroes(it) }
 
     /**
      * Hero and aspect as one key, which is the pairing a player asks about.
@@ -63,11 +69,11 @@ class PlayRepository @Inject constructor(
      * one-game 100% rows tells nobody anything and buries the rows that do.
      */
     fun observeByHeroAspect(): Flow<List<WinRateRow>> =
-        playDao.observeHeroAspectRows().map { rows -> countHeroAspects(rows) }
+        playDao.observeStatsRows().map { PlayStats.heroAspects(it) }
 
-    /** Aspects split out of their stored list and counted per aspect. */
+    /** Aspects split out of the roster and counted per aspect. */
     fun observeByAspect(): Flow<List<WinRateRow>> =
-        playDao.observeAspectRows().map { rows -> countAspects(rows) }
+        playDao.observeStatsRows().map { PlayStats.aspects(it) }
 
     fun newPlayId(): String = UUID.randomUUID().toString()
 
@@ -178,57 +184,6 @@ class PlayRepository @Inject constructor(
             won = won,
             comment = comment,
         )
-    }
-
-    private fun countHeroAspects(rows: List<HeroAspectRow>): List<WinRateRow> {
-        data class Tally(var played: Int = 0, var won: Int = 0, var millis: Long = 0)
-
-        val tallies = mutableMapOf<String, Tally>()
-        for (row in rows) {
-            row.aspects.split(",")
-                .map { it.trim() }
-                .filter { it.isNotEmpty() }
-                .distinct()
-                .forEach { aspect ->
-                    val tally = tallies.getOrPut("${row.heroName} · $aspect") { Tally() }
-                    tally.played++
-                    tally.millis += row.elapsedMillis
-                    if (row.won) tally.won++
-                }
-        }
-
-        return tallies
-            .filterValues { it.played > 1 }
-            .map { (key, tally) -> WinRateRow(key, tally.played, tally.won, tally.millis) }
-            .sortedWith(compareByDescending<WinRateRow> { it.played }.thenBy { it.key })
-    }
-
-    private fun countAspects(rows: List<AspectRow>): List<WinRateRow> {
-        val played = mutableMapOf<String, Int>()
-        val won = mutableMapOf<String, Int>()
-
-        val millis = mutableMapOf<String, Long>()
-
-        for (row in rows) {
-            row.aspects.split(',')
-                .map { it.trim() }
-                .filter { it.isNotEmpty() }
-                // A hero played with two aspects counts once for each, so the
-                // columns do not add up to the number of games. That is correct
-                // for the question being asked: how does this aspect do.
-                .distinct()
-                .forEach { aspect ->
-                    played[aspect] = (played[aspect] ?: 0) + 1
-                    millis[aspect] = (millis[aspect] ?: 0) + row.elapsedMillis
-                    if (row.won) {
-                        won[aspect] = (won[aspect] ?: 0) + 1
-                    }
-                }
-        }
-
-        return played.map { (aspect, count) ->
-            WinRateRow(aspect, count, won[aspect] ?: 0, millis[aspect] ?: 0)
-        }.sortedWith(compareByDescending<WinRateRow> { it.played }.thenBy { it.key })
     }
 
     private companion object {

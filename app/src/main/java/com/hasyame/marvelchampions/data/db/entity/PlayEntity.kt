@@ -41,18 +41,32 @@ data class PlayEntity(
     val difficulty: String,
 
     /**
-     * The hero, for a solo game or the first player in a group.
+     * The hero of the first seat, kept for display and for BoardGameGeek.
      *
-     * Win rate "per hero" is the question people ask, and it needs one hero per
-     * row to answer. Multi-hero games record the rest in [otherHeroes] for
-     * display without complicating the statistics.
+     * Not what the statistics count any more. Counting per hero from this field
+     * meant a four-player game credited one hero and ignored three.
      */
     val heroCode: String,
     val heroName: String,
+
+    /** Every aspect at the table, comma separated, without saying who played what. */
     val aspects: String,
 
     /** Comma-separated names of the other heroes at the table, if any. */
     val otherHeroes: String = "",
+
+    /**
+     * Every seat at the table, each hero paired with the aspect it played.
+     *
+     * This is what the statistics count. Empty on plays recorded before it
+     * existed; those still have the four fields above, which carry less, and
+     * the counting falls back to them rather than inventing what is missing.
+     *
+     * The SQL default is what lets the migration add the column to rows that
+     * already exist; a Kotlin default only covers new objects.
+     */
+    @ColumnInfo(defaultValue = "[]")
+    val roster: List<PlayHero> = emptyList(),
 
     val players: Int = 1,
     val won: Boolean,

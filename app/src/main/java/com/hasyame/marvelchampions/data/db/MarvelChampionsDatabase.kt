@@ -1,6 +1,7 @@
 package com.hasyame.marvelchampions.data.db
 
 import androidx.room.AutoMigration
+import androidx.room.TypeConverters
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.hasyame.marvelchampions.data.db.dao.CampaignDao
@@ -19,6 +20,7 @@ import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
 import com.hasyame.marvelchampions.data.db.entity.FavouriteCardEntity
 import com.hasyame.marvelchampions.data.db.entity.PackEntity
 import com.hasyame.marvelchampions.data.db.entity.PlayEntity
+import com.hasyame.marvelchampions.data.db.entity.PlayHeroConverters
 import com.hasyame.marvelchampions.data.db.entity.PackTranslationEntity
 import com.hasyame.marvelchampions.data.db.entity.RandomizerHistoryEntity
 import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
@@ -34,6 +36,7 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
  * They share a file for now because the cross-device bundle is a separate
  * serialisation concern, not a storage one.
  */
+@TypeConverters(PlayHeroConverters::class)
 @Database(
     entities = [
         CardEntity::class,
@@ -48,7 +51,7 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
         PlayEntity::class,
         FavouriteCardEntity::class,
     ],
-    version = 9,
+    version = 10,
     exportSchema = true,
     // Both migrations so far only add a table, so Room can generate them from
     // the exported schemas. Anything that alters an existing table needs a
@@ -62,6 +65,7 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
         AutoMigration(from = 6, to = 7),
         AutoMigration(from = 7, to = 8),
         AutoMigration(from = 8, to = 9),
+        AutoMigration(from = 9, to = 10),
     ],
 )
 abstract class MarvelChampionsDatabase : RoomDatabase() {

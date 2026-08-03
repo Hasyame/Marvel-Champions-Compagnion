@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.hasyame.marvelchampions.data.db.entity.PlayEntity
+import com.hasyame.marvelchampions.data.db.entity.PlayHero
 import kotlinx.coroutines.flow.Flow
 
 /** One row of a win-rate table. */
@@ -38,16 +39,26 @@ interface PlayDao {
     @Query("UPDATE plays SET reportedToBgg = 1 WHERE id = :id")
     suspend fun markReported(id: String)
 
-    // Counting in SQL rather than in memory: a play history grows for years and
-    // there is no reason to carry all of it into the statistics screen.
+    // Counted in SQL where a play is one row of the answer — a game happened at
+    // one scenario, one difficulty, and one table size.
 
+    /**
+     * The rows behind the per-hero, per-aspect and hero-with-aspect tables,
+     * which are counted in memory instead.
+     *
+     * A group game holds several heroes and several aspects in a single row, so
+     * `GROUP BY heroCode` could only ever see the first of them: a four-player
+     * game credited one hero and silently dropped the other three. Splitting a
+     * roster inside SQLite would take a recursive CTE to do a worse job than a
+     * loop, and only these seven columns are carried rather than whole plays.
+     */
     @Query(
         """
-        SELECT heroName AS `key`, COUNT(*) AS played, SUM(won) AS won, SUM(elapsedMillis) AS totalMillis
-        FROM plays GROUP BY heroCode ORDER BY played DESC, `key` ASC
+        SELECT heroCode, heroName, aspects, otherHeroes, roster, won, elapsedMillis
+        FROM plays ORDER BY playedAt DESC
         """,
     )
-    fun observeByHero(): Flow<List<WinRateRow>>
+    fun observeStatsRows(): Flow<List<PlayStatsRow>>
 
     @Query(
         """
@@ -81,23 +92,6 @@ interface PlayDao {
     )
     fun observeBySoloOrGroup(): Flow<List<WinRateRow>>
 
-    /**
-     * Aspects are stored as a comma-separated string because a hero can be
-     * played with more than one, so they are grouped in memory rather than in
-     * SQL. The rows are small — one per play — and splitting a list in SQLite
-     * would need a recursive CTE for no benefit.
-     */
-    @Query("SELECT aspects, won, elapsedMillis FROM plays")
-    fun observeAspectRows(): Flow<List<AspectRow>>
-
-    /**
-     * Hero and aspect together, which is the pairing a player actually asks
-     * about: not "how does Justice do" but "how does Justice do for this
-     * hero". Split in memory for the same reason as aspects alone.
-     */
-    @Query("SELECT heroName, aspects, won, elapsedMillis FROM plays")
-    fun observeHeroAspectRows(): Flow<List<HeroAspectRow>>
-
     /** For a restore, which replaces rather than merges. */
     @Query("DELETE FROM plays")
     suspend fun deleteAll()
@@ -106,11 +100,19 @@ interface PlayDao {
     suspend fun getAllPlays(): List<PlayEntity>
 }
 
-data class AspectRow(val aspects: String, val won: Boolean, val elapsedMillis: Long)
-
-data class HeroAspectRow(
+/**
+ * A play reduced to what the hero and aspect tables need.
+ *
+ * [roster] is the seat-by-seat record and is empty on plays written before it
+ * existed; the four fields beside it are what those older rows have, and
+ * `PlayStats.seats` recovers what it can from them.
+ */
+data class PlayStatsRow(
+    val heroCode: String,
     val heroName: String,
     val aspects: String,
+    val otherHeroes: String,
+    val roster: List<PlayHero>,
     val won: Boolean,
     val elapsedMillis: Long,
 )
