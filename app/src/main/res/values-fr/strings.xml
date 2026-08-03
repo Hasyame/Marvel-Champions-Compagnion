@@ -449,4 +449,7 @@
     <string name="session_leave_message">Le chronomètre tourne. Quitter maintenant abandonne la partie et rien ne sera enregistré.</string>
     <string name="session_leave_yes">Abandonner</string>
     <string name="session_leave_no">Continuer à jouer</string>
+    <string name="session_saving">Enregistrement de la partie…</string>
+    <string name="campaign_validating">Enregistrement…</string>
+    <string name="session_back_to_menu">Retour au menu</string>
 </resources>

@@ -58,6 +58,14 @@ data class CampaignRunUiState(
     val summary: ScenarioOutcomeSummary? = null,
     /** Ambient playlist offered on the play page. */
     val musicUrl: String = "",
+    /**
+     * True while a scenario result is being filed.
+     *
+     * Recording appends to the campaign log, records a play and may report to
+     * BoardGameGeek, none of which is instant. Without this the screen sat
+     * unchanged and a second tap filed the whole lot again.
+     */
+    val isSubmitting: Boolean = false,
 )
 
 @HiltViewModel
@@ -161,6 +169,10 @@ class CampaignRunViewModel @Inject constructor(
         val id = runId ?: return
         val run = state.value.run ?: return
         val scenarioId = run.state.currentScenarioId ?: return
+        if (state.value.isSubmitting) {
+            return
+        }
+        state.value = state.value.copy(isSubmitting = true)
         viewModelScope.launch {
             val elapsed = run.timer.elapsedAt(System.currentTimeMillis())
             repository.append(
@@ -180,6 +192,7 @@ class CampaignRunViewModel @Inject constructor(
             reload()
             state.value = state.value.copy(
                 page = RunPage.DEFEAT,
+                isSubmitting = false,
                 summary = ScenarioOutcomeSummary(victory = false, elapsedMillis = elapsed, victoryPoints = null),
             )
         }
@@ -195,6 +208,11 @@ class CampaignRunViewModel @Inject constructor(
             state.value = state.value.copy(page = RunPage.RESULT, summary = null)
             return
         }
+        if (state.value.isSubmitting) {
+            return
+        }
+        state.value = state.value.copy(isSubmitting = true)
+
         viewModelScope.launch {
             val elapsed = run.timer.elapsedAt(System.currentTimeMillis())
             repository.append(
@@ -232,6 +250,7 @@ class CampaignRunViewModel @Inject constructor(
 
             state.value = state.value.copy(
                 page = RunPage.RESULT,
+                isSubmitting = false,
                 summary = ScenarioOutcomeSummary(
                     victory = true,
                     elapsedMillis = elapsed,

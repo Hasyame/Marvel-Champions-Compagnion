@@ -51,6 +51,7 @@ import com.hasyame.marvelchampions.domain.campaign.template.ScenarioTemplate
 @Composable
 fun QuestionsPage(
     run: CampaignRun,
+    isSubmitting: Boolean = false,
     scenario: ScenarioTemplate?,
     onSubmit: (AnswerSet) -> Unit,
 ) {
@@ -241,6 +242,10 @@ fun QuestionsPage(
         }
 
         Button(
+            // Dead the instant it is tapped: filing a result writes to the
+            // campaign log, records a play and may reach BoardGameGeek, and a
+            // second tap would do all of it again.
+            enabled = !isSubmitting,
             onClick = {
                 onSubmit(
                     AnswerSet(
@@ -275,7 +280,13 @@ fun QuestionsPage(
                 )
             },
             modifier = Modifier.fillMaxWidth(),
-        ) { Text(stringResource(R.string.campaign_validate)) }
+        ) {
+            Text(
+                stringResource(
+                    if (isSubmitting) R.string.campaign_validating else R.string.campaign_validate,
+                ),
+            )
+        }
     }
 }
 

@@ -39,6 +39,8 @@ data class GameSessionUiState(
     val timer: TimerState = TimerState(),
     val elapsedMillis: Long = 0,
     val isLoading: Boolean = true,
+    /** True from the moment a result is tapped until it has been filed. */
+    val isFinishing: Boolean = false,
 ) {
     /** A game needs somewhere to happen and someone to play it. */
     val canStart: Boolean get() = scenarioCode != null && heroes.isNotEmpty()
@@ -157,12 +159,34 @@ class GameSessionViewModel @Inject constructor(
         )
     }
 
-    /** Ends the game and files it. The measured time is used, not a typed one. */
+    /**
+     * Ends the game and files it. The measured time is used, not a typed one.
+     *
+     * Guarded, because it was not and the cost was severe. Saving and then
+     * reporting to BoardGameGeek takes a network round trip, and during it the
+     * screen looked unchanged — so a second tap did not feel like a second
+     * result, it felt like the first had not registered. Every tap filed
+     * another play and sent another entry to BGG.
+     *
+     * The clock now stops on the first tap, the elapsed time is captured there
+     * and then, and every later call returns immediately.
+     */
     fun finish(won: Boolean) {
         val current = state.value
+        if (current.isFinishing) {
+            return
+        }
+
         val scenarioCode = current.scenarioCode ?: return
         val first = current.heroes.firstOrNull() ?: return
+        // Captured once: a repeat tap must not record a longer game than played.
         val elapsed = current.timer.elapsedAt(System.currentTimeMillis())
+
+        state.value = current.copy(
+            isFinishing = true,
+            timer = current.timer.pause(System.currentTimeMillis()),
+            elapsedMillis = elapsed,
+        )
 
         viewModelScope.launch {
             finished.value = playRepository.record(
@@ -192,6 +216,8 @@ class GameSessionViewModel @Inject constructor(
             phase = SessionPhase.SETUP,
             timer = TimerState(),
             elapsedMillis = 0,
+            // Cleared, or a rematch could never be finished.
+            isFinishing = false,
         )
     }
 

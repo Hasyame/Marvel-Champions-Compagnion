@@ -431,4 +431,7 @@
     <string name="session_leave_message">The clock is running. Leaving now discards the game and nothing is recorded.</string>
     <string name="session_leave_yes">Discard it</string>
     <string name="session_leave_no">Keep playing</string>
+    <string name="session_saving">Recording the game…</string>
+    <string name="campaign_validating">Recording…</string>
+    <string name="session_back_to_menu">Back to the menu</string>
 </resources>

@@ -128,6 +128,7 @@ fun CampaignRunScreen(
                     )
 
                     RunPage.PLAYING -> PlayingPage(
+                        isSubmitting = state.isSubmitting,
                         run = run,
                         scenario = scenario,
                         elapsedMillis = state.elapsedMillis,
@@ -139,6 +140,7 @@ fun CampaignRunScreen(
                     )
 
                     RunPage.QUESTIONS -> QuestionsPage(
+                        isSubmitting = state.isSubmitting,
                         run = run,
                         scenario = scenario,
                         onSubmit = viewModel::submitAnswers,
@@ -366,6 +368,7 @@ private fun CardChips(
 /** Page 2. The clock, and the two ways a scenario ends. */
 @Composable
 private fun PlayingPage(
+    isSubmitting: Boolean = false,
     run: CampaignRun,
     scenario: ScenarioTemplate?,
     elapsedMillis: Long,
@@ -418,13 +421,21 @@ private fun PlayingPage(
             )
         }
 
-        Button(onClick = onVictory, modifier = Modifier.fillMaxWidth()) {
+        Button(
+            onClick = onVictory,
+            enabled = !isSubmitting,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
             Text(
                 scenario?.victoryLabel?.resolve("fr")?.takeIf { it.isNotBlank() }
                     ?: stringResource(R.string.campaign_victory),
             )
         }
-        OutlinedButton(onClick = onDefeat, modifier = Modifier.fillMaxWidth()) {
+        OutlinedButton(
+            onClick = onDefeat,
+            enabled = !isSubmitting,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
             Text(
                 scenario?.defeatLabel?.resolve("fr")?.takeIf { it.isNotBlank() }
                     ?: stringResource(R.string.campaign_defeat),

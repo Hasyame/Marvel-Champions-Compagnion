@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -165,17 +166,26 @@ fun GameSessionScreen(
                     },
                 )
             },
+            // Three ways on, all equal: play again, look at what it did to the
+            // stats, or stop. A dialog with only two buttons pushed the third
+            // into a back gesture nobody would guess at.
             confirmButton = {
-                TextButton(
-                    onClick = {
-                        viewModel.reset()
-                        onOpenPlays()
-                    },
-                ) { Text(stringResource(R.string.session_see_stats)) }
-            },
-            dismissButton = {
-                TextButton(onClick = viewModel::reset) {
-                    Text(stringResource(R.string.session_another))
+                Column {
+                    TextButton(onClick = viewModel::reset) {
+                        Text(stringResource(R.string.session_another))
+                    }
+                    TextButton(
+                        onClick = {
+                            viewModel.reset()
+                            onOpenPlays()
+                        },
+                    ) { Text(stringResource(R.string.session_see_stats)) }
+                    TextButton(
+                        onClick = {
+                            viewModel.reset()
+                            onBack()
+                        },
+                    ) { Text(stringResource(R.string.session_back_to_menu)) }
                 }
             },
         )
@@ -332,6 +342,7 @@ private fun PlayingPhase(
 
             OutlinedButton(
                 onClick = if (state.timer.isRunning) viewModel::pause else viewModel::resume,
+                enabled = !state.isFinishing,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
@@ -345,18 +356,36 @@ private fun PlayingPhase(
                 )
             }
 
+            // Both go dead the instant either is tapped, and say why. Without
+            // this the screen looked unchanged while the play was saved and
+            // sent, which read as "it did not register" and invited another tap.
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Button(
                     onClick = { viewModel.finish(won = true) },
+                    enabled = !state.isFinishing,
                     modifier = Modifier.weight(1f),
                 ) { Text(stringResource(R.string.session_won)) }
                 OutlinedButton(
                     onClick = { viewModel.finish(won = false) },
+                    enabled = !state.isFinishing,
                     modifier = Modifier.weight(1f),
                 ) { Text(stringResource(R.string.session_lost)) }
+            }
+
+            if (state.isFinishing) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
+                    Text(
+                        text = stringResource(R.string.session_saving),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
         }
     }
