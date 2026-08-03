@@ -56,6 +56,22 @@ data class CampaignRecordRoute(val runId: String)
 @Serializable
 data class CampaignRunRoute(val runId: String)
 
+/**
+ * Everything that starts a game: a random draw, a setup the player builds, and
+ * campaigns. Campaign used to be its own tab; it is a way to play, so it lives
+ * here now.
+ */
+@Serializable
+data object PlayGraph
+
+/** The hub itself. */
+@Serializable
+data object PlayRoute
+
+/** The play history and what it adds up to. */
+@Serializable
+data object StatsGraph
+
 @Serializable
 data object RandomizerGraph
 

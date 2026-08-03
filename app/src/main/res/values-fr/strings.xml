@@ -441,4 +441,14 @@
     <string name="session_saved_not_sent">Enregistrée. Non envoyée sur BoardGameGeek : %1$s</string>
     <string name="session_see_stats">Voir mes stats</string>
     <string name="session_another">Rejouer</string>
+    <string name="destination_play">Jouer</string>
+    <string name="destination_stats">Stats</string>
+    <string name="play_continue">Reprendre la campagne</string>
+    <string name="play_start_something">COMMENCER UNE PARTIE</string>
+    <string name="play_random">Partie aléatoire</string>
+    <string name="play_random_detail">Laissez l\'application choisir un scénario, des héros et des aspects parmi ce que vous possédez.</string>
+    <string name="play_own">Ma propre partie</string>
+    <string name="play_own_detail">Choisissez tout vous-même. L\'application chronomètre la partie.</string>
+    <string name="play_campaign">Campagne</string>
+    <string name="play_campaign_detail">Démarrez une campagne, ou ouvrez-en une terminée.</string>
 </resources>

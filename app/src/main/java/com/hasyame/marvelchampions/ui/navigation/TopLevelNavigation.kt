@@ -32,7 +32,7 @@ private val NavDestination.hierarchy: Sequence<NavDestination>
 private fun TopLevelDestination.graphRouteInstance(): Any = when (this) {
     TopLevelDestination.CARDS -> CardsGraph
     TopLevelDestination.DECKS -> DecksGraph
-    TopLevelDestination.CAMPAIGN -> CampaignGraph
-    TopLevelDestination.RANDOMIZER -> RandomizerGraph
+    TopLevelDestination.PLAY -> PlayGraph
+    TopLevelDestination.STATS -> StatsGraph
     TopLevelDestination.SETTINGS -> SettingsGraph
 }

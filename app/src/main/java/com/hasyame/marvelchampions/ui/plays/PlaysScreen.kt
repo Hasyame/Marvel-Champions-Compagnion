@@ -47,8 +47,12 @@ import java.util.Date
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+/**
+ * [onBack] is null when this is a tab root: a top level destination has nothing
+ * to go back to, and an arrow there is a lie.
+ */
 fun PlaysScreen(
-    onBack: () -> Unit,
+    onBack: (() -> Unit)? = null,
     viewModel: PlaysViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -60,11 +64,13 @@ fun PlaysScreen(
                 colors = comicTopBarColors(),
                 title = { Text(stringResource(R.string.plays_title)) },
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.action_back),
-                        )
+                    onBack?.let { back ->
+                        IconButton(onClick = back) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.action_back),
+                            )
+                        }
                     }
                 },
             )

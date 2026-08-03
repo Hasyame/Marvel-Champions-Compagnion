@@ -20,6 +20,7 @@ import com.hasyame.marvelchampions.ui.decks.DecksScreen
 import com.hasyame.marvelchampions.ui.decks.NewDeckScreen
 import com.hasyame.marvelchampions.ui.plays.GameSessionScreen
 import com.hasyame.marvelchampions.ui.plays.PlaysScreen
+import com.hasyame.marvelchampions.ui.play.PlayScreen
 import com.hasyame.marvelchampions.ui.randomizer.RandomizerScreen
 import com.hasyame.marvelchampions.ui.settings.AboutScreen
 import com.hasyame.marvelchampions.ui.settings.SettingsScreen
@@ -99,7 +100,33 @@ fun MarvelChampionsNavHost(
                 )
             }
         }
-        navigation<CampaignGraph>(startDestination = CampaignRoute) {
+        // Play owns every way of starting a game, campaigns included.
+        navigation<PlayGraph>(startDestination = PlayRoute) {
+            composable<PlayRoute> {
+                PlayScreen(
+                    onRandomDraw = { navController.navigate(RandomizerRoute) },
+                    onOwnSetup = { navController.navigate(GameSessionRoute) },
+                    onCampaigns = { navController.navigate(CampaignRoute) },
+                    onResumeCampaign = { runId ->
+                        navController.navigate(CampaignRunRoute(runId))
+                    },
+                )
+            }
+            composable<RandomizerRoute> {
+                RandomizerScreen(
+                    onOpenPlays = { navController.navigate(PlaysRoute) },
+                    onNewGame = { navController.navigate(GameSessionRoute) },
+                )
+            }
+            composable<GameSessionRoute> {
+                GameSessionScreen(
+                    onBack = { navController.popBackStack() },
+                    onOpenPlays = { navController.navigate(PlaysRoute) },
+                )
+            }
+            composable<PlaysRoute> {
+                PlaysScreen(onBack = { navController.popBackStack() })
+            }
             composable<CampaignRoute> {
                 CampaignScreen(
                     onOpenRun = { runId -> navController.navigate(CampaignRunRoute(runId)) },
@@ -137,22 +164,9 @@ fun MarvelChampionsNavHost(
                 )
             }
         }
-        navigation<RandomizerGraph>(startDestination = RandomizerRoute) {
-            composable<RandomizerRoute> {
-                RandomizerScreen(
-                    onOpenPlays = { navController.navigate(PlaysRoute) },
-                    onNewGame = { navController.navigate(GameSessionRoute) },
-                )
-            }
-            composable<PlaysRoute> {
-                PlaysScreen(onBack = { navController.popBackStack() })
-            }
-            composable<GameSessionRoute> {
-                GameSessionScreen(
-                    onBack = { navController.popBackStack() },
-                    onOpenPlays = { navController.navigate(PlaysRoute) },
-                )
-            }
+        // Stats is its own tab, so its own graph and back stack.
+        navigation<StatsGraph>(startDestination = PlaysRoute) {
+            composable<PlaysRoute> { PlaysScreen() }
         }
         navigation<SettingsGraph>(startDestination = SettingsRoute) {
             composable<SettingsRoute> {

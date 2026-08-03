@@ -3,10 +3,10 @@ package com.hasyame.marvelchampions.ui.navigation
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.hasyame.marvelchampions.R
 import kotlin.reflect.KClass
@@ -18,6 +18,12 @@ import kotlin.reflect.KClass
  * Each one owns its own back stack: switching tabs saves the outgoing stack and
  * restores the incoming one, so leaving Cards for Settings and coming back lands
  * on the card that was open.
+ *
+ * **Play holds every way of starting a game** — a random draw, a setup chosen by
+ * the player, and a campaign. Campaign used to have its own tab and no longer
+ * does: a campaign scenario is a game like any other, and the split was a fact
+ * about the app's internals rather than about playing. It also pushed the count
+ * to six, one more than a phone shows without truncating labels.
  */
 enum class TopLevelDestination(
     val route: KClass<*>,
@@ -37,17 +43,17 @@ enum class TopLevelDestination(
         icon = Icons.AutoMirrored.Filled.List,
         labelRes = R.string.destination_decks,
     ),
-    CAMPAIGN(
-        route = CampaignRoute::class,
-        graphRoute = CampaignGraph::class,
-        icon = Icons.Filled.Star,
-        labelRes = R.string.destination_campaign,
+    PLAY(
+        route = PlayRoute::class,
+        graphRoute = PlayGraph::class,
+        icon = Icons.Filled.PlayArrow,
+        labelRes = R.string.destination_play,
     ),
-    RANDOMIZER(
-        route = RandomizerRoute::class,
-        graphRoute = RandomizerGraph::class,
-        icon = Icons.Filled.Refresh,
-        labelRes = R.string.destination_randomizer,
+    STATS(
+        route = PlaysRoute::class,
+        graphRoute = StatsGraph::class,
+        icon = Icons.Filled.Star,
+        labelRes = R.string.destination_stats,
     ),
     SETTINGS(
         route = SettingsRoute::class,

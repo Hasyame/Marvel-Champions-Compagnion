@@ -12,8 +12,10 @@ class TopLevelDestinationTest {
             listOf(
                 TopLevelDestination.CARDS,
                 TopLevelDestination.DECKS,
-                TopLevelDestination.CAMPAIGN,
-                TopLevelDestination.RANDOMIZER,
+                // Play holds the random draw, the player's own setup and
+                // campaigns. Campaign had a tab of its own, which made six.
+                TopLevelDestination.PLAY,
+                TopLevelDestination.STATS,
                 TopLevelDestination.SETTINGS,
             ),
             TopLevelDestination.entries,

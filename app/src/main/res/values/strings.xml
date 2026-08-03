@@ -423,4 +423,14 @@
     <string name="session_saved_not_sent">Saved. Not sent to BoardGameGeek: %1$s</string>
     <string name="session_see_stats">See my stats</string>
     <string name="session_another">Play another</string>
+    <string name="destination_play">Play</string>
+    <string name="destination_stats">Stats</string>
+    <string name="play_continue">Continue campaign</string>
+    <string name="play_start_something">START A GAME</string>
+    <string name="play_random">Random game</string>
+    <string name="play_random_detail">Let the app pick a scenario, heroes and aspects from what you own.</string>
+    <string name="play_own">My own setup</string>
+    <string name="play_own_detail">Choose everything yourself. The app times the game.</string>
+    <string name="play_campaign">Campaign</string>
+    <string name="play_campaign_detail">Start a campaign, or open one you have finished.</string>
 </resources>
