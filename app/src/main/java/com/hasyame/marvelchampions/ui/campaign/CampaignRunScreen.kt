@@ -259,7 +259,7 @@ private fun BriefingPage(
                         .filter { ConditionEvaluator.evaluate(it.condition, context) }
                         .forEach { step ->
                             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                Text("• " + step.text.resolve("fr"))
+                                Text(campaignText("• " + step.text.resolve("fr")))
 
                                 // Values the campaign log carries forward from
                                 // earlier scenarios, so the step can be
@@ -575,8 +575,10 @@ private fun ResultPage(
                 )
             }
         }
-        OutlinedButton(onClick = onMarket, modifier = Modifier.fillMaxWidth()) {
-            Text(stringResource(R.string.campaign_need_to_buy))
+        if (run.template.market != null) {
+            OutlinedButton(onClick = onMarket, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.campaign_need_to_buy))
+            }
         }
         OutlinedButton(onClick = onBreak, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.campaign_take_a_break))

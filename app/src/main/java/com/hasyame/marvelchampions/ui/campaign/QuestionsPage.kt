@@ -104,7 +104,17 @@ fun QuestionsPage(
         }
 
         prompts.forEach { prompt ->
-            val label = prompt.label?.resolve("fr").orEmpty().ifBlank { prompt.id }
+            // The card the app drew, named, and the campaign's own keywords set
+            // apart the way the campaign sets them.
+            // The card the app drew, named, so the question is about the thing
+            // on the table rather than a generic one.
+            val plainLabel = resolveDraws(
+                prompt.label?.resolve("fr").orEmpty().ifBlank { prompt.id },
+                run,
+                run.state.currentScenarioId,
+            )
+            // The campaign's own keywords, set apart the way the campaign sets them.
+            val label = campaignText(plainLabel)
             Card(Modifier.fillMaxWidth()) {
                 Column(
                     Modifier.padding(16.dp),
@@ -198,7 +208,7 @@ fun QuestionsPage(
                         }
 
                         PromptType.DECK_CARD_SELECT -> DeckCardField(
-                            label = label,
+                            label = plainLabel,
                             deckCards = run.deckCards,
                             selected = cardSelections[prompt.id].orEmpty(),
                             onSelectionChange = { cardSelections[prompt.id] = it },

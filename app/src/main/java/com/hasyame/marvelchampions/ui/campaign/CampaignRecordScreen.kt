@@ -177,14 +177,18 @@ private fun StatsCard(record: CampaignSummary) {
                 stringResource(R.string.campaign_stat_scenarios),
                 "${record.scenariosWon} / ${record.scenariosWon + record.scenariosLost}",
             )
-            Stat(
-                stringResource(R.string.campaign_stat_cards_bought),
-                record.cardsBought.toString(),
-            )
-            Stat(
-                stringResource(R.string.campaign_stat_credits_left),
-                record.creditsRemaining.toString(),
-            )
+            // Only the campaign with a shop has anything to say here; for the
+            // others these were two rows of nought.
+            if (record.hasMarket) {
+                Stat(
+                    stringResource(R.string.campaign_stat_cards_bought),
+                    record.cardsBought.toString(),
+                )
+                Stat(
+                    stringResource(R.string.campaign_stat_credits_left),
+                    record.creditsRemaining.toString(),
+                )
+            }
         }
     }
 }

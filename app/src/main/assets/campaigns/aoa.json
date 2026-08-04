@@ -56,7 +56,7 @@
    },
    {
     "text": {
-     "fr": "Jouer avec cette mission et suivre sa mise en place dans le journal de campagne",
+     "fr": "Jouer avec cette MISSION et suivre sa mise en place dans le journal de campagne",
      "en": "Play with this MISSION side scheme and follow its setup in the campaign log"
     },
     "draw": {
@@ -72,7 +72,7 @@
    },
    {
     "text": {
-     "fr": "Ajouter cet Overseer à la zone de mission et poser la carte Mission Rules à côté",
+     "fr": "Ajouter cet OVERSEER à la zone de mission et poser la carte Mission Rules à côté",
      "en": "Add this OVERSEER minion to the mission area and put Mission Rules beside it"
     },
     "draw": {
@@ -116,8 +116,8 @@
    },
    {
     "text": {
-     "fr": "Expert : placer 3 menaces sur la mission pour soigner un héros à fond",
-     "en": "Expert: place 3 threat on the mission to heal a hero to full"
+     "fr": "Expert : placer 3 menaces sur la MISSION pour soigner un héros à fond",
+     "en": "Expert: place 3 threat on the MISSION to heal a hero to full"
     },
     "when": {
      "difficulty": "expert"
@@ -204,16 +204,16 @@
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
-       "fr": "La mission a-t-elle été vaincue ?",
-       "en": "Was the MISSION side scheme defeated?"
+       "fr": "La MISSION {mission} a-t-elle été vaincue ?",
+       "en": "Was the MISSION {mission} defeated?"
       }
      },
      {
       "id": "overseerDefeated",
       "type": "boolean",
       "label": {
-       "fr": "L'Overseer a-t-il été vaincu ?",
-       "en": "Was the OVERSEER minion defeated?"
+       "fr": "L'OVERSEER {overseer} a-t-il été vaincu ?",
+       "en": "Was the OVERSEER {overseer} defeated?"
       }
      },
      {
@@ -353,16 +353,16 @@
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
-       "fr": "La mission a-t-elle été vaincue ?",
-       "en": "Was the MISSION side scheme defeated?"
+       "fr": "La MISSION {mission} a-t-elle été vaincue ?",
+       "en": "Was the MISSION {mission} defeated?"
       }
      },
      {
       "id": "overseerDefeated",
       "type": "boolean",
       "label": {
-       "fr": "L'Overseer a-t-il été vaincu ?",
-       "en": "Was the OVERSEER minion defeated?"
+       "fr": "L'OVERSEER {overseer} a-t-il été vaincu ?",
+       "en": "Was the OVERSEER {overseer} defeated?"
       }
      },
      {
@@ -479,16 +479,16 @@
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
-       "fr": "La mission a-t-elle été vaincue ?",
-       "en": "Was the MISSION side scheme defeated?"
+       "fr": "La MISSION {mission} a-t-elle été vaincue ?",
+       "en": "Was the MISSION {mission} defeated?"
       }
      },
      {
       "id": "overseerDefeated",
       "type": "boolean",
       "label": {
-       "fr": "L'Overseer a-t-il été vaincu ?",
-       "en": "Was the OVERSEER minion defeated?"
+       "fr": "L'OVERSEER {overseer} a-t-il été vaincu ?",
+       "en": "Was the OVERSEER {overseer} defeated?"
       }
      },
      {
@@ -598,16 +598,16 @@
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
-       "fr": "La mission a-t-elle été vaincue ?",
-       "en": "Was the MISSION side scheme defeated?"
+       "fr": "La MISSION {mission} a-t-elle été vaincue ?",
+       "en": "Was the MISSION {mission} defeated?"
       }
      },
      {
       "id": "overseerDefeated",
       "type": "boolean",
       "label": {
-       "fr": "L'Overseer a-t-il été vaincu ?",
-       "en": "Was the OVERSEER minion defeated?"
+       "fr": "L'OVERSEER {overseer} a-t-il été vaincu ?",
+       "en": "Was the OVERSEER {overseer} defeated?"
       }
      },
      {
@@ -735,7 +735,7 @@
     },
     {
      "text": {
-      "fr": "Jouer avec cette mission et suivre sa mise en place dans le journal de campagne",
+      "fr": "Jouer avec cette MISSION et suivre sa mise en place dans le journal de campagne",
       "en": "Play with this MISSION side scheme and follow its setup in the campaign log"
      },
      "cards": [
@@ -744,7 +744,7 @@
     },
     {
      "text": {
-      "fr": "Ajouter cet Overseer à la zone de mission et poser la carte Mission Rules à côté",
+      "fr": "Ajouter cet OVERSEER à la zone de mission et poser la carte Mission Rules à côté",
       "en": "Add this OVERSEER minion to the mission area and put Mission Rules beside it"
      },
      "draw": {
@@ -784,8 +784,8 @@
       "id": "professorSaved",
       "type": "boolean",
       "label": {
-       "fr": "Protect the Professor a-t-elle été vaincue ?",
-       "en": "Was Protect the Professor defeated?"
+       "fr": "La MISSION Protect the Professor a-t-elle été vaincue ?",
+       "en": "Was the MISSION Protect the Professor defeated?"
       }
      }
     ],

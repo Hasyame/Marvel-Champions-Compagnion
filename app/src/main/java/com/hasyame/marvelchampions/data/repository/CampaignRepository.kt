@@ -83,6 +83,8 @@ data class CampaignSummary(
     val scenariosLost: Int = 0,
     val creditsRemaining: Int = 0,
     val cardsBought: Int = 0,
+    /** Only one campaign has a shop; the rest should not show its figures. */
+    val hasMarket: Boolean = false,
     val scenarios: List<ScenarioLogEntry> = emptyList(),
 )
 
@@ -632,6 +634,7 @@ class CampaignRepository @Inject constructor(
                 scenariosLost = state.completedScenarios.count { !it.victory },
                 creditsRemaining = state.heroes.sumOf { state.heroCounter(creditsCounter, it.id) },
                 cardsBought = state.purchases.size,
+                hasMarket = template.market != null,
                 scenarios = state.completedScenarios.map { result ->
                     val scenario = template.scenarios.firstOrNull { it.id == result.scenarioId }
                     ScenarioLogEntry(

@@ -39,14 +39,14 @@ def mission_steps(scenario_number):
         },
         {
             "text": t(
-                "Jouer avec cette mission et suivre sa mise en place dans le journal de campagne",
+                "Jouer avec cette MISSION et suivre sa mise en place dans le journal de campagne",
                 "Play with this MISSION side scheme and follow its setup in the campaign log",
             ),
             "draw": {"id": "mission", "from": MISSIONS, "excluding": "missionsUsed"},
         },
         {
             "text": t(
-                "Ajouter cet Overseer à la zone de mission et poser la carte Mission Rules à côté",
+                "Ajouter cet OVERSEER à la zone de mission et poser la carte Mission Rules à côté",
                 "Add this OVERSEER minion to the mission area and put Mission Rules beside it",
             ),
             "draw": {"id": "overseer", "from": OVERSEERS, "excluding": "overseersDefeated"},
@@ -81,8 +81,8 @@ def expert_steps(first_scenario=False):
         })
         steps.append({
             "text": t(
-                "Expert : placer 3 menaces sur la mission pour soigner un héros à fond",
-                "Expert: place 3 threat on the mission to heal a hero to full",
+                "Expert : placer 3 menaces sur la MISSION pour soigner un héros à fond",
+                "Expert: place 3 threat on the MISSION to heal a hero to full",
             ),
             "when": {"difficulty": "expert"},
             "action": {
@@ -109,16 +109,16 @@ def mission_outcome_prompts(scenario_number):
             "id": "missionDefeated",
             "type": "boolean",
             "label": t(
-                "La mission a-t-elle été vaincue ?",
-                "Was the MISSION side scheme defeated?",
+                "La MISSION {mission} a-t-elle été vaincue ?",
+                "Was the MISSION {mission} defeated?",
             ),
         },
         {
             "id": "overseerDefeated",
             "type": "boolean",
             "label": t(
-                "L'Overseer a-t-il été vaincu ?",
-                "Was the OVERSEER minion defeated?",
+                "L'OVERSEER {overseer} a-t-il été vaincu ?",
+                "Was the OVERSEER {overseer} defeated?",
             ),
         },
         {
@@ -367,14 +367,14 @@ scenarios.append({
         },
         {
             "text": t(
-                "Jouer avec cette mission et suivre sa mise en place dans le journal de campagne",
+                "Jouer avec cette MISSION et suivre sa mise en place dans le journal de campagne",
                 "Play with this MISSION side scheme and follow its setup in the campaign log",
             ),
             "cards": [PROTECT_THE_PROFESSOR],
         },
         {
             "text": t(
-                "Ajouter cet Overseer à la zone de mission et poser la carte Mission Rules à côté",
+                "Ajouter cet OVERSEER à la zone de mission et poser la carte Mission Rules à côté",
                 "Add this OVERSEER minion to the mission area and put Mission Rules beside it",
             ),
             "draw": {"id": "overseer", "from": OVERSEERS, "excluding": "overseersDefeated"},
@@ -399,8 +399,8 @@ scenarios.append({
                 "id": "professorSaved",
                 "type": "boolean",
                 "label": t(
-                    "Protect the Professor a-t-elle été vaincue ?",
-                    "Was Protect the Professor defeated?",
+                    "La MISSION Protect the Professor a-t-elle été vaincue ?",
+                    "Was the MISSION Protect the Professor defeated?",
                 ),
             },
         ],
