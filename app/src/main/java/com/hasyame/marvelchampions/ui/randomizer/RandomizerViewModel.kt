@@ -7,6 +7,7 @@ import com.hasyame.marvelchampions.data.repository.RandomizerNames
 import com.hasyame.marvelchampions.data.repository.RandomizerRepository
 import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.domain.randomizer.Difficulty
+import com.hasyame.marvelchampions.domain.randomizer.HeroAssignment
 import com.hasyame.marvelchampions.domain.randomizer.DrawField
 import com.hasyame.marvelchampions.domain.randomizer.RandomizerDraw
 import com.hasyame.marvelchampions.domain.randomizer.RandomizerFilters
@@ -119,6 +120,62 @@ class RandomizerViewModel @Inject constructor(
             previous = draw.value,
             locked = DrawField.entries.toSet() - field,
         )
+    }
+
+    /**
+     * Sets a field by hand and locks it.
+     *
+     * Rolling answers "what shall I play"; sometimes the answer is already
+     * known for one part of it — a hero somebody wants to try, a scenario the
+     * group has agreed on — and the rest should be rolled around it. Choosing
+     * locks the field, because a value picked deliberately and then rolled away
+     * by the next tap of Roll would be worse than not offering the choice.
+     */
+    fun choose(field: DrawField, values: List<String>) {
+        val current = draw.value
+        draw.value = when (field) {
+            DrawField.SCENARIO -> current.copy(scenarioCode = values.firstOrNull())
+            DrawField.DIFFICULTY -> current.copy(
+                difficulty = values.firstOrNull()
+                    ?.let { name -> Difficulty.entries.firstOrNull { it.name == name } }
+                    ?: current.difficulty,
+            )
+
+            DrawField.MODULAR_SETS -> current.copy(
+                // Mandatory sets belong to the scenario, not the draw, so they
+                // stay in whatever the player picked.
+                modularSetCodes = (current.mandatoryModularCodes + values).distinct(),
+            )
+
+            DrawField.PLAYER_COUNT -> {
+                val count = values.firstOrNull()?.toIntOrNull() ?: current.playerCount
+                current.copy(
+                    playerCount = count,
+                    // The seats follow the count, keeping the ones already drawn.
+                    heroes = current.heroes.take(count),
+                )
+            }
+
+            // Seat order is the order they were picked. An aspect already drawn
+            // for a seat is kept, so choosing heroes does not silently reroll
+            // the aspects beside them.
+            DrawField.HEROES -> current.copy(
+                heroes = values.mapIndexed { index, code ->
+                    HeroAssignment(
+                        heroCode = code,
+                        aspect = current.heroes.getOrNull(index)?.aspect.orEmpty(),
+                    )
+                },
+                playerCount = values.size.coerceAtLeast(1),
+            )
+
+            DrawField.ASPECTS -> current.copy(
+                heroes = current.heroes.mapIndexed { index, hero ->
+                    hero.copy(aspect = values.getOrNull(index) ?: hero.aspect)
+                },
+            )
+        }
+        locked.value = locked.value + field
     }
 
     fun toggleLock(field: DrawField) {

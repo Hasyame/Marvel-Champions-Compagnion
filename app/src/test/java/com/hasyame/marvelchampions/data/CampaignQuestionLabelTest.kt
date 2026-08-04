@@ -79,7 +79,7 @@ class CampaignQuestionLabelTest {
     fun `every placeholder in the campaign names a draw that scenario makes`() {
         // The failure this guards against is silent: a typo in a placeholder
         // just removes the card name, leaving a question that still reads.
-        val pattern = Regex("""\{([A-Za-z0-9_]+)}""")
+        val pattern = Regex("""\{([A-Za-z0-9_]+)\}""")
         template().scenarios.forEach { scenario ->
             val drawIds = scenario.campaignSetup.mapNotNull { it.draw?.id }.toSet()
             scenario.onVictory?.prompts.orEmpty().forEach { prompt ->

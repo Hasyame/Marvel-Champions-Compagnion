@@ -138,12 +138,25 @@ internal object PlayStats {
             }
         }
 
+        // Merged by label, because two groups can share one.
+        //
+        // A hero played before the roster column existed is grouped by name;
+        // the same hero played after it is grouped by card code. Both come out
+        // labelled "Magneto", which split one hero's record across two rows and
+        // — since the statistics list keys on the label — crashed the screen
+        // outright with a duplicate key.
         return tallies.values
-            .asSequence()
             .filter { it.played >= minPlays }
-            .map { WinRateRow(it.label, it.played, it.won, it.millis) }
+            .groupBy { it.label }
+            .map { (label, group) ->
+                WinRateRow(
+                    key = label,
+                    played = group.sumOf { it.played },
+                    won = group.sumOf { it.won },
+                    totalMillis = group.sumOf { it.millis },
+                )
+            }
             .sortedWith(compareByDescending<WinRateRow> { it.played }.thenBy { it.key })
-            .toList()
     }
 
     private fun String.splitList(): List<String> =

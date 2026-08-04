@@ -130,6 +130,46 @@ class PlayStatsTest {
     }
 
     @Test
+    fun `one hero recorded two ways is one row, not two`() {
+        // The crash this guards: a hero played before the roster column existed
+        // groups by name, the same hero after it groups by card code, and both
+        // come out labelled the same. Two rows with one label split the record
+        // and — because the statistics list keys on the label — took the whole
+        // screen down with a duplicate key.
+        val legacy = PlayStatsRow(
+            heroCode = "",
+            heroName = "Magneto",
+            aspects = "Leadership",
+            otherHeroes = "",
+            roster = emptyList(),
+            won = true,
+            elapsedMillis = 0,
+        )
+        val modern = row("Magneto" to "Leadership", won = false)
+
+        val stats = PlayStats.heroes(listOf(legacy, modern))
+
+        assertEquals(1, stats.size)
+        assertEquals("Magneto", stats.single().key)
+        assertEquals(2, stats.single().played)
+        assertEquals(1, stats.single().won)
+    }
+
+    @Test
+    fun `every row of a table has a distinct key`() {
+        // What the statistics screen requires of every table it renders.
+        val rows = listOf(
+            row("Magneto" to "Leadership"),
+            PlayStatsRow("", "Magneto", "Justice", "", emptyList(), true, 0),
+            row("Thor" to "Aggression"),
+        )
+        listOf(PlayStats.heroes(rows), PlayStats.aspects(rows), PlayStats.heroAspects(rows))
+            .forEach { table ->
+                assertEquals(table.map { it.key }.size, table.map { it.key }.distinct().size)
+            }
+    }
+
+    @Test
     fun `time is credited to each hero who played it`() {
         val stats = PlayStats.heroes(
             listOf(row("Spider-Man" to "Justice", "Thor" to "Aggression", millis = 3_600_000)),

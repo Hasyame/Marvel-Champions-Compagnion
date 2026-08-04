@@ -51,7 +51,10 @@ private fun androidx.compose.ui.text.AnnotatedString.Builder.withStyleSpan(value
  * generic question.
  */
 fun resolveDraws(text: String, run: CampaignRun, scenarioId: String?): String =
-    Regex("""\{([A-Za-z0-9_]+)}""").replace(text) { match ->
+    // Both braces escaped. Android's regex engine is ICU, which rejects a bare
+    // closing brace as a syntax error where the JVM quietly accepts it — so
+    // this compiled fine in tests and threw on the device.
+    Regex("""\{([A-Za-z0-9_]+)\}""").replace(text) { match ->
         val drawn = run.state.draws[scenarioId].orEmpty()[match.groupValues[1]].orEmpty()
         if (drawn.isEmpty()) {
             // Nothing drawn: drop the placeholder rather than print braces.

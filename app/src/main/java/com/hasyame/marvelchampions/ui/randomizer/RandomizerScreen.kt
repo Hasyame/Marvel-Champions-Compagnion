@@ -39,6 +39,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -282,9 +283,27 @@ private fun DrawRow(
     viewModel: RandomizerViewModel,
 ) {
     val isLocked = field in state.locked
+    var choosing by remember { mutableStateOf(false) }
+
+    if (choosing) {
+        val options = state.optionsFor(field)
+        ChooseDrawValueDialog(
+            title = label,
+            options = options,
+            selected = state.selectionFor(field),
+            limit = field.pickLimit(state.draw.playerCount),
+            onDismiss = { choosing = false },
+            onConfirm = {
+                viewModel.choose(field, it)
+                choosing = false
+            },
+        )
+    }
+
     ListItem(
         overlineContent = { Text(label) },
         headlineContent = { Text(value, style = MaterialTheme.typography.titleMedium) },
+        modifier = Modifier.clickable { choosing = true },
         trailingContent = {
             Row {
                 IconButton(onClick = { viewModel.toggleLock(field) }) {
@@ -406,3 +425,43 @@ private fun aspectLabel(aspect: String): String = stringResource(
 /** Heroes as code-and-aspect pairs, which is what the session route carries. */
 private fun com.hasyame.marvelchampions.domain.randomizer.RandomizerDraw.asSessionHeroes(): String =
     heroes.joinToString(",") { "${it.heroCode}:${it.aspect}" }
+
+/**
+ * The values a row may be set to, already named in the reader's language.
+ *
+ * Drawn from the same pools the randomiser rolls against, so a hero the player
+ * does not own is not offered here either.
+ */
+@Composable
+private fun RandomizerUiState.optionsFor(field: DrawField): List<DrawOption> = when (field) {
+    DrawField.SCENARIO -> pools.scenarios
+        .map { DrawOption(it.code, names.scenarios[it.code] ?: it.code) }
+        .sortedBy { it.label }
+
+    DrawField.DIFFICULTY -> Difficulty.entries.map { DrawOption(it.name, difficultyLabel(it)) }
+
+    DrawField.MODULAR_SETS -> pools.modularSets
+        .map { DrawOption(it.code, names.modularSets[it.code] ?: it.code) }
+        .sortedBy { it.label }
+
+    DrawField.PLAYER_COUNT -> (1..MAX_PLAYERS).map { DrawOption(it.toString(), it.toString()) }
+
+    DrawField.HEROES -> pools.heroes
+        .map { DrawOption(it.code, names.heroes[it.code] ?: it.code) }
+        .sortedBy { it.label }
+
+    DrawField.ASPECTS -> pools.aspects.map { DrawOption(it, aspectLabel(it)) }
+}
+
+/** What the row currently holds, so the picker opens on it. */
+private fun RandomizerUiState.selectionFor(field: DrawField): List<String> = when (field) {
+    DrawField.SCENARIO -> listOfNotNull(draw.scenarioCode)
+    DrawField.DIFFICULTY -> listOfNotNull(draw.difficulty?.name)
+    DrawField.MODULAR_SETS -> draw.modularSetCodes
+    DrawField.PLAYER_COUNT -> listOf(draw.playerCount.toString())
+    DrawField.HEROES -> draw.heroes.map { it.heroCode }
+    DrawField.ASPECTS -> draw.heroes.map { it.aspect }
+}
+
+/** Marvel Champions seats four. */
+private const val MAX_PLAYERS = 4

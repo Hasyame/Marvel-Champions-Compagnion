@@ -499,4 +499,6 @@
     <string name="campaign_finished_title">Campagne terminée</string>
     <string name="campaign_finished_message">Le dernier vilain est à terre et la campagne est à vous. Voici ce qu\'elle aura coûté.</string>
     <string name="campaign_finished_cleanup">Avant la prochaine partie, retirez les cartes de campagne de vos decks.</string>
+    <string name="randomizer_choose_hint">Choisissez jusqu\'à %1$d, dans l\'ordre des joueurs</string>
+    <string name="randomizer_choose_confirm">Utiliser</string>
 </resources>
