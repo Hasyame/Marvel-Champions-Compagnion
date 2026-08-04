@@ -160,5 +160,11 @@ someone who already owns the campaign box and has the book to hand; on their own
 they do not explain how to play a campaign, and they are not a substitute for
 either the book or the game.
 
-The app collects nothing. There is no account, no analytics, no crash reporting
-and no backend of any kind; everything it stores stays on the device.
+The app collects nothing. There is no account, no analytics and no backend of
+any kind; everything it stores stays on the device.
+
+If the app crashes it writes the stack trace to its own private storage and
+offers, in Settings, to open a mail draft containing it. That is not crash
+reporting: nothing is sent anywhere unless you press the button, the trace is in
+the message body so you can read it first, and it is the only thing the app has
+ever offered to send.
