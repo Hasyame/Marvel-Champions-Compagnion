@@ -387,8 +387,8 @@ scenarios.append({
                 "id": "protocolsSurvived",
                 "type": "boolean",
                 "label": t(
-                    "{card:21184b} est-il absent de la zone de victoire ?",
-                    "Is {card:21184b} absent from the victory display?",
+                    "{card:" + DEFENSIVE_PROTOCOLS + "} est-il absent de la zone de victoire ?",
+                    "Is {card:" + DEFENSIVE_PROTOCOLS + "} absent from the victory display?",
                 ),
             },
             {
@@ -467,8 +467,8 @@ scenarios.append({
                 "id": "odinsArmor",
                 "type": "boolean",
                 "label": t(
-                    "Retrieve Odin's Armor est-il dans la zone de victoire ?",
-                    "Is Retrieve Odin's Armor in the victory display?",
+                    "{card:" + ODINS_ARMOR + "} est-il dans la zone de victoire ?",
+                    "Is {card:" + ODINS_ARMOR + "} in the victory display?",
                 ),
             },
             hp_prompt(),

@@ -768,8 +768,8 @@
       "id": "odinsArmor",
       "type": "boolean",
       "label": {
-       "fr": "Retrieve Odin's Armor est-il dans la zone de victoire ?",
-       "en": "Is Retrieve Odin's Armor in the victory display?"
+       "fr": "{card:21186b} est-il dans la zone de victoire ?",
+       "en": "Is {card:21186b} in the victory display?"
       }
      },
      {
