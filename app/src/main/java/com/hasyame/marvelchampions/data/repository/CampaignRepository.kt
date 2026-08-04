@@ -85,8 +85,23 @@ data class CampaignSummary(
     val cardsBought: Int = 0,
     /** Only one campaign has a shop; the rest should not show its figures. */
     val hasMarket: Boolean = false,
+    /** True once the campaign has been seen through to its end. */
+    val finished: Boolean = false,
     val scenarios: List<ScenarioLogEntry> = emptyList(),
-)
+) {
+    /**
+     * Scenarios won as a percentage of scenarios played.
+     *
+     * A replay after a defeat counts as another game, which is the honest
+     * reading: a campaign finished on the third attempt at Thanos was not a
+     * clean run and the figure should say so.
+     */
+    val winRatePercent: Int
+        get() = (scenariosWon + scenariosLost)
+            .takeIf { it > 0 }
+            ?.let { scenariosWon * 100 / it }
+            ?: 0
+}
 
 /** One scenario as it was played, with what was recorded for it. */
 data class ScenarioLogEntry(
@@ -635,6 +650,7 @@ class CampaignRepository @Inject constructor(
                 creditsRemaining = state.heroes.sumOf { state.heroCounter(creditsCounter, it.id) },
                 cardsBought = state.purchases.size,
                 hasMarket = template.market != null,
+                finished = state.finished,
                 scenarios = state.completedScenarios.map { result ->
                     val scenario = template.scenarios.firstOrNull { it.id == result.scenarioId }
                     ScenarioLogEntry(

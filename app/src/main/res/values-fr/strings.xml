@@ -493,4 +493,10 @@
     <string name="session_first_player">Premier joueur : %1$s</string>
     <string name="settings_crash_report">Signaler le dernier plantage</string>
     <string name="settings_crash_report_summary">L\'application s\'est fermée inopinément. L\'envoyer aide à corriger le problème — le rapport reste sur votre téléphone jusque-là.</string>
+    <string name="campaign_stat_wins">Scénarios gagnés</string>
+    <string name="campaign_stat_defeats">Scénarios perdus</string>
+    <string name="campaign_stat_winrate">Taux de victoire</string>
+    <string name="campaign_finished_title">Campagne terminée</string>
+    <string name="campaign_finished_message">Le dernier vilain est à terre et la campagne est à vous. Voici ce qu\'elle aura coûté.</string>
+    <string name="campaign_finished_cleanup">Avant la prochaine partie, retirez les cartes de campagne de vos decks.</string>
 </resources>

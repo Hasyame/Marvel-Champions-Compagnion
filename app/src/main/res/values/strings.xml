@@ -475,4 +475,10 @@
     <string name="session_first_player">First player: %1$s</string>
     <string name="settings_crash_report">Report the last crash</string>
     <string name="settings_crash_report_summary">The app closed unexpectedly. Sending this helps get it fixed — it stays on your phone until you do.</string>
+    <string name="campaign_stat_wins">Scenarios won</string>
+    <string name="campaign_stat_defeats">Scenarios lost</string>
+    <string name="campaign_stat_winrate">Win rate</string>
+    <string name="campaign_finished_title">Campaign complete</string>
+    <string name="campaign_finished_message">The last villain is down and the campaign is yours. Everything below is what it took.</string>
+    <string name="campaign_finished_cleanup">Before your next game, take the campaign cards back out of your decks.</string>
 </resources>

@@ -153,6 +153,24 @@ fun CampaignRecordScreen(
 private fun StatsCard(record: CampaignSummary) {
     ComicPanel(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            // A campaign is a dozen hours of somebody's life. Finishing one
+            // deserves more than a table of numbers.
+            if (record.finished) {
+                Text(
+                    text = stringResource(R.string.campaign_finished_title),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Text(
+                    text = stringResource(R.string.campaign_finished_message),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Text(
+                    text = stringResource(R.string.campaign_finished_cleanup),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
             Text(
                 text = record.entity.templateName,
                 style = MaterialTheme.typography.titleMedium,
@@ -176,6 +194,12 @@ private fun StatsCard(record: CampaignSummary) {
             Stat(
                 stringResource(R.string.campaign_stat_scenarios),
                 "${record.scenariosWon} / ${record.scenariosWon + record.scenariosLost}",
+            )
+            Stat(stringResource(R.string.campaign_stat_wins), record.scenariosWon.toString())
+            Stat(stringResource(R.string.campaign_stat_defeats), record.scenariosLost.toString())
+            Stat(
+                stringResource(R.string.campaign_stat_winrate),
+                "${record.winRatePercent}%",
             )
             // Only the campaign with a shop has anything to say here; for the
             // others these were two rows of nought.

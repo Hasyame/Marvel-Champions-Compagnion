@@ -1,0 +1,1047 @@
+{
+ "_note": "Mechanics only, written for this app: no rules text and no text from the campaign book. Card codes are MarvelCDB codes for pack 'mts'. The campaign pool is a card list, because that is what the rulebook calls it and what it holds; the two recorded facts that are not cards are flags, read with countTrue because the engine files a flag under the scenario that set it.",
+ "id": "mts",
+ "schemaVersion": 1,
+ "name": {
+  "fr": "L'Ombre du Titan Fou",
+  "en": "The Mad Titan's Shadow"
+ },
+ "packCode": "mts",
+ "difficulties": [
+  "standard",
+  "expert"
+ ],
+ "counters": [
+  {
+   "id": "hp",
+   "scope": "hero",
+   "initial": 0,
+   "maxFrom": "heroCard.health",
+   "activeWhen": {
+    "difficulty": "expert"
+   }
+  }
+ ],
+ "flagSets": [
+  {
+   "id": "towerDamaged"
+  },
+  {
+   "id": "infinityStones1B"
+  }
+ ],
+ "cardLists": [
+  {
+   "id": "campaignPool",
+   "scope": "campaign"
+  }
+ ],
+ "startScenarioId": "s1_ebony_maw",
+ "scenarios": [
+  {
+   "id": "s1_ebony_maw",
+   "name": {
+    "fr": "Ebony Maw",
+    "en": "Ebony Maw"
+   },
+   "flavour": {
+    "fr": "Ebony Maw assiège Knowhere pour y prendre la Pierre de Pouvoir. Le Corps de Knowhere ne tiendra pas seul.",
+    "en": "Ebony Maw is storming Knowhere for the Power Stone. The Knowhere Corps will not hold on their own."
+   },
+   "victoryLabel": {
+    "fr": "Ebony Maw est vaincu !",
+    "en": "Ebony Maw is beaten!"
+   },
+   "defeatLabel": {
+    "fr": "Ebony Maw vous a vaincus !",
+    "en": "Ebony Maw has beaten you!"
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "21071",
+      "21072"
+     ],
+     "expert": [
+      "21072",
+      "21073"
+     ]
+    },
+    "mainScheme": [
+     "21074a",
+     "21075a"
+    ],
+    "encounterSets": [
+     "ebony_maw",
+     "black_order",
+     "armies_of_titan",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Mettre ce complot secondaire en jeu",
+      "en": "Put this side scheme into play"
+     },
+     "cards": [
+      "21180a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger ce complot secondaire dans le deck rencontre",
+      "en": "Shuffle this side scheme into the encounter deck"
+     },
+     "cards": [
+      "21181"
+     ]
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     },
+     {
+      "id": "landingPadDefeated",
+      "type": "boolean",
+      "label": {
+       "fr": "Secure the Landing Pad a-t-il été vaincu ?",
+       "en": "Was Secure the Landing Pad defeated?"
+      }
+     },
+     {
+      "id": "knowhere1B",
+      "type": "boolean",
+      "label": {
+       "fr": "Attack on Knowhere 1B a-t-il été complété ?",
+       "en": "Was Attack on Knowhere 1B completed?"
+      }
+     },
+     {
+      "id": "hpPerHero",
+      "type": "perHeroNumber",
+      "label": {
+       "fr": "Points de vie restants",
+       "en": "Remaining hit points"
+      },
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "effects": [
+     {
+      "op": "addCard",
+      "cardList": "campaignPool",
+      "cardCode": "21180b",
+      "when": {
+       "answer": "landingPadDefeated"
+      }
+     },
+     {
+      "op": "addCard",
+      "cardList": "campaignPool",
+      "cardCode": "21181",
+      "when": {
+       "answer": "knowhere1B"
+      }
+     },
+     {
+      "op": "setHeroCounter",
+      "counter": "hp",
+      "from": "hpPerHero",
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "next": [
+     {
+      "goto": "s2_tower_defense"
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "goto": "s1_ebony_maw"
+     }
+    ]
+   }
+  },
+  {
+   "id": "s2_tower_defense",
+   "name": {
+    "fr": "Tower Defense",
+    "en": "Tower Defense"
+   },
+   "flavour": {
+    "fr": "Corvus Glaive et Proxima Midnight frappent la Tour des Avengers pour s'emparer de la Pierre de Réalité.",
+    "en": "Corvus Glaive and Proxima Midnight strike Avengers Tower to seize the Reality Stone."
+   },
+   "victoryLabel": {
+    "fr": "Le Black Order est vaincu !",
+    "en": "The Black Order is beaten!"
+   },
+   "defeatLabel": {
+    "fr": "Le Black Order vous a vaincus !",
+    "en": "The Black Order has beaten you!"
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "21092",
+      "21093",
+      "21095",
+      "21096"
+     ],
+     "expert": [
+      "21093",
+      "21094",
+      "21096",
+      "21097"
+     ]
+    },
+    "mainScheme": [
+     "21098a",
+     "21099a"
+    ],
+    "encounterSets": [
+     "tower_defense",
+     "armies_of_titan",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Mettre la Tour des Avengers en jeu sur sa face Stronghold, et lui attacher Focused Defense au complot 2B",
+      "en": "Put Avengers Tower into play on its Stronghold side, and attach Focused Defense to scheme 2B"
+     },
+     "cards": [
+      "21100",
+      "21101"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Pour durcir la partie, placer des dégâts par joueur sur la Tour des Avengers :\n  Standard : 1 par joueur\n  Expert : 2 par joueur\n  Héroïque : 3 par joueur",
+      "en": "To make it harder, place damage per player on Avengers Tower:\n  Standard: 1 per player\n  Expert: 2 per player\n  Heroic: 3 per player"
+     },
+     "cards": [
+      "21100"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mettre ce complot secondaire en jeu",
+      "en": "Put this side scheme into play"
+     },
+     "cards": [
+      "21182a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger ce complot secondaire dans le deck rencontre",
+      "en": "Shuffle this side scheme into the encounter deck"
+     },
+     "cards": [
+      "21181"
+     ],
+     "when": {
+      "cardList": "campaignPool",
+      "contains": "21181"
+     }
+    },
+    {
+     "text": {
+      "fr": "Expert : régler les points de vie de chaque héros sur la valeur ci-dessous",
+      "en": "Expert: set each hero's hit points to the value below"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "showCounter": "hp"
+    },
+    {
+     "text": {
+      "fr": "Expert : placer un jeton d'accélération sur un complot principal pour soigner un héros à fond",
+      "en": "Expert: place an acceleration token on a main scheme to heal a hero to full"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "action": {
+      "id": "heal",
+      "label": {
+       "fr": "Soigner",
+       "en": "Heal"
+      },
+      "perHero": true,
+      "effects": [
+       {
+        "op": "setHeroCounter",
+        "counter": "hp",
+        "value": 999
+       }
+      ]
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     },
+     {
+      "id": "shawarmaDefeated",
+      "type": "boolean",
+      "label": {
+       "fr": "Save the Shawarma Place a-t-il été vaincu ?",
+       "en": "Was Save the Shawarma Place defeated?"
+      }
+     },
+     {
+      "id": "blackSwanSurvived",
+      "type": "boolean",
+      "label": {
+       "fr": "Black Swan est-elle absente de la zone de victoire ?",
+       "en": "Is Black Swan absent from the victory display?"
+      }
+     },
+     {
+      "id": "towerDamaged",
+      "type": "boolean",
+      "label": {
+       "fr": "La Tour des Avengers a-t-elle le trait Damaged ?",
+       "en": "Does Avengers Tower have the Damaged trait?"
+      }
+     },
+     {
+      "id": "hpPerHero",
+      "type": "perHeroNumber",
+      "label": {
+       "fr": "Points de vie restants",
+       "en": "Remaining hit points"
+      },
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "effects": [
+     {
+      "op": "addCard",
+      "cardList": "campaignPool",
+      "cardCode": "21183",
+      "when": {
+       "answer": "shawarmaDefeated"
+      }
+     },
+     {
+      "op": "addCard",
+      "cardList": "campaignPool",
+      "cardCode": "21182b",
+      "when": {
+       "answer": "blackSwanSurvived"
+      }
+     },
+     {
+      "op": "setFlag",
+      "flag": "towerDamaged",
+      "from": "towerDamaged"
+     },
+     {
+      "op": "setHeroCounter",
+      "counter": "hp",
+      "from": "hpPerHero",
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "next": [
+     {
+      "goto": "s3_thanos"
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "goto": "s2_tower_defense"
+     }
+    ]
+   }
+  },
+  {
+   "id": "s3_thanos",
+   "name": {
+    "fr": "Thanos",
+    "en": "Thanos"
+   },
+   "flavour": {
+    "fr": "Thanos tient les six Pierres. Il reste une seule occasion de l'arrêter, à bord de Sanctuary.",
+    "en": "Thanos holds all six Stones. There is one chance left to stop him, aboard Sanctuary."
+   },
+   "victoryLabel": {
+    "fr": "Thanos est vaincu !",
+    "en": "Thanos is beaten!"
+   },
+   "defeatLabel": {
+    "fr": "Thanos vous a vaincus !",
+    "en": "Thanos has beaten you!"
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "21111",
+      "21112"
+     ],
+     "expert": [
+      "21112",
+      "21113"
+     ]
+    },
+    "mainScheme": [
+     "21114a",
+     "21115a"
+    ],
+    "encounterSets": [
+     "thanos",
+     "infinity_gauntlet",
+     "black_order",
+     "children_of_thanos",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Attacher l'Infinity Gauntlet à Thanos, puis mélanger les six Pierres à part, face cachée",
+      "en": "Attach the Infinity Gauntlet to Thanos, then shuffle the six Stones aside, facedown"
+     },
+     "cards": [
+      "21129"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mettre ce complot secondaire en jeu",
+      "en": "Put this side scheme into play"
+     },
+     "cards": [
+      "21184a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mettre cet allié en jeu sous le contrôle du premier joueur",
+      "en": "Put this ally into play under the first player's control"
+     },
+     "cards": [
+      "21180b"
+     ],
+     "when": {
+      "cardList": "campaignPool",
+      "contains": "21180b"
+     }
+    },
+    {
+     "text": {
+      "fr": "Mélanger ce complot secondaire dans le deck rencontre",
+      "en": "Shuffle this side scheme into the encounter deck"
+     },
+     "cards": [
+      "21181"
+     ],
+     "when": {
+      "cardList": "campaignPool",
+      "contains": "21181"
+     }
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur mélange un exemplaire de cette carte dans son deck",
+      "en": "Each player shuffles one copy of this card into their deck"
+     },
+     "cards": [
+      "21183"
+     ],
+     "when": {
+      "cardList": "campaignPool",
+      "contains": "21183"
+     }
+    },
+    {
+     "text": {
+      "fr": "Mettre ce sbire en jeu, engagé avec le premier joueur",
+      "en": "Put this minion into play engaged with the first player"
+     },
+     "cards": [
+      "21182b"
+     ],
+     "when": {
+      "cardList": "campaignPool",
+      "contains": "21182b"
+     }
+    },
+    {
+     "text": {
+      "fr": "Infliger 3 dégâts à chaque identité : la Tour des Avengers était endommagée",
+      "en": "Deal 3 damage to each identity: Avengers Tower was left damaged"
+     },
+     "when": {
+      "countTrue": "towerDamaged",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Expert : régler les points de vie de chaque héros sur la valeur ci-dessous",
+      "en": "Expert: set each hero's hit points to the value below"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "showCounter": "hp"
+    },
+    {
+     "text": {
+      "fr": "Expert : placer un jeton d'accélération sur un complot principal pour soigner un héros à fond",
+      "en": "Expert: place an acceleration token on a main scheme to heal a hero to full"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "action": {
+      "id": "heal",
+      "label": {
+       "fr": "Soigner",
+       "en": "Heal"
+      },
+      "perHero": true,
+      "effects": [
+       {
+        "op": "setHeroCounter",
+        "counter": "hp",
+        "value": 999
+       }
+      ]
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     },
+     {
+      "id": "protocolsSurvived",
+      "type": "boolean",
+      "label": {
+       "fr": "Defensive Protocols est-il absent de la zone de victoire ?",
+       "en": "Is Defensive Protocols absent from the victory display?"
+      }
+     },
+     {
+      "id": "infinityStones1B",
+      "type": "boolean",
+      "label": {
+       "fr": "The Infinity Stones 1B a-t-il été complété ?",
+       "en": "Was The Infinity Stones 1B completed?"
+      }
+     },
+     {
+      "id": "hpPerHero",
+      "type": "perHeroNumber",
+      "label": {
+       "fr": "Points de vie restants",
+       "en": "Remaining hit points"
+      },
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "effects": [
+     {
+      "op": "addCard",
+      "cardList": "campaignPool",
+      "cardCode": "21185",
+      "when": {
+       "answer": "protocolsSurvived"
+      }
+     },
+     {
+      "op": "setFlag",
+      "flag": "infinityStones1B",
+      "from": "infinityStones1B"
+     },
+     {
+      "op": "setHeroCounter",
+      "counter": "hp",
+      "from": "hpPerHero",
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "next": [
+     {
+      "goto": "s4_hela"
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "goto": "s3_thanos"
+     }
+    ]
+   }
+  },
+  {
+   "id": "s4_hela",
+   "name": {
+    "fr": "Hela",
+    "en": "Hela"
+   },
+   "flavour": {
+    "fr": "Loki a pris le trône d'Asgard et jeté Odin en Hel. Sans le Père de Tout, personne n'arrêtera le trickster.",
+    "en": "Loki has taken Asgard's throne and cast Odin into Hel. Without the All-Father, nobody stops the trickster."
+   },
+   "victoryLabel": {
+    "fr": "Hela est vaincue !",
+    "en": "Hela is beaten!"
+   },
+   "defeatLabel": {
+    "fr": "Hela vous a vaincus !",
+    "en": "Hela has beaten you!"
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "21136a"
+     ],
+     "expert": [
+      "21137a"
+     ]
+    },
+    "mainScheme": [
+     "21138a"
+    ],
+    "encounterSets": [
+     "hela",
+     "legions_of_hel",
+     "frost_giants",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Mettre ce complot secondaire en jeu",
+      "en": "Put this side scheme into play"
+     },
+     "cards": [
+      "21186a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger cette traîtrise dans le deck rencontre",
+      "en": "Shuffle this treachery into the encounter deck"
+     },
+     "cards": [
+      "21188"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur mélange un exemplaire de cette carte dans son deck",
+      "en": "Each player shuffles one copy of this card into their deck"
+     },
+     "cards": [
+      "21183"
+     ],
+     "when": {
+      "cardList": "campaignPool",
+      "contains": "21183"
+     }
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur mélange un exemplaire de cette obligation dans son deck",
+      "en": "Each player shuffles one copy of this obligation into their deck"
+     },
+     "cards": [
+      "21185"
+     ],
+     "when": {
+      "cardList": "campaignPool",
+      "contains": "21185"
+     }
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur défausse la moitié supérieure de son deck",
+      "en": "Each player discards the top half of their deck"
+     },
+     "when": {
+      "countTrue": "infinityStones1B",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Expert : régler les points de vie de chaque héros sur la valeur ci-dessous",
+      "en": "Expert: set each hero's hit points to the value below"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "showCounter": "hp"
+    },
+    {
+     "text": {
+      "fr": "Expert : placer un jeton d'accélération sur un complot principal pour soigner un héros à fond",
+      "en": "Expert: place an acceleration token on a main scheme to heal a hero to full"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "action": {
+      "id": "heal",
+      "label": {
+       "fr": "Soigner",
+       "en": "Heal"
+      },
+      "perHero": true,
+      "effects": [
+       {
+        "op": "setHeroCounter",
+        "counter": "hp",
+        "value": 999
+       }
+      ]
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     },
+     {
+      "id": "nornStonesDefeated",
+      "type": "boolean",
+      "label": {
+       "fr": "Find the Norn Stones a-t-il été vaincu ?",
+       "en": "Was Find the Norn Stones defeated?"
+      }
+     },
+     {
+      "id": "odinsArmor",
+      "type": "boolean",
+      "label": {
+       "fr": "Retrieve Odin's Armor est-il dans la zone de victoire ?",
+       "en": "Is Retrieve Odin's Armor in the victory display?"
+      }
+     },
+     {
+      "id": "hpPerHero",
+      "type": "perHeroNumber",
+      "label": {
+       "fr": "Points de vie restants",
+       "en": "Remaining hit points"
+      },
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "effects": [
+     {
+      "op": "addCard",
+      "cardList": "campaignPool",
+      "cardCode": "21187a",
+      "when": {
+       "answer": "nornStonesDefeated"
+      }
+     },
+     {
+      "op": "addCard",
+      "cardList": "campaignPool",
+      "cardCode": "21139a",
+      "when": {
+       "answer": "odinsArmor"
+      }
+     },
+     {
+      "op": "setHeroCounter",
+      "counter": "hp",
+      "from": "hpPerHero",
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "next": [
+     {
+      "goto": "s5_loki"
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "goto": "s4_hela"
+     }
+    ]
+   }
+  },
+  {
+   "id": "s5_loki",
+   "name": {
+    "fr": "Loki",
+    "en": "Loki"
+   },
+   "flavour": {
+    "fr": "Odin est libre, mais Loki garde le trône et le Gantelet. Tout se joue au Royaume d'Or.",
+    "en": "Odin is free, but Loki keeps the throne and the Gauntlet. It ends in the Golden Realm."
+   },
+   "victoryLabel": {
+    "fr": "Loki est vaincu !",
+    "en": "Loki is beaten!"
+   },
+   "defeatLabel": {
+    "fr": "Loki vous a vaincus !",
+    "en": "Loki has beaten you!"
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "21160",
+      "21161",
+      "21162",
+      "21163",
+      "21164"
+     ],
+     "expert": [
+      "21160",
+      "21161",
+      "21162",
+      "21163",
+      "21164"
+     ]
+    },
+    "mainScheme": [
+     "21165a"
+    ],
+    "encounterSets": [
+     "loki",
+     "infinity_gauntlet",
+     "enchantress",
+     "frost_giants",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Révéler ce Loki et le mettre en jeu ; mettre les quatre autres de côté, hors jeu",
+      "en": "Reveal this Loki and put it into play; set the other four aside, out of play"
+     },
+     "draw": {
+      "id": "loki",
+      "from": [
+       "21160",
+       "21161",
+       "21162",
+       "21163",
+       "21164"
+      ]
+     }
+    },
+    {
+     "text": {
+      "fr": "Choisir combien de Loki doivent être vaincus pour gagner :\n  Recrue : 1\n  Standard : 2\n  Expert : 3\n  Héroïque : 4",
+      "en": "Choose how many Lokis must be defeated to win:\n  Rookie: 1\n  Standard: 2\n  Expert: 3\n  Heroic: 4"
+     }
+    },
+    {
+     "text": {
+      "fr": "Mettre ce complot secondaire en jeu",
+      "en": "Put this side scheme into play"
+     },
+     "cards": [
+      "21189a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger cette traîtrise dans le deck rencontre",
+      "en": "Shuffle this treachery into the encounter deck"
+     },
+     "cards": [
+      "21188"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur mélange un exemplaire de cette carte dans son deck",
+      "en": "Each player shuffles one copy of this card into their deck"
+     },
+     "cards": [
+      "21183"
+     ],
+     "when": {
+      "cardList": "campaignPool",
+      "contains": "21183"
+     }
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur mélange un exemplaire de cette obligation dans son deck",
+      "en": "Each player shuffles one copy of this obligation into their deck"
+     },
+     "cards": [
+      "21185"
+     ],
+     "when": {
+      "cardList": "campaignPool",
+      "contains": "21185"
+     }
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur défausse la moitié supérieure de son deck",
+      "en": "Each player discards the top half of their deck"
+     },
+     "when": {
+      "countTrue": "infinityStones1B",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur met un exemplaire de cette amélioration en jeu, face Setup",
+      "en": "Each player puts one copy of this upgrade into play, Setup side up"
+     },
+     "cards": [
+      "21187a"
+     ],
+     "when": {
+      "cardList": "campaignPool",
+      "contains": "21187a"
+     }
+    },
+    {
+     "text": {
+      "fr": "Mettre Odin en jeu sur sa face King",
+      "en": "Put Odin into play on his King side"
+     },
+     "cards": [
+      "21139a"
+     ],
+     "when": {
+      "cardList": "campaignPool",
+      "contains": "21139a"
+     }
+    },
+    {
+     "text": {
+      "fr": "Expert : une défaite ici perd la campagne",
+      "en": "Expert: losing here loses the campaign"
+     },
+     "when": {
+      "difficulty": "expert"
+     }
+    },
+    {
+     "text": {
+      "fr": "Expert : régler les points de vie de chaque héros sur la valeur ci-dessous",
+      "en": "Expert: set each hero's hit points to the value below"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "showCounter": "hp"
+    },
+    {
+     "text": {
+      "fr": "Expert : placer un jeton d'accélération sur un complot principal pour soigner un héros à fond",
+      "en": "Expert: place an acceleration token on a main scheme to heal a hero to full"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "action": {
+      "id": "heal",
+      "label": {
+       "fr": "Soigner",
+       "en": "Heal"
+      },
+      "perHero": true,
+      "effects": [
+       {
+        "op": "setHeroCounter",
+        "counter": "hp",
+        "value": 999
+       }
+      ]
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     }
+    ],
+    "effects": [],
+    "next": [
+     {
+      "end": true
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "goto": "s5_loki"
+     }
+    ]
+   }
+  }
+ ]
+}
