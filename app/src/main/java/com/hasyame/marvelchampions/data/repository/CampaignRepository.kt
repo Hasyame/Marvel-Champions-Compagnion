@@ -15,6 +15,7 @@ import com.hasyame.marvelchampions.domain.campaign.engine.CampaignState
 import com.hasyame.marvelchampions.domain.campaign.engine.HeroCardStats
 import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
 import com.hasyame.marvelchampions.domain.campaign.template.CampaignTemplate
+import com.hasyame.marvelchampions.domain.campaign.template.LocalizedText
 import com.hasyame.marvelchampions.domain.campaign.template.TemplateError
 import com.hasyame.marvelchampions.domain.campaign.template.TemplateValidationException
 import com.hasyame.marvelchampions.domain.campaign.template.TemplateValidator
@@ -363,9 +364,13 @@ class CampaignRepository @Inject constructor(
                     // card the app picked had no name to show and fell back to
                     // its code, which is the one thing a player cannot read.
                     step.draw?.let { addAll(it.from) }
+                    addAll(cardPlaceholders(step.text))
                 }
                 listOfNotNull(scenario.onVictory, scenario.onDefeat).forEach { outcome ->
-                    outcome.prompts.forEach { addAll(it.cards) }
+                    outcome.prompts.forEach {
+                        addAll(it.cards)
+                        addAll(cardPlaceholders(it.label))
+                    }
                 }
             }
         }
@@ -717,3 +722,16 @@ class CampaignRepository @Inject constructor(
         val SET_TYPES = listOf("villain", "modular", "standard", "expert", "nemesis")
     }
 }
+
+/**
+ * Card codes named by a `{card:CODE}` placeholder.
+ *
+ * These are the only references that live inside prose rather than a list, so
+ * they are easy to miss when gathering names — and a missed one shows the
+ * player a five-digit code in the middle of a sentence.
+ */
+private val CARD_PLACEHOLDER = Regex("""\{card:([A-Za-z0-9_]+)\}""")
+
+private fun cardPlaceholders(text: LocalizedText?): List<String> =
+    listOfNotNull(text?.fr, text?.en)
+        .flatMap { CARD_PLACEHOLDER.findAll(it).map { match -> match.groupValues[1] } }

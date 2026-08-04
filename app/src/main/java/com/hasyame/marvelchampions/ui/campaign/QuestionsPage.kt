@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,6 +54,7 @@ fun QuestionsPage(
     run: CampaignRun,
     isSubmitting: Boolean = false,
     scenario: ScenarioTemplate?,
+    onCardClick: (String) -> Unit,
     onSubmit: (AnswerSet) -> Unit,
 ) {
     val context = EvaluationContext(state = run.state, scenarioId = scenario?.id)
@@ -120,6 +122,14 @@ fun QuestionsPage(
                     Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
+                    // The cards the question is about, previewed the way a setup
+                    // step previews its own. A question naming a card the player
+                    // has to go and find on the table is a question they have to
+                    // translate first.
+                    val previews = prompt.cards
+                        .takeIf { prompt.promptType != PromptType.CARD_SELECT }
+                        .orEmpty()
+
                     when (prompt.promptType) {
                         PromptType.NUMBER -> OutlinedTextField(
                             value = numbers[prompt.id].orEmpty(),
@@ -246,6 +256,16 @@ fun QuestionsPage(
                             text = stringResource(R.string.campaign_unknown_prompt, prompt.type),
                             color = MaterialTheme.colorScheme.error,
                         )
+                    }
+                    if (previews.isNotEmpty()) {
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            previews.forEach { code ->
+                                AssistChip(
+                                    onClick = { onCardClick(code) },
+                                    label = { Text(run.names.card(code)) },
+                                )
+                            }
+                        }
                     }
                 }
             }

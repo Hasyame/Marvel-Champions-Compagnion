@@ -145,6 +145,7 @@ fun CampaignRunScreen(
                         isSubmitting = state.isSubmitting,
                         run = run,
                         scenario = scenario,
+                        onCardClick = onCardClick,
                         onSubmit = viewModel::submitAnswers,
                     )
 

@@ -112,17 +112,23 @@
       "id": "landingPadDefeated",
       "type": "boolean",
       "label": {
-       "fr": "{card:21180a} a-t-il été vaincu ?",
-       "en": "Was {card:21180a} defeated?"
-      }
+       "fr": "Avez-vous vaincu {card:21180a} ?",
+       "en": "Did you defeat {card:21180a}?"
+      },
+      "cards": [
+       "21180a"
+      ]
      },
      {
       "id": "knowhere1B",
       "type": "boolean",
       "label": {
-       "fr": "{card:21074a} 1B a-t-il été complété ?",
-       "en": "Was {card:21074a} 1B completed?"
-      }
+       "fr": "Avez-vous complété l'étape 1B du complot principal ?",
+       "en": "Did you complete main scheme stage 1B?"
+      },
+      "cards": [
+       "21074a"
+      ]
      },
      {
       "id": "hpPerHero",
@@ -310,25 +316,34 @@
       "id": "shawarmaDefeated",
       "type": "boolean",
       "label": {
-       "fr": "{card:21182a} a-t-il été vaincu ?",
-       "en": "Was {card:21182a} defeated?"
-      }
+       "fr": "Avez-vous vaincu {card:21182a} ?",
+       "en": "Did you defeat {card:21182a}?"
+      },
+      "cards": [
+       "21182a"
+      ]
      },
      {
-      "id": "blackSwanSurvived",
+      "id": "blackSwanInVictory",
       "type": "boolean",
       "label": {
-       "fr": "{card:21182b} est-elle absente de la zone de victoire ?",
-       "en": "Is {card:21182b} absent from the victory display?"
-      }
+       "fr": "Avez-vous {card:21182b} dans la zone de victoire ?",
+       "en": "Do you have {card:21182b} in the victory display?"
+      },
+      "cards": [
+       "21182b"
+      ]
      },
      {
       "id": "towerDamaged",
       "type": "boolean",
       "label": {
-       "fr": "{card:21100} a-t-elle le trait Damaged ?",
-       "en": "Does {card:21100} have the Damaged trait?"
-      }
+       "fr": "Avez-vous retourné {card:21100} sur sa face Damaged ?",
+       "en": "Did you flip {card:21100} to its Damaged side?"
+      },
+      "cards": [
+       "21100"
+      ]
      },
      {
       "id": "hpPerHero",
@@ -356,7 +371,7 @@
       "cardList": "campaignPool",
       "cardCode": "21182b",
       "when": {
-       "answer": "blackSwanSurvived"
+       "notAnswer": "blackSwanInVictory"
       }
      },
      {
@@ -555,20 +570,26 @@
       }
      },
      {
-      "id": "protocolsSurvived",
+      "id": "protocolsInVictory",
       "type": "boolean",
       "label": {
-       "fr": "{card:21184b} est-il absent de la zone de victoire ?",
-       "en": "Is {card:21184b} absent from the victory display?"
-      }
+       "fr": "Avez-vous {card:21184b} dans la zone de victoire ?",
+       "en": "Do you have {card:21184b} in the victory display?"
+      },
+      "cards": [
+       "21184b"
+      ]
      },
      {
       "id": "infinityStones1B",
       "type": "boolean",
       "label": {
-       "fr": "{card:21114a} 1B a-t-il été complété ?",
-       "en": "Was {card:21114a} 1B completed?"
-      }
+       "fr": "Avez-vous complété l'étape 1B du complot principal ?",
+       "en": "Did you complete main scheme stage 1B?"
+      },
+      "cards": [
+       "21114a"
+      ]
      },
      {
       "id": "hpPerHero",
@@ -588,7 +609,7 @@
       "cardList": "campaignPool",
       "cardCode": "21185",
       "when": {
-       "answer": "protocolsSurvived"
+       "notAnswer": "protocolsInVictory"
       }
      },
      {
@@ -760,17 +781,23 @@
       "id": "nornStonesDefeated",
       "type": "boolean",
       "label": {
-       "fr": "{card:21186a} a-t-il été vaincu ?",
-       "en": "Was {card:21186a} defeated?"
-      }
+       "fr": "Avez-vous vaincu {card:21186a} ?",
+       "en": "Did you defeat {card:21186a}?"
+      },
+      "cards": [
+       "21186a"
+      ]
      },
      {
       "id": "odinsArmor",
       "type": "boolean",
       "label": {
-       "fr": "{card:21186b} est-il dans la zone de victoire ?",
-       "en": "Is {card:21186b} in the victory display?"
-      }
+       "fr": "Avez-vous {card:21186b} dans la zone de victoire ?",
+       "en": "Do you have {card:21186b} in the victory display?"
+      },
+      "cards": [
+       "21186b"
+      ]
      },
      {
       "id": "hpPerHero",
