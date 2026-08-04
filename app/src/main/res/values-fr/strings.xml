@@ -238,7 +238,7 @@
     <string name="campaign_pre_setup">Mise en place</string>
     <string name="campaign_setup_label">Mise en place de campagne</string>
     <string name="campaign_villain_deck_label">Deck du méchant</string>
-    <string name="campaign_main_scheme_label">Deck complot principal</string>
+    <string name="campaign_main_scheme_label">Deck manigance principale</string>
     <string name="campaign_encounter_sets_label">Deck rencontre</string>
     <string name="campaign_questions_title">Quelques questions</string>
     <string name="campaign_validate">Valider</string>
@@ -497,7 +497,7 @@
     <string name="campaign_stat_defeats">Scénarios perdus</string>
     <string name="campaign_stat_winrate">Taux de victoire</string>
     <string name="campaign_finished_title">Campagne terminée</string>
-    <string name="campaign_finished_message">Le dernier vilain est à terre et la campagne est à vous. Voici ce qu\'elle aura coûté.</string>
+    <string name="campaign_finished_message">Le dernier méchant est à terre et la campagne est à vous. Voici ce qu\'elle aura coûté.</string>
     <string name="campaign_finished_cleanup">Avant la prochaine partie, retirez les cartes de campagne de vos decks.</string>
     <string name="randomizer_choose_hint">Choisissez jusqu\'à %1$d, dans l\'ordre des joueurs</string>
     <string name="randomizer_choose_confirm">Utiliser</string>

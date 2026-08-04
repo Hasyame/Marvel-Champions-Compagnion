@@ -84,7 +84,7 @@ def expert_steps():
         },
         {
             "text": t(
-                "Expert : placer un jeton d'accélération sur un complot principal "
+                "Expert : placer un pion accélération sur une manigance principale "
                 "pour soigner un héros à fond",
                 "Expert: place an acceleration token on a main scheme to heal a hero to full",
             ),
@@ -125,7 +125,7 @@ def system_shock_step():
 def security_breach_step():
     return {
         "text": t(
-            "Mélanger ce complot secondaire dans le deck rencontre",
+            "Mélanger cette manigance annexe dans le deck rencontre",
             "Shuffle this side scheme into the encounter deck",
         ),
         "cards": [SECURITY_BREACH],
@@ -165,14 +165,14 @@ scenarios.append({
     "campaignSetup": [
         {
             "text": t(
-                "Mettre ce complot secondaire en jeu",
+                "Mettre cette manigance annexe en jeu",
                 "Put this side scheme into play",
             ),
             "cards": ["21180a"],
         },
         {
             "text": t(
-                "Mélanger ce complot secondaire dans le deck rencontre",
+                "Mélanger cette manigance annexe dans le deck rencontre",
                 "Shuffle this side scheme into the encounter deck",
             ),
             "cards": [SECURITY_BREACH],
@@ -194,7 +194,7 @@ scenarios.append({
                 "id": "knowhere1B",
                 "type": "boolean",
                 "label": t(
-                    "Avez-vous complété l'étape 1B du complot principal ?",
+                    "Avez-vous complété l'étape 1B de la manigance principale ?",
                     "Did you complete main scheme stage 1B?",
                 ),
                 "cards": ["21074a"],
@@ -244,7 +244,7 @@ scenarios.append({
         {
             "text": t(
                 "Mettre {card:21100} en jeu sur sa face Stronghold, et lui attacher "
-                "{card:21101} au complot 2B",
+                "{card:21101} à la manigance 2B",
                 "Put {card:21100} into play on its Stronghold side, and attach {card:21101} "
                 "to scheme 2B",
             ),
@@ -265,7 +265,7 @@ scenarios.append({
         },
         {
             "text": t(
-                "Mettre ce complot secondaire en jeu",
+                "Mettre cette manigance annexe en jeu",
                 "Put this side scheme into play",
             ),
             "cards": ["21182a"],
@@ -288,7 +288,7 @@ scenarios.append({
                 "id": "blackSwanInVictory",
                 "type": "boolean",
                 "label": t(
-                    "Avez-vous {card:21182b} dans la zone de victoire ?",
+                    "Avez-vous {card:21182b} dans la pile de victoire ?",
                     "Do you have {card:21182b} in the victory display?",
                 ),
                 "cards": ["21182b"],
@@ -354,7 +354,7 @@ scenarios.append({
         },
         {
             "text": t(
-                "Mettre ce complot secondaire en jeu",
+                "Mettre cette manigance annexe en jeu",
                 "Put this side scheme into play",
             ),
             "cards": ["21184a"],
@@ -392,7 +392,7 @@ scenarios.append({
                 "id": "protocolsInVictory",
                 "type": "boolean",
                 "label": t(
-                    "Avez-vous {card:" + DEFENSIVE_PROTOCOLS + "} dans la zone de victoire ?",
+                    "Avez-vous {card:" + DEFENSIVE_PROTOCOLS + "} dans la pile de victoire ?",
                     "Do you have {card:" + DEFENSIVE_PROTOCOLS + "} in the victory display?",
                 ),
                 "cards": ["21184b"],
@@ -401,7 +401,7 @@ scenarios.append({
                 "id": "infinityStones1B",
                 "type": "boolean",
                 "label": t(
-                    "Avez-vous complété l'étape 1B du complot principal ?",
+                    "Avez-vous complété l'étape 1B de la manigance principale ?",
                     "Did you complete main scheme stage 1B?",
                 ),
                 "cards": ["21114a"],
@@ -443,7 +443,7 @@ scenarios.append({
     "campaignSetup": [
         {
             "text": t(
-                "Mettre ce complot secondaire en jeu",
+                "Mettre cette manigance annexe en jeu",
                 "Put this side scheme into play",
             ),
             "cards": ["21186a"],
@@ -475,7 +475,7 @@ scenarios.append({
                 "id": "odinsArmor",
                 "type": "boolean",
                 "label": t(
-                    "Avez-vous {card:" + ODINS_ARMOR + "} dans la zone de victoire ?",
+                    "Avez-vous {card:" + ODINS_ARMOR + "} dans la pile de victoire ?",
                     "Do you have {card:" + ODINS_ARMOR + "} in the victory display?",
                 ),
                 "cards": ["21186b"],
@@ -545,7 +545,7 @@ scenarios.append({
         },
         {
             "text": t(
-                "Mettre ce complot secondaire en jeu",
+                "Mettre cette manigance annexe en jeu",
                 "Put this side scheme into play",
             ),
             "cards": ["21189a"],

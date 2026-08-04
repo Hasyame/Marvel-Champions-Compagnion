@@ -81,7 +81,7 @@
    "campaignSetup": [
     {
      "text": {
-      "fr": "Mettre ce complot secondaire en jeu",
+      "fr": "Mettre cette manigance annexe en jeu",
       "en": "Put this side scheme into play"
      },
      "cards": [
@@ -90,7 +90,7 @@
     },
     {
      "text": {
-      "fr": "Mélanger ce complot secondaire dans le deck rencontre",
+      "fr": "Mélanger cette manigance annexe dans le deck rencontre",
       "en": "Shuffle this side scheme into the encounter deck"
      },
      "cards": [
@@ -123,7 +123,7 @@
       "id": "knowhere1B",
       "type": "boolean",
       "label": {
-       "fr": "Avez-vous complété l'étape 1B du complot principal ?",
+       "fr": "Avez-vous complété l'étape 1B de la manigance principale ?",
        "en": "Did you complete main scheme stage 1B?"
       },
       "cards": [
@@ -228,7 +228,7 @@
    "campaignSetup": [
     {
      "text": {
-      "fr": "Mettre {card:21100} en jeu sur sa face Stronghold, et lui attacher {card:21101} au complot 2B",
+      "fr": "Mettre {card:21100} en jeu sur sa face Stronghold, et lui attacher {card:21101} à la manigance 2B",
       "en": "Put {card:21100} into play on its Stronghold side, and attach {card:21101} to scheme 2B"
      },
      "cards": [
@@ -247,7 +247,7 @@
     },
     {
      "text": {
-      "fr": "Mettre ce complot secondaire en jeu",
+      "fr": "Mettre cette manigance annexe en jeu",
       "en": "Put this side scheme into play"
      },
      "cards": [
@@ -256,7 +256,7 @@
     },
     {
      "text": {
-      "fr": "Mélanger ce complot secondaire dans le deck rencontre",
+      "fr": "Mélanger cette manigance annexe dans le deck rencontre",
       "en": "Shuffle this side scheme into the encounter deck"
      },
      "cards": [
@@ -279,7 +279,7 @@
     },
     {
      "text": {
-      "fr": "Expert : placer un jeton d'accélération sur un complot principal pour soigner un héros à fond",
+      "fr": "Expert : placer un pion accélération sur une manigance principale pour soigner un héros à fond",
       "en": "Expert: place an acceleration token on a main scheme to heal a hero to full"
      },
      "when": {
@@ -327,7 +327,7 @@
       "id": "blackSwanInVictory",
       "type": "boolean",
       "label": {
-       "fr": "Avez-vous {card:21182b} dans la zone de victoire ?",
+       "fr": "Avez-vous {card:21182b} dans la pile de victoire ?",
        "en": "Do you have {card:21182b} in the victory display?"
       },
       "cards": [
@@ -455,7 +455,7 @@
     },
     {
      "text": {
-      "fr": "Mettre ce complot secondaire en jeu",
+      "fr": "Mettre cette manigance annexe en jeu",
       "en": "Put this side scheme into play"
      },
      "cards": [
@@ -477,7 +477,7 @@
     },
     {
      "text": {
-      "fr": "Mélanger ce complot secondaire dans le deck rencontre",
+      "fr": "Mélanger cette manigance annexe dans le deck rencontre",
       "en": "Shuffle this side scheme into the encounter deck"
      },
      "cards": [
@@ -536,7 +536,7 @@
     },
     {
      "text": {
-      "fr": "Expert : placer un jeton d'accélération sur un complot principal pour soigner un héros à fond",
+      "fr": "Expert : placer un pion accélération sur une manigance principale pour soigner un héros à fond",
       "en": "Expert: place an acceleration token on a main scheme to heal a hero to full"
      },
      "when": {
@@ -573,7 +573,7 @@
       "id": "protocolsInVictory",
       "type": "boolean",
       "label": {
-       "fr": "Avez-vous {card:21184b} dans la zone de victoire ?",
+       "fr": "Avez-vous {card:21184b} dans la pile de victoire ?",
        "en": "Do you have {card:21184b} in the victory display?"
       },
       "cards": [
@@ -584,7 +584,7 @@
       "id": "infinityStones1B",
       "type": "boolean",
       "label": {
-       "fr": "Avez-vous complété l'étape 1B du complot principal ?",
+       "fr": "Avez-vous complété l'étape 1B de la manigance principale ?",
        "en": "Did you complete main scheme stage 1B?"
       },
       "cards": [
@@ -680,7 +680,7 @@
    "campaignSetup": [
     {
      "text": {
-      "fr": "Mettre ce complot secondaire en jeu",
+      "fr": "Mettre cette manigance annexe en jeu",
       "en": "Put this side scheme into play"
      },
      "cards": [
@@ -744,7 +744,7 @@
     },
     {
      "text": {
-      "fr": "Expert : placer un jeton d'accélération sur un complot principal pour soigner un héros à fond",
+      "fr": "Expert : placer un pion accélération sur une manigance principale pour soigner un héros à fond",
       "en": "Expert: place an acceleration token on a main scheme to heal a hero to full"
      },
      "when": {
@@ -792,7 +792,7 @@
       "id": "odinsArmor",
       "type": "boolean",
       "label": {
-       "fr": "Avez-vous {card:21186b} dans la zone de victoire ?",
+       "fr": "Avez-vous {card:21186b} dans la pile de victoire ?",
        "en": "Do you have {card:21186b} in the victory display?"
       },
       "cards": [
@@ -922,7 +922,7 @@
     },
     {
      "text": {
-      "fr": "Mettre ce complot secondaire en jeu",
+      "fr": "Mettre cette manigance annexe en jeu",
       "en": "Put this side scheme into play"
      },
      "cards": [
@@ -1021,7 +1021,7 @@
     },
     {
      "text": {
-      "fr": "Expert : placer un jeton d'accélération sur un complot principal pour soigner un héros à fond",
+      "fr": "Expert : placer un pion accélération sur une manigance principale pour soigner un héros à fond",
       "en": "Expert: place an acceleration token on a main scheme to heal a hero to full"
      },
      "when": {

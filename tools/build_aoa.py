@@ -232,7 +232,7 @@ scenarios.append({
         {"include": "standardIII"},
         {
             "text": t(
-                "Aligner ces quatre vilains dans cet ordre, chacun avec son compteur de points de vie",
+                "Aligner ces quatre méchants dans cet ordre, chacun avec son compteur de points de vie",
                 "Set these four villains in a row in this order, each with its own hit point dial",
             ),
             "draw": {
@@ -249,7 +249,7 @@ scenarios.append({
         },
         {
             "text": t(
-                "Donner le marqueur d'activation au vilain le plus à gauche",
+                "Donner le marqueur d'activation au méchant le plus à gauche",
                 "Give the active counter to the leftmost villain",
             ),
         },

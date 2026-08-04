@@ -263,7 +263,7 @@
    "campaignSetup": [
     {
      "text": {
-      "fr": "Révéler le complot secondaire",
+      "fr": "Révéler la manigance annexe",
       "en": "Reveal the side scheme"
      },
      "cards": [
@@ -313,7 +313,7 @@
       "id": "schemeAt1B",
       "type": "boolean",
       "label": {
-       "fr": "Le complot principal est-il en 1B ? ({card:16061a})",
+       "fr": "La manigance principale est-elle en 1B ? ({card:16061a})",
        "en": "Is the main scheme on stage 1B? ({card:16061a})"
       },
       "cards": [
@@ -332,7 +332,7 @@
       "id": "headhunterInVictoryDisplay",
       "type": "boolean",
       "label": {
-       "fr": "Avez-vous {card:16183} dans la zone de victoire ?",
+       "fr": "Avez-vous {card:16183} dans la pile de victoire ?",
        "en": "Do you have {card:16183} in the victory display?"
       },
       "cards": [
@@ -451,7 +451,7 @@
    "campaignSetup": [
     {
      "text": {
-      "fr": "Révéler ce complot secondaire (verso en Expert)",
+      "fr": "Révéler cette manigance annexe (verso en Expert)",
       "en": "Reveal this side scheme (reverse side on Expert)"
      },
      "cards": [
@@ -549,7 +549,7 @@
       "id": "noThreat",
       "type": "boolean",
       "label": {
-       "fr": "Le complot principal est-il sans menace ?",
+       "fr": "La manigance principale est-elle sans menace ?",
        "en": "Is there no threat on the main scheme?"
       }
      },
@@ -565,7 +565,7 @@
       "id": "headhunterInVictoryDisplay",
       "type": "boolean",
       "label": {
-       "fr": "Avez-vous {card:16183} dans la zone de victoire ?",
+       "fr": "Avez-vous {card:16183} dans la pile de victoire ?",
        "en": "Do you have {card:16183} in the victory display?"
       },
       "cards": [
@@ -688,7 +688,7 @@
    "campaignSetup": [
     {
      "text": {
-      "fr": "Révéler ce complot secondaire (verso en Expert)",
+      "fr": "Révéler cette manigance annexe (verso en Expert)",
       "en": "Reveal this side scheme (reverse side on Expert)"
      },
      "cards": [
@@ -802,7 +802,7 @@
       "id": "artifactCount",
       "type": "number",
       "label": {
-       "fr": "Combien de complots Galactic Artifacts dans la zone de victoire ?",
+       "fr": "Combien de manigances Galactic Artifacts dans la pile de victoire ?",
        "en": "How many Galactic Artifacts side schemes are in the victory display?"
       }
      },
@@ -810,7 +810,7 @@
       "id": "artifactNames",
       "type": "cardSelect",
       "label": {
-       "fr": "Quels complots Galactic Artifacts sont dans votre zone de victoire ?",
+       "fr": "Quels manigances Galactic Artifacts sont dans votre pile de victoire ?",
        "en": "Which Galactic Artifacts side schemes are in your victory display?"
       },
       "cards": [
@@ -824,7 +824,7 @@
       "id": "headhunterInVictoryDisplay",
       "type": "boolean",
       "label": {
-       "fr": "Avez-vous {card:16183} dans la zone de victoire ?",
+       "fr": "Avez-vous {card:16183} dans la pile de victoire ?",
        "en": "Do you have {card:16183} in the victory display?"
       },
       "cards": [
@@ -938,7 +938,7 @@
    "campaignSetup": [
     {
      "text": {
-      "fr": "Révéler ce complot secondaire (verso en Expert)",
+      "fr": "Révéler cette manigance annexe (verso en Expert)",
       "en": "Reveal this side scheme (reverse side on Expert)"
      },
      "cards": [
@@ -947,7 +947,7 @@
     },
     {
      "text": {
-      "fr": "Mélanger dans le deck rencontre les complots Galactic Artifacts enregistrés",
+      "fr": "Mélanger dans le deck rencontre les manigances Galactic Artifacts enregistrés",
       "en": "Shuffle the recorded Galactic Artifacts side schemes into the encounter deck"
      },
      "showCardList": "artifacts",
@@ -1125,7 +1125,7 @@
       "id": "schemeAt1B",
       "type": "boolean",
       "label": {
-       "fr": "Le complot principal est-il en 1B ? ({card:16091a})",
+       "fr": "La manigance principale est-elle en 1B ? ({card:16091a})",
        "en": "Is the main scheme on stage 1B? ({card:16091a})"
       },
       "cards": [
@@ -1152,7 +1152,7 @@
       "id": "headhunterInVictoryDisplay",
       "type": "boolean",
       "label": {
-       "fr": "Avez-vous {card:16183} dans la zone de victoire ?",
+       "fr": "Avez-vous {card:16183} dans la pile de victoire ?",
        "en": "Do you have {card:16183} in the victory display?"
       },
       "cards": [
@@ -1292,7 +1292,7 @@
    "campaignSetup": [
     {
      "text": {
-      "fr": "Facultatif : révéler ce complot secondaire (verso en Expert)",
+      "fr": "Facultatif : révéler cette manigance annexe (verso en Expert)",
       "en": "Optional: reveal this side scheme (reverse side on Expert)"
      },
      "cards": [
@@ -1317,7 +1317,7 @@
     },
     {
      "text": {
-      "fr": "Révéler ce complot secondaire et y placer ce nombre de menace par joueur",
+      "fr": "Révéler cette manigance annexe et y placer ce nombre de menace par joueur",
       "en": "Reveal this side scheme and place this much threat per player on it"
      },
      "cards": [
@@ -1375,7 +1375,7 @@
     },
     {
      "text": {
-      "fr": "Mélanger ce complot secondaire dans le deck rencontre",
+      "fr": "Mélanger cette manigance annexe dans le deck rencontre",
       "en": "Shuffle this side scheme into the encounter deck"
      },
      "cards": [
@@ -1425,7 +1425,7 @@
     },
     {
      "text": {
-      "fr": "Campagne Expert : placer 1 menace supplémentaire par joueur sur le complot principal",
+      "fr": "Campagne Expert : placer 1 menace supplémentaire par joueur sur la manigance principale",
       "en": "Expert campaign: place 1 additional threat per player on the main scheme"
      },
      "when": {
