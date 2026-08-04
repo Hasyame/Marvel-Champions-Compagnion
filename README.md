@@ -9,7 +9,7 @@ you can read the app in French and the cards in English, or the reverse.
 
 ## Status
 
-In use, and being played with. Current release: **[v1.2.0](https://github.com/Hasyame/Marvel-Champions-Compagnion/releases/latest)**.
+In use, and being played with. Current release: **[v1.2.1](https://github.com/Hasyame/Marvel-Champions-Compagnion/releases/latest)**.
 
 Every feature planned for the app is now in, and the work from here is campaign
 content rather than machinery.
