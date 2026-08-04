@@ -283,7 +283,12 @@ private fun BriefingPage(
                                                 "${it.name} ${run.state.heroCounter(counterId, it.id)}"
                                             }
                                         } else {
-                                            "$counterId: ${run.state.counter(counterId)}"
+                                            // The number alone. Prefixing it with
+                                            // the counter's id put "pincerThreat"
+                                            // in front of a player who has no
+                                            // reason to know the app calls it that;
+                                            // the step's own text says what it is.
+                                            run.state.counter(counterId).toString()
                                         },
                                         style = MaterialTheme.typography.titleMedium,
                                         color = MaterialTheme.colorScheme.primary,

@@ -451,8 +451,23 @@
    "campaignSetup": [
     {
      "text": {
-      "fr": "Révéler cette manigance annexe (verso en Expert)",
-      "en": "Reveal this side scheme (reverse side on Expert)"
+      "fr": "Révéler cette manigance annexe",
+      "en": "Reveal this side scheme"
+     },
+     "when": {
+      "difficulty": "standard"
+     },
+     "cards": [
+      "16179a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Révéler cette manigance annexe — face verso",
+      "en": "Reveal this side scheme — reverse side"
+     },
+     "when": {
+      "difficulty": "expert"
      },
      "cards": [
       "16179a"
@@ -688,8 +703,23 @@
    "campaignSetup": [
     {
      "text": {
-      "fr": "Révéler cette manigance annexe (verso en Expert)",
-      "en": "Reveal this side scheme (reverse side on Expert)"
+      "fr": "Révéler cette manigance annexe",
+      "en": "Reveal this side scheme"
+     },
+     "when": {
+      "difficulty": "standard"
+     },
+     "cards": [
+      "16180a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Révéler cette manigance annexe — face verso",
+      "en": "Reveal this side scheme — reverse side"
+     },
+     "when": {
+      "difficulty": "expert"
      },
      "cards": [
       "16180a"
@@ -938,8 +968,23 @@
    "campaignSetup": [
     {
      "text": {
-      "fr": "Révéler cette manigance annexe (verso en Expert)",
-      "en": "Reveal this side scheme (reverse side on Expert)"
+      "fr": "Révéler cette manigance annexe",
+      "en": "Reveal this side scheme"
+     },
+     "when": {
+      "difficulty": "standard"
+     },
+     "cards": [
+      "16181a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Révéler cette manigance annexe — face verso",
+      "en": "Reveal this side scheme — reverse side"
+     },
+     "when": {
+      "difficulty": "expert"
      },
      "cards": [
       "16181a"
@@ -1292,8 +1337,23 @@
    "campaignSetup": [
     {
      "text": {
-      "fr": "Facultatif : révéler cette manigance annexe (verso en Expert)",
-      "en": "Optional: reveal this side scheme (reverse side on Expert)"
+      "fr": "Facultatif : révéler cette manigance annexe",
+      "en": "Optional: reveal this side scheme"
+     },
+     "when": {
+      "difficulty": "standard"
+     },
+     "cards": [
+      "16182a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Facultatif : révéler cette manigance annexe — face verso",
+      "en": "Optional: reveal this side scheme — reverse side"
+     },
+     "when": {
+      "difficulty": "expert"
      },
      "cards": [
       "16182a"
