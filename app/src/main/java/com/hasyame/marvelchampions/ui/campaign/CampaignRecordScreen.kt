@@ -193,7 +193,7 @@ private fun StatsCard(record: CampaignSummary) {
             )
             Stat(
                 stringResource(R.string.campaign_stat_scenarios),
-                "${record.scenariosWon} / ${record.scenariosWon + record.scenariosLost}",
+                (record.scenariosWon + record.scenariosLost).toString(),
             )
             Stat(stringResource(R.string.campaign_stat_wins), record.scenariosWon.toString())
             Stat(stringResource(R.string.campaign_stat_defeats), record.scenariosLost.toString())

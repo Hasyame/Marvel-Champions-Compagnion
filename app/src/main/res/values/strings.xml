@@ -310,7 +310,7 @@
     <string name="campaign_stat_vp">Victory points</string>
     <string name="campaign_stat_vp_short">%1$d VP</string>
     <string name="campaign_stat_heroes">Heroes</string>
-    <string name="campaign_stat_scenarios">Scenarios won</string>
+    <string name="campaign_stat_scenarios">Scenarios played</string>
     <string name="campaign_stat_cards_bought">Market cards bought</string>
     <string name="campaign_stat_credits_left">Units left</string>
     <string name="campaign_log">Campaign log</string>

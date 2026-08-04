@@ -627,7 +627,9 @@ class CampaignRepository @Inject constructor(
         }
 
     /** Every run with its statistics, newest first, unfinished ones on top. */
-    suspend fun summaries(): List<CampaignSummary> = withContext(ioDispatcher) {
+    suspend fun summaries(
+        locale: CardLocale = CardLocale.FRENCH,
+    ): List<CampaignSummary> = withContext(ioDispatcher) {
         campaignDao.getRuns().map { entity ->
             val template = runCatching {
                 json.decodeFromString(CampaignTemplate.serializer(), entity.templateJson).expanded()
@@ -663,7 +665,12 @@ class CampaignRepository @Inject constructor(
                             ?: result.scenarioId,
                         victory = result.victory,
                         elapsedMillis = result.elapsedMillis,
-                        answers = describeAnswers(scenario, result.answers, state),
+                        answers = describeAnswers(
+                            scenario,
+                            result.answers,
+                            state,
+                            resolveNames(template, locale, state.cardLists.values.flatten().toSet()),
+                        ),
                     )
                 },
             )
@@ -680,10 +687,17 @@ class CampaignRepository @Inject constructor(
         scenario: com.hasyame.marvelchampions.domain.campaign.template.ScenarioTemplate?,
         answers: com.hasyame.marvelchampions.domain.campaign.engine.AnswerSet,
         state: CampaignState,
+        names: CampaignCardNames = CampaignCardNames(),
     ): List<Pair<String, String>> {
         val prompts = scenario?.onVictory?.prompts.orEmpty()
         fun label(id: String) =
             prompts.firstOrNull { it.id == id }?.label?.resolve("fr")?.takeIf { it.isNotBlank() }
+                // The finished-campaign log is the one place a question is read
+                // back long after it was asked, and it was printing the raw
+                // placeholder — "{card:21184b}" where it meant a card's name.
+                ?.let { text ->
+                    CARD_PLACEHOLDER.replace(text) { names.card(it.groupValues[1]) }
+                }
                 ?: id
 
         fun heroName(heroId: String) =

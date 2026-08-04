@@ -330,7 +330,7 @@
     <string name="campaign_stat_vp">Points de victoire</string>
     <string name="campaign_stat_vp_short">%1$d PV</string>
     <string name="campaign_stat_heroes">Héros</string>
-    <string name="campaign_stat_scenarios">Scénarios gagnés</string>
+    <string name="campaign_stat_scenarios">Scénarios joués</string>
     <string name="campaign_stat_cards_bought">Cartes du marché achetées</string>
     <string name="campaign_stat_credits_left">Crédits restants</string>
     <string name="campaign_log">Journal de campagne</string>
