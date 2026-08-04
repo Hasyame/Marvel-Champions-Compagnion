@@ -313,9 +313,12 @@
       "id": "schemeAt1B",
       "type": "boolean",
       "label": {
-       "fr": "Le complot principal est-il en 1B (Terrestrial Invasion) ?",
-       "en": "Is the main scheme on stage 1B (Terrestrial Invasion)?"
-      }
+       "fr": "Le complot principal est-il en 1B ? ({card:16061a})",
+       "en": "Is the main scheme on stage 1B? ({card:16061a})"
+      },
+      "cards": [
+       "16061a"
+      ]
      },
      {
       "id": "minionsInPlay",
@@ -329,9 +332,12 @@
       "id": "headhunterInVictoryDisplay",
       "type": "boolean",
       "label": {
-       "fr": "Badoon Headhunter est-il dans la zone de victoire ?",
-       "en": "Is Badoon Headhunter in the victory display?"
-      }
+       "fr": "Avez-vous {card:16183} dans la zone de victoire ?",
+       "en": "Do you have {card:16183} in the victory display?"
+      },
+      "cards": [
+       "16183"
+      ]
      },
      {
       "id": "hpPerHero",
@@ -559,9 +565,12 @@
       "id": "headhunterInVictoryDisplay",
       "type": "boolean",
       "label": {
-       "fr": "Badoon Headhunter est-il dans la zone de victoire ?",
-       "en": "Is Badoon Headhunter in the victory display?"
-      }
+       "fr": "Avez-vous {card:16183} dans la zone de victoire ?",
+       "en": "Do you have {card:16183} in the victory display?"
+      },
+      "cards": [
+       "16183"
+      ]
      },
      {
       "id": "hpPerHero",
@@ -815,9 +824,12 @@
       "id": "headhunterInVictoryDisplay",
       "type": "boolean",
       "label": {
-       "fr": "Badoon Headhunter est-il dans la zone de victoire ?",
-       "en": "Is Badoon Headhunter in the victory display?"
-      }
+       "fr": "Avez-vous {card:16183} dans la zone de victoire ?",
+       "en": "Do you have {card:16183} in the victory display?"
+      },
+      "cards": [
+       "16183"
+      ]
      },
      {
       "id": "hpPerHero",
@@ -1113,9 +1125,12 @@
       "id": "schemeAt1B",
       "type": "boolean",
       "label": {
-       "fr": "Le complot principal est-il en 1B (The Art of Evasion) ?",
-       "en": "Is the main scheme on stage 1B (The Art of Evasion)?"
-      }
+       "fr": "Le complot principal est-il en 1B ? ({card:16091a})",
+       "en": "Is the main scheme on stage 1B? ({card:16091a})"
+      },
+      "cards": [
+       "16091a"
+      ]
      },
      {
       "id": "evasionCount",
@@ -1137,9 +1152,12 @@
       "id": "headhunterInVictoryDisplay",
       "type": "boolean",
       "label": {
-       "fr": "Badoon Headhunter est-il dans la zone de victoire ?",
-       "en": "Is Badoon Headhunter in the victory display?"
-      }
+       "fr": "Avez-vous {card:16183} dans la zone de victoire ?",
+       "en": "Do you have {card:16183} in the victory display?"
+      },
+      "cards": [
+       "16183"
+      ]
      },
      {
       "id": "hpPerHero",

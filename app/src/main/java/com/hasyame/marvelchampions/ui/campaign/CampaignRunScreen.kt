@@ -564,6 +564,10 @@ private fun ResultPage(
                 text = stringResource(R.string.campaign_complete),
                 style = MaterialTheme.typography.titleMedium,
             )
+            // The whole campaign's figures, here, at the moment it ends. Making
+            // somebody navigate to a record screen to find out how their
+            // campaign went is asking them to go looking for their own reward.
+            CampaignTotals(run)
             Text(
                 text = stringResource(R.string.campaign_keep_or_forget),
                 style = MaterialTheme.typography.bodyMedium,
@@ -625,6 +629,43 @@ private fun DefeatPage(
         }
         OutlinedButton(onClick = onBreak, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.campaign_take_a_break))
+        }
+    }
+}
+
+/**
+ * What a whole campaign came to, folded from its own event log.
+ *
+ * The finished-campaign record shows the same figures later; this is the copy
+ * the player sees the moment the last villain goes down.
+ */
+@Composable
+private fun CampaignTotals(run: CampaignRun) {
+    val results = run.state.completedScenarios
+    val won = results.count { it.victory }
+    val played = results.size
+    val points = results.filter { it.victory }.sumOf { it.answers.numbers["vp"] ?: 0 }
+
+    ComicPanel(Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(stringResource(R.string.campaign_finished_message))
+            Text("${stringResource(R.string.campaign_stat_time)}: ${TimerState.format(run.state.totalPlayTimeMillis)}")
+            Text("${stringResource(R.string.campaign_stat_vp)}: $points")
+            Text("${stringResource(R.string.campaign_stat_heroes)}: ${run.state.heroes.joinToString(", ") { it.name }}")
+            Text("${stringResource(R.string.campaign_stat_scenarios)}: $played")
+            Text("${stringResource(R.string.campaign_stat_wins)}: $won")
+            Text("${stringResource(R.string.campaign_stat_defeats)}: ${played - won}")
+            Text(
+                text = "${stringResource(R.string.campaign_stat_winrate)}: " +
+                    "${if (played > 0) won * 100 / played else 0}%",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Text(
+                text = stringResource(R.string.campaign_finished_cleanup),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }

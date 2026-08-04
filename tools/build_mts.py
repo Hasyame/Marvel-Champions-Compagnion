@@ -522,8 +522,10 @@ scenarios.append({
     "campaignSetup": [
         {
             "text": t(
-                "Révéler ce Loki et le mettre en jeu ; mettre les quatre autres de côté, hors jeu",
-                "Reveal this Loki and put it into play; set the other four aside, out of play",
+                "Toucher la carte pour voir quel Loki affronter en premier ; mettre les "
+                "quatre autres de côté, hors jeu",
+                "Tap the card to see which Loki you face first; set the other four aside, "
+                "out of play",
             ),
             "draw": {"id": "loki", "from": LOKIS},
         },
