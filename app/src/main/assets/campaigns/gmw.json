@@ -1,1483 +1,1492 @@
 {
-  "_note": [
-    "Mechanics and narrative flavour. No rules text: setup steps name what to do",
-    "in a few words and point at cards by code, which the app resolves to real",
-    "card names. Someone without the campaign book cannot play from this file.",
-    "",
-    "Card codes are MarvelCDB codes. They are stable and language-neutral, which",
-    "is why they are stored rather than names — the app shows the name."
-  ],
-  "id": "gmw",
-  "schemaVersion": 1,
-  "name": {
-    "fr": "Convoitise Galactique",
-    "en": "The Galaxy's Most Wanted"
+ "_note": [
+  "Mechanics and narrative flavour. No rules text: setup steps name what to do",
+  "in a few words and point at cards by code, which the app resolves to real",
+  "card names. Someone without the campaign book cannot play from this file.",
+  "",
+  "Card codes are MarvelCDB codes. They are stable and language-neutral, which",
+  "is why they are stored rather than names — the app shows the name."
+ ],
+ "id": "gmw",
+ "schemaVersion": 1,
+ "name": {
+  "fr": "Convoitise Galactique",
+  "en": "The Galaxy's Most Wanted"
+ },
+ "packCode": "gmw",
+ "difficulties": [
+  "standard",
+  "expert"
+ ],
+ "counters": [
+  {
+   "id": "credits",
+   "scope": "hero",
+   "initial": 0,
+   "min": 0
   },
-  "packCode": "gmw",
-  "difficulties": [
-    "standard",
-    "expert"
-  ],
-  "counters": [
-    {
-      "id": "credits",
-      "scope": "hero",
-      "initial": 0,
-      "min": 0
-    },
-    {
-      "id": "hp",
-      "scope": "hero",
-      "initial": 0,
-      "maxFrom": "heroCard.health",
-      "activeWhen": {
-        "difficulty": "expert"
-      }
-    },
-    {
-      "id": "evasion",
-      "scope": "campaign",
-      "initial": 0,
-      "min": 0
-    },
-    {
-      "id": "pincerThreat",
-      "scope": "campaign",
-      "initial": 0,
-      "min": 0
-    },
-    {
-      "id": "powerStone",
-      "scope": "hero",
-      "initial": 0,
-      "min": 0
-    }
-  ],
-  "flagSets": [
-    {
-      "id": "headhunterDefeated",
-      "scope": "perScenario"
-    }
-  ],
-  "cardLists": [
-    {
-      "id": "purchases",
-      "scope": "hero"
-    },
-    {
-      "id": "collection",
-      "scope": "campaign"
-    },
-    {
-      "id": "artifacts",
-      "scope": "campaign"
-    }
-  ],
-  "market": {
-    "counterId": "credits",
-    "entries": [
-      {
-        "cardCode": "16150",
-        "cost": 1,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16151",
-        "cost": 1,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16152",
-        "cost": 1,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16153",
-        "cost": 1,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16154",
-        "cost": 2,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16155",
-        "cost": 2,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16156",
-        "cost": 2,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16157",
-        "cost": 2,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16158",
-        "cost": 3,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16159",
-        "cost": 3,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16160",
-        "cost": 3,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16161",
-        "cost": 3,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16162",
-        "cost": 4,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16163",
-        "cost": 4,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16164",
-        "cost": 4,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16165",
-        "cost": 4,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16166",
-        "cost": 5,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16167",
-        "cost": 5,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16168",
-        "cost": 5,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16169",
-        "cost": 5,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16170",
-        "cost": 6,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16171",
-        "cost": 6,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16172",
-        "cost": 6,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16173",
-        "cost": 6,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16174",
-        "cost": 7,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16175",
-        "cost": 7,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16176",
-        "cost": 7,
-        "cardListId": "purchases"
-      },
-      {
-        "cardCode": "16177",
-        "cost": 7,
-        "cardListId": "purchases"
-      }
-    ]
+  {
+   "id": "hp",
+   "scope": "hero",
+   "initial": 0,
+   "maxFrom": "heroCard.health",
+   "activeWhen": {
+    "difficulty": "expert"
+   }
   },
-  "startScenarioId": "s1_badoon",
-  "scenarios": [
-    {
-      "id": "s1_badoon",
-      "name": {
-        "fr": "La confrérie des Badoon",
-        "en": "Brotherhood of Badoon"
-      },
-      "victoryLabel": {
-        "fr": "Drang est vaincu !",
-        "en": "Drang beat!"
-      },
-      "defeatLabel": {
-        "fr": "Drang vous a vaincu !",
-        "en": "Drang has beat you!"
-      },
-      "flavour": {
-        "fr": "Les Badoon attaquent la Terre. Les Gardiens rejoignent les Vengeurs pour repousser la flotte de Drang.",
-        "en": "The Badoon are attacking Earth. The Guardians join the Avengers to push back Drang’s fleet."
-      },
-      "baseSetup": {
-        "villainDeck": {
-          "standard": [
-            "16058",
-            "16059"
-          ],
-          "expert": [
-            "16059",
-            "16060"
-          ]
-        },
-        "mainScheme": [
-          "16061a",
-          "16062a"
-        ],
-        "encounterSets": [
-          "brotherhood_of_badoon",
-          "band_of_badoon",
-          "ship_command",
-          "standard"
-        ]
-      },
-      "campaignSetup": [
-        {
-          "text": {
-            "fr": "Révéler le complot secondaire",
-            "en": "Reveal the side scheme"
-          },
-          "cards": [
-            "16178a"
-          ]
-        },
-        {
-          "text": {
-            "fr": "Mélanger ce sbire dans le deck rencontre",
-            "en": "Shuffle this minion into the encounter deck"
-          },
-          "cards": [
-            "16183"
-          ]
-        },
-        {
-          "text": {
-            "fr": "Chaque joueur met ce soutien en jeu de son côté",
-            "en": "Each player puts this support into play on their side"
-          },
-          "cards": [
-            "16142"
-          ]
-        },
-        {
-          "text": {
-            "fr": "Étape supplémentaire en Expert — voir le livret de campagne",
-            "en": "Additional Expert step — see the campaign book"
-          },
-          "when": {
-            "difficulty": "expert"
-          }
-        }
-      ],
-      "onVictory": {
-        "prompts": [
-          {
-            "id": "vp",
-            "type": "number",
-            "label": {
-              "fr": "Combien de points de victoire avez-vous accumulés ?",
-              "en": "How many victory points did you accumulate?"
-            },
-            "_note": "The total of the VICTORY values printed on encounter cards in the victory display, which the players add up themselves."
-          },
-          {
-            "id": "schemeAt1B",
-            "type": "boolean",
-            "label": {
-              "fr": "Le complot principal est-il en 1B (Terrestrial Invasion) ?",
-              "en": "Is the main scheme on stage 1B (Terrestrial Invasion)?"
-            }
-          },
-          {
-            "id": "minionsInPlay",
-            "type": "boolean",
-            "label": {
-              "fr": "Y a-t-il au moins un sbire en jeu ?",
-              "en": "Is there at least one minion in play?"
-            }
-          },
-          {
-            "id": "headhunterInVictoryDisplay",
-            "type": "boolean",
-            "label": {
-              "fr": "Badoon Headhunter est-il dans la zone de victoire ?",
-              "en": "Is Badoon Headhunter in the victory display?"
-            }
-          },
-          {
-            "id": "hpPerHero",
-            "type": "perHeroNumber",
-            "label": {
-              "fr": "Points de vie restants",
-              "en": "Remaining hit points"
-            },
-            "when": {
-              "difficulty": "expert"
-            }
-          },
-          {
-            "id": "eliminated",
-            "type": "perHeroBoolean",
-            "label": {
-              "fr": "Héros éliminé",
-              "en": "Hero eliminated"
-            }
-          }
-        ],
-        "effects": [
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "from": "vp",
-            "max": 3
-          },
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "value": 1,
-            "when": {
-              "answer": "schemeAt1B"
-            }
-          },
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "value": 1,
-            "when": {
-              "notAnswer": "minionsInPlay"
-            }
-          },
-          {
-            "op": "setFlag",
-            "flag": "headhunterDefeated",
-            "from": "headhunterInVictoryDisplay"
-          },
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "value": 1
-          },
-          {
-            "op": "setHeroCounter",
-            "counter": "hp",
-            "from": "hpPerHero",
-            "when": {
-              "difficulty": "expert"
-            }
-          }
-        ],
-        "next": [
-          {
-            "goto": "s2_museum"
-          }
-        ]
-      },
-      "onDefeat": {
-        "prompts": [],
-        "effects": [],
-        "next": [
-          {
-            "goto": "s1_badoon"
-          }
-        ]
-      }
-    },
-    {
-      "id": "s2_museum",
-      "name": {
-        "fr": "Infiltrer le musée",
-        "en": "Infiltrate the Museum"
-      },
-      "victoryLabel": {
-        "fr": "Le Collectionneur est vaincu !",
-        "en": "The Collector is beaten!"
-      },
-      "defeatLabel": {
-        "fr": "Le Collectionneur vous a vaincu !",
-        "en": "The Collector has beaten you!"
-      },
-      "flavour": {
-        "fr": "Drang a parlé : le Collectionneur convoitait la Pierre de Réalité. Direction son musée, avant qu’il ne réunisse les Pierres.",
-        "en": "Drang talked: the Collector was after the Reality Stone. You head for his museum before he can gather the Stones."
-      },
-      "baseSetup": {
-        "villainDeck": {
-          "standard": [
-            "16070",
-            "16071"
-          ],
-          "expert": [
-            "16071",
-            "16072"
-          ]
-        },
-        "mainScheme": [
-          "16073a"
-        ],
-        "encounterSets": [
-          "infiltrate_the_museum",
-          "galactic_artifacts",
-          "menagerie_medley",
-          "standard"
-        ]
-      },
-      "campaignSetup": [
-        {
-          "text": {
-            "fr": "Révéler ce complot secondaire (verso en Expert)",
-            "en": "Reveal this side scheme (reverse side on Expert)"
-          },
-          "cards": [
-            "16179a"
-          ]
-        },
-        {
-          "text": {
-            "fr": "Mélanger ce sbire dans le deck rencontre",
-            "en": "Shuffle this minion into the encounter deck"
-          },
-          "cards": [
-            "16183"
-          ]
-        },
-        {
-          "text": {
-            "fr": "Mélanger cette traîtrise dans le deck rencontre",
-            "en": "Shuffle this treachery into the encounter deck"
-          },
-          "cards": [
-            "16184"
-          ],
-          "when": {
-            "countTrue": "headhunterDefeated",
-            "countAtLeast": 1
-          }
-        },
-        {
-          "text": {
-            "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
-            "en": "Expert campaign: set each hit point total to the value recorded last scenario"
-          },
-          "when": {
-            "difficulty": "expert"
-          }
-        },
-        {
-          "text": {
-            "fr": "Campagne Expert : dépenser 1 crédit pour revenir aux points de vie imprimés",
-            "en": "Expert campaign: spend 1 unit to heal to printed hit points"
-          },
-          "when": {
-            "difficulty": "expert"
-          },
-          "action": {
-            "id": "heal",
-            "label": {
-              "fr": "Soigner",
-              "en": "Heal"
-            },
-            "perHero": true,
-            "cost": {
-              "counterId": "credits",
-              "amount": 1
-            },
-            "effects": [
-              {
-                "op": "setHeroCounter",
-                "counter": "hp",
-                "value": 999
-              }
-            ]
-          }
-        },
-        {
-          "text": {
-            "fr": "Campagne Expert : chaque joueur place 1 carte de sa main face visible dans La Collection",
-            "en": "Expert campaign: each player puts 1 card from hand faceup into The Collection"
-          },
-          "when": {
-            "difficulty": "expert"
-          }
-        }
-      ],
-      "onVictory": {
-        "prompts": [
-          {
-            "id": "vp",
-            "type": "number",
-            "label": {
-              "fr": "Combien de points de victoire avez-vous accumulés ?",
-              "en": "How many victory points did you accumulate?"
-            }
-          },
-          {
-            "id": "fewCollection",
-            "type": "perHeroBoolean",
-            "label": {
-              "fr": "Ce héros a-t-il au plus 1 carte dans La Collection ?",
-              "en": "Does this hero have at most 1 card in The Collection?"
-            }
-          },
-          {
-            "id": "noThreat",
-            "type": "boolean",
-            "label": {
-              "fr": "Le complot principal est-il sans menace ?",
-              "en": "Is there no threat on the main scheme?"
-            }
-          },
-          {
-            "id": "collectionCards",
-            "type": "deckCardSelect",
-            "label": {
-              "fr": "Cartes joueur placées dans La Collection — les sélectionner dans les decks",
-              "en": "Player cards put into The Collection — pick them from the decks"
-            }
-          },
-          {
-            "id": "headhunterInVictoryDisplay",
-            "type": "boolean",
-            "label": {
-              "fr": "Badoon Headhunter est-il dans la zone de victoire ?",
-              "en": "Is Badoon Headhunter in the victory display?"
-            }
-          },
-          {
-            "id": "hpPerHero",
-            "type": "perHeroNumber",
-            "label": {
-              "fr": "Points de vie restants",
-              "en": "Remaining hit points"
-            },
-            "when": {
-              "difficulty": "expert"
-            }
-          },
-          {
-            "id": "eliminated",
-            "type": "perHeroBoolean",
-            "label": {
-              "fr": "Héros éliminé",
-              "en": "Hero eliminated"
-            }
-          }
-        ],
-        "effects": [
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "from": "vp",
-            "max": 3
-          },
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "value": 1,
-            "when": {
-              "heroAnswer": "fewCollection"
-            }
-          },
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "value": 1,
-            "when": {
-              "answer": "noThreat"
-            }
-          },
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "value": 1
-          },
-          {
-            "op": "addCardsFromAnswer",
-            "cardList": "collection",
-            "from": "collectionCards"
-          },
-          {
-            "op": "setFlag",
-            "flag": "headhunterDefeated",
-            "from": "headhunterInVictoryDisplay"
-          },
-          {
-            "op": "setHeroCounter",
-            "counter": "hp",
-            "from": "hpPerHero",
-            "when": {
-              "difficulty": "expert"
-            }
-          }
-        ],
-        "next": [
-          {
-            "goto": "s3_escape"
-          }
-        ]
-      },
-      "onDefeat": {
-        "next": [
-          {
-            "goto": "s2_museum"
-          }
-        ]
-      }
-    },
-    {
-      "id": "s3_escape",
-      "name": {
-        "fr": "Fuir le musée",
-        "en": "Escape the Museum"
-      },
-      "victoryLabel": {
-        "fr": "Vous vous échappez !",
-        "en": "You escape!"
-      },
-      "defeatLabel": {
-        "fr": "Le Collectionneur vous retient !",
-        "en": "The Collector holds you!"
-      },
-      "flavour": {
-        "fr": "Le Collectionneur est vaincu, mais vous êtes prisonniers de sa collection — et quelqu’un a emporté la Pierre de Pouvoir avant vous. La panne qu’il a provoquée vous laisse une chance de sortir.",
-        "en": "The Collector is beaten, but you are trapped in his collection — and someone took the Power Stone before you did. The blackout they caused is your chance to get out."
-      },
-      "baseSetup": {
-        "villainDeck": {
-          "standard": [
-            "16080a"
-          ],
-          "expert": [
-            "16081a"
-          ]
-        },
-        "mainScheme": [
-          "16082a",
-          "16083a",
-          "16084a"
-        ],
-        "encounterSets": [
-          "escape_the_museum",
-          "galactic_artifacts",
-          "menagerie_medley",
-          "ship_command",
-          "standard"
-        ]
-      },
-      "campaignSetup": [
-        {
-          "text": {
-            "fr": "Révéler ce complot secondaire (verso en Expert)",
-            "en": "Reveal this side scheme (reverse side on Expert)"
-          },
-          "cards": [
-            "16180a"
-          ]
-        },
-        {
-          "text": {
-            "fr": "Retirer ces cartes de la partie : elles ne peuvent pas être jouées ce scénario. Puis piocher jusqu'à la taille de main",
-            "en": "Remove these cards from the game — they cannot be played this scenario. Then draw up to hand size"
-          },
-          "showCardList": "collection",
-          "when": {
-            "cardList": "collection",
-            "minSize": 1
-          }
-        },
-        {
-          "text": {
-            "fr": "Mélanger ce sbire dans le deck rencontre",
-            "en": "Shuffle this minion into the encounter deck"
-          },
-          "cards": [
-            "16183"
-          ]
-        },
-        {
-          "text": {
-            "fr": "Mélanger cette traîtrise dans le deck rencontre",
-            "en": "Shuffle this treachery into the encounter deck"
-          },
-          "cards": [
-            "16184"
-          ],
-          "when": {
-            "countTrue": "headhunterDefeated",
-            "countAtLeast": 1
-          }
-        },
-        {
-          "text": {
-            "fr": "Mélanger cette traîtrise dans le deck rencontre",
-            "en": "Shuffle this treachery into the encounter deck"
-          },
-          "cards": [
-            "16185"
-          ],
-          "when": {
-            "countTrue": "headhunterDefeated",
-            "countAtLeast": 2
-          }
-        },
-        {
-          "text": {
-            "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
-            "en": "Expert campaign: set each hit point total to the value recorded last scenario"
-          },
-          "when": {
-            "difficulty": "expert"
-          }
-        },
-        {
-          "text": {
-            "fr": "Campagne Expert : dépenser 1 crédit pour revenir aux points de vie imprimés",
-            "en": "Expert campaign: spend 1 unit to heal to printed hit points"
-          },
-          "when": {
-            "difficulty": "expert"
-          },
-          "action": {
-            "id": "heal",
-            "label": {
-              "fr": "Soigner",
-              "en": "Heal"
-            },
-            "perHero": true,
-            "cost": {
-              "counterId": "credits",
-              "amount": 1
-            },
-            "effects": [
-              {
-                "op": "setHeroCounter",
-                "counter": "hp",
-                "value": 999
-              }
-            ]
-          }
-        },
-        {
-          "text": {
-            "fr": "Campagne Expert : défausser le deck rencontre jusqu’à un attachement, puis le révéler",
-            "en": "Expert campaign: discard the encounter deck until an attachment, then reveal it"
-          },
-          "when": {
-            "difficulty": "expert"
-          }
-        }
-      ],
-      "onVictory": {
-        "prompts": [
-          {
-            "id": "vp",
-            "type": "number",
-            "label": {
-              "fr": "Combien de points de victoire avez-vous accumulés ?",
-              "en": "How many victory points did you accumulate?"
-            }
-          },
-          {
-            "id": "artifactCount",
-            "type": "number",
-            "label": {
-              "fr": "Combien de complots Galactic Artifacts dans la zone de victoire ?",
-              "en": "How many Galactic Artifacts side schemes are in the victory display?"
-            }
-          },
-          {
-            "id": "artifactNames",
-            "type": "cardSelect",
-            "label": {
-              "fr": "Quels complots Galactic Artifacts sont dans votre zone de victoire ?",
-              "en": "Which Galactic Artifacts side schemes are in your victory display?"
-            },
-            "cards": [
-              "16127",
-              "16128",
-              "16129",
-              "16130"
-            ]
-          },
-          {
-            "id": "headhunterInVictoryDisplay",
-            "type": "boolean",
-            "label": {
-              "fr": "Badoon Headhunter est-il dans la zone de victoire ?",
-              "en": "Is Badoon Headhunter in the victory display?"
-            }
-          },
-          {
-            "id": "hpPerHero",
-            "type": "perHeroNumber",
-            "label": {
-              "fr": "Points de vie restants",
-              "en": "Remaining hit points"
-            },
-            "when": {
-              "difficulty": "expert"
-            }
-          },
-          {
-            "id": "eliminated",
-            "type": "perHeroBoolean",
-            "label": {
-              "fr": "Héros éliminé",
-              "en": "Hero eliminated"
-            }
-          }
-        ],
-        "effects": [
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "from": "vp",
-            "max": 3
-          },
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "from": "artifactCount",
-            "divideBy": 2
-          },
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "value": 1
-          },
-          {
-            "op": "addCardsFromAnswer",
-            "cardList": "artifacts",
-            "from": "artifactNames"
-          },
-          {
-            "op": "setFlag",
-            "flag": "headhunterDefeated",
-            "from": "headhunterInVictoryDisplay"
-          },
-          {
-            "op": "setHeroCounter",
-            "counter": "hp",
-            "from": "hpPerHero",
-            "when": {
-              "difficulty": "expert"
-            }
-          }
-        ],
-        "next": [
-          {
-            "goto": "s4_nebula"
-          }
-        ]
-      },
-      "onDefeat": {
-        "next": [
-          {
-            "goto": "s3_escape"
-          }
-        ]
-      }
-    },
-    {
-      "id": "s4_nebula",
-      "name": {
-        "fr": "Nebula",
-        "en": "Nebula"
-      },
-      "victoryLabel": {
-        "fr": "Nebula est vaincue !",
-        "en": "Nebula is beaten!"
-      },
-      "defeatLabel": {
-        "fr": "Nebula vous a échappé !",
-        "en": "Nebula got away!"
-      },
-      "flavour": {
-        "fr": "Les capteurs du Milano repèrent le vaisseau du voleur. À sa poursuite, vous reconnaissez Nebula, la sœur de Gamora.",
-        "en": "The Milano’s sensors pick up the thief’s ship. Giving chase, you recognise Nebula, Gamora’s sister."
-      },
-      "baseSetup": {
-        "villainDeck": {
-          "standard": [
-            "16088",
-            "16089"
-          ],
-          "expert": [
-            "16089",
-            "16090"
-          ]
-        },
-        "mainScheme": [
-          "16091a",
-          "16092a"
-        ],
-        "encounterSets": [
-          "nebula",
-          "power_stone",
-          "ship_command",
-          "space_pirates",
-          "standard"
-        ]
-      },
-      "campaignSetup": [
-        {
-          "text": {
-            "fr": "Révéler ce complot secondaire (verso en Expert)",
-            "en": "Reveal this side scheme (reverse side on Expert)"
-          },
-          "cards": [
-            "16181a"
-          ]
-        },
-        {
-          "text": {
-            "fr": "Mélanger dans le deck rencontre les complots Galactic Artifacts enregistrés",
-            "en": "Shuffle the recorded Galactic Artifacts side schemes into the encounter deck"
-          },
-          "showCardList": "artifacts",
-          "when": {
-            "cardList": "artifacts",
-            "minSize": 1
-          }
-        },
-        {
-          "text": {
-            "fr": "Placer 1 jeton évasion sur le vaisseau de Nebula",
-            "en": "Place 1 evasion counter on Nebula’s Ship"
-          },
-          "cards": [
-            "16127"
-          ],
-          "when": {
-            "cardList": "artifacts",
-            "contains": "16127"
-          }
-        },
-        {
-          "text": {
-            "fr": "Donner 1 carte rencontre face cachée au premier joueur",
-            "en": "Deal the first player 1 facedown encounter card"
-          },
-          "cards": [
-            "16128"
-          ],
-          "when": {
-            "cardList": "artifacts",
-            "contains": "16128"
-          }
-        },
-        {
-          "text": {
-            "fr": "Donner 1 carte boost face cachée à Nebula",
-            "en": "Give Nebula 1 facedown boost card"
-          },
-          "cards": [
-            "16129"
-          ],
-          "when": {
-            "cardList": "artifacts",
-            "contains": "16129"
-          }
-        },
-        {
-          "text": {
-            "fr": "Donner un statut « tough » à Nebula",
-            "en": "Give Nebula a tough status card"
-          },
-          "cards": [
-            "16130"
-          ],
-          "when": {
-            "cardList": "artifacts",
-            "contains": "16130"
-          }
-        },
-        {
-          "text": {
-            "fr": "Mélanger ce sbire dans le deck rencontre",
-            "en": "Shuffle this minion into the encounter deck"
-          },
-          "cards": [
-            "16183"
-          ]
-        },
-        {
-          "text": {
-            "fr": "Mélanger cette traîtrise dans le deck rencontre",
-            "en": "Shuffle this treachery into the encounter deck"
-          },
-          "cards": [
-            "16184"
-          ],
-          "when": {
-            "countTrue": "headhunterDefeated",
-            "countAtLeast": 1
-          }
-        },
-        {
-          "text": {
-            "fr": "Mélanger cette traîtrise dans le deck rencontre",
-            "en": "Shuffle this treachery into the encounter deck"
-          },
-          "cards": [
-            "16185"
-          ],
-          "when": {
-            "countTrue": "headhunterDefeated",
-            "countAtLeast": 2
-          }
-        },
-        {
-          "text": {
-            "fr": "Mélanger ce sbire dans le deck rencontre",
-            "en": "Shuffle this minion into the encounter deck"
-          },
-          "cards": [
-            "16186"
-          ],
-          "when": {
-            "countTrue": "headhunterDefeated",
-            "countAtLeast": 3
-          }
-        },
-        {
-          "text": {
-            "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
-            "en": "Expert campaign: set each hit point total to the value recorded last scenario"
-          },
-          "when": {
-            "difficulty": "expert"
-          }
-        },
-        {
-          "text": {
-            "fr": "Campagne Expert : dépenser 1 crédit pour revenir aux points de vie imprimés",
-            "en": "Expert campaign: spend 1 unit to heal to printed hit points"
-          },
-          "when": {
-            "difficulty": "expert"
-          },
-          "action": {
-            "id": "heal",
-            "label": {
-              "fr": "Soigner",
-              "en": "Heal"
-            },
-            "perHero": true,
-            "cost": {
-              "counterId": "credits",
-              "amount": 1
-            },
-            "effects": [
-              {
-                "op": "setHeroCounter",
-                "counter": "hp",
-                "value": 999
-              }
-            ]
-          }
-        },
-        {
-          "text": {
-            "fr": "Campagne Expert : défausser le deck rencontre jusqu’à un attachement Technique, puis l’attacher à Nebula",
-            "en": "Expert campaign: discard the encounter deck until a Technique attachment, then attach it to Nebula"
-          },
-          "when": {
-            "difficulty": "expert"
-          }
-        }
-      ],
-      "onVictory": {
-        "prompts": [
-          {
-            "id": "vp",
-            "type": "number",
-            "label": {
-              "fr": "Combien de points de victoire avez-vous accumulés ?",
-              "en": "How many victory points did you accumulate?"
-            }
-          },
-          {
-            "id": "fewEvasion",
-            "type": "boolean",
-            "label": {
-              "fr": "Y a-t-il au plus 1 jeton évasion sur le vaisseau de Nebula ?",
-              "en": "Is there at most 1 evasion counter on Nebula’s Ship?"
-            }
-          },
-          {
-            "id": "schemeAt1B",
-            "type": "boolean",
-            "label": {
-              "fr": "Le complot principal est-il en 1B (The Art of Evasion) ?",
-              "en": "Is the main scheme on stage 1B (The Art of Evasion)?"
-            }
-          },
-          {
-            "id": "evasionCount",
-            "type": "number",
-            "label": {
-              "fr": "Combien de jetons évasion sur le vaisseau de Nebula ?",
-              "en": "How many evasion counters are on Nebula’s Ship?"
-            }
-          },
-          {
-            "id": "powerStoneHolder",
-            "type": "perHeroBoolean",
-            "label": {
-              "fr": "Ce héros a-t-il la Pierre de Pouvoir attachée ?",
-              "en": "Does this hero have the Power Stone attached?"
-            }
-          },
-          {
-            "id": "headhunterInVictoryDisplay",
-            "type": "boolean",
-            "label": {
-              "fr": "Badoon Headhunter est-il dans la zone de victoire ?",
-              "en": "Is Badoon Headhunter in the victory display?"
-            }
-          },
-          {
-            "id": "hpPerHero",
-            "type": "perHeroNumber",
-            "label": {
-              "fr": "Points de vie restants",
-              "en": "Remaining hit points"
-            },
-            "when": {
-              "difficulty": "expert"
-            }
-          },
-          {
-            "id": "eliminated",
-            "type": "perHeroBoolean",
-            "label": {
-              "fr": "Héros éliminé",
-              "en": "Hero eliminated"
-            }
-          }
-        ],
-        "effects": [
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "from": "vp",
-            "max": 3
-          },
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "value": 1,
-            "when": {
-              "answer": "fewEvasion"
-            }
-          },
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "value": 1,
-            "when": {
-              "answer": "schemeAt1B"
-            }
-          },
-          {
-            "op": "addCounter",
-            "counter": "credits",
-            "value": 1
-          },
-          {
-            "op": "setCounter",
-            "counter": "evasion",
-            "from": "evasionCount"
-          },
-          {
-            "op": "setCounter",
-            "counter": "pincerThreat",
-            "value": 3
-          },
-          {
-            "op": "subtractCounter",
-            "counter": "pincerThreat",
-            "from": "evasionCount",
-            "min": 0
-          },
-          {
-            "op": "setHeroCounter",
-            "counter": "powerStone",
-            "from": "powerStoneHolder"
-          },
-          {
-            "op": "setFlag",
-            "flag": "headhunterDefeated",
-            "from": "headhunterInVictoryDisplay"
-          },
-          {
-            "op": "setHeroCounter",
-            "counter": "hp",
-            "from": "hpPerHero",
-            "when": {
-              "difficulty": "expert"
-            }
-          }
-        ],
-        "next": [
-          {
-            "goto": "s5_ronan"
-          }
-        ]
-      },
-      "onDefeat": {
-        "next": [
-          {
-            "goto": "s4_nebula"
-          }
-        ]
-      }
-    },
-    {
-      "id": "s5_ronan",
-      "name": {
-        "fr": "Ronan l’Accusateur",
-        "en": "Ronan the Accuser"
-      },
-      "victoryLabel": {
-        "fr": "Ronan est vaincu !",
-        "en": "Ronan is beaten!"
-      },
-      "defeatLabel": {
-        "fr": "Ronan vous a vaincu !",
-        "en": "Ronan has beaten you!"
-      },
-      "flavour": {
-        "fr": "Cap sur Knowhere, la Pierre et Nebula à bord. Un vaisseau kree vous coupe la route : Ronan l’Accusateur.",
-        "en": "You set course for Knowhere with the Stone and Nebula aboard. A Kree warship cuts you off: Ronan the Accuser."
-      },
-      "baseSetup": {
-        "villainDeck": {
-          "standard": [
-            "16103",
-            "16104"
-          ],
-          "expert": [
-            "16104",
-            "16105"
-          ]
-        },
-        "mainScheme": [
-          "16106a",
-          "16107a"
-        ],
-        "encounterSets": [
-          "ronan",
-          "kree_militant",
-          "power_stone",
-          "ship_command",
-          "standard"
-        ]
-      },
-      "campaignSetup": [
-        {
-          "text": {
-            "fr": "Facultatif : révéler ce complot secondaire (verso en Expert)",
-            "en": "Optional: reveal this side scheme (reverse side on Expert)"
-          },
-          "cards": [
-            "16182a"
-          ]
-        },
-        {
-          "text": {
-            "fr": "Chercher cette traîtrise dans le deck rencontre et la pile de défausse, puis la donner face cachée à ce joueur",
-            "en": "Search the encounter deck and discard pile for this treachery, then deal it facedown to this player"
-          },
-          "cards": [
-            "16116"
-          ],
-          "showHeroesWith": "powerStone",
-          "when": {
-            "anyHero": {
-              "counter": "powerStone",
-              "atLeast": 1
-            }
-          }
-        },
-        {
-          "text": {
-            "fr": "Révéler ce complot secondaire et y placer ce nombre de menace par joueur",
-            "en": "Reveal this side scheme and place this much threat per player on it"
-          },
-          "cards": [
-            "16112"
-          ],
-          "showCounter": "pincerThreat"
-        },
-        {
-          "text": {
-            "fr": "Mélanger ce sbire dans le deck rencontre",
-            "en": "Shuffle this minion into the encounter deck"
-          },
-          "cards": [
-            "16183"
-          ]
-        },
-        {
-          "text": {
-            "fr": "Mélanger cette traîtrise dans le deck rencontre",
-            "en": "Shuffle this treachery into the encounter deck"
-          },
-          "cards": [
-            "16184"
-          ],
-          "when": {
-            "countTrue": "headhunterDefeated",
-            "countAtLeast": 1
-          }
-        },
-        {
-          "text": {
-            "fr": "Mélanger cette traîtrise dans le deck rencontre",
-            "en": "Shuffle this treachery into the encounter deck"
-          },
-          "cards": [
-            "16185"
-          ],
-          "when": {
-            "countTrue": "headhunterDefeated",
-            "countAtLeast": 2
-          }
-        },
-        {
-          "text": {
-            "fr": "Mélanger ce sbire dans le deck rencontre",
-            "en": "Shuffle this minion into the encounter deck"
-          },
-          "cards": [
-            "16186"
-          ],
-          "when": {
-            "countTrue": "headhunterDefeated",
-            "countAtLeast": 3
-          }
-        },
-        {
-          "text": {
-            "fr": "Mélanger ce complot secondaire dans le deck rencontre",
-            "en": "Shuffle this side scheme into the encounter deck"
-          },
-          "cards": [
-            "16187"
-          ],
-          "when": {
-            "countTrue": "headhunterDefeated",
-            "countAtLeast": 4
-          }
-        },
-        {
-          "text": {
-            "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
-            "en": "Expert campaign: set each hit point total to the value recorded last scenario"
-          },
-          "when": {
-            "difficulty": "expert"
-          }
-        },
-        {
-          "text": {
-            "fr": "Campagne Expert : dépenser 1 crédit pour revenir aux points de vie imprimés",
-            "en": "Expert campaign: spend 1 unit to heal to printed hit points"
-          },
-          "when": {
-            "difficulty": "expert"
-          },
-          "action": {
-            "id": "heal",
-            "label": {
-              "fr": "Soigner",
-              "en": "Heal"
-            },
-            "perHero": true,
-            "cost": {
-              "counterId": "credits",
-              "amount": 1
-            },
-            "effects": [
-              {
-                "op": "setHeroCounter",
-                "counter": "hp",
-                "value": 999
-              }
-            ]
-          }
-        },
-        {
-          "text": {
-            "fr": "Campagne Expert : placer 1 menace supplémentaire par joueur sur le complot principal",
-            "en": "Expert campaign: place 1 additional threat per player on the main scheme"
-          },
-          "when": {
-            "difficulty": "expert"
-          }
-        },
-        {
-          "text": {
-            "fr": "Campagne Expert : une défaite ici fait perdre la campagne",
-            "en": "Expert campaign: losing here loses the campaign"
-          },
-          "when": {
-            "difficulty": "expert"
-          }
-        }
-      ],
-      "onVictory": {
-        "prompts": [],
-        "effects": [],
-        "next": [
-          {
-            "end": true
-          }
-        ]
-      },
-      "onDefeat": {
-        "next": [
-          {
-            "end": true,
-            "when": {
-              "difficulty": "expert"
-            }
-          },
-          {
-            "goto": "s5_ronan"
-          }
-        ]
-      }
-    }
+  {
+   "id": "evasion",
+   "scope": "campaign",
+   "initial": 0,
+   "min": 0
+  },
+  {
+   "id": "pincerThreat",
+   "scope": "campaign",
+   "initial": 0,
+   "min": 0
+  },
+  {
+   "id": "powerStone",
+   "scope": "hero",
+   "initial": 0,
+   "min": 0
+  }
+ ],
+ "flagSets": [
+  {
+   "id": "headhunterDefeated",
+   "scope": "perScenario"
+  }
+ ],
+ "cardLists": [
+  {
+   "id": "purchases",
+   "scope": "hero"
+  },
+  {
+   "id": "collection",
+   "scope": "campaign"
+  },
+  {
+   "id": "artifacts",
+   "scope": "campaign"
+  }
+ ],
+ "market": {
+  "counterId": "credits",
+  "entries": [
+   {
+    "cardCode": "16150",
+    "cost": 1,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16151",
+    "cost": 1,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16152",
+    "cost": 1,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16153",
+    "cost": 1,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16154",
+    "cost": 2,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16155",
+    "cost": 2,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16156",
+    "cost": 2,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16157",
+    "cost": 2,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16158",
+    "cost": 3,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16159",
+    "cost": 3,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16160",
+    "cost": 3,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16161",
+    "cost": 3,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16162",
+    "cost": 4,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16163",
+    "cost": 4,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16164",
+    "cost": 4,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16165",
+    "cost": 4,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16166",
+    "cost": 5,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16167",
+    "cost": 5,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16168",
+    "cost": 5,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16169",
+    "cost": 5,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16170",
+    "cost": 6,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16171",
+    "cost": 6,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16172",
+    "cost": 6,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16173",
+    "cost": 6,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16174",
+    "cost": 7,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16175",
+    "cost": 7,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16176",
+    "cost": 7,
+    "cardListId": "purchases"
+   },
+   {
+    "cardCode": "16177",
+    "cost": 7,
+    "cardListId": "purchases"
+   }
   ]
+ },
+ "startScenarioId": "s1_badoon",
+ "scenarios": [
+  {
+   "id": "s1_badoon",
+   "name": {
+    "fr": "La confrérie des Badoon",
+    "en": "Brotherhood of Badoon"
+   },
+   "victoryLabel": {
+    "fr": "Drang est vaincu !",
+    "en": "Drang beat!"
+   },
+   "defeatLabel": {
+    "fr": "Drang vous a vaincu !",
+    "en": "Drang has beat you!"
+   },
+   "flavour": {
+    "fr": "Les Badoon attaquent la Terre. Les Gardiens rejoignent les Vengeurs pour repousser la flotte de Drang.",
+    "en": "The Badoon are attacking Earth. The Guardians join the Avengers to push back Drang’s fleet."
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "16058",
+      "16059"
+     ],
+     "expert": [
+      "16059",
+      "16060"
+     ]
+    },
+    "mainScheme": [
+     "16061a",
+     "16062a"
+    ],
+    "encounterSets": [
+     "brotherhood_of_badoon",
+     "band_of_badoon",
+     "ship_command",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Révéler le complot secondaire",
+      "en": "Reveal the side scheme"
+     },
+     "cards": [
+      "16178a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger ce sbire dans le deck rencontre",
+      "en": "Shuffle this minion into the encounter deck"
+     },
+     "cards": [
+      "16183"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur met ce soutien en jeu de son côté",
+      "en": "Each player puts this support into play on their side"
+     },
+     "cards": [
+      "16142"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Étape supplémentaire en Expert — voir le livret de campagne",
+      "en": "Additional Expert step — see the campaign book"
+     },
+     "when": {
+      "difficulty": "expert"
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      },
+      "_note": "The total of the VICTORY values printed on encounter cards in the victory display, which the players add up themselves."
+     },
+     {
+      "id": "schemeAt1B",
+      "type": "boolean",
+      "label": {
+       "fr": "Le complot principal est-il en 1B (Terrestrial Invasion) ?",
+       "en": "Is the main scheme on stage 1B (Terrestrial Invasion)?"
+      }
+     },
+     {
+      "id": "minionsInPlay",
+      "type": "boolean",
+      "label": {
+       "fr": "Y a-t-il au moins un sbire en jeu ?",
+       "en": "Is there at least one minion in play?"
+      }
+     },
+     {
+      "id": "headhunterInVictoryDisplay",
+      "type": "boolean",
+      "label": {
+       "fr": "Badoon Headhunter est-il dans la zone de victoire ?",
+       "en": "Is Badoon Headhunter in the victory display?"
+      }
+     },
+     {
+      "id": "hpPerHero",
+      "type": "perHeroNumber",
+      "label": {
+       "fr": "Points de vie restants",
+       "en": "Remaining hit points"
+      },
+      "when": {
+       "difficulty": "expert"
+      }
+     },
+     {
+      "id": "eliminated",
+      "type": "perHeroBoolean",
+      "label": {
+       "fr": "Héros éliminé",
+       "en": "Hero eliminated"
+      }
+     }
+    ],
+    "effects": [
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "from": "vp",
+      "max": 3
+     },
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "value": 1,
+      "when": {
+       "answer": "schemeAt1B"
+      }
+     },
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "value": 1,
+      "when": {
+       "notAnswer": "minionsInPlay"
+      }
+     },
+     {
+      "op": "setFlag",
+      "flag": "headhunterDefeated",
+      "from": "headhunterInVictoryDisplay"
+     },
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "value": 1
+     },
+     {
+      "op": "setHeroCounter",
+      "counter": "hp",
+      "from": "hpPerHero",
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "next": [
+     {
+      "goto": "s2_museum"
+     }
+    ]
+   },
+   "onDefeat": {
+    "prompts": [],
+    "effects": [],
+    "next": [
+     {
+      "goto": "s1_badoon"
+     }
+    ]
+   }
+  },
+  {
+   "id": "s2_museum",
+   "name": {
+    "fr": "Infiltrer le musée",
+    "en": "Infiltrate the Museum"
+   },
+   "victoryLabel": {
+    "fr": "Le Collectionneur est vaincu !",
+    "en": "The Collector is beaten!"
+   },
+   "defeatLabel": {
+    "fr": "Le Collectionneur vous a vaincu !",
+    "en": "The Collector has beaten you!"
+   },
+   "flavour": {
+    "fr": "Drang a parlé : le Collectionneur convoitait la Pierre de Réalité. Direction son musée, avant qu’il ne réunisse les Pierres.",
+    "en": "Drang talked: the Collector was after the Reality Stone. You head for his museum before he can gather the Stones."
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "16070",
+      "16071"
+     ],
+     "expert": [
+      "16071",
+      "16072"
+     ]
+    },
+    "mainScheme": [
+     "16073a"
+    ],
+    "encounterSets": [
+     "infiltrate_the_museum",
+     "galactic_artifacts",
+     "menagerie_medley",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Révéler ce complot secondaire (verso en Expert)",
+      "en": "Reveal this side scheme (reverse side on Expert)"
+     },
+     "cards": [
+      "16179a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger ce sbire dans le deck rencontre",
+      "en": "Shuffle this minion into the encounter deck"
+     },
+     "cards": [
+      "16183"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger cette traîtrise dans le deck rencontre",
+      "en": "Shuffle this treachery into the encounter deck"
+     },
+     "cards": [
+      "16184"
+     ],
+     "when": {
+      "countTrue": "headhunterDefeated",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
+      "en": "Expert campaign: set each hit point total to the value recorded last scenario"
+     },
+     "when": {
+      "difficulty": "expert"
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : dépenser 1 crédit pour revenir aux points de vie imprimés",
+      "en": "Expert campaign: spend 1 unit to heal to printed hit points"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "action": {
+      "id": "heal",
+      "label": {
+       "fr": "Soigner",
+       "en": "Heal"
+      },
+      "perHero": true,
+      "cost": {
+       "counterId": "credits",
+       "amount": 1
+      },
+      "effects": [
+       {
+        "op": "setHeroCounter",
+        "counter": "hp",
+        "value": 999
+       }
+      ]
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : chaque joueur place 1 carte de sa main face visible dans La Collection",
+      "en": "Expert campaign: each player puts 1 card from hand faceup into The Collection"
+     },
+     "when": {
+      "difficulty": "expert"
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     },
+     {
+      "id": "fewCollection",
+      "type": "perHeroBoolean",
+      "label": {
+       "fr": "Ce héros a-t-il au plus 1 carte dans La Collection ?",
+       "en": "Does this hero have at most 1 card in The Collection?"
+      }
+     },
+     {
+      "id": "noThreat",
+      "type": "boolean",
+      "label": {
+       "fr": "Le complot principal est-il sans menace ?",
+       "en": "Is there no threat on the main scheme?"
+      }
+     },
+     {
+      "id": "collectionCards",
+      "type": "deckCardSelect",
+      "label": {
+       "fr": "Cartes joueur placées dans La Collection — les sélectionner dans les decks",
+       "en": "Player cards put into The Collection — pick them from the decks"
+      }
+     },
+     {
+      "id": "headhunterInVictoryDisplay",
+      "type": "boolean",
+      "label": {
+       "fr": "Badoon Headhunter est-il dans la zone de victoire ?",
+       "en": "Is Badoon Headhunter in the victory display?"
+      }
+     },
+     {
+      "id": "hpPerHero",
+      "type": "perHeroNumber",
+      "label": {
+       "fr": "Points de vie restants",
+       "en": "Remaining hit points"
+      },
+      "when": {
+       "difficulty": "expert"
+      }
+     },
+     {
+      "id": "eliminated",
+      "type": "perHeroBoolean",
+      "label": {
+       "fr": "Héros éliminé",
+       "en": "Hero eliminated"
+      }
+     }
+    ],
+    "effects": [
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "from": "vp",
+      "max": 3
+     },
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "value": 1,
+      "when": {
+       "heroAnswer": "fewCollection"
+      }
+     },
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "value": 1,
+      "when": {
+       "answer": "noThreat"
+      }
+     },
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "value": 1
+     },
+     {
+      "op": "addCardsFromAnswer",
+      "cardList": "collection",
+      "from": "collectionCards"
+     },
+     {
+      "op": "setFlag",
+      "flag": "headhunterDefeated",
+      "from": "headhunterInVictoryDisplay"
+     },
+     {
+      "op": "setHeroCounter",
+      "counter": "hp",
+      "from": "hpPerHero",
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "next": [
+     {
+      "goto": "s3_escape"
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "goto": "s2_museum"
+     }
+    ]
+   }
+  },
+  {
+   "id": "s3_escape",
+   "name": {
+    "fr": "Fuir le musée",
+    "en": "Escape the Museum"
+   },
+   "victoryLabel": {
+    "fr": "Vous vous échappez !",
+    "en": "You escape!"
+   },
+   "defeatLabel": {
+    "fr": "Le Collectionneur vous retient !",
+    "en": "The Collector holds you!"
+   },
+   "flavour": {
+    "fr": "Le Collectionneur est vaincu, mais vous êtes prisonniers de sa collection — et quelqu’un a emporté la Pierre de Pouvoir avant vous. La panne qu’il a provoquée vous laisse une chance de sortir.",
+    "en": "The Collector is beaten, but you are trapped in his collection — and someone took the Power Stone before you did. The blackout they caused is your chance to get out."
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "16080a"
+     ],
+     "expert": [
+      "16081a"
+     ]
+    },
+    "mainScheme": [
+     "16082a",
+     "16083a",
+     "16084a"
+    ],
+    "encounterSets": [
+     "escape_the_museum",
+     "galactic_artifacts",
+     "menagerie_medley",
+     "ship_command",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Révéler ce complot secondaire (verso en Expert)",
+      "en": "Reveal this side scheme (reverse side on Expert)"
+     },
+     "cards": [
+      "16180a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Retirer ces cartes de la partie : elles ne peuvent pas être jouées ce scénario. Puis piocher jusqu'à la taille de main",
+      "en": "Remove these cards from the game — they cannot be played this scenario. Then draw up to hand size"
+     },
+     "showCardList": "collection",
+     "when": {
+      "cardList": "collection",
+      "minSize": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Mélanger ce sbire dans le deck rencontre",
+      "en": "Shuffle this minion into the encounter deck"
+     },
+     "cards": [
+      "16183"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger cette traîtrise dans le deck rencontre",
+      "en": "Shuffle this treachery into the encounter deck"
+     },
+     "cards": [
+      "16184"
+     ],
+     "when": {
+      "countTrue": "headhunterDefeated",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Mélanger cette traîtrise dans le deck rencontre",
+      "en": "Shuffle this treachery into the encounter deck"
+     },
+     "cards": [
+      "16185"
+     ],
+     "when": {
+      "countTrue": "headhunterDefeated",
+      "countAtLeast": 2
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
+      "en": "Expert campaign: set each hit point total to the value recorded last scenario"
+     },
+     "when": {
+      "difficulty": "expert"
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : dépenser 1 crédit pour revenir aux points de vie imprimés",
+      "en": "Expert campaign: spend 1 unit to heal to printed hit points"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "action": {
+      "id": "heal",
+      "label": {
+       "fr": "Soigner",
+       "en": "Heal"
+      },
+      "perHero": true,
+      "cost": {
+       "counterId": "credits",
+       "amount": 1
+      },
+      "effects": [
+       {
+        "op": "setHeroCounter",
+        "counter": "hp",
+        "value": 999
+       }
+      ]
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : défausser le deck rencontre jusqu’à un attachement, puis le révéler",
+      "en": "Expert campaign: discard the encounter deck until an attachment, then reveal it"
+     },
+     "when": {
+      "difficulty": "expert"
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     },
+     {
+      "id": "artifactCount",
+      "type": "number",
+      "label": {
+       "fr": "Combien de complots Galactic Artifacts dans la zone de victoire ?",
+       "en": "How many Galactic Artifacts side schemes are in the victory display?"
+      }
+     },
+     {
+      "id": "artifactNames",
+      "type": "cardSelect",
+      "label": {
+       "fr": "Quels complots Galactic Artifacts sont dans votre zone de victoire ?",
+       "en": "Which Galactic Artifacts side schemes are in your victory display?"
+      },
+      "cards": [
+       "16127",
+       "16128",
+       "16129",
+       "16130"
+      ]
+     },
+     {
+      "id": "headhunterInVictoryDisplay",
+      "type": "boolean",
+      "label": {
+       "fr": "Badoon Headhunter est-il dans la zone de victoire ?",
+       "en": "Is Badoon Headhunter in the victory display?"
+      }
+     },
+     {
+      "id": "hpPerHero",
+      "type": "perHeroNumber",
+      "label": {
+       "fr": "Points de vie restants",
+       "en": "Remaining hit points"
+      },
+      "when": {
+       "difficulty": "expert"
+      }
+     },
+     {
+      "id": "eliminated",
+      "type": "perHeroBoolean",
+      "label": {
+       "fr": "Héros éliminé",
+       "en": "Hero eliminated"
+      }
+     }
+    ],
+    "effects": [
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "from": "vp",
+      "max": 3
+     },
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "from": "artifactCount",
+      "divideBy": 2
+     },
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "value": 1
+     },
+     {
+      "op": "addCardsFromAnswer",
+      "cardList": "artifacts",
+      "from": "artifactNames"
+     },
+     {
+      "op": "setFlag",
+      "flag": "headhunterDefeated",
+      "from": "headhunterInVictoryDisplay"
+     },
+     {
+      "op": "setHeroCounter",
+      "counter": "hp",
+      "from": "hpPerHero",
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "next": [
+     {
+      "goto": "s4_nebula"
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "goto": "s3_escape"
+     }
+    ]
+   }
+  },
+  {
+   "id": "s4_nebula",
+   "name": {
+    "fr": "Nebula",
+    "en": "Nebula"
+   },
+   "victoryLabel": {
+    "fr": "Nebula est vaincue !",
+    "en": "Nebula is beaten!"
+   },
+   "defeatLabel": {
+    "fr": "Nebula vous a échappé !",
+    "en": "Nebula got away!"
+   },
+   "flavour": {
+    "fr": "Les capteurs du Milano repèrent le vaisseau du voleur. À sa poursuite, vous reconnaissez Nebula, la sœur de Gamora.",
+    "en": "The Milano’s sensors pick up the thief’s ship. Giving chase, you recognise Nebula, Gamora’s sister."
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "16088",
+      "16089"
+     ],
+     "expert": [
+      "16089",
+      "16090"
+     ]
+    },
+    "mainScheme": [
+     "16091a",
+     "16092a"
+    ],
+    "encounterSets": [
+     "nebula",
+     "power_stone",
+     "ship_command",
+     "space_pirates",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Révéler ce complot secondaire (verso en Expert)",
+      "en": "Reveal this side scheme (reverse side on Expert)"
+     },
+     "cards": [
+      "16181a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger dans le deck rencontre les complots Galactic Artifacts enregistrés",
+      "en": "Shuffle the recorded Galactic Artifacts side schemes into the encounter deck"
+     },
+     "showCardList": "artifacts",
+     "when": {
+      "cardList": "artifacts",
+      "minSize": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Placer 1 jeton évasion sur le vaisseau de Nebula",
+      "en": "Place 1 evasion counter on Nebula’s Ship"
+     },
+     "cards": [
+      "16127"
+     ],
+     "when": {
+      "cardList": "artifacts",
+      "contains": "16127"
+     }
+    },
+    {
+     "text": {
+      "fr": "Donner 1 carte rencontre face cachée au premier joueur",
+      "en": "Deal the first player 1 facedown encounter card"
+     },
+     "cards": [
+      "16128"
+     ],
+     "when": {
+      "cardList": "artifacts",
+      "contains": "16128"
+     }
+    },
+    {
+     "text": {
+      "fr": "Donner 1 carte boost face cachée à Nebula",
+      "en": "Give Nebula 1 facedown boost card"
+     },
+     "cards": [
+      "16129"
+     ],
+     "when": {
+      "cardList": "artifacts",
+      "contains": "16129"
+     }
+    },
+    {
+     "text": {
+      "fr": "Donner un statut « tough » à Nebula",
+      "en": "Give Nebula a tough status card"
+     },
+     "cards": [
+      "16130"
+     ],
+     "when": {
+      "cardList": "artifacts",
+      "contains": "16130"
+     }
+    },
+    {
+     "text": {
+      "fr": "Mélanger ce sbire dans le deck rencontre",
+      "en": "Shuffle this minion into the encounter deck"
+     },
+     "cards": [
+      "16183"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger cette traîtrise dans le deck rencontre",
+      "en": "Shuffle this treachery into the encounter deck"
+     },
+     "cards": [
+      "16184"
+     ],
+     "when": {
+      "countTrue": "headhunterDefeated",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Mélanger cette traîtrise dans le deck rencontre",
+      "en": "Shuffle this treachery into the encounter deck"
+     },
+     "cards": [
+      "16185"
+     ],
+     "when": {
+      "countTrue": "headhunterDefeated",
+      "countAtLeast": 2
+     }
+    },
+    {
+     "text": {
+      "fr": "Mélanger ce sbire dans le deck rencontre",
+      "en": "Shuffle this minion into the encounter deck"
+     },
+     "cards": [
+      "16186"
+     ],
+     "when": {
+      "countTrue": "headhunterDefeated",
+      "countAtLeast": 3
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
+      "en": "Expert campaign: set each hit point total to the value recorded last scenario"
+     },
+     "when": {
+      "difficulty": "expert"
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : dépenser 1 crédit pour revenir aux points de vie imprimés",
+      "en": "Expert campaign: spend 1 unit to heal to printed hit points"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "action": {
+      "id": "heal",
+      "label": {
+       "fr": "Soigner",
+       "en": "Heal"
+      },
+      "perHero": true,
+      "cost": {
+       "counterId": "credits",
+       "amount": 1
+      },
+      "effects": [
+       {
+        "op": "setHeroCounter",
+        "counter": "hp",
+        "value": 999
+       }
+      ]
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : défausser le deck rencontre jusqu’à un attachement Technique, puis l’attacher à Nebula",
+      "en": "Expert campaign: discard the encounter deck until a Technique attachment, then attach it to Nebula"
+     },
+     "when": {
+      "difficulty": "expert"
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     },
+     {
+      "id": "fewEvasion",
+      "type": "boolean",
+      "label": {
+       "fr": "Y a-t-il au plus 1 jeton évasion sur le vaisseau de Nebula ?",
+       "en": "Is there at most 1 evasion counter on Nebula’s Ship?"
+      }
+     },
+     {
+      "id": "schemeAt1B",
+      "type": "boolean",
+      "label": {
+       "fr": "Le complot principal est-il en 1B (The Art of Evasion) ?",
+       "en": "Is the main scheme on stage 1B (The Art of Evasion)?"
+      }
+     },
+     {
+      "id": "evasionCount",
+      "type": "number",
+      "label": {
+       "fr": "Combien de jetons évasion sur le vaisseau de Nebula ?",
+       "en": "How many evasion counters are on Nebula’s Ship?"
+      }
+     },
+     {
+      "id": "powerStoneHolder",
+      "type": "perHeroBoolean",
+      "label": {
+       "fr": "Ce héros a-t-il la Pierre de Pouvoir attachée ?",
+       "en": "Does this hero have the Power Stone attached?"
+      }
+     },
+     {
+      "id": "headhunterInVictoryDisplay",
+      "type": "boolean",
+      "label": {
+       "fr": "Badoon Headhunter est-il dans la zone de victoire ?",
+       "en": "Is Badoon Headhunter in the victory display?"
+      }
+     },
+     {
+      "id": "hpPerHero",
+      "type": "perHeroNumber",
+      "label": {
+       "fr": "Points de vie restants",
+       "en": "Remaining hit points"
+      },
+      "when": {
+       "difficulty": "expert"
+      }
+     },
+     {
+      "id": "eliminated",
+      "type": "perHeroBoolean",
+      "label": {
+       "fr": "Héros éliminé",
+       "en": "Hero eliminated"
+      }
+     }
+    ],
+    "effects": [
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "from": "vp",
+      "max": 3
+     },
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "value": 1,
+      "when": {
+       "answer": "fewEvasion"
+      }
+     },
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "value": 1,
+      "when": {
+       "answer": "schemeAt1B"
+      }
+     },
+     {
+      "op": "addCounter",
+      "counter": "credits",
+      "value": 1
+     },
+     {
+      "op": "setCounter",
+      "counter": "evasion",
+      "from": "evasionCount"
+     },
+     {
+      "op": "setCounter",
+      "counter": "pincerThreat",
+      "value": 3
+     },
+     {
+      "op": "subtractCounter",
+      "counter": "pincerThreat",
+      "from": "evasionCount",
+      "min": 0
+     },
+     {
+      "op": "setHeroCounter",
+      "counter": "powerStone",
+      "from": "powerStoneHolder"
+     },
+     {
+      "op": "setFlag",
+      "flag": "headhunterDefeated",
+      "from": "headhunterInVictoryDisplay"
+     },
+     {
+      "op": "setHeroCounter",
+      "counter": "hp",
+      "from": "hpPerHero",
+      "when": {
+       "difficulty": "expert"
+      }
+     }
+    ],
+    "next": [
+     {
+      "goto": "s5_ronan"
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "goto": "s4_nebula"
+     }
+    ]
+   }
+  },
+  {
+   "id": "s5_ronan",
+   "name": {
+    "fr": "Ronan l’Accusateur",
+    "en": "Ronan the Accuser"
+   },
+   "victoryLabel": {
+    "fr": "Ronan est vaincu !",
+    "en": "Ronan is beaten!"
+   },
+   "defeatLabel": {
+    "fr": "Ronan vous a vaincu !",
+    "en": "Ronan has beaten you!"
+   },
+   "flavour": {
+    "fr": "Cap sur Knowhere, la Pierre et Nebula à bord. Un vaisseau kree vous coupe la route : Ronan l’Accusateur.",
+    "en": "You set course for Knowhere with the Stone and Nebula aboard. A Kree warship cuts you off: Ronan the Accuser."
+   },
+   "baseSetup": {
+    "villainDeck": {
+     "standard": [
+      "16103",
+      "16104"
+     ],
+     "expert": [
+      "16104",
+      "16105"
+     ]
+    },
+    "mainScheme": [
+     "16106a",
+     "16107a"
+    ],
+    "encounterSets": [
+     "ronan",
+     "kree_militant",
+     "power_stone",
+     "ship_command",
+     "standard"
+    ]
+   },
+   "campaignSetup": [
+    {
+     "text": {
+      "fr": "Facultatif : révéler ce complot secondaire (verso en Expert)",
+      "en": "Optional: reveal this side scheme (reverse side on Expert)"
+     },
+     "cards": [
+      "16182a"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Chercher cette traîtrise dans le deck rencontre et la pile de défausse, puis la donner face cachée à ce joueur",
+      "en": "Search the encounter deck and discard pile for this treachery, then deal it facedown to this player"
+     },
+     "cards": [
+      "16116"
+     ],
+     "showHeroesWith": "powerStone",
+     "when": {
+      "anyHero": {
+       "counter": "powerStone",
+       "atLeast": 1
+      }
+     }
+    },
+    {
+     "text": {
+      "fr": "Révéler ce complot secondaire et y placer ce nombre de menace par joueur",
+      "en": "Reveal this side scheme and place this much threat per player on it"
+     },
+     "cards": [
+      "16112"
+     ],
+     "showCounter": "pincerThreat"
+    },
+    {
+     "text": {
+      "fr": "Mélanger ce sbire dans le deck rencontre",
+      "en": "Shuffle this minion into the encounter deck"
+     },
+     "cards": [
+      "16183"
+     ]
+    },
+    {
+     "text": {
+      "fr": "Mélanger cette traîtrise dans le deck rencontre",
+      "en": "Shuffle this treachery into the encounter deck"
+     },
+     "cards": [
+      "16184"
+     ],
+     "when": {
+      "countTrue": "headhunterDefeated",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Mélanger cette traîtrise dans le deck rencontre",
+      "en": "Shuffle this treachery into the encounter deck"
+     },
+     "cards": [
+      "16185"
+     ],
+     "when": {
+      "countTrue": "headhunterDefeated",
+      "countAtLeast": 2
+     }
+    },
+    {
+     "text": {
+      "fr": "Mélanger ce sbire dans le deck rencontre",
+      "en": "Shuffle this minion into the encounter deck"
+     },
+     "cards": [
+      "16186"
+     ],
+     "when": {
+      "countTrue": "headhunterDefeated",
+      "countAtLeast": 3
+     }
+    },
+    {
+     "text": {
+      "fr": "Mélanger ce complot secondaire dans le deck rencontre",
+      "en": "Shuffle this side scheme into the encounter deck"
+     },
+     "cards": [
+      "16187"
+     ],
+     "when": {
+      "countTrue": "headhunterDefeated",
+      "countAtLeast": 4
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : reprendre les points de vie enregistrés au scénario précédent",
+      "en": "Expert campaign: set each hit point total to the value recorded last scenario"
+     },
+     "when": {
+      "difficulty": "expert"
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : dépenser 1 crédit pour revenir aux points de vie imprimés",
+      "en": "Expert campaign: spend 1 unit to heal to printed hit points"
+     },
+     "when": {
+      "difficulty": "expert"
+     },
+     "action": {
+      "id": "heal",
+      "label": {
+       "fr": "Soigner",
+       "en": "Heal"
+      },
+      "perHero": true,
+      "cost": {
+       "counterId": "credits",
+       "amount": 1
+      },
+      "effects": [
+       {
+        "op": "setHeroCounter",
+        "counter": "hp",
+        "value": 999
+       }
+      ]
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : placer 1 menace supplémentaire par joueur sur le complot principal",
+      "en": "Expert campaign: place 1 additional threat per player on the main scheme"
+     },
+     "when": {
+      "difficulty": "expert"
+     }
+    },
+    {
+     "text": {
+      "fr": "Campagne Expert : une défaite ici fait perdre la campagne",
+      "en": "Expert campaign: losing here loses the campaign"
+     },
+     "when": {
+      "difficulty": "expert"
+     }
+    }
+   ],
+   "onVictory": {
+    "prompts": [
+     {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     }
+    ],
+    "effects": [],
+    "next": [
+     {
+      "end": true
+     }
+    ]
+   },
+   "onDefeat": {
+    "next": [
+     {
+      "end": true,
+      "when": {
+       "difficulty": "expert"
+      }
+     },
+     {
+      "goto": "s5_ronan"
+     }
+    ]
+   }
+  }
+ ]
 }

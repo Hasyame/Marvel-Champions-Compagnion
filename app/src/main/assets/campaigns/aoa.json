@@ -201,6 +201,14 @@
    "onVictory": {
     "prompts": [
      {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     },
+     {
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
@@ -350,6 +358,14 @@
    "onVictory": {
     "prompts": [
      {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     },
+     {
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
@@ -476,6 +492,14 @@
    "onVictory": {
     "prompts": [
      {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     },
+     {
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
@@ -594,6 +618,14 @@
    ],
    "onVictory": {
     "prompts": [
+     {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     },
      {
       "id": "missionDefeated",
       "type": "boolean",
@@ -780,6 +812,14 @@
    ],
    "onVictory": {
     "prompts": [
+     {
+      "id": "vp",
+      "type": "number",
+      "label": {
+       "fr": "Combien de points de victoire avez-vous accumulés ?",
+       "en": "How many victory points did you accumulate?"
+      }
+     },
      {
       "id": "professorSaved",
       "type": "boolean",

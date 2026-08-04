@@ -106,6 +106,14 @@ def mission_outcome_prompts(scenario_number):
     """
     return [
         {
+            "id": "vp",
+            "type": "number",
+            "label": t(
+                "Combien de points de victoire avez-vous accumulés ?",
+                "How many victory points did you accumulate?",
+            ),
+        },
+        {
             "id": "missionDefeated",
             "type": "boolean",
             "label": t(
@@ -395,6 +403,14 @@ scenarios.append({
     ] + [{"include": "expertHp"}],
     "onVictory": {
         "prompts": [
+            {
+                "id": "vp",
+                "type": "number",
+                "label": t(
+                    "Combien de points de victoire avez-vous accumulés ?",
+                    "How many victory points did you accumulate?",
+                ),
+            },
             {
                 "id": "professorSaved",
                 "type": "boolean",

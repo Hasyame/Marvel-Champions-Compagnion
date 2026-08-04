@@ -6,6 +6,7 @@ import com.hasyame.marvelchampions.domain.campaign.template.CampaignTemplate
 import com.hasyame.marvelchampions.domain.campaign.template.TemplateValidator
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
+import com.hasyame.marvelchampions.domain.campaign.template.PromptType
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -105,6 +106,28 @@ class BundledCampaignsTest {
                         text.length <= MAX_FLAVOUR_LENGTH,
                     )
                 }
+            }
+        }
+    }
+
+    @Test
+    fun `every scenario asks for its victory points`() {
+        // `vp` is not merely recorded. The app totals it across the campaign,
+        // shows it on the result page, and sends it to BoardGameGeek as the
+        // play's score — so a scenario that never asks silently contributes
+        // nothing to any of the three, and the campaign total reads low.
+        templates().forEach { (name, template) ->
+            template.scenarios.forEach { scenario ->
+                val prompt = scenario.onVictory?.prompts.orEmpty().firstOrNull { it.id == "vp" }
+                assertTrue(
+                    "$name/${scenario.id} never asks for victory points",
+                    prompt != null,
+                )
+                assertEquals(
+                    "$name/${scenario.id} must record victory points as a number",
+                    PromptType.NUMBER,
+                    prompt?.promptType,
+                )
             }
         }
     }
