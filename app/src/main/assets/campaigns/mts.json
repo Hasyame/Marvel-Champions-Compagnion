@@ -112,7 +112,7 @@
       "id": "landingPadDefeated",
       "type": "boolean",
       "label": {
-       "fr": "Avez-vous vaincu {card:21180a} ?",
+       "fr": "Avez-vous déjoué {card:21180a} ?",
        "en": "Did you defeat {card:21180a}?"
       },
       "cards": [
@@ -316,7 +316,7 @@
       "id": "shawarmaDefeated",
       "type": "boolean",
       "label": {
-       "fr": "Avez-vous vaincu {card:21182a} ?",
+       "fr": "Avez-vous déjoué {card:21182a} ?",
        "en": "Did you defeat {card:21182a}?"
       },
       "cards": [
@@ -781,7 +781,7 @@
       "id": "nornStonesDefeated",
       "type": "boolean",
       "label": {
-       "fr": "Avez-vous vaincu {card:21186a} ?",
+       "fr": "Avez-vous déjoué {card:21186a} ?",
        "en": "Did you defeat {card:21186a}?"
       },
       "cards": [

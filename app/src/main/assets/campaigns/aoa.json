@@ -212,7 +212,7 @@
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
-       "fr": "La MISSION {mission} a-t-elle été vaincue ?",
+       "fr": "La MISSION {mission} a-t-elle été déjouée ?",
        "en": "Was the MISSION {mission} defeated?"
       }
      },
@@ -369,7 +369,7 @@
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
-       "fr": "La MISSION {mission} a-t-elle été vaincue ?",
+       "fr": "La MISSION {mission} a-t-elle été déjouée ?",
        "en": "Was the MISSION {mission} defeated?"
       }
      },
@@ -503,7 +503,7 @@
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
-       "fr": "La MISSION {mission} a-t-elle été vaincue ?",
+       "fr": "La MISSION {mission} a-t-elle été déjouée ?",
        "en": "Was the MISSION {mission} defeated?"
       }
      },
@@ -630,7 +630,7 @@
       "id": "missionDefeated",
       "type": "boolean",
       "label": {
-       "fr": "La MISSION {mission} a-t-elle été vaincue ?",
+       "fr": "La MISSION {mission} a-t-elle été déjouée ?",
        "en": "Was the MISSION {mission} defeated?"
       }
      },
@@ -824,7 +824,7 @@
       "id": "professorSaved",
       "type": "boolean",
       "label": {
-       "fr": "La MISSION Protect the Professor a-t-elle été vaincue ?",
+       "fr": "La MISSION Protect the Professor a-t-elle été déjouée ?",
        "en": "Was the MISSION Protect the Professor defeated?"
       }
      }

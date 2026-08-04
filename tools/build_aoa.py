@@ -117,7 +117,7 @@ def mission_outcome_prompts(scenario_number):
             "id": "missionDefeated",
             "type": "boolean",
             "label": t(
-                "La MISSION {mission} a-t-elle été vaincue ?",
+                "La MISSION {mission} a-t-elle été déjouée ?",
                 "Was the MISSION {mission} defeated?",
             ),
         },
@@ -415,7 +415,7 @@ scenarios.append({
                 "id": "professorSaved",
                 "type": "boolean",
                 "label": t(
-                    "La MISSION Protect the Professor a-t-elle été vaincue ?",
+                    "La MISSION Protect the Professor a-t-elle été déjouée ?",
                     "Was the MISSION Protect the Professor defeated?",
                 ),
             },

@@ -185,7 +185,7 @@ scenarios.append({
                 "id": "landingPadDefeated",
                 "type": "boolean",
                 "label": t(
-                    "Avez-vous vaincu {card:21180a} ?",
+                    "Avez-vous déjoué {card:21180a} ?",
                     "Did you defeat {card:21180a}?",
                 ),
                 "cards": ["21180a"],
@@ -279,7 +279,7 @@ scenarios.append({
                 "id": "shawarmaDefeated",
                 "type": "boolean",
                 "label": t(
-                    "Avez-vous vaincu {card:21182a} ?",
+                    "Avez-vous déjoué {card:21182a} ?",
                     "Did you defeat {card:21182a}?",
                 ),
                 "cards": ["21182a"],
@@ -466,7 +466,7 @@ scenarios.append({
                 "id": "nornStonesDefeated",
                 "type": "boolean",
                 "label": t(
-                    "Avez-vous vaincu {card:21186a} ?",
+                    "Avez-vous déjoué {card:21186a} ?",
                     "Did you defeat {card:21186a}?",
                 ),
                 "cards": ["21186a"],
