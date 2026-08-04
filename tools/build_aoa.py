@@ -42,6 +42,7 @@ def mission_steps(scenario_number):
             ),
             "draw": {"id": "mission", "from": MISSIONS, "excluding": "missionsUsed"},
         },
+    ] + mission_setup_steps() + mission_legacy_steps() + [
         {
             "text": t(
                 "Ajouter cet OVERSEER à la zone de mission et poser la carte Mission Rules à côté",
@@ -142,6 +143,7 @@ def mission_outcome_effects():
         # spent. Whether it fell only decides which of its two backs resolves,
         # and that happens inside the scenario.
         {"op": "addDrawnCard", "cardList": "missionsUsed", "from": "mission"},
+    ] + mission_outcome_flags() + [
         # An overseer is struck only when it fell, so one that survived stays in
         # the pool for the next scenario.
         {
@@ -157,6 +159,90 @@ def mission_outcome_effects():
             "when": {"difficulty": "expert"},
         },
     ]
+
+
+
+# --- what each MISSION brings with it ----------------------------------------
+# Setup runs only in the scenario that drew it; the outcome lasts the rest of
+# the campaign, so it is a flag read with countTrue like every other one.
+MISSION_RULES = [
+    # (code, flag stem, setup fr/en, defeated fr/en, failed fr/en)
+    ("45166a", "seattle",
+     ("Mettre de côté chaque exemplaire de l'amélioration Desperate Measures",
+      "Set each copy of the Desperate Measures upgrade aside"),
+     ("Chaque joueur peut mélanger 1 Desperate Measures dans son deck, hors taille minimale",
+      "Each player may shuffle 1 Desperate Measures into their deck, outside the minimum"),
+     ("Retirer chaque exemplaire de Desperate Measures de la campagne",
+      "Remove each copy of Desperate Measures from the campaign")),
+
+    ("45167a", "evacuate",
+     ("Chaque joueur mélange un exemplaire de Panicked Refugees dans son deck",
+      "Each player shuffles a copy of Panicked Refugees into their deck"),
+     ("Panicked Refugees retirée. Chaque joueur ajoute 1 amélioration au choix, hors taille minimale",
+      "Panicked Refugees removed. Each player adds 1 upgrade of any aspect, outside the minimum"),
+     ("Chaque joueur mélange un exemplaire de Panicked Refugees dans son deck",
+      "Each player shuffles a copy of Panicked Refugees into their deck")),
+
+    ("45168a", "seawall",
+     ("Mélanger North American Sea Wall dans le deck rencontre",
+      "Shuffle the North American Sea Wall side scheme into the encounter deck"),
+     ("Sea Wall retirée. Chaque joueur ajoute 1 soutien au choix, hors taille minimale",
+      "Sea Wall removed. Each player adds 1 support of any aspect, outside the minimum"),
+     ("Mélanger North American Sea Wall dans le deck rencontre pendant la mise en place",
+      "Shuffle North American Sea Wall into the encounter deck during setup")),
+
+    ("45169a", "lostmutants",
+     ("Mettre de côté chaque allié de campagne",
+      "Set each campaign ally aside"),
+     ("Chaque joueur ajoute un allié de campagne à son deck, hors taille minimale",
+      "Each player adds a campaign ally to their deck, outside the minimum"),
+     ("Retirer chaque allié de campagne de la campagne",
+      "Remove each campaign ally from the campaign")),
+]
+
+
+def mission_setup_steps():
+    """The chosen mission's own setup, shown only when it is the one drawn."""
+    return [
+        {
+            "text": t(setup[0], setup[1]),
+            "cards": [code],
+            "when": {"drawIs": "mission:" + code},
+        }
+        for code, _stem, setup, _d, _f in MISSION_RULES
+    ]
+
+
+def mission_legacy_steps():
+    """What an earlier mission left behind, for every scenario after it."""
+    steps = []
+    for code, stem, _s, defeated, failed in MISSION_RULES:
+        steps.append({
+            "text": t(defeated[0], defeated[1]),
+            "cards": [code],
+            "when": {"countTrue": stem + "Won", "countAtLeast": 1},
+        })
+        steps.append({
+            "text": t(failed[0], failed[1]),
+            "cards": [code],
+            "when": {"countTrue": stem + "Lost", "countAtLeast": 1},
+        })
+    return steps
+
+
+def mission_outcome_flags():
+    """Records how the mission drawn for this scenario ended."""
+    effects = []
+    for code, stem, _s, _d, _f in MISSION_RULES:
+        effects.append({
+            "op": "setFlag", "flag": stem + "Won", "boolValue": True,
+            "when": {"all": [{"drawIs": "mission:" + code}, {"answer": "missionDefeated"}]},
+        })
+        effects.append({
+            "op": "setFlag", "flag": stem + "Lost", "boolValue": True,
+            "when": {"all": [{"drawIs": "mission:" + code}, {"notAnswer": "missionDefeated"}]},
+        })
+    return effects
 
 
 scenarios = []
@@ -446,7 +532,11 @@ template = {
             "activeWhen": {"difficulty": "expert"},
         },
     ],
-    "flagSets": [{"id": "professorSaved", "scope": "campaign"}],
+    "flagSets": [{"id": "professorSaved", "scope": "campaign"}] + [
+        {"id": stem + suffix}
+        for _c, stem, _s, _d, _f in MISSION_RULES
+        for suffix in ("Won", "Lost")
+    ],
     "cardLists": [
         {"id": "missionsUsed", "scope": "campaign"},
         {"id": "overseersDefeated", "scope": "campaign"},

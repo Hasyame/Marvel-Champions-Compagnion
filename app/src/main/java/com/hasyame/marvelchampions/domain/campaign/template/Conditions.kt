@@ -70,6 +70,17 @@ data class Condition(
      * hero qualifies. Without it a hero-scoped [counter] would be read against
      * the campaign and always come back zero.
      */
+    /**
+     * True when a setup draw came up with a particular card, written
+     * `drawId:cardCode`.
+     *
+     * A drawn card can carry rules of its own — Age of Apocalypse gives each
+     * MISSION its own setup step and its own lasting consequence — and those
+     * cannot be written into the scenario, because which one is in play is not
+     * known until the app draws it.
+     */
+    val drawIs: String? = null,
+
     val anyHero: Condition? = null,
 
     /** True when any nested condition holds. */

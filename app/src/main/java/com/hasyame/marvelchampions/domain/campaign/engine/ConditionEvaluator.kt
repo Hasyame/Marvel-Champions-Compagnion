@@ -61,6 +61,15 @@ object ConditionEvaluator {
             if (resolveFlag(it, state, context.scenarioId)) return false
         }
 
+        condition.drawIs?.let { reference ->
+            val (drawId, code) = reference.split(':', limit = 2).let {
+                it.first() to it.getOrElse(1) { "" }
+            }
+            if (code !in state.draws[context.scenarioId].orEmpty()[drawId].orEmpty()) {
+                return false
+            }
+        }
+
         condition.countTrue?.let { setId ->
             val count = state.countTrue(setId)
             condition.countAtLeast?.let { if (count < it) return false }
