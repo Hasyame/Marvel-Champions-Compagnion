@@ -114,4 +114,12 @@ data class GameSessionRoute(
     val difficulty: String? = null,
     val heroes: String? = null,
     val modularSets: String? = null,
+    /**
+     * True when the game is already decided and the clock should simply start.
+     *
+     * A draw arrives complete — scenario, difficulty, heroes, modular sets —
+     * so showing the setup page would ask the player to confirm choices the
+     * randomiser just made for them.
+     */
+    val autoStart: Boolean = false,
 )

@@ -107,6 +107,7 @@ class GameSessionViewModel @Inject constructor(
         difficulty: String?,
         heroes: String?,
         modularSets: String? = null,
+        autoStart: Boolean = false,
     ) {
         if (prefilled) {
             return
@@ -131,6 +132,12 @@ class GameSessionViewModel @Inject constructor(
                 .filter { it.isNotBlank() }
                 .ifEmpty { state.value.modularSetCodes },
         )
+
+        // A draw arrives complete, so the clock starts rather than showing a
+        // setup page asking the player to confirm what was just rolled.
+        if (autoStart) {
+            start()
+        }
     }
 
     fun setScenario(code: String) {

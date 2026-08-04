@@ -49,4 +49,30 @@ fun sendContactEmail(context: Context, lastSyncEpochMillis: Long?): Boolean {
     }
 }
 
+/**
+ * Opens a mail draft holding the last crash.
+ *
+ * The trace goes in the body rather than an attachment: the person sending it
+ * can read exactly what they are sending, which is the whole point of keeping
+ * it on the device until they choose to.
+ */
+fun sendCrashEmail(context: Context, trace: String): Boolean {
+    val versionName = runCatching {
+        context.packageManager.getPackageInfo(context.packageName, 0).versionName
+    }.getOrNull() ?: "unknown"
+
+    val intent = Intent(Intent.ACTION_SENDTO).apply {
+        data = "mailto:$CONTACT_ADDRESS".toUri()
+        putExtra(Intent.EXTRA_SUBJECT, "Marvel Champions Companion crash ($versionName)")
+        putExtra(Intent.EXTRA_TEXT, trace)
+    }
+
+    return try {
+        context.startActivity(intent)
+        true
+    } catch (_: ActivityNotFoundException) {
+        false
+    }
+}
+
 const val CONTACT_ADDRESS: String = "marvelchampcompanion@proton.me"

@@ -41,7 +41,9 @@ import com.hasyame.marvelchampions.domain.model.CardLocale
 import com.hasyame.marvelchampions.domain.model.ThemeChoice
 import com.hasyame.marvelchampions.ui.util.openExternalUrl
 import com.hasyame.marvelchampions.ui.util.CONTACT_ADDRESS
+import com.hasyame.marvelchampions.data.diagnostics.CrashLog
 import com.hasyame.marvelchampions.ui.util.sendContactEmail
+import com.hasyame.marvelchampions.ui.util.sendCrashEmail
 import java.text.DateFormat
 import java.util.Date
 
@@ -211,6 +213,19 @@ fun SettingsScreen(
                     noMailApp = !sendContactEmail(context, state.lastCardSync)
                 },
             )
+            // Only after a crash. Nothing to say is the normal state, and a row
+            // that is always there invites people to go looking for trouble.
+            val crash = remember { CrashLog.read(context) }
+            if (crash != null) {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_crash_report)) },
+                    supportingContent = {
+                        Text(stringResource(R.string.settings_crash_report_summary))
+                    },
+                    modifier = Modifier.clickable { noMailApp = !sendCrashEmail(context, crash) },
+                )
+            }
+
             if (noMailApp) {
                 Text(
                     text = stringResource(R.string.settings_no_mail_app, CONTACT_ADDRESS),

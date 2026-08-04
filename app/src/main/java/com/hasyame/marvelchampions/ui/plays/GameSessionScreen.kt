@@ -69,6 +69,7 @@ fun GameSessionScreen(
     difficulty: String? = null,
     heroes: String? = null,
     modularSets: String? = null,
+    autoStart: Boolean = false,
     onOpenPlays: () -> Unit,
     viewModel: GameSessionViewModel = hiltViewModel(),
 ) {
@@ -85,7 +86,7 @@ fun GameSessionScreen(
 
     // A draw handed over from the randomiser, applied once.
     LaunchedEffect(scenarioCode, difficulty, heroes, modularSets) {
-        viewModel.prefill(scenarioCode, difficulty, heroes, modularSets)
+        viewModel.prefill(scenarioCode, difficulty, heroes, modularSets, autoStart)
     }
 
     // Only while the clock is actually running, so a paused or finished game

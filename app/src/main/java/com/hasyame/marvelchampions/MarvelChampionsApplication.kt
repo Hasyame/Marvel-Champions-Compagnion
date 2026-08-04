@@ -9,6 +9,7 @@ import coil3.SingletonImageLoader
 import coil3.disk.DiskCache
 import coil3.disk.directory
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import com.hasyame.marvelchampions.data.diagnostics.CrashLog
 import dagger.hilt.android.HiltAndroidApp
 import okhttp3.OkHttpClient
 import javax.inject.Inject
@@ -19,6 +20,12 @@ class MarvelChampionsApplication :
     Application(),
     Configuration.Provider,
     SingletonImageLoader.Factory {
+
+    override fun onCreate() {
+        super.onCreate()
+        // First thing, so a crash during the rest of startup is still recorded.
+        CrashLog.install(this)
+    }
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory

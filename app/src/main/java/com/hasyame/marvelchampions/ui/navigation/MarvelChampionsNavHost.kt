@@ -115,12 +115,17 @@ fun MarvelChampionsNavHost(
             composable<RandomizerRoute> {
                 RandomizerScreen(
                     onBack = { navController.popBackStack() },
-                    onPlayDraw = { heroes, modulars, difficulty ->
+                    onPlayDraw = { scenario, heroes, modulars, difficulty ->
                         navController.navigate(
                             GameSessionRoute(
+                                // Was dropped, so the session had every part of
+                                // the draw except the scenario it was for, could
+                                // not start, and fell back to the setup page.
+                                scenarioCode = scenario.takeIf { it.isNotBlank() },
                                 difficulty = difficulty.takeIf { it.isNotBlank() },
                                 heroes = heroes,
                                 modularSets = modulars,
+                                autoStart = true,
                             ),
                         )
                     },
@@ -133,6 +138,7 @@ fun MarvelChampionsNavHost(
                     difficulty = args.difficulty,
                     heroes = args.heroes,
                     modularSets = args.modularSets,
+                    autoStart = args.autoStart,
                     onBack = { navController.popBackStack() },
                     onOpenPlays = { navController.navigate(PlaysRoute) },
                 )
