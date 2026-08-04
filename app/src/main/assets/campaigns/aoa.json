@@ -80,8 +80,8 @@
    },
    {
     "text": {
-     "fr": "Jouer avec cette MISSION et suivre sa mise en place dans le journal de campagne",
-     "en": "Play with this MISSION side scheme and follow its setup in the campaign log"
+     "fr": "",
+     "en": ""
     },
     "draw": {
      "id": "mission",
@@ -96,8 +96,8 @@
    },
    {
     "text": {
-     "fr": "Mettre de côté chaque exemplaire de l'amélioration Desperate Measures",
-     "en": "Set each copy of the Desperate Measures upgrade aside"
+     "fr": "Jouer avec la MISSION {mission} — Mettre de côté chaque exemplaire de l'amélioration Desperate Measures",
+     "en": "Play with the MISSION {mission} — Set each copy of the Desperate Measures upgrade aside"
     },
     "cards": [
      "45166a"
@@ -108,8 +108,8 @@
    },
    {
     "text": {
-     "fr": "Chaque joueur mélange un exemplaire de Panicked Refugees dans son deck",
-     "en": "Each player shuffles a copy of Panicked Refugees into their deck"
+     "fr": "Jouer avec la MISSION {mission} — Chaque joueur mélange un exemplaire de Panicked Refugees dans son deck",
+     "en": "Play with the MISSION {mission} — Each player shuffles a copy of Panicked Refugees into their deck"
     },
     "cards": [
      "45167a"
@@ -120,8 +120,8 @@
    },
    {
     "text": {
-     "fr": "Mélanger North American Sea Wall dans le deck rencontre",
-     "en": "Shuffle the North American Sea Wall side scheme into the encounter deck"
+     "fr": "Jouer avec la MISSION {mission} — Mélanger North American Sea Wall dans le deck rencontre",
+     "en": "Play with the MISSION {mission} — Shuffle the North American Sea Wall side scheme into the encounter deck"
     },
     "cards": [
      "45168a"
@@ -132,8 +132,8 @@
    },
    {
     "text": {
-     "fr": "Mettre de côté chaque allié de campagne",
-     "en": "Set each campaign ally aside"
+     "fr": "Jouer avec la MISSION {mission} — Mettre de côté chaque allié de campagne",
+     "en": "Play with the MISSION {mission} — Set each campaign ally aside"
     },
     "cards": [
      "45169a"

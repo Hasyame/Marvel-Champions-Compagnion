@@ -258,6 +258,11 @@ private fun BriefingPage(
                     )
                     scenario.campaignSetup
                         .filter { ConditionEvaluator.evaluate(it.condition, context) }
+                        // A step can exist only to carry a draw, with the steps
+                        // that read it saying everything. Rendering its empty
+                        // text would put a bullet with nothing after it on the
+                        // briefing.
+                        .filter { it.text.resolve("fr").isNotBlank() }
                         .forEach { step ->
                             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                 Text(

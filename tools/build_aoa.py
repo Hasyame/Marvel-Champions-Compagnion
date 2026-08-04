@@ -36,10 +36,9 @@ def mission_steps(scenario_number):
             ),
         },
         {
-            "text": t(
-                "Jouer avec cette MISSION et suivre sa mise en place dans le journal de campagne",
-                "Play with this MISSION side scheme and follow its setup in the campaign log",
-            ),
+            # The draw itself carries no text: the four steps below name the
+            # mission that came up and say what it wants, in one line each.
+            "text": t("", ""),
             "draw": {"id": "mission", "from": MISSIONS, "excluding": "missionsUsed"},
         },
     ] + mission_setup_steps() + mission_legacy_steps() + [
@@ -205,7 +204,10 @@ def mission_setup_steps():
     """The chosen mission's own setup, shown only when it is the one drawn."""
     return [
         {
-            "text": t(setup[0], setup[1]),
+            "text": t(
+                "Jouer avec la MISSION {mission} — " + setup[0],
+                "Play with the MISSION {mission} — " + setup[1],
+            ),
             "cards": [code],
             "when": {"drawIs": "mission:" + code},
         }
