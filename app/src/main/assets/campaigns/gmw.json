@@ -343,14 +343,6 @@
       "when": {
        "difficulty": "expert"
       }
-     },
-     {
-      "id": "eliminated",
-      "type": "perHeroBoolean",
-      "label": {
-       "fr": "Héros éliminé",
-       "en": "Hero eliminated"
-      }
      }
     ],
     "effects": [
@@ -580,14 +572,6 @@
       },
       "when": {
        "difficulty": "expert"
-      }
-     },
-     {
-      "id": "eliminated",
-      "type": "perHeroBoolean",
-      "label": {
-       "fr": "Héros éliminé",
-       "en": "Hero eliminated"
       }
      }
     ],
@@ -844,14 +828,6 @@
       },
       "when": {
        "difficulty": "expert"
-      }
-     },
-     {
-      "id": "eliminated",
-      "type": "perHeroBoolean",
-      "label": {
-       "fr": "Héros éliminé",
-       "en": "Hero eliminated"
       }
      }
     ],
@@ -1174,14 +1150,6 @@
       },
       "when": {
        "difficulty": "expert"
-      }
-     },
-     {
-      "id": "eliminated",
-      "type": "perHeroBoolean",
-      "label": {
-       "fr": "Héros éliminé",
-       "en": "Hero eliminated"
       }
      }
     ],
