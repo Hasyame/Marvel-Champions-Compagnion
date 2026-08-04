@@ -533,7 +533,11 @@ private fun ResultPage(
                 Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                val hasCredits = run.template.market != null
+                // Credits are worth mentioning only while there is still a
+                // scenario left to spend them on. Congratulating somebody on
+                // nought of a currency the campaign has just retired is noise.
+                val hasCredits = run.template.market != null &&
+                    summary?.campaignFinished != true
                 Text(
                     text = if (hasCredits && distinct.size == 1 && run.state.heroes.size == 1) {
                         pluralStringResource(
