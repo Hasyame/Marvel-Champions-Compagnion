@@ -1463,6 +1463,110 @@
      }
     },
     {
+     "text": {
+      "fr": "Chaque joueur peut mélanger 1 Desperate Measures dans son deck, hors taille minimale",
+      "en": "Each player may shuffle 1 Desperate Measures into their deck, outside the minimum"
+     },
+     "cards": [
+      "45166a"
+     ],
+     "when": {
+      "countTrue": "seattleWon",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Retirer chaque exemplaire de Desperate Measures de la campagne",
+      "en": "Remove each copy of Desperate Measures from the campaign"
+     },
+     "cards": [
+      "45166a"
+     ],
+     "when": {
+      "countTrue": "seattleLost",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Panicked Refugees retirée. Chaque joueur ajoute 1 amélioration au choix, hors taille minimale",
+      "en": "Panicked Refugees removed. Each player adds 1 upgrade of any aspect, outside the minimum"
+     },
+     "cards": [
+      "45167a"
+     ],
+     "when": {
+      "countTrue": "evacuateWon",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur mélange un exemplaire de Panicked Refugees dans son deck",
+      "en": "Each player shuffles a copy of Panicked Refugees into their deck"
+     },
+     "cards": [
+      "45167a"
+     ],
+     "when": {
+      "countTrue": "evacuateLost",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Sea Wall retirée. Chaque joueur ajoute 1 soutien au choix, hors taille minimale",
+      "en": "Sea Wall removed. Each player adds 1 support of any aspect, outside the minimum"
+     },
+     "cards": [
+      "45168a"
+     ],
+     "when": {
+      "countTrue": "seawallWon",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Mélanger North American Sea Wall dans le deck rencontre pendant la mise en place",
+      "en": "Shuffle North American Sea Wall into the encounter deck during setup"
+     },
+     "cards": [
+      "45168a"
+     ],
+     "when": {
+      "countTrue": "seawallLost",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Chaque joueur ajoute un allié de campagne à son deck, hors taille minimale",
+      "en": "Each player adds a campaign ally to their deck, outside the minimum"
+     },
+     "cards": [
+      "45169a"
+     ],
+     "when": {
+      "countTrue": "lostmutantsWon",
+      "countAtLeast": 1
+     }
+    },
+    {
+     "text": {
+      "fr": "Retirer chaque allié de campagne de la campagne",
+      "en": "Remove each campaign ally from the campaign"
+     },
+     "cards": [
+      "45169a"
+     ],
+     "when": {
+      "countTrue": "lostmutantsLost",
+      "countAtLeast": 1
+     }
+    },
+    {
      "include": "expertHp"
     }
    ],

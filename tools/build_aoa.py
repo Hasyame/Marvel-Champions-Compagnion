@@ -486,7 +486,7 @@ scenarios.append({
                 "Each player searches their deck for an ally and takes it into hand",
             ),
         },
-    ] + [{"include": "expertHp"}],
+    ] + mission_legacy_steps() + [{"include": "expertHp"}],
     "onVictory": {
         "prompts": [
             {
