@@ -9,7 +9,7 @@ you can read the app in French and the cards in English, or the reverse.
 
 ## Status
 
-In use, and being played with. Current release: **[v1.2.1](https://github.com/Hasyame/Marvel-Champions-Compagnion/releases/latest)**.
+In use, and being played with. Current release: **[v1.4.0](https://github.com/Hasyame/Marvel-Champions-Compagnion/releases/latest)**.
 
 Every feature planned for the app is now in, and the work from here is campaign
 content rather than machinery.
@@ -32,7 +32,8 @@ content rather than machinery.
   from scratch, edit, check legality as you go, see what a deck is made of, and
   share a decklist as plain text.
 - **Randomiser.** Scenario, difficulty, modular sets, heroes and aspects, drawn
-  only from what you own, with locking, rerolls and a history.
+  only from what you own, with locking, rerolls and a history. Tap any row to
+  choose it yourself instead — the choice locks, and the rest rolls around it.
 - **Play log.** Finished games are recorded and timed, whether they came from
   the randomiser, from a campaign, or were set up by hand with your own modular
   sets. The clock can be corrected afterwards, a game can be thrown away before
@@ -47,8 +48,15 @@ content rather than machinery.
 - **Campaign tracker.** An append-only event log with all state folded from it,
   so a record can never drift from what was played. Counters, flags, card lists,
   a market, per-scenario questionnaires, and setup steps for one scenario that
-  depend on what was recorded in the ones before it. **The Galaxy's Most Wanted**
-  and **Age of Apocalypse** ship with the app.
+  depend on what was recorded in the ones before it. **The Galaxy's Most Wanted**,
+  **Age of Apocalypse** and **The Mad Titan's Shadow** ship with the app, each
+  played through end to end before release.
+- **Setup the app does for you.** Anything a campaign tells you to pick at
+  random — Age of Apocalypse's side missions and overseers, the order the Four
+  Horsemen line up in, which Loki you face first — is drawn by the app, recorded
+  so it cannot change while you read it, and kept out of the pool next time. A
+  mission's own setup and whatever it leaves behind follow it through the rest
+  of the campaign.
 - **Finished campaigns.** Saved runs keep total time, victory points, heroes,
   credits and a per-scenario log of the answers given.
 - **Backup and restore.** Collection, decks, campaigns, play history and
@@ -60,7 +68,6 @@ content rather than machinery.
 
 Campaign templates, in the order they get played:
 
-- **The Mad Titan's Shadow**
 - **Fear No Evil**
 
 Campaigns are added after they have been played, so that the mechanics in the
