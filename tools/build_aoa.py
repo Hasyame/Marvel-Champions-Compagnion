@@ -10,9 +10,7 @@ import json, io
 MISSIONS = ["45166a", "45167a", "45168a", "45169a"]      # 1/5 - 4/5
 PROTECT_THE_PROFESSOR = "45170a"                          # 5/5, scenario 5 only
 OVERSEERS = ["45179a", "45180a", "45181a", "45182a", "45183a"]
-AOA_MODULAR = ["45164", "45165"]                          # Age of Apocalypse set
 MISSION_TEAM = "45171a"
-PURSUED_BY_THE_PAST = "45075a"                            # Standard III permanent
 
 
 def t(fr, en):

@@ -161,7 +161,10 @@ they do not explain how to play a campaign, and they are not a substitute for
 either the book or the game.
 
 The app collects nothing. There is no account, no analytics and no backend of
-any kind; everything it stores stays on the device.
+any kind; everything it stores stays on the device. Android's automatic backup
+is switched off for the same reason — it would copy your play history and
+campaign log to Google Drive without asking. Settings offers a backup you ask
+for and keep yourself instead.
 
 If the app crashes it writes the stack trace to its own private storage and
 offers, in Settings, to open a mail draft containing it. That is not crash

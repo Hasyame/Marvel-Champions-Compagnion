@@ -4,9 +4,17 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--
+      allowBackup is off on purpose. Android auto-backup copies app data to the
+      user's Google Drive, which would include the play history, the campaign
+      log and the encrypted BoardGameGeek blob — and this app promises that what
+      it stores stays on the device. Settings offers an explicit backup the
+      player asks for and keeps themselves, which is the honest version of the
+      same feature.
+    -->
     <application
         android:name=".MarvelChampionsApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"

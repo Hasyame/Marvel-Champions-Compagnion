@@ -826,10 +826,7 @@
       "label": {
        "fr": "La MISSION {card:45170a} a-t-elle été déjouée ?",
        "en": "Was the MISSION {card:45170a} defeated?"
-      },
-      "cards": [
-       "45170a"
-      ]
+      }
      }
     ],
     "effects": [
