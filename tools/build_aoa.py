@@ -415,8 +415,8 @@ scenarios.append({
                 "id": "professorSaved",
                 "type": "boolean",
                 "label": t(
-                    "La MISSION Protect the Professor a-t-elle été déjouée ?",
-                    "Was the MISSION Protect the Professor defeated?",
+                    "La MISSION {card:45170a} a-t-elle été déjouée ?",
+                    "Was the MISSION {card:45170a} defeated?",
                 ),
             },
         ],

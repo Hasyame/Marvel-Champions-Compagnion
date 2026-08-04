@@ -824,9 +824,12 @@
       "id": "professorSaved",
       "type": "boolean",
       "label": {
-       "fr": "La MISSION Protect the Professor a-t-elle été déjouée ?",
-       "en": "Was the MISSION Protect the Professor defeated?"
-      }
+       "fr": "La MISSION {card:45170a} a-t-elle été déjouée ?",
+       "en": "Was the MISSION {card:45170a} defeated?"
+      },
+      "cards": [
+       "45170a"
+      ]
      }
     ],
     "effects": [
