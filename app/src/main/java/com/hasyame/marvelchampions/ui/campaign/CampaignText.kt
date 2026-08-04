@@ -54,12 +54,20 @@ fun resolveDraws(text: String, run: CampaignRun, scenarioId: String?): String =
     // Both braces escaped. Android's regex engine is ICU, which rejects a bare
     // closing brace as a syntax error where the JVM quietly accepts it — so
     // this compiled fine in tests and threw on the device.
-    Regex("""\{([A-Za-z0-9_]+)\}""").replace(text) { match ->
-        val drawn = run.state.draws[scenarioId].orEmpty()[match.groupValues[1]].orEmpty()
-        if (drawn.isEmpty()) {
-            // Nothing drawn: drop the placeholder rather than print braces.
-            ""
+    Regex("""\{(card:)?([A-Za-z0-9_]+)\}""").replace(text) { match ->
+        val (cardPrefix, name) = match.destructured
+        if (cardPrefix.isNotEmpty()) {
+            // A card code, resolved through the card database so the name comes
+            // out in the reader's language. Writing the name into the template
+            // instead left English prose sitting beside a French card chip.
+            run.names.card(name)
         } else {
-            drawn.joinToString(", ") { run.names.card(it) }
+            val drawn = run.state.draws[scenarioId].orEmpty()[name].orEmpty()
+            if (drawn.isEmpty()) {
+                // Nothing drawn: drop the placeholder rather than print braces.
+                ""
+            } else {
+                drawn.joinToString(", ") { run.names.card(it) }
+            }
         }
     }.replace("  ", " ").trim()

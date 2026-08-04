@@ -185,16 +185,16 @@ scenarios.append({
                 "id": "landingPadDefeated",
                 "type": "boolean",
                 "label": t(
-                    "Secure the Landing Pad a-t-il été vaincu ?",
-                    "Was Secure the Landing Pad defeated?",
+                    "{card:21180a} a-t-il été vaincu ?",
+                    "Was {card:21180a} defeated?",
                 ),
             },
             {
                 "id": "knowhere1B",
                 "type": "boolean",
                 "label": t(
-                    "Attack on Knowhere 1B a-t-il été complété ?",
-                    "Was Attack on Knowhere 1B completed?",
+                    "{card:21074a} 1B a-t-il été complété ?",
+                    "Was {card:21074a} 1B completed?",
                 ),
             },
             hp_prompt(),
@@ -241,20 +241,20 @@ scenarios.append({
     "campaignSetup": [
         {
             "text": t(
-                "Mettre la Tour des Avengers en jeu sur sa face Stronghold, et lui attacher "
-                "Focused Defense au complot 2B",
-                "Put Avengers Tower into play on its Stronghold side, and attach Focused Defense "
+                "Mettre {card:21100} en jeu sur sa face Stronghold, et lui attacher "
+                "{card:21101} au complot 2B",
+                "Put {card:21100} into play on its Stronghold side, and attach {card:21101} "
                 "to scheme 2B",
             ),
             "cards": ["21100", "21101"],
         },
         {
             "text": t(
-                "Pour durcir la partie, placer des dégâts par joueur sur la Tour des Avengers :\n"
+                "Pour durcir la partie, placer des dégâts par joueur sur {card:21100} :\n"
                 "  Standard : 1 par joueur\n"
                 "  Expert : 2 par joueur\n"
                 "  Héroïque : 3 par joueur",
-                "To make it harder, place damage per player on Avengers Tower:\n"
+                "To make it harder, place damage per player on {card:21100}:\n"
                 "  Standard: 1 per player\n"
                 "  Expert: 2 per player\n"
                 "  Heroic: 3 per player",
@@ -277,24 +277,24 @@ scenarios.append({
                 "id": "shawarmaDefeated",
                 "type": "boolean",
                 "label": t(
-                    "Save the Shawarma Place a-t-il été vaincu ?",
-                    "Was Save the Shawarma Place defeated?",
+                    "{card:21182a} a-t-il été vaincu ?",
+                    "Was {card:21182a} defeated?",
                 ),
             },
             {
                 "id": "blackSwanSurvived",
                 "type": "boolean",
                 "label": t(
-                    "Black Swan est-elle absente de la zone de victoire ?",
-                    "Is Black Swan absent from the victory display?",
+                    "{card:21182b} est-elle absente de la zone de victoire ?",
+                    "Is {card:21182b} absent from the victory display?",
                 ),
             },
             {
                 "id": "towerDamaged",
                 "type": "boolean",
                 "label": t(
-                    "La Tour des Avengers a-t-elle le trait Damaged ?",
-                    "Does Avengers Tower have the Damaged trait?",
+                    "{card:21100} a-t-elle le trait Damaged ?",
+                    "Does {card:21100} have the Damaged trait?",
                 ),
             },
             hp_prompt(),
@@ -387,16 +387,16 @@ scenarios.append({
                 "id": "protocolsSurvived",
                 "type": "boolean",
                 "label": t(
-                    "Defensive Protocols est-il absent de la zone de victoire ?",
-                    "Is Defensive Protocols absent from the victory display?",
+                    "{card:21184b} est-il absent de la zone de victoire ?",
+                    "Is {card:21184b} absent from the victory display?",
                 ),
             },
             {
                 "id": "infinityStones1B",
                 "type": "boolean",
                 "label": t(
-                    "The Infinity Stones 1B a-t-il été complété ?",
-                    "Was The Infinity Stones 1B completed?",
+                    "{card:21114a} 1B a-t-il été complété ?",
+                    "Was {card:21114a} 1B completed?",
                 ),
             },
             hp_prompt(),
@@ -459,8 +459,8 @@ scenarios.append({
                 "id": "nornStonesDefeated",
                 "type": "boolean",
                 "label": t(
-                    "Find the Norn Stones a-t-il été vaincu ?",
-                    "Was Find the Norn Stones defeated?",
+                    "{card:21186a} a-t-il été vaincu ?",
+                    "Was {card:21186a} defeated?",
                 ),
             },
             {

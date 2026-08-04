@@ -259,7 +259,15 @@ private fun BriefingPage(
                         .filter { ConditionEvaluator.evaluate(it.condition, context) }
                         .forEach { step ->
                             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                Text(campaignText("• " + step.text.resolve("fr")))
+                                Text(
+                                    campaignText(
+                                        "• " + resolveDraws(
+                                            step.text.resolve("fr"),
+                                            run,
+                                            run.state.currentScenarioId,
+                                        ),
+                                    ),
+                                )
 
                                 // Values the campaign log carries forward from
                                 // earlier scenarios, so the step can be
@@ -519,8 +527,9 @@ private fun ResultPage(
                 Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
+                val hasCredits = run.template.market != null
                 Text(
-                    text = if (distinct.size == 1 && run.state.heroes.size == 1) {
+                    text = if (hasCredits && distinct.size == 1 && run.state.heroes.size == 1) {
                         pluralStringResource(
                             R.plurals.campaign_result_solo,
                             distinct.single(),
@@ -539,7 +548,7 @@ private fun ResultPage(
                     style = MaterialTheme.typography.bodyLarge,
                 )
 
-                if (run.state.heroes.size > 1) {
+                if (hasCredits && run.state.heroes.size > 1) {
                     run.state.heroes.forEach { hero ->
                         Text("${hero.name}: +${gained[hero.id] ?: 0}")
                     }

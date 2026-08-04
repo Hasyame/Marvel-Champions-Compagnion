@@ -159,19 +159,24 @@ class BundledCampaignsTest {
 
     @Test
     fun `setup steps point at cards by code rather than naming them in the text`() {
-        // A code in the prose would be unreadable and would not translate; the
-        // app resolves the code to the card's real name in the reader's
-        // language, so the reference belongs in `cards`.
+        // A bare code in the prose would be unreadable and would not translate.
+        // `{card:CODE}` is different: the app resolves it against the card
+        // database, so the player reads a name in their own language and the
+        // template never hard-codes one. Everything else is still rejected.
+        val placeholder = Regex("""\{card:\d{5}[a-z]?\}""")
         val codePattern = Regex("""\b\d{5}[a-z]?\b""")
         templates().forEach { (name, template) ->
             template.scenarios.forEach { scenario ->
-                scenario.campaignSetup.forEach { step ->
-                    listOfNotNull(step.text.fr, step.text.en).forEach { text ->
-                        assertTrue(
-                            "$name/${scenario.id} has a raw card code in its text: \"$text\"",
-                            !codePattern.containsMatchIn(text),
-                        )
-                    }
+                val texts = scenario.campaignSetup.flatMap {
+                    listOfNotNull(it.text.fr, it.text.en)
+                } + scenario.onVictory?.prompts.orEmpty().flatMap {
+                    listOfNotNull(it.label?.fr, it.label?.en)
+                }
+                texts.forEach { text ->
+                    assertTrue(
+                        "$name/${scenario.id} has a raw card code in its text: \"$text\"",
+                        !codePattern.containsMatchIn(placeholder.replace(text, "")),
+                    )
                 }
             }
         }
