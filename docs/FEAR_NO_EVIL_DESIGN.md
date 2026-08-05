@@ -151,3 +151,17 @@ What that needs:
 
 Until then the filter version works, but it is per-session and hidden in the
 wrong screen.
+
+### Done, and one gap it exposed
+
+Built and verified on the phone: the pack opens to its sets, unticking one
+persists across a force-stop, and the draw reads the table. The chips are gone
+from the randomiser.
+
+Testing it surfaced something separate. Excluding Goblin Gimmicks does not stop
+Mutagen Formula being offered, because `scenario_rules.json` records no
+mandatory modulars for it — 18 of 58 scenarios have an empty list, and some of
+those genuinely require a set. The exclusion rule is right; the data it reads is
+incomplete, so the "do not offer the scenario" half stays silent for them.
+Fixing it means revisiting `tools/generate-scenario-rules.mjs`, not this
+feature.
