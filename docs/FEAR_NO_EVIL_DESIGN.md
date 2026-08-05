@@ -79,3 +79,50 @@ increments on a draw.
 Only after all four does the template become a JSON file. Attempting it before
 would mean encoding the campaign's rules in prose the app cannot act on, which
 is precisely what this schema exists to avoid.
+
+---
+
+# Queued work, decided but not built
+
+## Excluding modular sets from the randomiser
+
+A player who owns part of a pack does not own all of its modular sets, so the
+draw offers sets they cannot field. `RandomizerFilters` already excludes
+scenarios, heroes and aspects — modular sets are simply missing from it.
+
+The work mirrors the hero exclusion exactly: add `excludedModularSets` to the
+filters, `toggleExcludedModularSet` beside `toggleExcludedHero`, apply it in
+`ScenarioRandomizer`, and add the chips to the filters card.
+
+**Decided (Benoit, on being asked):** a scenario whose *mandatory* modular sets
+include an excluded one is **not offered at all**. If you cannot field a set the
+scenario requires, the scenario is not playable, so drawing it and flagging the
+gap would only make the player reject it by hand.
+
+## The Rise of Red Skull
+
+Needs no engine work — every mechanic it uses already exists. Card codes are all
+present on MarvelCDB under pack `trors`:
+
+- Villains: Crossbones `04058-60`, Absorbing Man `04076-78`, Taskmaster
+  `04093-95`, Zola `04109-11`, Red Skull `04125-27`
+- Main schemes: `04061a` `04062a` `04063a` · `04079a` · `04096a` · `04112a`
+  `04113a` · `04128a` `04129a`
+- EXPERIMENTAL attachments: `04072` `04073` `04074` `04075`
+- TECH upgrades: `04155` `04156` `04157` `04158`
+- Basic Condition upgrades: `04159a` `04160a` `04161a` `04162a`
+- Taskmaster allies: `04097` `04098` `04099` `04100`
+- Hydra Prison: `04122`
+
+Sets: `crossbones`, `exper_weapon`, `hydra_assault`, `weap_master`,
+`hydra_patrol`, `absorbing_man`, `taskmaster`, `zola`, `red_skull`, `expcamp`,
+`hydra_camp`.
+
+Shape: a card list for the EXPERIMENTAL attachments the encounter deck keeps
+gaining, another for what the players earn and keep, a third for allies lost
+behind the Hydra Prison; a campaign counter for the delay markers, which become
+threat in the finale; a flag for whether the prison was still standing.
+
+Two corrections to the spec as given: scenario 4 is headed HELA but is Zola
+throughout, and the "Legions of Hydra" and "Under Attack" sets it names do not
+exist under those codes — the pack ships `hydra_patrol` and `hydra_assault`.
