@@ -59,6 +59,14 @@ data class RandomizerFilters(
     val excludedScenarios: Set<String> = emptySet(),
     val excludedHeroes: Set<String> = emptySet(),
     val excludedAspects: Set<String> = emptySet(),
+    /**
+     * Modular sets the player cannot field.
+     *
+     * Owning a pack is not the same as owning every modular set in it — a
+     * second-hand box, a proxy build, a set lent out. The draw has no way to
+     * know, so the player says.
+     */
+    val excludedModularSets: Set<String> = emptySet(),
     val allowedDifficulties: Set<Difficulty> = Difficulty.entries.toSet(),
     val minPlayers: Int = 1,
     val maxPlayers: Int = 4,

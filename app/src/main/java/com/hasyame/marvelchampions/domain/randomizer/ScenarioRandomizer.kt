@@ -31,6 +31,13 @@ object ScenarioRandomizer {
         } else {
             pools.scenarios
                 .filter { it.code !in filters.excludedScenarios }
+                // A scenario that demands a set the player cannot field is not
+                // playable, so it is not offered. Drawing it and flagging the
+                // gap would only make them roll again by hand.
+                .filter { scenario ->
+                    rules[scenario.code]?.mandatoryModulars.orEmpty()
+                        .none { it in filters.excludedModularSets }
+                }
                 .randomOrNull(random)
                 ?.code
         }
@@ -60,7 +67,16 @@ object ScenarioRandomizer {
         val modularSetCodes = if (DrawField.MODULAR_SETS in locked && previous.modularSetCodes.isNotEmpty()) {
             previous.modularSetCodes
         } else {
-            drawModularSets(pools, rule, mandatory, random)
+            drawModularSets(
+                pools.copy(
+                    modularSets = pools.modularSets.filter {
+                        it.code !in filters.excludedModularSets
+                    },
+                ),
+                rule,
+                mandatory,
+                random,
+            )
         }
 
         val heroes = if (DrawField.HEROES in locked && DrawField.ASPECTS in locked) {

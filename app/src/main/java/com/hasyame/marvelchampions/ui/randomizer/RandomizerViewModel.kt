@@ -204,6 +204,14 @@ class RandomizerViewModel @Inject constructor(
         )
     }
 
+    /** Sets the player has not got, so the draw stops offering them. */
+    fun toggleExcludedModularSet(code: String) {
+        val current = filters.value.excludedModularSets
+        filters.value = filters.value.copy(
+            excludedModularSets = if (code in current) current - code else current + code,
+        )
+    }
+
     fun toggleExcludedAspect(aspect: String) {
         val current = filters.value.excludedAspects
         filters.value = filters.value.copy(

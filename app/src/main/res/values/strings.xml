@@ -486,4 +486,6 @@
     <string name="difficulty_standard_iii">Standard III</string>
     <string name="campaign_choose_one">Tap the one you want to keep</string>
     <string name="campaign_choose_scenario">Which scenario next?</string>
+    <string name="randomizer_excluded_modulars">Modular sets you do not have</string>
+    <string name="randomizer_excluded_modulars_hint">Excluded sets are never drawn, and scenarios that require one are not offered</string>
 </resources>

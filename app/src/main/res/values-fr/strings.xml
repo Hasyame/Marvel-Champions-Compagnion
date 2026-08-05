@@ -504,4 +504,6 @@
     <string name="difficulty_standard_iii">Standard III</string>
     <string name="campaign_choose_one">Touchez celle que vous gardez</string>
     <string name="campaign_choose_scenario">Quel scénario ensuite ?</string>
+    <string name="randomizer_excluded_modulars">Sets modulaires que vous n\'avez pas</string>
+    <string name="randomizer_excluded_modulars_hint">Les sets exclus ne sont jamais tirés, et les scénarios qui en exigent un ne sont pas proposés</string>
 </resources>
