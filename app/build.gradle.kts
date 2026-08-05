@@ -101,6 +101,19 @@ android {
     }
 
     buildTypes {
+        debug {
+            // A different package from the release build, so the two can sit on
+            // the same phone at once.
+            //
+            // Without this they share one application id, and Android refuses
+            // to install one over the other because the signatures differ — the
+            // only way through is to uninstall, which takes every campaign,
+            // deck and play with it. Testing a change should not cost the data
+            // you were testing against.
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+        }
+
         release {
             isMinifyEnabled = true
             isShrinkResources = true

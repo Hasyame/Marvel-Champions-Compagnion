@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Overrides the launcher label for debug builds only.
+
+      With applicationIdSuffix the two builds install side by side, which is the
+      point — but two identical icons called the same thing is its own trap. The
+      label says which one you are opening.
+    -->
+    <string name="app_name">MC Companion (debug)</string>
+</resources>
