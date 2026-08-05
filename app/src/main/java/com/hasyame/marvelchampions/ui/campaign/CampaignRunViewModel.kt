@@ -331,6 +331,16 @@ class CampaignRunViewModel @Inject constructor(
         }
     }
 
+    /** Keeps one of the cards a draw offered; the rest go back to the pool. */
+    fun keepDrawnCard(drawId: String, cardCode: String) {
+        val id = runId ?: return
+        val scenarioId = state.value.run?.state?.currentScenarioId ?: return
+        viewModelScope.launch {
+            repository.chooseDrawnCard(id, scenarioId, drawId, cardCode)
+            reload()
+        }
+    }
+
     fun takeSetupAction(actionId: String, heroId: String?) {
         val id = runId ?: return
         val scenarioId = state.value.run?.state?.currentScenarioId ?: return

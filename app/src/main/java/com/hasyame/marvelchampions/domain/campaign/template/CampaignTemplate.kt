@@ -242,6 +242,14 @@ data class DrawDefinition(
      */
     val counts: Map<String, String> = emptyMap(),
     /**
+     * How many candidates to offer when the players choose rather than the app.
+     *
+     * Fear No Evil deals two environments and keeps the one the table picks;
+     * the other goes back into the pool. Zero means the draw decides, which is
+     * every other campaign.
+     */
+    val offer: Int = 0,
+    /**
      * How many to draw, in order. More than one is for a setup that arranges
      * several cards, such as villains laid out in a row.
      */

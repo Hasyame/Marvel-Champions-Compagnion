@@ -502,4 +502,5 @@
     <string name="randomizer_choose_hint">Choisissez jusqu\'à %1$d, dans l\'ordre des joueurs</string>
     <string name="randomizer_choose_confirm">Utiliser</string>
     <string name="difficulty_standard_iii">Standard III</string>
+    <string name="campaign_choose_one">Touchez celle que vous gardez</string>
 </resources>

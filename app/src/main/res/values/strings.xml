@@ -484,4 +484,5 @@
     <string name="randomizer_choose_hint">Pick up to %1$d, in seating order</string>
     <string name="randomizer_choose_confirm">Use these</string>
     <string name="difficulty_standard_iii">Standard III</string>
+    <string name="campaign_choose_one">Tap the one you want to keep</string>
 </resources>

@@ -64,6 +64,18 @@ class CampaignEngine(
 
                 is CampaignEvent.SetupActionTaken -> applySetupAction(template, state, event, heroStats)
                 is CampaignEvent.SetupDrawn -> applyDraw(template, state, event)
+                // The kept card replaces the offer, so everything downstream —
+                // conditions, effects, the chips on the briefing — reads one
+                // card without knowing a choice happened. The cards not kept
+                // were never struck, so they are still in the pool.
+                is CampaignEvent.SetupChoiceMade -> state.copy(
+                    draws = state.draws + (
+                        event.scenarioId to (
+                            state.draws[event.scenarioId].orEmpty() +
+                                (event.drawId to listOf(event.cardCode))
+                            )
+                        ),
+                )
                 is CampaignEvent.ManualAdjustment -> applyManual(state, event)
                 is CampaignEvent.TimeRecorded ->
                     state.copy(totalPlayTimeMillis = state.totalPlayTimeMillis + event.elapsedMillis)

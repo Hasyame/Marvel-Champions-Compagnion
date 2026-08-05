@@ -127,6 +127,7 @@ fun CampaignRunScreen(
                         onNotReady = onBack,
                         onCardClick = onCardClick,
                         onSetupAction = viewModel::takeSetupAction,
+                        onKeepCard = viewModel::keepDrawnCard,
                     )
 
                     RunPage.PLAYING -> PlayingPage(
@@ -186,6 +187,7 @@ private fun BriefingPage(
     onNotReady: () -> Unit,
     onCardClick: (String) -> Unit,
     onSetupAction: (String, String?) -> Unit,
+    onKeepCard: (String, String) -> Unit,
 ) {
     if (scenario == null) {
         Box(Modifier.fillMaxSize().padding(32.dp), contentAlignment = Alignment.Center) {
@@ -336,11 +338,30 @@ private fun BriefingPage(
                                     )
                                 } ?: step.cards
 
+                                // An offer still waiting on the table: tapping a
+                                // card keeps it and returns the others to the
+                                // pool. Once kept there is only one chip left,
+                                // so this reads as an ordinary reference again.
+                                val undecided = step.draw?.offer.orEmpty0() > 0 && chips.size > 1
+
                                 if (chips.isNotEmpty()) {
+                                    if (undecided) {
+                                        Text(
+                                            text = stringResource(R.string.campaign_choose_one),
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.primary,
+                                        )
+                                    }
                                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                         chips.forEach { code ->
                                             AssistChip(
-                                                onClick = { onCardClick(code) },
+                                                onClick = {
+                                                    if (undecided) {
+                                                        onKeepCard(step.draw!!.id, code)
+                                                    } else {
+                                                        onCardClick(code)
+                                                    }
+                                                },
                                                 label = { Text(run.names.card(code)) },
                                             )
                                         }
@@ -683,3 +704,6 @@ private fun CampaignTotals(run: CampaignRun) {
         }
     }
 }
+
+/** Null and zero mean the same thing here: a draw that decides for itself. */
+private fun Int?.orEmpty0(): Int = this ?: 0

@@ -91,6 +91,22 @@ sealed interface CampaignEvent {
         val cardCodes: List<String>,
     ) : CampaignEvent
 
+    /**
+     * Which of the offered cards the players kept.
+     *
+     * Recorded rather than derived: the ones not kept go back into the pool, so
+     * nothing else in the state says which was chosen.
+     */
+    @Serializable
+    @SerialName("setup_choice")
+    data class SetupChoiceMade(
+        override val id: String,
+        override val timestamp: Long,
+        val scenarioId: String,
+        val drawId: String,
+        val cardCode: String,
+    ) : CampaignEvent
+
     /** Any hand adjustment. Logged as such so it never looks like a rules result. */
     @Serializable
     @SerialName("manual")

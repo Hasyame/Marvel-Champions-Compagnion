@@ -549,9 +549,12 @@ class CampaignRepository @Inject constructor(
                 // Shuffled rather than picked one at a time: a draw of several
                 // is an arrangement, and the order it comes out in is the order
                 // the cards are set out in.
+                // An offer deals several for the players to choose between; a
+                // plain draw deals what it needs and decides.
+                val wanted = if (definition.offer > 0) definition.offer else definition.count
                 val codes = CampaignEngine.drawPool(definition, state)
                     .shuffled()
-                    .take(definition.count.coerceAtLeast(1))
+                    .take(wanted.coerceAtLeast(1))
                 if (codes.isEmpty()) {
                     continue
                 }
@@ -571,6 +574,22 @@ class CampaignRepository @Inject constructor(
                 drawn = true
             }
             drawn
+        }
+
+
+    /** Records which of the offered cards the players kept. */
+    suspend fun chooseDrawnCard(runId: String, scenarioId: String, drawId: String, cardCode: String) =
+        withContext(ioDispatcher) {
+            append(
+                runId,
+                CampaignEvent.SetupChoiceMade(
+                    id = UUID.randomUUID().toString(),
+                    timestamp = System.currentTimeMillis(),
+                    scenarioId = scenarioId,
+                    drawId = drawId,
+                    cardCode = cardCode,
+                ),
+            )
         }
 
     suspend fun updateTimer(runId: String, timer: TimerState, scenarioId: String?) =
