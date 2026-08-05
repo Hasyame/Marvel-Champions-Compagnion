@@ -126,3 +126,28 @@ threat in the finale; a flag for whether the prison was still standing.
 Two corrections to the spec as given: scenario 4 is headed HELA but is Zola
 throughout, and the "Legions of Hydra" and "Under Attack" sets it names do not
 exist under those codes — the pack ships `hydra_patrol` and `hydra_assault`.
+
+## Modular exclusion belongs in the collection, not the randomiser (queued)
+
+Shipped in the randomiser's filters, which is the wrong home. Not owning a
+modular set is a fact about the collection, the same kind of fact as not owning
+the pack — it should be recorded once, persist, and apply everywhere, rather
+than sitting in a per-draw filter that resets and only the randomiser consults.
+
+**Decided (Benoit):** move it to Settings, beside the collection. Tapping a pack
+or expansion opens the modular sets inside it, and each can be excluded there.
+
+What that needs:
+
+- Persistence beside the owned packs. `OwnedPackDao` records what is owned;
+  excluded sets want the same treatment rather than in-memory filter state.
+- The collection screen gains an expand-on-tap per pack, listing that pack's
+  modular sets. `CardDao.getCardSets("modular", locale)` already returns each
+  set with its owning pack, so the grouping is free.
+- `RandomizerViewModel.effectiveFilters()` reads the stored exclusions instead
+  of holding its own, and the chips come out of the filters card.
+- The rule itself does not change and its tests still hold: an excluded set is
+  never drawn, and no scenario requiring it is offered.
+
+Until then the filter version works, but it is per-session and hidden in the
+wrong screen.
