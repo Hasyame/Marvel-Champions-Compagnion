@@ -76,6 +76,9 @@ class CampaignEngine(
                             )
                         ),
                 )
+                is CampaignEvent.ScenarioChosen ->
+                    state.copy(currentScenarioId = event.scenarioId, awaitingChoice = false)
+
                 is CampaignEvent.ManualAdjustment -> applyManual(state, event)
                 is CampaignEvent.TimeRecorded ->
                     state.copy(totalPlayTimeMillis = state.totalPlayTimeMillis + event.elapsedMillis)
@@ -95,7 +98,8 @@ class CampaignEngine(
             difficulty = event.difficulty,
             heroes = event.heroes,
             started = true,
-            currentScenarioId = event.startScenarioId,
+            awaitingChoice = template.chooseFirstScenario,
+            currentScenarioId = event.startScenarioId.takeUnless { template.chooseFirstScenario },
         )
 
         for (counter in template.counters) {
@@ -167,6 +171,7 @@ class CampaignEngine(
             draws = next.draws - event.scenarioId,
             currentScenarioId = advanced.scenarioId,
             finished = advanced.finished,
+            awaitingChoice = advanced.awaitingChoice,
         )
     }
 
@@ -204,7 +209,11 @@ class CampaignEngine(
         )
     }
 
-    private data class Advance(val scenarioId: String?, val finished: Boolean)
+    private data class Advance(
+        val scenarioId: String?,
+        val finished: Boolean,
+        val awaitingChoice: Boolean = false,
+    )
 
     /**
      * `next` is a guarded list evaluated in order, so a branch is data. The
@@ -221,6 +230,9 @@ class CampaignEngine(
             ?: return Advance(scenarioId, finished = false)
         return when {
             step.end -> Advance(null, finished = true)
+            // Nothing is current while the players decide, so the run has no
+            // scenario to render until they have.
+            step.choose -> Advance(null, finished = false, awaitingChoice = true)
             step.goto != null -> Advance(step.goto, finished = false)
             else -> Advance(scenarioId, finished = false)
         }
@@ -582,6 +594,27 @@ class CampaignEngine(
         fun drawPool(draw: DrawDefinition, state: CampaignState): List<String> {
             val spent = draw.excluding?.let { state.cardLists[it].orEmpty() }.orEmpty().toSet()
             return draw.from.filterNot { it in spent }.ifEmpty { draw.from }
+        }
+
+
+        /**
+         * The scenarios the players may still pick.
+         *
+         * A scenario is spent once it has been played, won or lost — this
+         * campaign does not replay them. The finale is held back until it is
+         * the only thing left, which is what makes it the finale.
+         */
+        fun choosableScenarios(
+            template: CampaignTemplate,
+            state: CampaignState,
+        ): List<ScenarioTemplate> {
+            val played = state.completedScenarios.map { it.scenarioId }.toSet()
+            val remaining = template.scenarios.filterNot {
+                it.id in played || it.id == template.finaleScenarioId
+            }
+            return remaining.ifEmpty {
+                template.scenarios.filter { it.id == template.finaleScenarioId && it.id !in played }
+            }
         }
 
         /** What a scenario has already drawn, in the order drawn. */

@@ -45,6 +45,14 @@ data class CampaignTemplate(
     val scenarios: List<ScenarioTemplate> = emptyList(),
     /** Scenario id the campaign starts on. Defaults to the first. */
     val startScenarioId: String? = null,
+    /**
+     * Played only when nothing else is left, and never offered as a choice.
+     *
+     * Fear No Evil keeps Le Caïd back for the end however the rest is ordered.
+     */
+    val finaleScenarioId: String? = null,
+    /** True when the campaign asks which scenario to play first. */
+    val chooseFirstScenario: Boolean = false,
 ) {
 
     /**
@@ -305,6 +313,13 @@ data class NextStep(
     @SerialName("when") val condition: Condition? = null,
     /** Ends the campaign rather than moving on. */
     val end: Boolean = false,
+    /**
+     * Hands the choice of the next scenario to the players.
+     *
+     * Fear No Evil is played in whatever order the table likes, so the campaign
+     * cannot name what comes next — only that it is time to ask.
+     */
+    val choose: Boolean = false,
 )
 
 enum class PromptType {

@@ -107,6 +107,15 @@ sealed interface CampaignEvent {
         val cardCode: String,
     ) : CampaignEvent
 
+    /** The scenario the players chose to play next. */
+    @Serializable
+    @SerialName("scenario_chosen")
+    data class ScenarioChosen(
+        override val id: String,
+        override val timestamp: Long,
+        val scenarioId: String,
+    ) : CampaignEvent
+
     /** Any hand adjustment. Logged as such so it never looks like a rules result. */
     @Serializable
     @SerialName("manual")

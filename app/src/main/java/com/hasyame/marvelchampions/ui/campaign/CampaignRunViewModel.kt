@@ -37,6 +37,9 @@ enum class RunPage {
 
     /** The market, reachable from [RESULT] or on its own. */
     MARKET,
+
+    /** Choosing which scenario to play next. */
+    CHOICE,
 }
 
 /** What one scenario awarded, for the result page. */
@@ -94,8 +97,13 @@ class CampaignRunViewModel @Inject constructor(
             // A run reopened with the timer already going belongs on the play
             // page, not back at the briefing.
             val running = state.value.run?.timer?.isRunning == true
+            val awaiting = state.value.run?.state?.awaitingChoice == true
             state.value = state.value.copy(
-                page = if (running) RunPage.PLAYING else RunPage.BRIEFING,
+                page = when {
+                    awaiting -> RunPage.CHOICE
+                    running -> RunPage.PLAYING
+                    else -> RunPage.BRIEFING
+                },
             )
         }
     }
@@ -328,6 +336,16 @@ class CampaignRunViewModel @Inject constructor(
                 ),
             )
             reload()
+        }
+    }
+
+    /** Records which scenario the players chose, and opens its briefing. */
+    fun chooseScenario(scenarioId: String) {
+        val id = runId ?: return
+        viewModelScope.launch {
+            repository.chooseScenario(id, scenarioId)
+            reload()
+            state.value = state.value.copy(page = RunPage.BRIEFING)
         }
     }
 

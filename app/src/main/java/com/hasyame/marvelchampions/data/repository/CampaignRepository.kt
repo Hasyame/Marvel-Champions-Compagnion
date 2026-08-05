@@ -577,6 +577,18 @@ class CampaignRepository @Inject constructor(
         }
 
 
+    /** Records the scenario the players chose to play next. */
+    suspend fun chooseScenario(runId: String, scenarioId: String) = withContext(ioDispatcher) {
+        append(
+            runId,
+            CampaignEvent.ScenarioChosen(
+                id = UUID.randomUUID().toString(),
+                timestamp = System.currentTimeMillis(),
+                scenarioId = scenarioId,
+            ),
+        )
+    }
+
     /** Records which of the offered cards the players kept. */
     suspend fun chooseDrawnCard(runId: String, scenarioId: String, drawId: String, cardCode: String) =
         withContext(ioDispatcher) {

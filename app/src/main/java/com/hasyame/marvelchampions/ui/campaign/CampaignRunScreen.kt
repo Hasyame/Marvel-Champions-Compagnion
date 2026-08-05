@@ -166,6 +166,12 @@ fun CampaignRunScreen(
                         onBreak = onBack,
                     )
 
+                    RunPage.CHOICE -> ChoosePage(
+                        run = run,
+                        onChoose = viewModel::chooseScenario,
+                        onBreak = onBack,
+                    )
+
                     RunPage.MARKET -> MarketPage(
                         run = run,
                         onBuy = viewModel::purchase,
@@ -717,3 +723,58 @@ private fun CampaignTotals(run: CampaignRun) {
 
 /** Null and zero mean the same thing here: a draw that decides for itself. */
 private fun Int?.orEmpty0(): Int = this ?: 0
+
+
+/**
+ * Which scenario to play next, when the campaign leaves that to the table.
+ *
+ * Only what has not been played is offered, and the finale is held back until
+ * it is all that is left — a campaign that let you open on its last scenario
+ * would not be a campaign.
+ */
+@Composable
+private fun ChoosePage(
+    run: CampaignRun,
+    onChoose: (String) -> Unit,
+    onBreak: () -> Unit,
+) {
+    val choices = CampaignEngine.choosableScenarios(run.template, run.state)
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.campaign_choose_scenario),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.primary,
+        )
+
+        choices.forEach { scenario ->
+            ComicPanel(Modifier.fillMaxWidth()) {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { onChoose(scenario.id) }
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    Text(
+                        text = scenario.name?.resolve("fr").orEmpty().ifBlank { scenario.id },
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    scenario.flavour?.resolve("fr")?.takeIf { it.isNotBlank() }?.let {
+                        Text(it, style = MaterialTheme.typography.bodySmall)
+                    }
+                }
+            }
+        }
+
+        OutlinedButton(onClick = onBreak, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.campaign_take_a_break))
+        }
+    }
+}

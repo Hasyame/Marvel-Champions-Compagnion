@@ -33,6 +33,9 @@ data class CampaignState(
      */
     val draws: Map<String, Map<String, List<String>>> = emptyMap(),
 
+    /** True while the campaign is waiting for the players to pick what to play. */
+    val awaitingChoice: Boolean = false,
+
     val currentScenarioId: String? = null,
     val completedScenarios: List<ScenarioResult> = emptyList(),
     val setupActionsTaken: Map<String, Set<String>> = emptyMap(),

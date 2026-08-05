@@ -503,4 +503,5 @@
     <string name="randomizer_choose_confirm">Utiliser</string>
     <string name="difficulty_standard_iii">Standard III</string>
     <string name="campaign_choose_one">Touchez celle que vous gardez</string>
+    <string name="campaign_choose_scenario">Quel scénario ensuite ?</string>
 </resources>

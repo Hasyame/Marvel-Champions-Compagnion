@@ -485,4 +485,5 @@
     <string name="randomizer_choose_confirm">Use these</string>
     <string name="difficulty_standard_iii">Standard III</string>
     <string name="campaign_choose_one">Tap the one you want to keep</string>
+    <string name="campaign_choose_scenario">Which scenario next?</string>
 </resources>
