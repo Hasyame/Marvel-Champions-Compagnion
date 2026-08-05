@@ -52,6 +52,7 @@ import com.hasyame.marvelchampions.domain.campaign.engine.ConditionEvaluator
 import com.hasyame.marvelchampions.domain.campaign.engine.EvaluationContext
 import com.hasyame.marvelchampions.domain.campaign.engine.TimerState
 import com.hasyame.marvelchampions.domain.campaign.template.CounterScope
+import com.hasyame.marvelchampions.domain.campaign.template.villainStages
 import com.hasyame.marvelchampions.domain.campaign.template.ScenarioTemplate
 import com.hasyame.marvelchampions.ui.util.openExternalUrl
 import kotlinx.coroutines.delay
@@ -221,7 +222,16 @@ private fun BriefingPage(
                         text = stringResource(R.string.campaign_pre_setup),
                         style = MaterialTheme.typography.titleMedium,
                     )
-                    setup.villainDeck[run.state.difficulty]?.takeIf { it.isNotEmpty() }?.let {
+                    setup.villainStages(
+                        run.state.difficulty,
+                        setup.villainDeckFromDraw?.let { drawId ->
+                            CampaignEngine.drawnCards(
+                                run.state,
+                                run.state.currentScenarioId,
+                                drawId,
+                            ).firstOrNull()
+                        },
+                    ).takeIf { it.isNotEmpty() }?.let {
                         CardChips(
                             label = stringResource(R.string.campaign_villain_deck_label),
                             codes = it,

@@ -159,6 +159,20 @@ data class ScenarioTemplate(
 data class BaseSetup(
     /** Villain stages per difficulty, e.g. `standard` to `["drang_1","drang_2"]`. */
     val villainDeck: Map<String, List<String>> = emptyMap(),
+    /**
+     * Draw id naming which villain is faced, when the scenario does not fix one.
+     *
+     * Fear No Evil pairs a scenario with whichever subordinate has not been
+     * fought yet, and each brings its own stages — so the deck cannot be written
+     * into the scenario the way every other campaign writes it.
+     */
+    val villainDeckFromDraw: String? = null,
+    /**
+     * Stages per drawn villain: card code to difficulty to stages.
+     *
+     * Consulted only when [villainDeckFromDraw] names a draw that has come up.
+     */
+    val villainDecks: Map<String, Map<String, List<String>>> = emptyMap(),
     val mainScheme: List<String> = emptyList(),
     val encounterSets: List<String> = emptyList(),
     val modularSets: List<String> = emptyList(),
@@ -357,3 +371,17 @@ data class PromptOption(
     val id: String,
     val label: LocalizedText? = null,
 )
+
+/**
+ * The villain stages to show, whether the scenario fixed them or drew them.
+ *
+ * Falls back to the written deck when nothing has been drawn yet, so a briefing
+ * rendered before the draw lands still shows something rather than blanking.
+ */
+fun BaseSetup.villainStages(difficulty: String, drawnVillain: String?): List<String> {
+    val fromDraw = villainDeckFromDraw
+        ?.let { drawnVillain }
+        ?.let { villainDecks[it] }
+        ?.get(difficulty)
+    return fromDraw?.takeIf { it.isNotEmpty() } ?: villainDeck[difficulty].orEmpty()
+}
