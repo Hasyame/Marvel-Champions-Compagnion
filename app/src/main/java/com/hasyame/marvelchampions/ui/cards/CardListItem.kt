@@ -103,29 +103,33 @@ fun CardListItem(
         },
         supportingContent = {
             Text(
+                // The faction only when it is an aspect. On a hero card
+                // MarvelCDB reports the type and the faction both as "Hero",
+                // so the row read "Héros · Héros ·" — the same word twice,
+                // which looked like a bug because it was one.
                 text = listOfNotNull(
                     card.typeName,
-                    card.factionName,
+                    card.factionName?.takeIf { aspectColor(card.factionCode) != null },
                     card.traits?.takeIf { it.isNotBlank() },
                 ).joinToString(" · "),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
         },
-        trailingContent = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                card.cost?.let {
-                    CostPip(it)
-                    Spacer(Modifier.width(8.dp))
-                }
-                if (showPack) {
-                    Text(
-                        text = card.packCode.uppercase(),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
+        // Only the pack, and only where it changes. The cost used to sit here
+        // too, as a bare number in a circle at the far right of the row — which
+        // says nothing about what it counts. It now sits on the corner of the
+        // art, where the card itself prints it, and needs no label.
+        trailingContent = if (showPack) {
+            {
+                Text(
+                    text = card.packCode.uppercase(),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
+        } else {
+            null
         },
     )
     androidx.compose.material3.HorizontalDivider()
@@ -158,6 +162,11 @@ private fun CardThumbnail(card: CardEntity) {
                 modifier = Modifier.size(width = THUMBNAIL_WIDTH, height = THUMBNAIL_HEIGHT),
             )
         }
+        // Top-left, over the art, because that is where the printed card puts
+        // it. A player reads it without being told what it is.
+        card.cost?.let {
+            CostPip(it, Modifier.align(Alignment.TopStart).padding(2.dp))
+        }
     }
 }
 
@@ -168,17 +177,17 @@ private fun CardThumbnail(card: CardEntity) {
  * as neither one thing nor the other.
  */
 @Composable
-private fun CostPip(cost: Int) {
+private fun CostPip(cost: Int, modifier: Modifier = Modifier) {
     Box(
-        Modifier
-            .size(24.dp)
+        modifier
+            .size(20.dp)
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.secondaryContainer),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = stringResource(R.string.card_cost_short, cost),
-            style = MaterialTheme.typography.labelLarge,
+            style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSecondaryContainer,
         )
     }

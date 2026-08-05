@@ -101,8 +101,8 @@ fun Modifier.comicBurst(
 @Composable
 fun ComicPanel(
     modifier: Modifier = Modifier,
-    borderWidth: Dp = 2.5.dp,
-    offset: Dp = 4.dp,
+    borderWidth: Dp = 2.dp,
+    offset: Dp = 3.dp,
     color: Color = MaterialTheme.colorScheme.surface,
     content: @Composable BoxScope.() -> Unit,
 ) {
@@ -121,7 +121,10 @@ fun ComicPanel(
                 topLeft = Offset(dx, dx),
                 size = Size(size.width, size.height),
                 cornerRadius = androidx.compose.ui.geometry.CornerRadius(6.dp.toPx()),
-                alpha = 0.55f,
+                // Opaque. A half-transparent offset rectangle is neither a
+                // printed shadow nor a real one — it reads as a smudge behind
+                // the panel. Print has no blur and no partial ink.
+                alpha = 1f,
             )
         },
     ) {

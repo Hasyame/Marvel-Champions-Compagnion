@@ -25,17 +25,18 @@ private val LightScheme = lightColorScheme(
     primaryContainer = IronRedTint,
     onPrimaryContainer = IronRedInk,
 
-    secondary = BrassGold,
-    onSecondary = BrassGoldInk,
-    secondaryContainer = BrassGoldTint,
-    onSecondaryContainer = BrassGoldInk,
+    // Neutral, not gold. Gold is what the game prints Justice in, so a gold
+    // selection sat in the same list as cards where gold already means
+    // something else.
+    secondary = InkGraphite,
+    onSecondary = BoneCream,
+    secondaryContainer = InkGraphiteSoft,
+    onSecondaryContainer = InkGraphite,
 
-    // The bright gold is the highlight — starbursts and accents — so it is the
-    // tertiary and never a page fill.
-    tertiary = ArcGold,
-    onTertiary = BrassGoldInk,
-    tertiaryContainer = ArcGoldTint,
-    onTertiaryContainer = BrassGoldInk,
+    tertiary = InkGraphite,
+    onTertiary = BoneCream,
+    tertiaryContainer = InkGraphiteSoft,
+    onTertiaryContainer = InkGraphite,
 
     background = PaperWarm,
     onBackground = PanelInk,
@@ -68,15 +69,16 @@ private val DarkScheme = darkColorScheme(
     onPrimaryContainer = IronRedTint,
     inversePrimary = IronRed,
 
-    secondary = BrassGold,
-    onSecondary = BrassGoldInk,
-    secondaryContainer = BrassGoldDeep,
-    onSecondaryContainer = BrassGoldTint,
+    // See the light scheme: neutral so the aspect palette keeps its meaning.
+    secondary = BoneCream,
+    onSecondary = InkGraphite,
+    secondaryContainer = BoneCreamDeep,
+    onSecondaryContainer = BoneCream,
 
-    tertiary = ArcGold,
-    onTertiary = BrassGoldInk,
-    tertiaryContainer = ArcGoldDeep,
-    onTertiaryContainer = ArcGoldTint,
+    tertiary = BoneCream,
+    onTertiary = InkGraphite,
+    tertiaryContainer = BoneCreamDeep,
+    onTertiaryContainer = BoneCream,
 
     background = NightBase,
     onBackground = PaperWarm,

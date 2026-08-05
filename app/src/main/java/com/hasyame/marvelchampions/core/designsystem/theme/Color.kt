@@ -61,7 +61,7 @@ val NightOutlineSoft = Color(0xFF5A4A48)
  * Always dark, in both themes. Using the outline colour meant the dark theme
  * drew a pale slab behind every panel.
  */
-val PanelShadow = Color(0xFF070405)
+val PanelShadow = Color(0xFF120C0B)
 
 /**
  * Aspect colours, as the game prints them.
@@ -69,6 +69,20 @@ val PanelShadow = Color(0xFF070405)
  * Kept separate from the app palette above: these carry meaning a player
  * already knows, so they are not ours to restyle.
  */
+/**
+ * Neutral ink, for everything interactive.
+ *
+ * The app used gold here, which is the same colour the game prints Justice in —
+ * a selected chip and a Justice card were the same yellow, one meaning "you
+ * tapped this" and the other meaning "this is an aspect". Chrome in a neutral
+ * leaves the aspect palette to mean only one thing, and lets the card art be
+ * the colour on the screen.
+ */
+val InkGraphite = Color(0xFF2B2422)
+val InkGraphiteSoft = Color(0xFFE4DAD6)
+val BoneCream = Color(0xFFF2E7E2)
+val BoneCreamDeep = Color(0xFF3A302E)
+
 val AspectAggression = Color(0xFFC0392B)
 val AspectJustice = Color(0xFFD4A017)
 val AspectLeadership = Color(0xFF2E6DA4)
