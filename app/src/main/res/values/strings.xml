@@ -483,4 +483,5 @@
     <string name="campaign_finished_cleanup">Before your next game, take the campaign cards back out of your decks.</string>
     <string name="randomizer_choose_hint">Pick up to %1$d, in seating order</string>
     <string name="randomizer_choose_confirm">Use these</string>
+    <string name="difficulty_standard_iii">Standard III</string>
 </resources>

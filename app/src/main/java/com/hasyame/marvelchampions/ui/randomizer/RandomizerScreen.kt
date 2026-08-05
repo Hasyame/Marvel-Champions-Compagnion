@@ -405,6 +405,7 @@ private fun difficultyLabel(difficulty: Difficulty): String = stringResource(
     when (difficulty) {
         Difficulty.STANDARD_I -> R.string.difficulty_standard_i
         Difficulty.STANDARD_II -> R.string.difficulty_standard_ii
+        Difficulty.STANDARD_III -> R.string.difficulty_standard_iii
         Difficulty.EXPERT_I -> R.string.difficulty_expert_i
         Difficulty.EXPERT_II -> R.string.difficulty_expert_ii
     },

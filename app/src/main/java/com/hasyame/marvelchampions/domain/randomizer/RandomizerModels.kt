@@ -4,6 +4,7 @@ package com.hasyame.marvelchampions.domain.randomizer
 enum class Difficulty {
     STANDARD_I,
     STANDARD_II,
+    STANDARD_III,
     EXPERT_I,
     EXPERT_II,
 }
