@@ -9,6 +9,7 @@ import coil3.SingletonImageLoader
 import com.hasyame.marvelchampions.data.db.dao.FavouriteDao
 import com.hasyame.marvelchampions.data.db.dao.PlayDao
 import com.hasyame.marvelchampions.data.db.dao.CardDao
+import com.hasyame.marvelchampions.data.db.dao.ExcludedModularSetDao
 import com.hasyame.marvelchampions.data.db.dao.OwnedPackDao
 import com.hasyame.marvelchampions.data.db.dao.PackDao
 import com.hasyame.marvelchampions.data.db.dao.RandomizerHistoryDao
@@ -86,6 +87,10 @@ object DataModule {
     @Provides
     fun provideOwnedPackDao(database: MarvelChampionsDatabase): OwnedPackDao =
         database.ownedPackDao()
+
+    @Provides
+    fun provideExcludedModularSetDao(database: MarvelChampionsDatabase): ExcludedModularSetDao =
+        database.excludedModularSetDao()
 
     @Provides
     fun provideRandomizerHistoryDao(database: MarvelChampionsDatabase): RandomizerHistoryDao =

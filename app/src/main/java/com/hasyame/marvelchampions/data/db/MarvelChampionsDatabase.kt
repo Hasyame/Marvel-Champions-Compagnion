@@ -6,6 +6,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.hasyame.marvelchampions.data.db.dao.CampaignDao
 import com.hasyame.marvelchampions.data.db.dao.CardDao
+import com.hasyame.marvelchampions.data.db.dao.ExcludedModularSetDao
 import com.hasyame.marvelchampions.data.db.dao.OwnedPackDao
 import com.hasyame.marvelchampions.data.db.dao.PackDao
 import com.hasyame.marvelchampions.data.db.dao.FavouriteDao
@@ -16,6 +17,7 @@ import com.hasyame.marvelchampions.data.db.entity.CampaignEventEntity
 import com.hasyame.marvelchampions.data.db.entity.CampaignRunEntity
 import com.hasyame.marvelchampions.data.db.entity.CardEntity
 import com.hasyame.marvelchampions.data.db.entity.CardFtsEntity
+import com.hasyame.marvelchampions.data.db.entity.ExcludedModularSetEntity
 import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
 import com.hasyame.marvelchampions.data.db.entity.FavouriteCardEntity
 import com.hasyame.marvelchampions.data.db.entity.PackEntity
@@ -50,8 +52,9 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
         CampaignEventEntity::class,
         PlayEntity::class,
         FavouriteCardEntity::class,
+        ExcludedModularSetEntity::class,
     ],
-    version = 10,
+    version = 11,
     exportSchema = true,
     // Both migrations so far only add a table, so Room can generate them from
     // the exported schemas. Anything that alters an existing table needs a
@@ -66,6 +69,7 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
         AutoMigration(from = 7, to = 8),
         AutoMigration(from = 8, to = 9),
         AutoMigration(from = 9, to = 10),
+        AutoMigration(from = 10, to = 11),
     ],
 )
 abstract class MarvelChampionsDatabase : RoomDatabase() {
@@ -77,6 +81,7 @@ abstract class MarvelChampionsDatabase : RoomDatabase() {
     abstract fun campaignDao(): CampaignDao
     abstract fun playDao(): PlayDao
     abstract fun favouriteDao(): FavouriteDao
+    abstract fun excludedModularSetDao(): ExcludedModularSetDao
 
     companion object {
         const val NAME: String = "marvelchampions.db"

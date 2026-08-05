@@ -60,6 +60,19 @@ class RandomizerRepository @Inject constructor(
         )
     }
 
+    /**
+     * Modular sets the user has told the collection they cannot field.
+     *
+     * A flow rather than a one-shot read: the collection screen is a tap away
+     * from the draw, and coming back to a stale pool would be a bug the player
+     * could see.
+     */
+    fun observeExcludedModularSets(): Flow<Set<String>> =
+        collectionRepository.observeExcludedModularSets()
+
+    suspend fun getExcludedModularSets(): Set<String> =
+        collectionRepository.getExcludedModularSets()
+
     suspend fun loadRules(): Map<String, ScenarioRule> = withContext(ioDispatcher) {
         seed.readScenarioRules().scenarios.associate { dto ->
             dto.code to ScenarioRule(

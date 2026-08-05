@@ -71,3 +71,21 @@ data class OwnedPackEntity(
     @PrimaryKey val packCode: String,
     val quantity: Int,
 )
+
+/**
+ * A modular set the user owns the pack for but cannot field.
+ *
+ * Owning a pack is not the same as owning everything in it — a second-hand box
+ * with sets missing, a set lent out and not returned, a proxy build. The draw
+ * has no way to know, so this table records what the user told it.
+ *
+ * Absence means owned: only the exceptions are stored, so a collection with
+ * nothing missing costs no rows. No foreign key, for the same reason as
+ * [OwnedPackEntity] — the card cache can be cleared and rebuilt underneath it,
+ * and an exclusion must survive that.
+ */
+@Entity(tableName = "excluded_modular_sets")
+@Serializable
+data class ExcludedModularSetEntity(
+    @PrimaryKey val setCode: String,
+)

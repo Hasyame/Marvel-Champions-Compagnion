@@ -1,7 +1,10 @@
 package com.hasyame.marvelchampions.data.repository
 
+import com.hasyame.marvelchampions.data.db.dao.CardDao
+import com.hasyame.marvelchampions.data.db.dao.ExcludedModularSetDao
 import com.hasyame.marvelchampions.data.db.dao.OwnedPackDao
 import com.hasyame.marvelchampions.data.db.dao.PackDao
+import com.hasyame.marvelchampions.data.db.entity.ExcludedModularSetEntity
 import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
 import com.hasyame.marvelchampions.data.db.entity.PackEntity
 import com.hasyame.marvelchampions.domain.model.CardLocale
@@ -29,6 +32,8 @@ data class PackOwnership(
 class CollectionRepository @Inject constructor(
     private val packDao: PackDao,
     private val ownedPackDao: OwnedPackDao,
+    private val excludedModularSetDao: ExcludedModularSetDao,
+    private val cardDao: CardDao,
 ) {
 
     fun observeCollection(locale: CardLocale): Flow<List<PackOwnership>> =
@@ -84,4 +89,47 @@ class CollectionRepository @Inject constructor(
     }
 
     suspend fun isEmpty(): Boolean = ownedPackDao.countOwned() == 0
+
+    /**
+     * The modular sets each pack contains, keyed by pack code.
+     *
+     * Derived from the cards themselves rather than curated: a set belongs to
+     * whichever pack its cards came in.
+     */
+    suspend fun modularSetsByPack(locale: CardLocale): Map<String, List<ModularSet>> =
+        cardDao.getCardSets(MODULAR_SET, locale.code)
+            .map { ModularSet(code = it.code, name = it.name ?: it.code, packCode = it.packCode) }
+            .sortedBy { it.name }
+            .groupBy { it.packCode }
+
+    fun observeExcludedModularSets(): Flow<Set<String>> =
+        excludedModularSetDao.observeExcluded().map { rows -> rows.map { it.setCode }.toSet() }
+
+    suspend fun getExcludedModularSets(): Set<String> =
+        excludedModularSetDao.getExcludedCodes().toSet()
+
+    /** [excluded] true means the user has not got it, so nothing may offer it. */
+    suspend fun setModularSetExcluded(setCode: String, excluded: Boolean) {
+        if (excluded) {
+            excludedModularSetDao.exclude(ExcludedModularSetEntity(setCode))
+        } else {
+            excludedModularSetDao.include(setCode)
+        }
+    }
+
+    /** Replaces the exclusions wholesale, for the restore path. */
+    suspend fun replaceExcludedModularSets(setCodes: Collection<String>) {
+        excludedModularSetDao.replaceAll(setCodes.map { ExcludedModularSetEntity(it) })
+    }
+
+    private companion object {
+        const val MODULAR_SET = "modular"
+    }
 }
+
+/** A modular set as the collection screen shows it, under its pack. */
+data class ModularSet(
+    val code: String,
+    val name: String,
+    val packCode: String,
+)

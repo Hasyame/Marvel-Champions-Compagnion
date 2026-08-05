@@ -2,6 +2,7 @@ package com.hasyame.marvelchampions.data.backup
 
 import com.hasyame.marvelchampions.data.db.entity.CampaignEventEntity
 import com.hasyame.marvelchampions.data.db.entity.CampaignRunEntity
+import com.hasyame.marvelchampions.data.db.entity.ExcludedModularSetEntity
 import com.hasyame.marvelchampions.data.db.entity.FavouriteCardEntity
 import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
 import com.hasyame.marvelchampions.data.db.entity.PlayEntity
@@ -28,6 +29,12 @@ data class Backup(
     val appVersion: String = "",
 
     val ownedPacks: List<OwnedPackEntity> = emptyList(),
+    /**
+     * Added after format 1 shipped. The version is deliberately not bumped: an
+     * older build ignores unknown keys, so it can still read a newer file and
+     * merely loses the exclusions, which beats refusing the backup outright.
+     */
+    val excludedModularSets: List<ExcludedModularSetEntity> = emptyList(),
     val decks: List<SavedDeckEntity> = emptyList(),
     val campaignRuns: List<CampaignRunEntity> = emptyList(),
     val campaignEvents: List<CampaignEventEntity> = emptyList(),

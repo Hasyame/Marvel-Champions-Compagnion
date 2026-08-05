@@ -1,5 +1,6 @@
 package com.hasyame.marvelchampions.ui.collection
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -11,7 +12,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -24,6 +28,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -32,6 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
 import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
+import com.hasyame.marvelchampions.data.repository.ModularSet
 import com.hasyame.marvelchampions.data.repository.PackOwnership
 import com.hasyame.marvelchampions.domain.model.PackType
 
@@ -46,6 +55,10 @@ fun CollectionScreen(
     viewModel: CollectionViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // Held here rather than in the row: LazyColumn recycles its children, and
+    // an expansion kept inside one would collapse itself on scroll.
+    var expanded by rememberSaveable { mutableStateOf(emptySet<String>()) }
 
     Scaffold(
         topBar = {
@@ -93,9 +106,23 @@ fun CollectionScreen(
                     )
                 }
                 items(group.packs, key = { it.pack.code }) { ownership ->
+                    val sets = state.modularSetsByPack[ownership.pack.code].orEmpty()
                     PackRow(
                         ownership = ownership,
+                        // Only an owned pack can have sets missing from it, and
+                        // a pack with none has nothing to open.
+                        modularSets = if (ownership.isOwned) sets else emptyList(),
+                        expanded = ownership.pack.code in expanded,
+                        excludedSets = state.excludedModularSets,
                         onToggle = { viewModel.setOwned(ownership.pack.code, it) },
+                        onToggleExpanded = {
+                            expanded = if (ownership.pack.code in expanded) {
+                                expanded - ownership.pack.code
+                            } else {
+                                expanded + ownership.pack.code
+                            }
+                        },
+                        onToggleSet = { code, owned -> viewModel.setModularSetOwned(code, owned) },
                     )
                 }
             }
@@ -146,9 +173,21 @@ private fun BulkActions(
 @Composable
 private fun PackRow(
     ownership: PackOwnership,
+    modularSets: List<ModularSet>,
+    expanded: Boolean,
+    excludedSets: Set<String>,
     onToggle: (Boolean) -> Unit,
+    onToggleExpanded: () -> Unit,
+    onToggleSet: (String, Boolean) -> Unit,
 ) {
+    val missing = modularSets.count { it.code in excludedSets }
+
     ListItem(
+        modifier = if (modularSets.isEmpty()) {
+            Modifier
+        } else {
+            Modifier.clickable(onClick = onToggleExpanded)
+        },
         headlineContent = { Text(ownership.name) },
         supportingContent = {
             Text(
@@ -165,14 +204,70 @@ private fun PackRow(
                             ),
                         )
                     }
+                    // Worth saying on the collapsed row: an exclusion made once
+                    // and forgotten would otherwise quietly shrink every draw.
+                    if (missing > 0) {
+                        append(" · ")
+                        append(
+                            pluralStringResource(
+                                R.plurals.collection_missing_sets,
+                                missing,
+                                missing,
+                            ),
+                        )
+                    }
                 },
                 style = MaterialTheme.typography.bodySmall,
             )
         },
         trailingContent = {
-            Switch(checked = ownership.isOwned, onCheckedChange = onToggle)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (modularSets.isNotEmpty()) {
+                    Icon(
+                        imageVector = if (expanded) {
+                            Icons.Filled.KeyboardArrowUp
+                        } else {
+                            Icons.Filled.KeyboardArrowDown
+                        },
+                        contentDescription = stringResource(
+                            if (expanded) {
+                                R.string.collection_hide_modular_sets
+                            } else {
+                                R.string.collection_show_modular_sets
+                            },
+                        ),
+                    )
+                }
+                Switch(checked = ownership.isOwned, onCheckedChange = onToggle)
+            }
         },
     )
+
+    if (expanded && modularSets.isNotEmpty()) {
+        Text(
+            text = stringResource(R.string.collection_modular_sets_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(start = 32.dp, end = 16.dp, bottom = 4.dp),
+        )
+        modularSets.forEach { set ->
+            val owned = set.code !in excludedSets
+            ListItem(
+                modifier = Modifier
+                    .padding(start = 32.dp)
+                    .clickable { onToggleSet(set.code, !owned) },
+                headlineContent = {
+                    Text(text = set.name, style = MaterialTheme.typography.bodyMedium)
+                },
+                leadingContent = {
+                    Checkbox(
+                        checked = owned,
+                        onCheckedChange = { onToggleSet(set.code, it) },
+                    )
+                },
+            )
+        }
+    }
 }
 
 @Composable

@@ -58,6 +58,13 @@
         <item quantity="one">%1$d of %2$d card known</item>
         <item quantity="other">%1$d of %2$d cards known</item>
     </plurals>
+    <string name="collection_show_modular_sets">Show the modular sets in this pack</string>
+    <string name="collection_hide_modular_sets">Hide the modular sets in this pack</string>
+    <string name="collection_modular_sets_hint">Untick a set you have not got. It is never drawn, and scenarios that require it are not offered.</string>
+    <plurals name="collection_missing_sets">
+        <item quantity="one">%1$d set missing</item>
+        <item quantity="other">%1$d sets missing</item>
+    </plurals>
 
     <!-- Pack types -->
     <string name="pack_type_core">Core set</string>
@@ -486,6 +493,4 @@
     <string name="difficulty_standard_iii">Standard III</string>
     <string name="campaign_choose_one">Tap the one you want to keep</string>
     <string name="campaign_choose_scenario">Which scenario next?</string>
-    <string name="randomizer_excluded_modulars">Modular sets you do not have</string>
-    <string name="randomizer_excluded_modulars_hint">Excluded sets are never drawn, and scenarios that require one are not offered</string>
 </resources>

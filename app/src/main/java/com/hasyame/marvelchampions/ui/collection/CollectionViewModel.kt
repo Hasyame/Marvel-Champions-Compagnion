@@ -3,6 +3,7 @@ package com.hasyame.marvelchampions.ui.collection
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hasyame.marvelchampions.data.repository.CollectionRepository
+import com.hasyame.marvelchampions.data.repository.ModularSet
 import com.hasyame.marvelchampions.data.repository.PackOwnership
 import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.domain.model.PackType
@@ -10,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -27,6 +29,10 @@ data class CollectionUiState(
     val ownedCount: Int = 0,
     val totalCount: Int = 0,
     val isLoading: Boolean = true,
+    /** The modular sets each pack contains, keyed by pack code. */
+    val modularSetsByPack: Map<String, List<ModularSet>> = emptyMap(),
+    /** Sets the user has said they cannot field. Absence means owned. */
+    val excludedModularSets: Set<String> = emptySet(),
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -36,9 +42,21 @@ class CollectionViewModel @Inject constructor(
     private val preferences: AppPreferences,
 ) : ViewModel() {
 
-    val uiState: StateFlow<CollectionUiState> = preferences.cardLocale.flatMapLatest { locale ->
-        repository.observeCollection(locale)
-    }.map { collection ->
+    /**
+     * Which sets belong to which pack, reloaded when the card language changes.
+     *
+     * It comes from the card cache rather than the collection, so it is read
+     * once per locale instead of being folded into the collection flow.
+     */
+    private val modularSetsByPack = preferences.cardLocale.map { locale ->
+        repository.modularSetsByPack(locale)
+    }
+
+    val uiState: StateFlow<CollectionUiState> = combine(
+        preferences.cardLocale.flatMapLatest { locale -> repository.observeCollection(locale) },
+        modularSetsByPack,
+        repository.observeExcludedModularSets(),
+    ) { collection, setsByPack, excluded ->
         CollectionUiState(
             waves = collection
                 .groupBy { it.pack.wave }
@@ -47,6 +65,8 @@ class CollectionViewModel @Inject constructor(
             ownedCount = collection.count { it.isOwned },
             totalCount = collection.size,
             isLoading = false,
+            modularSetsByPack = setsByPack,
+            excludedModularSets = excluded,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -60,6 +80,16 @@ class CollectionViewModel @Inject constructor(
 
     fun setQuantity(packCode: String, quantity: Int) {
         viewModelScope.launch { repository.setQuantity(packCode, quantity) }
+    }
+
+    /**
+     * Records that a set inside an owned pack is or is not on the shelf.
+     *
+     * [owned] is the player's answer to the tick box, so it is inverted here:
+     * only what is missing is stored.
+     */
+    fun setModularSetOwned(setCode: String, owned: Boolean) {
+        viewModelScope.launch { repository.setModularSetExcluded(setCode, excluded = !owned) }
     }
 
     /** "Select all hero packs" and friends. */

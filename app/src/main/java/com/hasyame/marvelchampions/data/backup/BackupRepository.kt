@@ -50,6 +50,7 @@ class BackupRepository @Inject constructor(
                 createdAt = System.currentTimeMillis(),
                 appVersion = appVersion(),
                 ownedPacks = database.ownedPackDao().getOwned(),
+                excludedModularSets = database.excludedModularSetDao().getExcluded(),
                 decks = database.savedDeckDao().getDecks(),
                 campaignRuns = runs,
                 campaignEvents = runs.flatMap { database.campaignDao().getEvents(it.id) },
@@ -107,10 +108,12 @@ class BackupRepository @Inject constructor(
                 database.campaignDao().deleteAllRuns()
                 database.savedDeckDao().deleteAll()
                 database.ownedPackDao().clearOwned()
+                database.excludedModularSetDao().clear()
                 database.randomizerHistoryDao().clear()
                 database.favouriteDao().deleteAll()
 
                 database.ownedPackDao().upsertAll(backup.ownedPacks)
+                database.excludedModularSetDao().excludeAll(backup.excludedModularSets)
                 database.savedDeckDao().upsertAll(backup.decks)
                 backup.campaignRuns.forEach { database.campaignDao().insertRun(it) }
                 // After the runs: an event references its run, and the foreign

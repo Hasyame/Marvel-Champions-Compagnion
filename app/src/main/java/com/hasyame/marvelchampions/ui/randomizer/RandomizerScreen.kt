@@ -382,28 +382,6 @@ private fun FiltersCard(state: RandomizerUiState, viewModel: RandomizerViewModel
             }
 
             Text(
-                text = stringResource(R.string.randomizer_excluded_modulars),
-                style = MaterialTheme.typography.titleSmall,
-            )
-            Text(
-                text = stringResource(R.string.randomizer_excluded_modulars_hint),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                state.pools.modularSets
-                    .map { it.code to (state.names.modularSets[it.code] ?: it.code) }
-                    .sortedBy { it.second }
-                    .forEach { (code, name) ->
-                        FilterChip(
-                            selected = code in state.filters.excludedModularSets,
-                            onClick = { viewModel.toggleExcludedModularSet(code) },
-                            label = { Text(name) },
-                        )
-                    }
-            }
-
-            Text(
                 text = stringResource(R.string.randomizer_players),
                 style = MaterialTheme.typography.titleSmall,
             )

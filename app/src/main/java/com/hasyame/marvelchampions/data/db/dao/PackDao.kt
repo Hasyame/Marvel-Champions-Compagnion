@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.hasyame.marvelchampions.data.db.entity.ExcludedModularSetEntity
 import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
 import com.hasyame.marvelchampions.data.db.entity.PackEntity
 import com.hasyame.marvelchampions.data.db.entity.PackTranslationEntity
@@ -114,4 +115,36 @@ interface OwnedPackDao {
     /** For a restore, which replaces rather than merges. */
     @Query("DELETE FROM owned_packs")
     suspend fun clearOwned()
+}
+
+@Dao
+interface ExcludedModularSetDao {
+
+    @Query("SELECT * FROM excluded_modular_sets")
+    fun observeExcluded(): Flow<List<ExcludedModularSetEntity>>
+
+    @Query("SELECT * FROM excluded_modular_sets")
+    suspend fun getExcluded(): List<ExcludedModularSetEntity>
+
+    @Query("SELECT setCode FROM excluded_modular_sets")
+    suspend fun getExcludedCodes(): List<String>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun exclude(set: ExcludedModularSetEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun excludeAll(sets: List<ExcludedModularSetEntity>)
+
+    @Query("DELETE FROM excluded_modular_sets WHERE setCode = :setCode")
+    suspend fun include(setCode: String)
+
+    @Query("DELETE FROM excluded_modular_sets")
+    suspend fun clear()
+
+    /** Replaces the whole list, for the import and restore paths. */
+    @Transaction
+    suspend fun replaceAll(sets: List<ExcludedModularSetEntity>) {
+        clear()
+        excludeAll(sets)
+    }
 }

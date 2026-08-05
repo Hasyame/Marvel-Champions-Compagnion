@@ -55,6 +55,9 @@ class RandomizerViewModel @Inject constructor(
     private var rules: Map<String, ScenarioRule> = emptyMap()
     private var beatenScenarios: Set<String> = emptySet()
 
+    /** Sets the collection says are missing. Never drawn, and see below. */
+    private var missingModularSets: Set<String> = emptySet()
+
     val uiState: StateFlow<RandomizerUiState> = combine(
         combine(draw, locked, filters, excludeBeaten, ::Quad),
         combine(pools, names, loading, ::Triple),
@@ -87,6 +90,10 @@ class RandomizerViewModel @Inject constructor(
             rules = repository.loadRules()
             pools.value = repository.loadPools(locale)
             names.value = repository.loadNames(locale)
+            // Read once before the opening roll: collecting the flow below is
+            // not guaranteed to have delivered by the time we draw, and a first
+            // draw offering a set the player has not got is the whole bug.
+            missingModularSets = repository.getExcludedModularSets()
             loading.value = false
             if (pools.value.scenarios.isNotEmpty()) {
                 rollAll()
@@ -94,6 +101,9 @@ class RandomizerViewModel @Inject constructor(
         }
         viewModelScope.launch {
             repository.observeBeatenScenarios().collect { beatenScenarios = it.toSet() }
+        }
+        viewModelScope.launch {
+            repository.observeExcludedModularSets().collect { missingModularSets = it }
         }
     }
 
@@ -204,14 +214,6 @@ class RandomizerViewModel @Inject constructor(
         )
     }
 
-    /** Sets the player has not got, so the draw stops offering them. */
-    fun toggleExcludedModularSet(code: String) {
-        val current = filters.value.excludedModularSets
-        filters.value = filters.value.copy(
-            excludedModularSets = if (code in current) current - code else current + code,
-        )
-    }
-
     fun toggleExcludedAspect(aspect: String) {
         val current = filters.value.excludedAspects
         filters.value = filters.value.copy(
@@ -232,8 +234,16 @@ class RandomizerViewModel @Inject constructor(
     }
 
     /** Folds the "exclude beaten" toggle into the scenario exclusion set. */
+    /**
+     * The filters actually drawn against.
+     *
+     * Two of them are not the player's per-draw choice: scenarios already
+     * beaten, and modular sets the collection says are missing. The second is a
+     * fact about what is on the shelf, set once in the collection screen, so it
+     * is merged in here rather than being toggled beside the draw.
+     */
     private fun effectiveFilters(): RandomizerFilters {
-        val base = filters.value
+        val base = filters.value.copy(excludedModularSets = missingModularSets)
         return if (excludeBeaten.value) {
             base.copy(excludedScenarios = base.excludedScenarios + beatenScenarios)
         } else {

@@ -60,6 +60,14 @@
         <item quantity="many">%1$d de cartes connues sur %2$d</item>
         <item quantity="other">%1$d cartes connues sur %2$d</item>
     </plurals>
+    <string name="collection_show_modular_sets">Afficher les sets modulaires de cette extension</string>
+    <string name="collection_hide_modular_sets">Masquer les sets modulaires de cette extension</string>
+    <string name="collection_modular_sets_hint">Décochez un set que vous ne possédez pas. Il ne sera jamais tiré, et les scénarios qui l\'exigent ne seront pas proposés.</string>
+    <plurals name="collection_missing_sets">
+        <item quantity="one">%1$d set manquant</item>
+        <item quantity="many">%1$d de sets manquants</item>
+        <item quantity="other">%1$d sets manquants</item>
+    </plurals>
 
     <!-- Pack types -->
     <string name="pack_type_core">Boîte de base</string>
@@ -504,6 +512,4 @@
     <string name="difficulty_standard_iii">Standard III</string>
     <string name="campaign_choose_one">Touchez celle que vous gardez</string>
     <string name="campaign_choose_scenario">Quel scénario ensuite ?</string>
-    <string name="randomizer_excluded_modulars">Sets modulaires que vous n\'avez pas</string>
-    <string name="randomizer_excluded_modulars_hint">Les sets exclus ne sont jamais tirés, et les scénarios qui en exigent un ne sont pas proposés</string>
 </resources>
