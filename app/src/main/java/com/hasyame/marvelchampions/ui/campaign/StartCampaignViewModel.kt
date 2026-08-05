@@ -42,31 +42,38 @@ class StartCampaignViewModel @Inject constructor(
     val uiState: StateFlow<StartCampaignUiState> = state.asStateFlow()
 
     init {
+        // Collected, not read once. This used to be a single suspend read in
+        // init, and the view model outlives a trip to the Decks tab — so a
+        // player who imported a deck because the screen told them to came back
+        // to the same screen still saying they had none, and the only way out
+        // was to restart the app.
         viewModelScope.launch {
             val locale = preferences.currentCardLocale()
-            val decks = deckRepository.getDecks()
+            val templates = campaignRepository.bundledTemplates()
 
-            state.value = StartCampaignUiState(
-                templates = campaignRepository.bundledTemplates(),
-                candidates = decks.map { deck ->
-                    val rules = builderRepository.heroRules(deck.heroCode, locale)
-                    RosterCandidate(
-                        deck = deck,
-                        // Cards missing from the collection are deliberately
-                        // not a problem here: a campaign is about deck
-                        // legality, and owning the cards is a separate matter.
-                        problems = rules?.let {
-                            builderRepository.validate(
-                                rules = it,
-                                aspects = DeckRepository.parseAspects(deck.aspects),
-                                slots = DeckRepository.parseSlots(deck.slots),
-                                locale = locale,
-                            ).problems
-                        }.orEmpty(),
-                    )
-                },
-                isLoading = false,
-            )
+            deckRepository.observeDecks().collect { decks ->
+                state.value = StartCampaignUiState(
+                    templates = templates,
+                    candidates = decks.map { deck ->
+                        val rules = builderRepository.heroRules(deck.heroCode, locale)
+                        RosterCandidate(
+                            deck = deck,
+                            // Cards missing from the collection are deliberately
+                            // not a problem here: a campaign is about deck
+                            // legality, and owning the cards is a separate matter.
+                            problems = rules?.let {
+                                builderRepository.validate(
+                                    rules = it,
+                                    aspects = DeckRepository.parseAspects(deck.aspects),
+                                    slots = DeckRepository.parseSlots(deck.slots),
+                                    locale = locale,
+                                ).problems
+                            }.orEmpty(),
+                        )
+                    },
+                    isLoading = false,
+                )
+            }
         }
     }
 
