@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Check
@@ -28,6 +28,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -37,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,11 +67,18 @@ fun CardsScreen(
 
     // This was the one tab without a title bar, so its search field started
     // hard against the status bar while every other screen began below one.
+    // The title slides away as you scroll and comes back the moment you scroll
+    // up. On a list this long the red bar was holding one word across a tenth
+    // of the screen for the entire time anybody spent reading.
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
                 colors = comicTopBarColors(),
                 title = { Text(stringResource(R.string.destination_cards)) },
+                scrollBehavior = scrollBehavior,
             )
         },
     ) { padding ->
@@ -151,11 +160,15 @@ private fun CardList(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
-        items(state.results, key = { it.code }) { card ->
+        itemsIndexed(state.results, key = { _, card -> card.code }) { index, card ->
             CardListItem(
                 card = card,
                 selected = card.code == state.selectedCode,
                 onClick = { onCardClick(card.code) },
+                // Only where the pack changes, so the label marks a boundary
+                // instead of repeating down the whole screen.
+                showPack = index == 0 ||
+                    state.results[index - 1].packCode != card.packCode,
             )
         }
     }

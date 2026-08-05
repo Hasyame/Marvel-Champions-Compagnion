@@ -55,6 +55,44 @@ fun Modifier.halftone(
 }
 
 /**
+ * The radiating spokes a comic draws behind a word it wants you to hear.
+ *
+ * Drawn behind one headline and nowhere else. The effect works because it is
+ * rare: put it behind a list and it stops meaning "this is the moment" and
+ * starts meaning "this app has a background".
+ */
+fun Modifier.comicBurst(
+    color: Color,
+    spokes: Int = 24,
+    alpha: Float = 0.13f,
+): Modifier = drawBehind {
+    if (spokes <= 0) {
+        return@drawBehind
+    }
+    val centre = Offset(size.width / 2f, size.height / 2f)
+    // Past the corners, so no spoke stops short inside the box.
+    val reach = kotlin.math.hypot(size.width, size.height)
+    val sweep = (2.0 * Math.PI / spokes).toFloat()
+
+    for (index in 0 until spokes step 2) {
+        val start = index * sweep
+        val path = androidx.compose.ui.graphics.Path().apply {
+            moveTo(centre.x, centre.y)
+            lineTo(
+                centre.x + reach * kotlin.math.cos(start),
+                centre.y + reach * kotlin.math.sin(start),
+            )
+            lineTo(
+                centre.x + reach * kotlin.math.cos(start + sweep),
+                centre.y + reach * kotlin.math.sin(start + sweep),
+            )
+            close()
+        }
+        drawPath(path = path, color = color, alpha = alpha)
+    }
+}
+
+/**
  * A comic panel: heavy ink border and a hard offset shadow, no blur.
  *
  * Material's elevation shadow is a soft gradient, which is exactly what print

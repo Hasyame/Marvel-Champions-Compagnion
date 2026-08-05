@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -21,6 +22,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -35,6 +39,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -45,6 +52,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hasyame.marvelchampions.R
 import com.hasyame.marvelchampions.core.designsystem.component.comicTopBarColors
 import com.hasyame.marvelchampions.core.designsystem.component.ComicPanel
+import com.hasyame.marvelchampions.core.designsystem.component.comicBurst
 import com.hasyame.marvelchampions.core.designsystem.component.halftone
 import com.hasyame.marvelchampions.data.repository.CampaignRun
 import com.hasyame.marvelchampions.domain.campaign.engine.CampaignEngine
@@ -103,12 +111,12 @@ fun CampaignRunScreen(
         when {
             state.isLoading -> Box(
                 Modifier.fillMaxSize().padding(padding),
-                contentAlignment = Alignment.Center,
+                contentAlignment = androidx.compose.ui.Alignment.Center,
             ) { CircularProgressIndicator() }
 
             run == null -> Box(
                 Modifier.fillMaxSize().padding(padding),
-                contentAlignment = Alignment.Center,
+                contentAlignment = androidx.compose.ui.Alignment.Center,
             ) { Text(stringResource(R.string.campaign_run_not_found)) }
 
             // The campaign tab is the part of the app that is looked at rather
@@ -560,11 +568,34 @@ private fun ResultPage(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text(
-            text = stringResource(R.string.campaign_bravo),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary,
+        // The payoff moment of the whole app, which used to be one line of
+        // ordinary heading text above a great deal of empty screen. The burst
+        // is drawn behind this headline and nowhere else in the app: it reads
+        // as "this is the moment" precisely because it is not reused.
+        val burstScale by animateFloatAsState(
+            targetValue = 1f,
+            animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+            label = "victory-burst",
         )
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .height(160.dp)
+                // drawBehind is not clipped to the node, so without this the
+                // spokes ran the whole height of the screen and sat behind the
+                // buttons. The burst belongs to the headline, not the page.
+                .clipToBounds()
+                .scale(burstScale)
+                .comicBurst(MaterialTheme.colorScheme.primary),
+            contentAlignment = androidx.compose.ui.Alignment.Center,
+        ) {
+            Text(
+                text = stringResource(R.string.campaign_bravo),
+                style = MaterialTheme.typography.displayMedium,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center,
+            )
+        }
 
         val gained = summary?.creditsGained.orEmpty()
         val distinct = gained.values.distinct()

@@ -33,6 +33,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +47,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -68,6 +76,7 @@ fun RandomizerScreen(
     playsViewModel: PlaysViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val haptics = LocalHapticFeedback.current
 
     Scaffold(
         topBar = {
@@ -109,7 +118,16 @@ fun RandomizerScreen(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        Button(onClick = viewModel::rollAll, modifier = Modifier.weight(1f)) {
+                        Button(
+                            // A tick under the thumb, the way a physical roll
+                            // has one. Rolling is the one action here that is
+                            // meant to feel like an event.
+                            onClick = {
+                                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                viewModel.rollAll()
+                            },
+                            modifier = Modifier.weight(1f),
+                        ) {
                             Text(stringResource(R.string.randomizer_roll))
                         }
                         OutlinedButton(
@@ -283,6 +301,7 @@ private fun DrawRow(
     viewModel: RandomizerViewModel,
 ) {
     val isLocked = field in state.locked
+    val haptics = LocalHapticFeedback.current
     var choosing by remember { mutableStateOf(false) }
 
     if (choosing) {
@@ -302,7 +321,21 @@ private fun DrawRow(
 
     ListItem(
         overlineContent = { Text(label) },
-        headlineContent = { Text(value, style = MaterialTheme.typography.titleMedium) },
+        // The value tumbles in rather than blinking. Rolling is the most fun
+        // thing this screen does and it used to happen with no sign that
+        // anything had moved — on a reroll of one field you could miss it.
+        headlineContent = {
+            AnimatedContent(
+                targetState = value,
+                transitionSpec = {
+                    (slideInVertically { height -> height / 2 } + fadeIn())
+                        .togetherWith(slideOutVertically { height -> -height / 2 } + fadeOut())
+                },
+                label = "draw-value",
+            ) { shown ->
+                Text(shown, style = MaterialTheme.typography.titleMedium)
+            }
+        },
         modifier = Modifier.clickable { choosing = true },
         trailingContent = {
             Row {
@@ -319,7 +352,10 @@ private fun DrawRow(
                         },
                     )
                 }
-                IconButton(onClick = { viewModel.reroll(field) }) {
+                IconButton(onClick = {
+                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                    viewModel.reroll(field)
+                }) {
                     Icon(
                         imageVector = Icons.Filled.Refresh,
                         contentDescription = stringResource(R.string.randomizer_reroll),
