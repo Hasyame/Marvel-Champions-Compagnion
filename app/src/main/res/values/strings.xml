@@ -21,7 +21,7 @@
     <string name="cards_not_found">Card not found.</string>
     <string name="cards_select_a_card">Select a card to see its details.</string>
     <string name="cards_database_empty">The card database is empty. Update the cards from Settings.</string>
-    <string name="cards_filter_owned_only">Owned packs only</string>
+    <string name="cards_filter_owned_only">Cards in my collection</string>
     <string name="cards_filter_type">Type</string>
     <string name="cards_filter_aspect">Aspect</string>
     <string name="cards_filter_cost">Cost</string>

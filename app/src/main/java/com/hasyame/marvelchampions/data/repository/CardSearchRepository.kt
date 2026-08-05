@@ -19,6 +19,9 @@ data class CardFilterOptions(
     val typeCodes: List<String> = emptyList(),
     val factionCodes: List<String> = emptyList(),
     val traits: List<String> = emptyList(),
+    /** Code to printed name, so the chips can be labelled in the card language. */
+    val typeNames: Map<String, String> = emptyMap(),
+    val factionNames: Map<String, String> = emptyMap(),
 )
 
 @Singleton
@@ -82,6 +85,10 @@ class CardSearchRepository @Inject constructor(
             CardFilterOptions(
                 typeCodes = cardDao.distinctTypeCodes(locale.code),
                 factionCodes = cardDao.distinctFactionCodes(locale.code),
+                typeNames = cardDao.distinctTypeNames(locale.code)
+                    .associate { it.code to it.name },
+                factionNames = cardDao.distinctFactionNames(locale.code)
+                    .associate { it.code to it.name },
                 // Traits are stored as the printed string, "Avenger. Gamma.",
                 // so the individual traits have to be split back out.
                 traits = cardDao.distinctTraitStrings(locale.code)

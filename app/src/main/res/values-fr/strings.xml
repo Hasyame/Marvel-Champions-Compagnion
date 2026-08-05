@@ -21,7 +21,7 @@
     <string name="cards_not_found">Carte introuvable.</string>
     <string name="cards_select_a_card">Sélectionnez une carte pour voir son détail.</string>
     <string name="cards_database_empty">La base de cartes est vide. Mettez les cartes à jour depuis les réglages.</string>
-    <string name="cards_filter_owned_only">Extensions possédées uniquement</string>
+    <string name="cards_filter_owned_only">Cartes de ma collection</string>
     <string name="cards_filter_type">Type</string>
     <string name="cards_filter_aspect">Aspect</string>
     <string name="cards_filter_cost">Coût</string>

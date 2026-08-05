@@ -71,6 +71,7 @@ fun CardFilterSheet(
             ChipSection(
                 title = stringResource(R.string.cards_filter_type),
                 values = options.typeCodes,
+                labels = options.typeNames,
                 selected = filter.typeCodes,
                 onToggle = { onFilterChange(filter.copy(typeCodes = filter.typeCodes.toggle(it))) },
             )
@@ -78,6 +79,7 @@ fun CardFilterSheet(
             ChipSection(
                 title = stringResource(R.string.cards_filter_aspect),
                 values = options.factionCodes,
+                labels = options.factionNames,
                 selected = filter.factionCodes,
                 onToggle = {
                     onFilterChange(filter.copy(factionCodes = filter.factionCodes.toggle(it)))
@@ -134,21 +136,32 @@ private fun ChipSection(
     values: List<String>,
     selected: Set<String>,
     onToggle: (String) -> Unit,
+    /**
+     * Code to the word a player sees. Falling back to a tidied code keeps a
+     * value the card database has no name for from vanishing out of the filter
+     * altogether.
+     */
+    labels: Map<String, String> = emptyMap(),
 ) {
     if (values.isEmpty()) {
         return
     }
     Text(text = title, style = MaterialTheme.typography.titleSmall)
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        values.forEach { value ->
-            FilterChip(
-                selected = value in selected,
-                onClick = { onToggle(value) },
-                label = { Text(value.replaceFirstChar(Char::uppercase)) },
-            )
-        }
+        values.map { it to label(it, labels) }
+            .sortedBy { it.second }
+            .forEach { (value, shown) ->
+                FilterChip(
+                    selected = value in selected,
+                    onClick = { onToggle(value) },
+                    label = { Text(shown) },
+                )
+            }
     }
 }
+
+private fun label(value: String, labels: Map<String, String>): String =
+    labels[value] ?: value.replace('_', ' ').replaceFirstChar(Char::uppercase)
 
 private fun Set<String>.toggle(value: String): Set<String> =
     if (value in this) this - value else this + value

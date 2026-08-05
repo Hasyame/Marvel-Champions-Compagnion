@@ -16,6 +16,12 @@ import kotlinx.coroutines.flow.Flow
  */
 private const val INSERT_CHUNK_SIZE = 200
 
+/** A code and the word a player actually sees for it. */
+data class CodeName(
+    val code: String,
+    val name: String,
+)
+
 /** A card set or hero, with its name in the requested locale. */
 data class CardSetSummary(
     val code: String,
@@ -127,6 +133,31 @@ interface CardDao {
 
     @Query("SELECT DISTINCT factionCode FROM cards WHERE locale = :locale ORDER BY factionCode")
     suspend fun distinctFactionCodes(locale: String): List<String>
+
+    /**
+     * The printed name for each code, in one locale.
+     *
+     * The filter sheet used to label its chips with the codes themselves, so a
+     * French player was offered "Player_side_scheme" and "Alter_ego". The cards
+     * already carry a translated name for every one of them.
+     */
+    @Query(
+        """
+        SELECT DISTINCT typeCode AS code, typeName AS name
+        FROM cards
+        WHERE locale = :locale AND typeCode IS NOT NULL AND typeName IS NOT NULL
+        """,
+    )
+    suspend fun distinctTypeNames(locale: String): List<CodeName>
+
+    @Query(
+        """
+        SELECT DISTINCT factionCode AS code, factionName AS name
+        FROM cards
+        WHERE locale = :locale AND factionCode IS NOT NULL AND factionName IS NOT NULL
+        """,
+    )
+    suspend fun distinctFactionNames(locale: String): List<CodeName>
 
     @Query(
         """
