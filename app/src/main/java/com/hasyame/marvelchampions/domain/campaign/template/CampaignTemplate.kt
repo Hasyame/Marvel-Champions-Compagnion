@@ -234,6 +234,14 @@ data class DrawDefinition(
      */
     val excluding: String? = null,
     /**
+     * Counters to raise when a card comes up, as card code to counter id.
+     *
+     * Fear No Evil sets threat from how often an environment has been drawn, so
+     * the count has to be kept as the campaign runs rather than worked out from
+     * the log afterwards.
+     */
+    val counts: Map<String, String> = emptyMap(),
+    /**
      * How many to draw, in order. More than one is for a setup that arranges
      * several cards, such as villains laid out in a row.
      */

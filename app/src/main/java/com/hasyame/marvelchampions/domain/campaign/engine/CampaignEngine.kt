@@ -63,12 +63,7 @@ class CampaignEngine(
                     if (event.id in refunded) state else applyPurchase(state, event)
 
                 is CampaignEvent.SetupActionTaken -> applySetupAction(template, state, event, heroStats)
-                is CampaignEvent.SetupDrawn -> state.copy(
-                    draws = state.draws + (
-                        event.scenarioId to
-                            (state.draws[event.scenarioId].orEmpty() + (event.drawId to event.cardCodes))
-                        ),
-                )
+                is CampaignEvent.SetupDrawn -> applyDraw(template, state, event)
                 is CampaignEvent.ManualAdjustment -> applyManual(state, event)
                 is CampaignEvent.TimeRecorded ->
                     state.copy(totalPlayTimeMillis = state.totalPlayTimeMillis + event.elapsedMillis)
@@ -160,6 +155,40 @@ class CampaignEngine(
             draws = next.draws - event.scenarioId,
             currentScenarioId = advanced.scenarioId,
             finished = advanced.finished,
+        )
+    }
+
+
+    /**
+     * Records what a draw came up with, and raises any counter that card feeds.
+     *
+     * The counters are declared on the draw rather than written by an effect,
+     * because a draw happens during setup where no effects run.
+     */
+    private fun applyDraw(
+        template: CampaignTemplate,
+        state: CampaignState,
+        event: CampaignEvent.SetupDrawn,
+    ): CampaignState {
+        val counts = template.scenarios
+            .flatMap { it.campaignSetup }
+            .mapNotNull { it.draw }
+            .firstOrNull { it.id == event.drawId }
+            ?.counts
+            .orEmpty()
+
+        var counters = state.counters
+        for (code in event.cardCodes) {
+            val counterId = counts[code] ?: continue
+            counters = counters + (counterId to clamp((counters[counterId] ?: 0) + 1, template, counterId))
+        }
+
+        return state.copy(
+            counters = counters,
+            draws = state.draws + (
+                event.scenarioId to
+                    (state.draws[event.scenarioId].orEmpty() + (event.drawId to event.cardCodes))
+                ),
         )
     }
 
