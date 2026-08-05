@@ -360,7 +360,13 @@ class CampaignEngine(
                     return state
                 }
                 val listId = effect.cardList ?: return state
+                // A per-hero answer folds into the same list, distinctly: what
+                // later scenarios need from "each player chose one" is which
+                // cards are in play, not who holds which. Who holds which stays
+                // in the answer, for the log.
                 val codes = answers.cardLists[effect.from].orEmpty()
+                    .ifEmpty { answers.perHeroCards[effect.from].orEmpty().values.flatten() }
+                    .distinct()
                 state.copy(
                     cardLists = state.cardLists +
                         (listId to (state.cardLists[listId].orEmpty() + codes)),

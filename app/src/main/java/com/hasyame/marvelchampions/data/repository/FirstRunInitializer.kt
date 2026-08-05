@@ -21,7 +21,7 @@ internal val PRESEEDED_COLLECTION: List<String> = listOf(
     // Scenario packs
     "gob", "sm",
     // Campaign boxes
-    "fne", "aoa", "gmw", "mts",
+    "fne", "aoa", "gmw", "mts", "trors",
 )
 
 /** What the app needs to do before showing anything on first launch. */

@@ -49,8 +49,11 @@ content rather than machinery.
   so a record can never drift from what was played. Counters, flags, card lists,
   a market, per-scenario questionnaires, and setup steps for one scenario that
   depend on what was recorded in the ones before it. **The Galaxy's Most Wanted**,
-  **Age of Apocalypse** and **The Mad Titan's Shadow** ship with the app, each
-  played through end to end before release.
+  **Age of Apocalypse**, **The Mad Titan's Shadow** and **The Rise of Red Skull**
+  ship with the app. Where a campaign says each player *chooses* a card, that is
+  compulsory: the questionnaire records one answer per player and will not file
+  until everyone has picked, because every later scenario assumes the card is in
+  the deck.
 - **Setup the app does for you.** Anything a campaign tells you to pick at
   random — Age of Apocalypse's side missions and overseers, the order the Four
   Horsemen line up in, which Loki you face first — is drawn by the app, recorded

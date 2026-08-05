@@ -327,6 +327,16 @@ enum class PromptType {
     BOOLEAN,
     PER_HERO_NUMBER,
     PER_HERO_BOOLEAN,
+
+    /**
+     * Each hero picks from a known set of cards, one answer per hero.
+     *
+     * Distinct from [CARD_SELECT], which records a single set for the table.
+     * When a campaign says "each player chooses one", two players may well pick
+     * the same card, and a shared set cannot hold it twice — nor can it say who
+     * took what.
+     */
+    PER_HERO_CARD_SELECT,
     CARD_LIST,
 
     /**
@@ -369,6 +379,7 @@ data class Prompt(
             "boolean" -> PromptType.BOOLEAN
             "perheronumber" -> PromptType.PER_HERO_NUMBER
             "perheroboolean" -> PromptType.PER_HERO_BOOLEAN
+            "perherocardselect" -> PromptType.PER_HERO_CARD_SELECT
             "cardlist" -> PromptType.CARD_LIST
             "cardselect" -> PromptType.CARD_SELECT
             "deckcardselect" -> PromptType.DECK_CARD_SELECT
@@ -378,7 +389,8 @@ data class Prompt(
 
     val isPerHero: Boolean
         get() = promptType == PromptType.PER_HERO_NUMBER ||
-            promptType == PromptType.PER_HERO_BOOLEAN
+            promptType == PromptType.PER_HERO_BOOLEAN ||
+            promptType == PromptType.PER_HERO_CARD_SELECT
 }
 
 @Serializable

@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -67,6 +68,7 @@ fun QuestionsPage(
     val cardSelections = remember { mutableStateMapOf<String, Set<String>>() }
     val perHeroNumbers = remember { mutableStateMapOf<String, String>() }
     val perHeroBooleans = remember { mutableStateMapOf<String, Boolean>() }
+    val perHeroCards = remember { mutableStateMapOf<String, Set<String>>() }
 
     // Every switch on the page starts recorded as "no". A map that only gains a
     // key when a switch is touched cannot tell "answered no" from "not asked",
@@ -76,6 +78,29 @@ fun QuestionsPage(
             prompts.filter { it.promptType == PromptType.BOOLEAN }
                 .forEach { put(it.id, false) }
         }
+    }
+
+    // A choice the campaign words as "each player chooses" is compulsory: the
+    // later scenarios are written assuming the card was taken. `min` on the
+    // prompt is how a template says so, and until it is satisfied the page
+    // cannot be filed.
+    val unmetPrompts = prompts.filter { prompt ->
+        val required = prompt.min ?: 0
+        required > 0 &&
+            when (prompt.promptType) {
+                PromptType.CARD_SELECT, PromptType.DECK_CARD_SELECT ->
+                    cardSelections[prompt.id].orEmpty().size < required
+
+                // "Each player chooses one" is unmet while any one player has
+                // not. A table of three where two have picked is not two thirds
+                // done — the third player's deck is wrong for every scenario
+                // that follows.
+                PromptType.PER_HERO_CARD_SELECT -> run.state.heroes.any { hero ->
+                    perHeroCards["${prompt.id}|${hero.id}"].orEmpty().size < required
+                }
+
+                else -> false
+            }
     }
 
     Column(
@@ -126,8 +151,13 @@ fun QuestionsPage(
                     // step previews its own. A question naming a card the player
                     // has to go and find on the table is a question they have to
                     // translate first.
+                    // Both select types already list every card as a row of its
+                    // own; previewing them again just prints the list twice.
                     val previews = prompt.cards
-                        .takeIf { prompt.promptType != PromptType.CARD_SELECT }
+                        .takeIf {
+                            prompt.promptType != PromptType.CARD_SELECT &&
+                                prompt.promptType != PromptType.PER_HERO_CARD_SELECT
+                        }
                         .orEmpty()
 
                     when (prompt.promptType) {
@@ -150,6 +180,53 @@ fun QuestionsPage(
                                 checked = booleans[prompt.id] ?: false,
                                 onCheckedChange = { booleans[prompt.id] = it },
                             )
+                        }
+
+                        PromptType.PER_HERO_CARD_SELECT -> {
+                            Text(label, style = MaterialTheme.typography.titleSmall)
+                            if ((prompt.min ?: 0) > 0) {
+                                Text(
+                                    text = pluralStringResource(
+                                        R.plurals.campaign_choice_required_each,
+                                        prompt.min ?: 0,
+                                        prompt.min ?: 0,
+                                    ),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                            // One block per hero: the same card may be chosen
+                            // twice at a table of two, which a shared list
+                            // could not record.
+                            run.state.heroes.forEach { hero ->
+                                val key = "${prompt.id}|${hero.id}"
+                                Text(
+                                    text = hero.name,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
+                                prompt.cards.forEach { code ->
+                                    val selected = perHeroCards[key].orEmpty().contains(code)
+                                    Row(
+                                        Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        Text(run.names.card(code), Modifier.weight(1f))
+                                        Switch(
+                                            checked = selected,
+                                            onCheckedChange = { on ->
+                                                val current = perHeroCards[key].orEmpty()
+                                                perHeroCards[key] = if (on) {
+                                                    current + code
+                                                } else {
+                                                    current - code
+                                                }
+                                            },
+                                        )
+                                    }
+                                }
+                            }
                         }
 
                         PromptType.PER_HERO_NUMBER -> {
@@ -191,6 +268,17 @@ fun QuestionsPage(
 
                         PromptType.CARD_SELECT -> {
                             Text(label, style = MaterialTheme.typography.titleSmall)
+                            if ((prompt.min ?: 0) > 0) {
+                                Text(
+                                    text = pluralStringResource(
+                                        R.plurals.campaign_choice_required,
+                                        prompt.min ?: 0,
+                                        prompt.min ?: 0,
+                                    ),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
                             // Codes are recorded, names are shown, so a later
                             // scenario can act on the answer rather than only
                             // repeat it back.
@@ -271,11 +359,25 @@ fun QuestionsPage(
             }
         }
 
+        if (unmetPrompts.isNotEmpty()) {
+            Text(
+                text = stringResource(R.string.campaign_answer_required),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+            )
+        }
+
         Button(
             // Dead the instant it is tapped: filing a result writes to the
             // campaign log, records a play and may reach BoardGameGeek, and a
             // second tap would do all of it again.
-            enabled = !isSubmitting,
+            //
+            // Also dead while a required choice is unmade. When the campaign
+            // says each player chooses a card, that is not an offer — the
+            // scenarios after it assume the card is in the deck, so letting the
+            // page through unanswered would break the campaign quietly, several
+            // scenarios later.
+            enabled = !isSubmitting && unmetPrompts.isEmpty(),
             onClick = {
                 onSubmit(
                     AnswerSet(
@@ -303,6 +405,17 @@ fun QuestionsPage(
                             .mapNotNull { (key, value) ->
                                 val parts = key.split('|')
                                 if (parts.size == 2) Triple(parts[0], parts[1], value) else null
+                            }
+                            .groupBy({ it.first }, { it.second to it.third })
+                            .mapValues { entry -> entry.value.toMap() },
+                        perHeroCards = perHeroCards.entries
+                            .mapNotNull { (key, value) ->
+                                val parts = key.split('|')
+                                if (parts.size == 2) {
+                                    Triple(parts[0], parts[1], value.toList())
+                                } else {
+                                    null
+                                }
                             }
                             .groupBy({ it.first }, { it.second to it.third })
                             .mapValues { entry -> entry.value.toMap() },

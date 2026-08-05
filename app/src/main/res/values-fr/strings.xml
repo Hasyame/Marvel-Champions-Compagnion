@@ -172,6 +172,17 @@
     <string name="campaign_buy">Acheter</string>
     <string name="campaign_refund">Rembourser</string>
     <string name="campaign_no_questions">Rien à enregistrer pour ce résultat.</string>
+    <string name="campaign_answer_required">Un choix obligatoire reste à faire. La campagne l\'exige, et les scénarios suivants le supposent acquis.</string>
+    <plurals name="campaign_choice_required">
+        <item quantity="one">Obligatoire : choisissez au moins %1$d carte.</item>
+        <item quantity="many">Obligatoire : choisissez au moins %1$d de cartes.</item>
+        <item quantity="other">Obligatoire : choisissez au moins %1$d cartes.</item>
+    </plurals>
+    <plurals name="campaign_choice_required_each">
+        <item quantity="one">Obligatoire : chaque joueur choisit au moins %1$d carte.</item>
+        <item quantity="many">Obligatoire : chaque joueur choisit au moins %1$d de cartes.</item>
+        <item quantity="other">Obligatoire : chaque joueur choisit au moins %1$d cartes.</item>
+    </plurals>
     <string name="campaign_card_list_hint">Noms de cartes séparés par des virgules.</string>
     <string name="campaign_unknown_prompt">Type de question « %1$s » non pris en charge dans le modèle.</string>
     <string name="campaign_defeat_recorded">Défaite enregistrée</string>

@@ -167,6 +167,15 @@
     <string name="campaign_buy">Buy</string>
     <string name="campaign_refund">Refund</string>
     <string name="campaign_no_questions">Nothing to record for this outcome.</string>
+    <string name="campaign_answer_required">A required choice is still open. The campaign expects it, and later scenarios assume it was made.</string>
+    <plurals name="campaign_choice_required">
+        <item quantity="one">Required: choose at least %1$d.</item>
+        <item quantity="other">Required: choose at least %1$d.</item>
+    </plurals>
+    <plurals name="campaign_choice_required_each">
+        <item quantity="one">Required: each player chooses at least %1$d.</item>
+        <item quantity="other">Required: each player chooses at least %1$d.</item>
+    </plurals>
     <string name="campaign_card_list_hint">Card names separated by commas.</string>
     <string name="campaign_unknown_prompt">Unsupported question type “%1$s” in the template.</string>
     <string name="campaign_defeat_recorded">Defeat recorded</string>

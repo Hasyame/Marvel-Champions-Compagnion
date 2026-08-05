@@ -91,6 +91,40 @@ class BundledCampaignsTest {
     }
 
     @Test
+    fun `the rise of red skull carries its four kinds of memory`() {
+        val trors = templates().map { it.second }.single { it.id == "trors" }
+
+        assertEquals(
+            listOf("s1_crossbones", "s2_absorbing_man", "s3_taskmaster", "s4_zola", "s5_red_skull"),
+            trors.scenarios.map { it.id },
+        )
+        // Four lists, not one pool: the finale treats an ally you rescued and
+        // an ally you left behind a prison door as opposite facts, and merging
+        // them would lose which was which.
+        assertEquals(
+            setOf("experimental", "tech", "conditions", "rescued", "imprisoned"),
+            trors.cardLists.map { it.id }.toSet(),
+        )
+        // The delay Absorbing Man bought becomes threat in the finale, so it
+        // has to survive three scenarios as a number.
+        assertTrue("delay counter missing", trors.counters.any { it.id == "delay" })
+    }
+
+    @Test
+    fun `the red skull finale reads every fact the campaign recorded`() {
+        val trors = templates().map { it.second }.single { it.id == "trors" }
+        val finale = trors.scenarios.single { it.id == "s5_red_skull" }
+
+        // Each of these was written down in an earlier scenario. A step that
+        // stops reading one is how a campaign quietly forgets.
+        assertTrue(finale.campaignSetup.any { it.showCounter == "delay" })
+        assertTrue(finale.campaignSetup.any { it.showCardList == "experimental" })
+        assertTrue(finale.campaignSetup.any { it.showCardList == "imprisoned" })
+        assertTrue(finale.campaignSetup.any { it.showCardList == "conditions" })
+        assertTrue(finale.campaignSetup.any { it.showHeroesWith == "engaged" })
+    }
+
+    @Test
     fun `scenario blurbs are written for the app, not copied from the book`() {
         // The blurbs were once whole passages lifted from the campaign book —
         // several hundred characters each — while the README claimed the

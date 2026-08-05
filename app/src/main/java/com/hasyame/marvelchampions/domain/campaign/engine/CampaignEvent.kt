@@ -177,4 +177,12 @@ data class AnswerSet(
     /** Prompt id to hero id to value. */
     val perHeroNumbers: Map<String, Map<String, Int>> = emptyMap(),
     val perHeroBooleans: Map<String, Map<String, Boolean>> = emptyMap(),
+    /**
+     * Prompt id to hero id to the cards that hero chose.
+     *
+     * Kept apart from [cardLists] because who chose what is the point: "each
+     * player chooses one" lets two heroes take the same card, which a single
+     * shared list would silently collapse into one.
+     */
+    val perHeroCards: Map<String, Map<String, List<String>>> = emptyMap(),
 )

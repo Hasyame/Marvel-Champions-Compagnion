@@ -165,3 +165,26 @@ those genuinely require a set. The exclusion rule is right; the data it reads is
 incomplete, so the "do not offer the scenario" half stays silent for them.
 Fixing it means revisiting `tools/generate-scenario-rules.mjs`, not this
 feature.
+
+### The Rise of Red Skull — built
+
+Five scenarios, no engine gaps of its own, but building it exposed one.
+
+**"Each player chooses" is compulsory, and it is per player.** The questions
+page filed whatever was on screen, so a table could walk past a choice the
+campaign requires and reach scenario 5 with a deck the setup assumes is
+different. Two things were missing: a way for a template to say an answer is
+required (`min` on the prompt, enforced by disabling the file button), and a
+prompt that records one answer per hero rather than one per table
+(`perHeroCardSelect`). The per-hero part matters because two players may take
+the same TECH upgrade, which a single shared set cannot hold twice.
+
+`min` is deliberately absent where the campaign says "may choose" — the Basic
+Condition upgrades in scenario 2. Requiring one there would invent a rule.
+
+Two corrections to the spec as given, both confirmed against the MarvelCDB pack
+listing rather than assumed: the pack ships four modular sets — `exper_weapon`,
+`hydra_assault`, `weap_master`, `hydra_patrol` — so the named "Legions of Hydra"
+(scenario 1) and "Under Attack" (scenario 4) do not exist and are read as
+`hydra_patrol` and `hydra_assault`. Scenario 4 is headed HELA in the first draft
+of the spec but is Zola throughout, which the later drafts fixed.
