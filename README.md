@@ -9,7 +9,7 @@ you can read the app in French and the cards in English, or the reverse.
 
 ## Status
 
-In use, and being played with. Current release: **[v1.4.0](https://github.com/Hasyame/Marvel-Champions-Compagnion/releases/latest)**.
+In use, and being played with. Current release: **[v1.5.3](https://github.com/Hasyame/Marvel-Champions-Compagnion/releases/latest)**.
 
 Every feature planned for the app is now in, and the work from here is campaign
 content rather than machinery.
@@ -17,7 +17,9 @@ content rather than machinery.
 ### Done
 
 - **Card database.** The full MarvelCDB catalogue including encounter cards,
-  searchable offline with accent-insensitive prefix matching, filters for type,
+  each row carrying its art, its aspect as a colour, and its resource cost where
+  the printed card puts it. Searchable offline with accent-insensitive prefix
+  matching, filters for type,
   aspect, cost and traits, sorting by set, name or cost, and a detail screen
   showing which product a card comes from and which encounter set it belongs to.
   A card MarvelCDB has not translated is shown in English rather than hidden.
@@ -27,13 +29,19 @@ content rather than machinery.
   readable at a table with no signal. Never automatic — it is a large download
   and asking first is the only decent way to do that on mobile data.
 - **Collection.** Mark the packs you own; the randomiser and deck legality
-  follow from it.
+  follow from it. Owning a pack is not owning everything in it, so tapping one
+  opens the modular sets it contains — untick whatever is missing from a
+  second-hand box or a set lent out and never returned. An excluded set is never
+  drawn, and no scenario that requires it is offered.
 - **Decks.** Import from a MarvelCDB link or a share from the browser, build
   from scratch, edit, check legality as you go, see what a deck is made of, and
   share a decklist as plain text.
 - **Randomiser.** Scenario, difficulty, modular sets, heroes and aspects, drawn
   only from what you own, with locking, rerolls and a history. Tap any row to
   choose it yourself instead — the choice locks, and the rest rolls around it.
+  Five difficulty steps from Standard I to Expert II, and only villain sets that
+  bring a scenario of their own: the four Wrecking Crew villains are played
+  inside Wrecking Crew, not instead of it.
 - **Play log.** Finished games are recorded and timed, whether they came from
   the randomiser, from a campaign, or were set up by hand with your own modular
   sets. The clock can be corrected afterwards, a game can be thrown away before
@@ -65,13 +73,19 @@ content rather than machinery.
 - **Backup and restore.** Collection, decks, campaigns, play history and
   favourites to a single readable JSON file, and back again on any device.
   There is no account and no server, so without this the phone is the only copy.
-- **Dark theme**, on by default, and light if you prefer it.
+- **Dark theme**, on by default, and light if you prefer it. Both are built
+  around the game’s own aspect colours meaning only one thing: aggression red,
+  justice gold, leadership blue, protection green belong to the cards, so the
+  app own chrome stays out of that palette.
 
 ### Next
 
-Campaign templates, in the order they get played:
-
-- **Fear No Evil**
+- **Fear No Evil**, once MarvelCDB publishes its encounter cards. The pack
+  currently holds only the two heroes, so there is nothing to build the
+  scenarios against. The engine work the campaign needs — a table that chooses
+  its next scenario, a villain drawn into its own deck, choosing one of two
+  drawn cards, and a counter fed by how often a card was offered — is already
+  done and tested.
 
 Campaigns are added after they have been played, so that the mechanics in the
 template come from experience rather than from a reading of the book. That is
