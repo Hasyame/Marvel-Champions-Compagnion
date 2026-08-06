@@ -29,8 +29,6 @@ AntiFeatures:
   NonFreeNet:
     en-US: Card data is downloaded from MarvelCDB, a third-party service.
 
-AutoName: Thwart
-
 RepoType: git
 Repo: https://github.com/Hasyame/Thwart.git
 
