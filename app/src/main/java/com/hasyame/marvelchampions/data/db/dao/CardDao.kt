@@ -193,6 +193,33 @@ interface CardDao {
     )
     suspend fun getCardSets(setType: String, locale: String): List<CardSetSummary>
 
+    /**
+     * Villain sets you can actually sit down and play.
+     *
+     * A scenario is a villain set that brings a main scheme. The four Wrecking
+     * Crew villains and the Marauders are villain sets without one — they are
+     * played inside somebody else's scenario — so drawing them offered
+     * "Bulldozer" as though it were a scenario of its own.
+     */
+    @Query(
+        """
+        SELECT cardSetCode AS code,
+               MIN(cardSetName) AS name,
+               MIN(packCode) AS packCode
+        FROM cards
+        WHERE locale = :locale
+          AND cardSetTypeNameCode = 'villain'
+          AND cardSetCode IS NOT NULL
+          AND cardSetCode IN (
+            SELECT cardSetCode FROM cards
+            WHERE locale = :locale AND typeCode = 'main_scheme'
+          )
+        GROUP BY cardSetCode
+        ORDER BY name
+        """,
+    )
+    suspend fun getPlayableScenarios(locale: String): List<CardSetSummary>
+
     /** Hero identities, which are cards rather than sets. */
     @Query(
         """

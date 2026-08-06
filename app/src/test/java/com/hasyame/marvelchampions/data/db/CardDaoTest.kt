@@ -178,6 +178,34 @@ class CardDaoTest {
         assertNull(dao.getCardPreferringLocale("99999", "fr"))
     }
 
+    @Test
+    fun `a villain set is only a scenario when it brings a main scheme`() = runTest {
+        // The four Wrecking Crew villains are villain sets with no main scheme
+        // of their own — they are played inside the Wrecking Crew scenario —
+        // and the draw used to offer "Bulldozer" as though you could play it.
+        dao.insertAll(
+            listOf(
+                villainCard("v1", set = "crossbones", type = "villain"),
+                villainCard("v2", set = "crossbones", type = "main_scheme"),
+                villainCard("v3", set = "bulldozer", type = "villain"),
+            ),
+        )
+
+        val playable = dao.getPlayableScenarios("en").map { it.code }
+
+        assertEquals(listOf("crossbones"), playable)
+    }
+
+    /** A card in a villain set, which is what a scenario is made of. */
+    private fun villainCard(code: String, set: String, type: String) =
+        card(code = code, locale = "en", name = code).copy(
+            typeCode = type,
+            typeName = type,
+            cardSetCode = set,
+            cardSetName = set,
+            cardSetTypeNameCode = "villain",
+        )
+
     private fun card(
         code: String,
         locale: String,

@@ -37,10 +37,10 @@
       "packCode": "aos",
       "modularCount": 2,
       "mandatoryModulars": [
-        "a.i.m._science"
+        "a.i.m._science",
+        "batrocs_brigade"
       ],
-      "recommendedModulars": [],
-      "needsReview": true
+      "recommendedModulars": []
     },
     {
       "code": "black_widow_villain",
@@ -60,14 +60,6 @@
         "band_of_badoon"
       ],
       "recommendedModulars": []
-    },
-    {
-      "code": "bulldozer",
-      "packCode": "twc",
-      "modularCount": 0,
-      "mandatoryModulars": [],
-      "recommendedModulars": [],
-      "needsReview": true
     },
     {
       "code": "crossbones",
@@ -235,14 +227,6 @@
       "recommendedModulars": []
     },
     {
-      "code": "marauders",
-      "packCode": "next_evol",
-      "modularCount": 0,
-      "mandatoryModulars": [],
-      "recommendedModulars": [],
-      "needsReview": true
-    },
-    {
       "code": "master_mold",
       "packCode": "mut_gen",
       "modularCount": 1,
@@ -315,14 +299,6 @@
       "recommendedModulars": []
     },
     {
-      "code": "piledriver",
-      "packCode": "twc",
-      "modularCount": 0,
-      "mandatoryModulars": [],
-      "recommendedModulars": [],
-      "needsReview": true
-    },
-    {
       "code": "project_wideawake",
       "packCode": "mut_gen",
       "modularCount": 1,
@@ -392,8 +368,7 @@
       "packCode": "sm",
       "modularCount": 0,
       "mandatoryModulars": [],
-      "recommendedModulars": [],
-      "needsReview": true
+      "recommendedModulars": []
     },
     {
       "code": "spiral",
@@ -437,14 +412,6 @@
       "modularCount": 7,
       "mandatoryModulars": [],
       "recommendedModulars": []
-    },
-    {
-      "code": "thunderball",
-      "packCode": "twc",
-      "modularCount": 0,
-      "mandatoryModulars": [],
-      "recommendedModulars": [],
-      "needsReview": true
     },
     {
       "code": "thunderbolts",
@@ -499,20 +466,11 @@
       "recommendedModulars": []
     },
     {
-      "code": "wrecker",
-      "packCode": "twc",
-      "modularCount": 0,
-      "mandatoryModulars": [],
-      "recommendedModulars": [],
-      "needsReview": true
-    },
-    {
       "code": "wrecking_crew",
       "packCode": "twc",
       "modularCount": 0,
       "mandatoryModulars": [],
-      "recommendedModulars": [],
-      "needsReview": true
+      "recommendedModulars": []
     },
     {
       "code": "zola",

@@ -158,13 +158,28 @@ Built and verified on the phone: the pack opens to its sets, unticking one
 persists across a force-stop, and the draw reads the table. The chips are gone
 from the randomiser.
 
-Testing it surfaced something separate. Excluding Goblin Gimmicks does not stop
-Mutagen Formula being offered, because `scenario_rules.json` records no
-mandatory modulars for it — 18 of 58 scenarios have an empty list, and some of
-those genuinely require a set. The exclusion rule is right; the data it reads is
-incomplete, so the "do not offer the scenario" half stays silent for them.
-Fixing it means revisiting `tools/generate-scenario-rules.mjs`, not this
-feature.
+Testing it surfaced something that looked like a data gap and mostly was not.
+Excluding Goblin Gimmicks does not stop Mutagen Formula being offered, and I
+concluded from that that the generator was dropping mandatory sets. It was not.
+The card reads "One modular encounter set (recommended: Goblin Gimmicks)" — the
+set is recommended, not required, and the parser had it right. Of the 18
+scenarios with an empty mandatory list, 17 were correct.
+
+What the audit did find, and what is now fixed:
+
+- **Five villain sets are not scenarios.** The four Wrecking Crew villains and
+  the Marauders have no main scheme of their own; they are played inside
+  somebody else's scenario. They were listed as scenarios, so the draw could
+  offer "Bulldozer".
+- **One genuine unresolved set.** Batroc's scenario card spells his brigade
+  "Batrocs's Brigade", so the name never matched. An explicit alias, not a fuzzy
+  matcher — a near-miss match would resolve names the script should refuse.
+- **Two false alarms.** Wrecking Crew and Sinister Six name no modular sets,
+  which is an answer rather than a parse failure, but both were flagged
+  needsReview so the app warned about a setup it had read correctly.
+
+53 scenarios now, and one entry still needs review: Magog draws a random set
+from a pack the app cannot enumerate, which is a real unknown.
 
 ### The Rise of Red Skull — built
 

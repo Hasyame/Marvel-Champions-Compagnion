@@ -43,7 +43,7 @@ class RandomizerRepository @Inject constructor(
      */
     suspend fun loadPools(locale: CardLocale): RandomizerPools = withContext(ioDispatcher) {
         val owned = collectionRepository.getOwnedCodes()
-        val scenarios = cardDao.getCardSets(VILLAIN_SET, locale.code)
+        val scenarios = cardDao.getPlayableScenarios(locale.code)
         val modulars = cardDao.getCardSets(MODULAR_SET, locale.code)
         val heroes = cardDao.getHeroes(locale.code)
 
@@ -88,7 +88,7 @@ class RandomizerRepository @Inject constructor(
 
     suspend fun loadNames(locale: CardLocale): RandomizerNames = withContext(ioDispatcher) {
         RandomizerNames(
-            scenarios = cardDao.getCardSets(VILLAIN_SET, locale.code)
+            scenarios = cardDao.getPlayableScenarios(locale.code)
                 .mapNotNull { s -> s.name?.let { s.code to it } }.toMap(),
             modularSets = cardDao.getCardSets(MODULAR_SET, locale.code)
                 .mapNotNull { s -> s.name?.let { s.code to it } }.toMap(),
@@ -122,7 +122,6 @@ class RandomizerRepository @Inject constructor(
     suspend fun deleteHistoryEntry(id: String) = historyDao.delete(id)
 
     companion object {
-        private const val VILLAIN_SET = "villain"
         private const val MODULAR_SET = "modular"
 
         /** Primary factions that are playable aspects. */

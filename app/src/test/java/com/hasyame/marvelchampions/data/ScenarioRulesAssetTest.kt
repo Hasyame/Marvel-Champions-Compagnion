@@ -29,9 +29,56 @@ class ScenarioRulesAssetTest {
 
     @Test
     fun `covers every scenario marvelcdb publishes`() {
-        // 58 villain sets as of 2026-08-01. A new one means the generator needs
-        // rerunning.
-        assertEquals(58, read().scenarios.size)
+        // 53 as of 2026-08-06. It was 58: five villain sets bring no main
+        // scheme and are not scenarios at all. A new one means the generator
+        // needs rerunning.
+        assertEquals(53, read().scenarios.size)
+    }
+
+    @Test
+    fun `a villain set with no scenario of its own is not listed`() {
+        // The four Wrecking Crew villains are played inside the Wrecking Crew
+        // scenario, and the Marauders inside somebody else's. Listing them
+        // offered "Bulldozer" as though you could sit down and play it.
+        val codes = read().scenarios.map { it.code }
+
+        listOf("bulldozer", "piledriver", "thunderball", "wrecker", "marauders").forEach {
+            assertTrue("$it is not a scenario and must not be listed", it !in codes)
+        }
+        assertTrue("wrecking_crew is the scenario and must be", "wrecking_crew" in codes)
+    }
+
+    @Test
+    fun `a scenario that uses no modular set is an answer, not a failure`() {
+        // Wrecking Crew and Sinister Six name no modular sets. That used to be
+        // flagged needsReview, so the app warned the player it could not read a
+        // setup it had read correctly.
+        val scenarios = read().scenarios
+        listOf("wrecking_crew", "sinister_six").forEach { code ->
+            val scenario = scenarios.single { it.code == code }
+            assertEquals(0, scenario.modularCount)
+            assertTrue("$code should not need review", scenario.needsReview != true)
+        }
+    }
+
+    @Test
+    fun `a set named with a typo on the card still resolves`() {
+        // Batroc's own scenario card spells his brigade "Batrocs's Brigade".
+        // Both of his mandatory sets have to survive that.
+        val batroc = read().scenarios.single { it.code == "batroc" }
+
+        assertEquals(
+            listOf("a.i.m._science", "batrocs_brigade"),
+            batroc.mandatoryModulars.sorted(),
+        )
+    }
+
+    @Test
+    fun `only a genuinely unknowable setup needs review`() {
+        // Magog draws a random set from a pack the app cannot enumerate, which
+        // is a real unknown. Everything else parsed.
+        val review = read().scenarios.filter { it.needsReview == true }.map { it.code }
+        assertEquals(listOf("magog"), review)
     }
 
     @Test
