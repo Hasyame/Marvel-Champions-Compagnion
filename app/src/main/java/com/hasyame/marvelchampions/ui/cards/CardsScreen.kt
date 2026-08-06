@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -223,7 +224,16 @@ private fun SearchBar(
             onValueChange = onQueryChange,
             modifier = Modifier.weight(1f),
             singleLine = true,
-            label = { Text(stringResource(R.string.cards_search_hint)) },
+            // One line, always. The field is single-line but the label was not,
+            // so beside two icon buttons it wrapped and made the whole box two
+            // rows tall for no gain.
+            label = {
+                Text(
+                    text = stringResource(R.string.cards_search_hint),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            },
             leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
             trailingIcon = {
                 if (query.isNotEmpty()) {

@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.hasyame.marvelchampions.R
 import com.hasyame.marvelchampions.core.designsystem.component.aspectColor
+import com.hasyame.marvelchampions.core.designsystem.theme.PipInk
+import com.hasyame.marvelchampions.core.designsystem.theme.PipRim
 import com.hasyame.marvelchampions.data.db.entity.CardEntity
 import com.hasyame.marvelchampions.data.marvelcdb.MarvelCdbUrls
 
@@ -178,17 +180,23 @@ private fun CardThumbnail(card: CardEntity) {
  */
 @Composable
 private fun CostPip(cost: Int, modifier: Modifier = Modifier) {
+    // Fixed ink and cream rather than the theme's accent. This pip sits on
+    // whatever art the card happens to have, so a colour that follows the theme
+    // is a colour that will land on something the same shade sooner or later —
+    // in the dark theme it did, and the number all but vanished. The cost is
+    // information; it has to survive any background underneath it.
     Box(
         modifier
             .size(20.dp)
             .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.secondaryContainer),
+            .background(PipInk)
+            .border(1.dp, PipRim, CircleShape),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = stringResource(R.string.card_cost_short, cost),
             style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
+            color = PipRim,
         )
     }
 }

@@ -81,7 +81,13 @@ val PanelShadow = Color(0xFF120C0B)
 val InkGraphite = Color(0xFF2B2422)
 val InkGraphiteSoft = Color(0xFFE4DAD6)
 val BoneCream = Color(0xFFF2E7E2)
-val BoneCreamDeep = Color(0xFF3A302E)
+val BoneCreamDeep = Color(0xFF554A47)
+
+/**
+ * The cost pip, which is drawn over card art and so belongs to neither theme.
+ */
+val PipInk = Color(0xE60F0A0A)
+val PipRim = Color(0xFFF2E7E2)
 
 val AspectAggression = Color(0xFFC0392B)
 val AspectJustice = Color(0xFFD4A017)

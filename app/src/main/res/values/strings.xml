@@ -15,7 +15,7 @@
     <string name="action_clear_filters">Clear filters</string>
 
     <!-- Cards -->
-    <string name="cards_search_hint">Search cards</string>
+    <string name="cards_search_hint">Search</string>
     <string name="cards_filters">Filters</string>
     <string name="cards_no_results">No card matches your search.</string>
     <string name="cards_not_found">Card not found.</string>

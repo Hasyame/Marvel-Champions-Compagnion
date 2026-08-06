@@ -15,7 +15,7 @@
     <string name="action_clear_filters">Réinitialiser les filtres</string>
 
     <!-- Cards -->
-    <string name="cards_search_hint">Rechercher une carte</string>
+    <string name="cards_search_hint">Rechercher</string>
     <string name="cards_filters">Filtres</string>
     <string name="cards_no_results">Aucune carte ne correspond à votre recherche.</string>
     <string name="cards_not_found">Carte introuvable.</string>
