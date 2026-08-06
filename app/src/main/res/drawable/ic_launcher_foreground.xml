@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  A solid gold M over a card, on deep red.
+  A solid gold T over a card, on deep red.
 
-  Two earlier attempts failed for opposite reasons. The first carried three
-  ideas at once — starburst, card fan and letters — and read as clutter. The
-  second was three thin stroked letters, which at 48dp look spindly: an
-  outlined glyph has almost no ink in it, so it reads as weak rather than
-  minimal.
+It was a gold M — a letter belonging to somebody else, and the clearest piece
+  of borrowed identity the app had. The name is Thwart now, so the letter is a
+  T.
 
-  A filled letterform is what gives a mark weight. One bold M, drawn as a
-  single closed shape with real thickness, over a card silhouette that sits
-  close enough in tone not to compete. The card says what the app is for; the M
-  is what you recognise at a glance.
+  A bar struck across the card was tried first and abandoned: under a circular
+  mask the card is cropped away entirely, and what is left is a notched gold
+  bar that reads as a road sign. A letterform survives the mask because it is
+  the subject rather than a relationship between two shapes.
+
+  Filled, not outlined: at 48dp a stroked glyph has almost no ink in it and
+  reads as weak rather than minimal. The card behind sits one shade off the
+  background, enough for depth without competing.
 
   Original geometry — no characters, no logos, no trade dress.
 
@@ -26,7 +28,7 @@
 
     <!--
       A card behind the letter, one shade off the background. Enough to read as
-      depth, not enough to fight the M for attention.
+      depth, not enough to fight the T for attention.
     -->
     <group android:pivotX="54" android:pivotY="54" android:rotation="-12">
         <path
@@ -39,12 +41,10 @@
     <path
         android:fillColor="#5C0009"
         android:fillAlpha="0.55"
-        android:pathData="M25,81 L25,33 L41,33 L57,57 L73,33 L89,33 L89,81 L75,81
-                         L75,55 L63,73 L51,73 L39,55 L39,81 Z" />
+        android:pathData="M27,33 L87,33 L87,51 L66,51 L66,81 L48,81 L48,51 L27,51 Z" />
 
-    <!-- M, filled. -->
+    <!-- T, filled. Crossbar and stem both inside the 66dp safe zone. -->
     <path
         android:fillColor="#FCC200"
-        android:pathData="M22,78 L22,30 L38,30 L54,54 L70,30 L86,30 L86,78 L72,78
-                         L72,52 L60,70 L48,70 L36,52 L36,78 Z" />
+        android:pathData="M24,30 L84,30 L84,48 L63,48 L63,78 L45,78 L45,48 L24,48 Z" />
 </vector>
