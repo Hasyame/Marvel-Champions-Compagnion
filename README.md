@@ -182,8 +182,19 @@ nowhere in the app's own name, icon or branding: it is there to tell a player
 what the app is compatible with, not to suggest it comes from the publisher.
 
 No card images, card text, or campaign book text is stored in this repository.
-Card data is fetched from MarvelCDB at build or run time and cached on the
-device.
+
+The **release APK is a different matter, and worth being plain about**: it
+bundles a snapshot of the MarvelCDB card data — around 15 MB of card text in
+both languages — so the app is usable offline the moment it is installed. That
+snapshot is fetched by `./gradlew fetchCardSeed` at packaging time and is
+deliberately never committed, but it is inside the APK you download from the
+releases page.
+
+A build made without it works too: the app detects the snapshot is absent and
+downloads the cards on first sync. That is what F-Droid ships, since F-Droid
+builds from this source and the snapshot is not in it. So the F-Droid build and
+the GitHub release differ — same code, but one arrives with the cards and one
+fetches them.
 
 Campaign templates in `app/src/main/assets/campaigns/` hold **mechanics only** —
 card codes, counters, conditions and effects, plus short labels and a
