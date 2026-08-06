@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Marvel Champions Companion</string>
+    <string name="app_name">Thwart</string>
 
     <string name="destination_cards">Cards</string>
     <string name="destination_decks">Decks</string>

@@ -1,8 +1,13 @@
-# Marvel Champions Companion
+# Thwart
 
-An Android companion app for **Marvel Champions: The Card Game**: card database and search, deck lists, a scenario randomiser driven by the
-packs you actually own, and a data-driven campaign tracker. Offline first, no
-account, no backend, no advertising.
+An unofficial Android companion for **Marvel Champions: The Card Game**: card
+database and search, deck lists, a scenario randomiser driven by the packs you
+actually own, and a data-driven campaign tracker. Offline first, no account, no
+backend, no advertising.
+
+*Thwart* is the app's own name. It is not a Marvel or Fantasy Flight Games
+product and does not use their branding; the game is named here to say what the
+app works with, which is the only thing that naming it is for.
 
 Bilingual throughout — the interface and the card text are chosen separately, so
 you can read the app in French and the cards in English, or the reverse.
@@ -171,6 +176,10 @@ Marvel Champions: The Card Game is © Marvel and published by Fantasy Flight
 Games. This project is not affiliated with, endorsed by, or sponsored by Marvel,
 Fantasy Flight Games or Asmodee. All trademarks and copyrights belong to their
 respective owners.
+
+The app is called **Thwart**. The game's name appears in the description, and
+nowhere in the app's own name, icon or branding: it is there to tell a player
+what the app is compatible with, not to suggest it comes from the publisher.
 
 No card images, card text, or campaign book text is stored in this repository.
 Card data is fetched from MarvelCDB at build or run time and cached on the
