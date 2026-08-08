@@ -1,0 +1,9 @@
+Sixteen French set names the card database gets wrong are now corrected in the
+app: Fuir le Musée, Infiltrer le Musée, Dieu des Mensonges, Loi Martiale,
+Scientifique Suprême, Recrues Dangereuses, Puissants Avengers, Jeunes Avengers,
+Nouveaux Avengers, Héros à Embaucher, Jumeaux Écarlates, Garde Royale, Duo
+Mortel, Atlantes, Défenseurs and L'Initiative.
+
+They are generated from docs/game_contents.json, which now records what is in
+every box — 72 scenarios and 99 modular sets across twelve waves, with the pack
+each difficulty came in.

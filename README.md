@@ -14,7 +14,7 @@ you can read the app in French and the cards in English, or the reverse.
 
 ## Status
 
-In use, and being played with. Current release: **[v1.7.0](https://github.com/Hasyame/Thwart/releases/latest)**.
+In use, and being played with. Current release: **[v1.8.0](https://github.com/Hasyame/Thwart/releases/latest)**.
 
 Every feature planned for the app is now in, and the work from here is campaign
 content rather than machinery.
@@ -79,9 +79,14 @@ content rather than machinery.
   favourites to a single readable JSON file, and back again on any device.
   There is no account and no server, so without this the phone is the only copy.
 - **Dark theme**, on by default, and light if you prefer it. Both are built
-  around the game’s own aspect colours meaning only one thing: aggression red,
+  around the game's own aspect colours meaning only one thing: aggression red,
   justice gold, leadership blue, protection green belong to the cards, so the
-  app own chrome stays out of that palette.
+  app's own chrome stays out of that palette.
+- **French names the card database gets wrong.** MarvelCDB's French endpoint
+  still returns some set names in English. `docs/game_contents.json` records what
+  is in every box, in both languages, and `tools/build_game_contents.py` derives
+  the corrections the app applies — so a name typed in one place reaches the
+  screen, and a name MarvelCDB fixes upstream is not frozen into a local copy.
 
 ### Next
 

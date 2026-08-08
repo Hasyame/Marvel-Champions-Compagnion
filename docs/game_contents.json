@@ -218,7 +218,7 @@
             {
               "en": "Infiltrate the Museum",
               "code": "infiltrate_the_museum",
-              "fr": null
+              "fr": "Infiltrer le Musée"
             },
             {
               "en": "Escape the Museum",
@@ -315,7 +315,7 @@
             {
               "en": "The Black Order",
               "code": null,
-              "fr": null
+              "fr": "L'Ordre Noir"
             },
             {
               "en": "Armies of Titan",
@@ -363,7 +363,7 @@
             {
               "en": "The Hood",
               "code": "the_hood",
-              "fr": null
+              "fr": "The Hood"
             }
           ],
           "modularSets": [
@@ -468,7 +468,7 @@
             {
               "en": "Guerilla Tactics",
               "code": null,
-              "fr": null
+              "fr": "Tactiques de Guérilla"
             },
             {
               "en": "Osborn Tech",
@@ -548,7 +548,7 @@
             {
               "en": "Operation Zero Tolerance",
               "code": null,
-              "fr": null
+              "fr": "Opération Tolérance Zéro"
             },
             {
               "en": "Sentinels",
@@ -598,12 +598,12 @@
             {
               "en": "Crime",
               "code": "crime",
-              "fr": null
+              "fr": "Crime"
             },
             {
               "en": "Fantasy",
               "code": "fantasy",
-              "fr": null
+              "fr": "Fantasy"
             },
             {
               "en": "Horror",
@@ -618,12 +618,12 @@
             {
               "en": "Sitcom",
               "code": "sitcom",
-              "fr": null
+              "fr": "Sitcom"
             },
             {
               "en": "Western",
               "code": "western",
-              "fr": null
+              "fr": "Western"
             }
           ],
           "difficultiesAdded": []
@@ -809,7 +809,7 @@
             {
               "en": "Scientist Supreme",
               "code": "scientist_supreme",
-              "fr": null
+              "fr": "Scientifique Suprême"
             },
             {
               "en": "S.H.I.E.L.D.",
@@ -837,14 +837,14 @@
             {
               "en": "God of Lies",
               "code": "god_of_lies",
-              "fr": null
+              "fr": "Dieu des Mensonges"
             }
           ],
           "modularSets": [
             {
               "en": "Trickster Magic",
               "code": "trickster_magic",
-              "fr": null
+              "fr": "Trickster Magic"
             }
           ],
           "difficultiesAdded": []
@@ -857,59 +857,59 @@
             {
               "en": "Resistance: Captain Marvel",
               "code": null,
-              "fr": null
+              "fr": "Résistance : Captain Marvel"
             },
             {
               "en": "Resistance: Iron Man",
               "code": null,
-              "fr": null
+              "fr": "Résistance : Iron Man"
             },
             {
               "en": "Resistance: Spider-Woman",
               "code": null,
-              "fr": null
+              "fr": "Résistance : Spider-Woman"
             },
             {
               "en": "Resistance: Captain America",
               "code": null,
-              "fr": null
+              "fr": "Résistance : Captain America"
             },
             {
               "en": "Registration: Captain Marvel",
               "code": null,
-              "fr": null
+              "fr": "Inscription : Captain Marvel"
             },
             {
               "en": "Registration: Iron Man",
               "code": null,
-              "fr": null
+              "fr": "Inscription : Iron Man"
             },
             {
               "en": "Registration: Spider-Woman",
               "code": null,
-              "fr": null
+              "fr": "Inscription : Spider-Woman"
             },
             {
               "en": "Registration: Captain America",
               "code": null,
-              "fr": null
+              "fr": "Inscription : Captain America"
             }
           ],
           "modularSets": [
             {
               "en": "Dangerous Recruits",
               "code": "dangerous_recruits",
-              "fr": null
+              "fr": "Recrues Dangereuses"
             },
             {
               "en": "Mighty Avengers",
               "code": "mighty_avengers",
-              "fr": null
+              "fr": "Puissants Avengers"
             },
             {
               "en": "Heroes for Hire",
               "code": "heroes_for_hire",
-              "fr": null
+              "fr": "Héros à Embaucher"
             },
             {
               "en": "Paladin",
@@ -924,7 +924,7 @@
             {
               "en": "The Initiative",
               "code": "the_initiative",
-              "fr": null
+              "fr": "L'Initiative"
             },
             {
               "en": "Martial Law",
@@ -939,12 +939,12 @@
             {
               "en": "New Avengers",
               "code": "new_avengers",
-              "fr": null
+              "fr": "Nouveaux Avengers"
             },
             {
               "en": "Secret Avengers",
               "code": "secret_avengers",
-              "fr": null
+              "fr": "Secret Avengers"
             },
             {
               "en": "Namor",
@@ -954,7 +954,7 @@
             {
               "en": "Atlanteans",
               "code": "atlanteans",
-              "fr": null
+              "fr": "Atlantes"
             },
             {
               "en": "Spider-Man",
@@ -964,12 +964,12 @@
             {
               "en": "Defenders",
               "code": "defenders",
-              "fr": null
+              "fr": "Défenseurs"
             },
             {
               "en": "Hell's Kitchen",
               "code": "hells_kitchen",
-              "fr": null
+              "fr": "Hell's Kitchen"
             }
           ],
           "difficultiesAdded": [],
@@ -997,19 +997,19 @@
             {
               "en": "Resistance: She-Hulk",
               "code": null,
-              "fr": null
+              "fr": "Résistance : She-Hulk"
             },
             {
               "en": "Registration: She-Hulk",
               "code": null,
-              "fr": null
+              "fr": "Inscription : She-Hulk"
             }
           ],
           "modularSets": [
             {
               "en": "S.H.I.E.L.D. Ops",
               "code": "shield_ops",
-              "fr": null
+              "fr": "S.H.I.E.L.D. Ops"
             },
             {
               "en": "Thunderbolts",
@@ -1024,7 +1024,7 @@
             {
               "en": "Deadly Duo",
               "code": "deadly_duo",
-              "fr": null
+              "fr": "Duo Mortel"
             },
             {
               "en": "Vision",
@@ -1034,12 +1034,12 @@
             {
               "en": "Young Avengers",
               "code": "young_avengers",
-              "fr": null
+              "fr": "Jeunes Avengers"
             },
             {
               "en": "Scarlet Twins",
               "code": "scarlet_twins",
-              "fr": null
+              "fr": "Jumeaux Écarlates"
             },
             {
               "en": "Moon Knight",
@@ -1049,7 +1049,7 @@
             {
               "en": "Royal Guard",
               "code": "royal_guard",
-              "fr": null
+              "fr": "Garde Royale"
             }
           ],
           "difficultiesAdded": [],
@@ -1072,25 +1072,23 @@
             {
               "en": "The Getaway",
               "code": null,
-              "fr": null
+              "fr": "La Poursuite"
             },
             {
               "en": "Protection Racket",
               "code": null,
-              "fr": null
+              "fr": "Racket en Bande Organisée"
             },
             {
               "en": "The Raft Breakout",
               "code": null,
-              "fr": null
+              "fr": "L'Évasion du Raft"
             },
             {
               "en": "Kingpin",
               "code": null,
-              "fr": null
-            }
-          ],
-          "modularSets": [
+              "fr": "Le Caïd"
+            },
             {
               "en": "Bullseye",
               "code": null,
@@ -1102,6 +1100,7 @@
               "fr": null
             }
           ],
+          "modularSets": [],
           "difficultiesAdded": []
         }
       ]

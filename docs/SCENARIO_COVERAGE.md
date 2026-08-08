@@ -2,7 +2,7 @@
 
 Benoit listed every scenario in the game, from the boxes, in August 2026. Cross
 checking that against MarvelCDB found something the app cannot fix by trying
-harder: **17 scenarios exist in the game and not in MarvelCDB.**
+harder: **19 scenarios exist in the game and not in MarvelCDB.**
 
 The app derives its scenario pool from villain encounter sets in the card
 database, so a scenario MarvelCDB has not entered does not exist as far as the
@@ -14,7 +14,7 @@ app is concerned. No amount of query fixing changes that.
 |---|---|---|
 | Civil War | Resistance and Registration, for Captain Marvel, Iron Man, Spider-Woman and Captain America | 8 |
 | She-Hulk | Resistance: She-Hulk, Registration: She-Hulk | 2 |
-| Fear No Evil | The Getaway, Protection Racket, The Raft Breakout, Kingpin | 4 |
+| Fear No Evil | The Getaway, Protection Racket, The Raft Breakout, Kingpin, Bullseye, Electro | 6 |
 | Shadowland | Shadows in the Night, Shadow Labyrinth, Heart of Shadow | 3 |
 
 That is waves 9 to 11, largely. MarvelCDB enters cards as volunteers get to
