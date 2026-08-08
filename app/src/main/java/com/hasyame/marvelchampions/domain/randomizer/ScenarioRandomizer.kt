@@ -26,6 +26,11 @@ object ScenarioRandomizer {
         locked: Set<DrawField> = emptySet(),
         random: Random = Random.Default,
     ): RandomizerDraw {
+        // A pack is restricted exactly when some scenario names it as its own
+        // pool. Derived from the rules rather than passed in, so the two cannot
+        // disagree about which packs those are.
+        val restrictedPacks = rules.values.flatMap { it.modularPacks }.toSet()
+
         val scenarioCode = if (DrawField.SCENARIO in locked) {
             previous.scenarioCode
         } else {
@@ -77,7 +82,8 @@ object ScenarioRandomizer {
             drawModularSets(
                 pools.copy(
                     modularSets = pools.modularSets.filter {
-                        it.code !in filters.excludedModularSets
+                        it.code !in filters.excludedModularSets &&
+                            isLegalFor(it, rule, restrictedPacks)
                     },
                 ),
                 rule,
@@ -109,6 +115,26 @@ object ScenarioRandomizer {
         )
     }
 
+    /**
+     * Whether a modular set may be used by this scenario.
+     *
+     * Civil War and She-Hulk share a pool that is only legal in their own
+     * games. Everybody else may use anything owned, except those — which is why
+     * the check runs both ways rather than only consulting the scenario's rule:
+     * without the second half, Hell's Kitchen turns up in Rhino.
+     */
+    private fun isLegalFor(
+        set: SetRef,
+        rule: ScenarioRule?,
+        restrictedPacks: Set<String>,
+    ): Boolean {
+        val allowed = rule?.modularPacks.orEmpty()
+        if (allowed.isNotEmpty()) {
+            return set.packCode in allowed
+        }
+        return set.packCode !in restrictedPacks
+    }
+
     private fun drawModularSets(
         pools: RandomizerPools,
         rule: ScenarioRule?,
@@ -119,9 +145,17 @@ object ScenarioRandomizer {
             return emptyList()
         }
         val chosen = mandatory.toMutableList()
+        // Civil War takes three or four, decided at the table, so the count is
+        // itself part of the draw. Everything else has max equal to count and
+        // this settles on the one number.
+        val wanted = if (rule.modularCountMax > rule.modularCount) {
+            random.nextInt(rule.modularCount, rule.modularCountMax + 1)
+        } else {
+            rule.modularCount
+        }
         // Mandatory sets already count towards the scenario's total, so only
         // the shortfall is drawn at random.
-        val remaining = (rule.modularCount - chosen.size).coerceAtLeast(0)
+        val remaining = (wanted - chosen.size).coerceAtLeast(0)
         if (remaining == 0) {
             return chosen
         }

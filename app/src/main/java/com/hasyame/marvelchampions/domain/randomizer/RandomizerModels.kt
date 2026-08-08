@@ -58,6 +58,20 @@ data class ScenarioRule(
     val recommendedModulars: List<String> = emptyList(),
     /** The generator could not parse this scenario with confidence. */
     val needsReview: Boolean = false,
+    /**
+     * Upper bound when a scenario draws a variable number of sets.
+     *
+     * Civil War takes three or four, decided at the table. Everything else
+     * takes exactly [modularCount], so this defaults to it.
+     */
+    val modularCountMax: Int = modularCount,
+    /**
+     * Packs its modular sets may come from. Empty means anything owned.
+     *
+     * Civil War and She-Hulk share a pool that is legal only in their own
+     * games, and the sets in it must not turn up anywhere else.
+     */
+    val modularPacks: List<String> = emptyList(),
 )
 
 /** Everything the user owns, already filtered to owned packs. */

@@ -26,14 +26,24 @@ Everything else on the list resolves, including both Green Goblin scenarios
 (`risky_business`, `mutagen_formula`, pack `gob`). One naming nit: MarvelCDB
 spells M.O.D.O.K. without the trailing dot.
 
-## Civil War needs randomiser rules of its own
+## Civil War, built
 
-Worth recording before anybody builds it:
+A Civil War game is a **pair**: a side, Resistance or Registration, and the hero
+you face. Those eight combinations are the playable units — a villain on its own
+is not a game — and MarvelCDB has entered none of them. It has entered all
+fifteen modular sets, though, which meant they were drawable for every other
+scenario in the collection.
 
-- A Civil War scenario draws **3 to 4 modular sets**, not the usual one or two.
-- Its modular sets may only be used with Civil War scenarios or the two She-Hulk
-  ones. The randomiser currently treats every owned modular set as drawable by
-  every scenario, which would put Hell's Kitchen into Rhino.
+Both halves are now in:
+
+- The pairs are offered from `curated_scenarios.json`, generated from the box
+  list. The app can name the game and cannot show a setup, because there are no
+  card codes for it. For a whole campaign box that is a better trade than
+  pretending it does not exist.
+- Their modular sets are legal only in Civil War and She-Hulk games, and no
+  longer legal anywhere else. The check runs both ways; without the second half
+  Hell's Kitchen turned up in Rhino.
+- Three or four sets per game, decided by the draw rather than fixed.
 
 ## What this means for the pool
 

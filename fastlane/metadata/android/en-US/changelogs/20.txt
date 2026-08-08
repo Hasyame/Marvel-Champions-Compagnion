@@ -1,0 +1,13 @@
+Civil War and She-Hulk can be drawn.
+
+A Civil War game is a pair — a side, Resistance or Registration, and the hero
+you face — and the eight combinations are now offered, along with the two
+She-Hulk ones. MarvelCDB has not entered these scenarios, so the app can name
+the game to play but cannot show you a setup for it.
+
+Each pair draws three or four modular sets, decided by the draw.
+
+Those sets also stopped turning up where they do not belong. All fifteen Civil
+War sets are in the card database even though its scenarios are not, so Hell's
+Kitchen was drawable for Rhino. They are legal in Civil War and She-Hulk games
+only.

@@ -4,6 +4,7 @@ import com.hasyame.marvelchampions.data.db.dao.CardDao
 import com.hasyame.marvelchampions.data.db.dao.RandomizerHistoryDao
 import com.hasyame.marvelchampions.data.db.entity.RandomizerHistoryEntity
 import com.hasyame.marvelchampions.data.seed.CardSeedSource
+import com.hasyame.marvelchampions.data.seed.CuratedScenarios
 import com.hasyame.marvelchampions.data.seed.SetNameOverrides
 import com.hasyame.marvelchampions.domain.model.CardLocale
 import com.hasyame.marvelchampions.domain.randomizer.Difficulty
@@ -36,6 +37,7 @@ class RandomizerRepository @Inject constructor(
     private val collectionRepository: CollectionRepository,
     private val seed: CardSeedSource,
     private val setNameOverrides: SetNameOverrides,
+    private val curatedScenarios: CuratedScenarios,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
 
@@ -51,14 +53,21 @@ class RandomizerRepository @Inject constructor(
         // player has not got is not a scenario, so it should be missing from
         // My own setup and the pickers too, not only from the roll.
         val missingScenarios = collectionRepository.getExcludedScenarios()
+        val curated = curatedScenarios.load()
         val scenarios = cardDao.getPlayableScenarios(locale.code)
         val modulars = cardDao.getCardSets(MODULAR_SET, locale.code)
         val heroes = cardDao.getHeroes(locale.code)
 
         RandomizerPools(
+            // The card database first, then the scenarios only the boxes know
+            // about. Civil War is a whole campaign box the randomiser would
+            // otherwise pretend does not exist.
             scenarios = scenarios
                 .filter { it.packCode in owned && it.code !in missingScenarios }
-                .map { SetRef(it.code, it.packCode) },
+                .map { SetRef(it.code, it.packCode) } +
+                curated.scenarios
+                    .filter { it.packCode in owned && it.code !in missingScenarios }
+                    .map { SetRef(it.code, it.packCode) },
             modularSets = modulars.filter { it.packCode in owned }
                 .map { SetRef(it.code, it.packCode) },
             heroes = heroes.filter { it.packCode in owned }
@@ -101,7 +110,13 @@ class RandomizerRepository @Inject constructor(
         collectionRepository.observeExcludedScenarios()
 
     suspend fun loadRules(): Map<String, ScenarioRule> = withContext(ioDispatcher) {
-        seed.readScenarioRules().scenarios.associate { dto ->
+        val curated = curatedScenarios.load()
+        // Every scenario from a restricted pack keeps that restriction, whether
+        // its rule came from the generator or from the curated file: the sets
+        // are illegal outside those games either way.
+        val restricted = curated.restrictedModularPacks
+
+        val fromCards = seed.readScenarioRules().scenarios.associate { dto ->
             dto.code to ScenarioRule(
                 code = dto.code,
                 packCode = dto.packCode,
@@ -109,8 +124,21 @@ class RandomizerRepository @Inject constructor(
                 mandatoryModulars = dto.mandatoryModulars,
                 recommendedModulars = dto.recommendedModulars,
                 needsReview = dto.needsReview,
+                modularPacks = if (dto.packCode in restricted) restricted else emptyList(),
             )
         }
+
+        val fromBoxes = curated.scenarios.associate { dto ->
+            dto.code to ScenarioRule(
+                code = dto.code,
+                packCode = dto.packCode,
+                modularCount = dto.modularCountMin,
+                modularCountMax = dto.modularCountMax,
+                modularPacks = dto.modularPacks,
+            )
+        }
+
+        fromCards + fromBoxes
     }
 
     suspend fun loadNames(locale: CardLocale): RandomizerNames = withContext(ioDispatcher) {
@@ -120,7 +148,9 @@ class RandomizerRepository @Inject constructor(
         val overrides = setNameOverrides.forLocale(locale)
         RandomizerNames(
             scenarios = cardDao.getPlayableScenarios(locale.code)
-                .mapNotNull { s -> (overrides[s.code] ?: s.name)?.let { s.code to it } }.toMap(),
+                .mapNotNull { s -> (overrides[s.code] ?: s.name)?.let { s.code to it } }.toMap() +
+                curatedScenarios.load().scenarios
+                    .associate { it.code to curatedScenarios.name(it, locale) },
             modularSets = cardDao.getCardSets(MODULAR_SET, locale.code)
                 .mapNotNull { s -> (overrides[s.code] ?: s.name)?.let { s.code to it } }.toMap(),
             heroes = cardDao.getHeroes(locale.code)
