@@ -83,6 +83,7 @@ class BggClient @Inject constructor(
             .add("objectid", MARVEL_CHAMPIONS_ID)
             .add("playdate", play.playedOn)
             .add("length", play.lengthMinutes.toString())
+            .add("location", play.location)
             .add("quantity", "1")
 
             .add("incomplete", "0")

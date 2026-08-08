@@ -48,6 +48,23 @@ class AppPreferences @Inject constructor(
         preferences[KEY_MUSIC_URL] ?: DEFAULT_MUSIC_URL
     }
 
+    /**
+     * Where games get played, as free text.
+     *
+     * BoardGameGeek's location on a play is a string a person wrote — "Home",
+     * "Chez Marc", the name of a club — not a coordinate, so this is typed
+     * rather than sensed. Asking Android for the position would mean a location
+     * permission on an app that has only ever asked for the network, to produce
+     * something less useful than the word you would have typed.
+     *
+     * A setting rather than a question at the end of every game: most people
+     * play in the same handful of places, and a prompt you answer identically
+     * every time is a prompt worth not asking.
+     */
+    val playLocation: Flow<String> = context.dataStore.data.map { preferences ->
+        preferences[KEY_PLAY_LOCATION].orEmpty()
+    }
+
     /** Light, dark, or whatever the system is doing. */
     val themeChoice: Flow<ThemeChoice> = context.dataStore.data.map { preferences ->
         ThemeChoice.fromCode(preferences[KEY_THEME])
@@ -66,6 +83,18 @@ class AppPreferences @Inject constructor(
     suspend fun setLastCardSync(epochMillis: Long) {
         context.dataStore.edit { it[KEY_LAST_SYNC] = epochMillis }
     }
+
+    suspend fun setPlayLocation(location: String) {
+        context.dataStore.edit { preferences ->
+            if (location.isBlank()) {
+                preferences.remove(KEY_PLAY_LOCATION)
+            } else {
+                preferences[KEY_PLAY_LOCATION] = location.trim()
+            }
+        }
+    }
+
+    suspend fun currentPlayLocation(): String = playLocation.first()
 
     suspend fun setMusicUrl(url: String) {
         context.dataStore.edit { preferences ->
@@ -90,5 +119,6 @@ class AppPreferences @Inject constructor(
         private val KEY_LAST_SYNC = longPreferencesKey("last_card_sync")
         private val KEY_MUSIC_URL = stringPreferencesKey("music_url")
         private val KEY_THEME = stringPreferencesKey("theme_choice")
+        private val KEY_PLAY_LOCATION = stringPreferencesKey("play_location")
     }
 }

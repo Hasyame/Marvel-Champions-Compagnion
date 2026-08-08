@@ -74,6 +74,19 @@ data class PlayEntity(
     val notes: String = "",
 
     /**
+     * Where it was played, free text, as BoardGameGeek records it.
+     *
+     * Stored on the play rather than read from settings when reporting: the
+     * setting is where you play *now*, and a game played somewhere else last
+     * month should not silently move house because you changed it.
+     *
+     * The SQL default is what lets Room write the migration itself: a Kotlin
+     * default says nothing to SQLite about the rows already in the table.
+     */
+    @ColumnInfo(defaultValue = "")
+    val location: String = "",
+
+    /**
      * Victory points, which BoardGameGeek records as the player score.
      *
      * Zero for a game that has none — most one-off games — rather than absent,

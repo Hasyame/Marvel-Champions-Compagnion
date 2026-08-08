@@ -1,0 +1,9 @@
+Plays sent to BoardGameGeek can now say where they were played.
+
+Set it once under Settings, where you play. It travels with each game, so
+changing it later does not move games you played somewhere else.
+
+Typed rather than sensed: BoardGameGeek records a location as free text a
+person wrote, so asking Android for your position would mean a location
+permission on an app that has only ever wanted the network, to produce
+something less useful than the word you would have typed.

@@ -103,6 +103,16 @@ class BggPayloadTest {
     }
 
     @Test
+    fun `where it was played travels with the play`() {
+        assertEquals("Chez Marc", bgg(play().copy(location = "Chez Marc")).location)
+    }
+
+    @Test
+    fun `no location set sends an empty one rather than inventing something`() {
+        assertEquals("", bgg(play()).location)
+    }
+
+    @Test
     fun `length is still reported in minutes`() {
         assertEquals(75, bgg(play(elapsedMinutes = 75)).lengthMinutes)
     }

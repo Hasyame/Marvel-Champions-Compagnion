@@ -52,4 +52,6 @@ data class BggPlay(
     val players: List<BggPlayer>,
     val won: Boolean,
     val comment: String,
+    /** Free text. BGG shows it on the play and groups plays by it. */
+    val location: String = "",
 )

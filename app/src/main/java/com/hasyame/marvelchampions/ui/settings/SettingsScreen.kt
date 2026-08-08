@@ -149,6 +149,11 @@ fun SettingsScreen(
             )
             HorizontalDivider()
 
+            PlayLocationSection(
+                state = state,
+                onPlayLocationChange = viewModel::setPlayLocation,
+            )
+            HorizontalDivider()
             MusicSection(state = state, onMusicUrlChange = viewModel::setMusicUrl)
             HorizontalDivider()
 
@@ -256,6 +261,43 @@ fun SettingsScreen(
  * YouTube. Handing the URL over keeps the user's own subscription and app in
  * charge.
  */
+/**
+ * Where games get played, sent with a play to BoardGameGeek.
+ *
+ * Typed, not sensed. BGG's location on a play is a string a person wrote, so
+ * asking Android for the position would mean a location permission on an app
+ * that has only ever wanted the network, to produce something less useful than
+ * the word you would have typed anyway.
+ */
+@Composable
+private fun PlayLocationSection(
+    state: SettingsUiState,
+    onPlayLocationChange: (String) -> Unit,
+) {
+    var draft by remember(state.playLocation) { mutableStateOf(state.playLocation) }
+
+    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = stringResource(R.string.settings_play_location),
+            style = MaterialTheme.typography.titleSmall,
+        )
+        Text(
+            text = stringResource(R.string.settings_play_location_summary),
+            style = MaterialTheme.typography.bodySmall,
+        )
+        OutlinedTextField(
+            value = draft,
+            onValueChange = {
+                draft = it
+                onPlayLocationChange(it)
+            },
+            singleLine = true,
+            label = { Text(stringResource(R.string.settings_play_location_label)) },
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
 @Composable
 private fun MusicSection(
     state: SettingsUiState,

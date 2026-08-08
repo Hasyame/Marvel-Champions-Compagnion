@@ -34,6 +34,7 @@ data class SettingsUiState(
     val lastCardSync: Long? = null,
     val syncState: CardSyncState = CardSyncState.Idle,
     val musicUrl: String = AppPreferences.DEFAULT_MUSIC_URL,
+    val playLocation: String = "",
     val themeChoice: ThemeChoice = ThemeChoice.DARK,
     val bgg: BggAccountState = BggAccountState(),
     val bggVerifying: Boolean = false,
@@ -60,13 +61,15 @@ class SettingsViewModel @Inject constructor(
         syncManager.observeState(),
         preferences.musicUrl,
         preferences.themeChoice,
-    ) { locale, lastSync, syncState, musicUrl, theme ->
+        preferences.playLocation,
+    ) { values ->
         SettingsUiState(
-            cardLocale = locale,
-            lastCardSync = lastSync,
-            syncState = syncState,
-            musicUrl = musicUrl,
-            themeChoice = theme,
+            cardLocale = values[0] as CardLocale,
+            lastCardSync = values[1] as Long?,
+            syncState = values[2] as CardSyncState,
+            musicUrl = values[3] as String,
+            themeChoice = values[4] as ThemeChoice,
+            playLocation = values[5] as String,
         )
     }
 
@@ -216,6 +219,10 @@ class SettingsViewModel @Inject constructor(
 
     fun setThemeChoice(choice: ThemeChoice) {
         viewModelScope.launch { preferences.setThemeChoice(choice) }
+    }
+
+    fun setPlayLocation(location: String) {
+        viewModelScope.launch { preferences.setPlayLocation(location) }
     }
 
     fun setMusicUrl(url: String) {

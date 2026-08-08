@@ -6,6 +6,7 @@ import com.hasyame.marvelchampions.data.bgg.BggResult
 import com.hasyame.marvelchampions.data.db.dao.PlayDao
 import com.hasyame.marvelchampions.data.db.dao.WinRateRow
 import com.hasyame.marvelchampions.data.db.entity.PlayEntity
+import com.hasyame.marvelchampions.data.settings.AppPreferences
 import com.hasyame.marvelchampions.domain.model.BggPlay
 import com.hasyame.marvelchampions.domain.model.BggPlayer
 import com.hasyame.marvelchampions.domain.model.BggReportingMode
@@ -41,6 +42,7 @@ class PlayRepository @Inject constructor(
     private val playDao: PlayDao,
     private val bggAccount: BggAccount,
     private val bggClient: BggClient,
+    private val preferences: AppPreferences,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
 
@@ -85,12 +87,22 @@ class PlayRepository @Inject constructor(
      * unreachable would be indefensible.
      */
     suspend fun record(play: PlayEntity): PlayRecorded = withContext(ioDispatcher) {
-        playDao.insert(play)
+        // Stamped here rather than at the two call sites, because this is the
+        // one door every finished game comes through — a timed game and a
+        // campaign scenario both end up here — and a play that missed its
+        // location because one caller forgot would be invisible until it
+        // reached BoardGameGeek.
+        val stamped = if (play.location.isBlank()) {
+            play.copy(location = preferences.currentPlayLocation())
+        } else {
+            play
+        }
+        playDao.insert(stamped)
 
         when (bggAccount.currentMode()) {
             BggReportingMode.OFF -> PlayRecorded.SavedOnly
             BggReportingMode.ASK -> PlayRecorded.SavedAskToReport
-            BggReportingMode.ALWAYS -> report(play.id)
+            BggReportingMode.ALWAYS -> report(stamped.id)
         }
     }
 

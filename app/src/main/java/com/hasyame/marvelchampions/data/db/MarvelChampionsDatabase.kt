@@ -54,7 +54,7 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
         FavouriteCardEntity::class,
         ExcludedModularSetEntity::class,
     ],
-    version = 11,
+    version = 12,
     exportSchema = true,
     // Both migrations so far only add a table, so Room can generate them from
     // the exported schemas. Anything that alters an existing table needs a
@@ -70,6 +70,7 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
         AutoMigration(from = 8, to = 9),
         AutoMigration(from = 9, to = 10),
         AutoMigration(from = 10, to = 11),
+        AutoMigration(from = 11, to = 12),
     ],
 )
 abstract class MarvelChampionsDatabase : RoomDatabase() {

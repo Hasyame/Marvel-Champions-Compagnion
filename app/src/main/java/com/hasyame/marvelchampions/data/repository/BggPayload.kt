@@ -95,6 +95,7 @@ internal fun PlayEntity.toBggPlay(bggUsername: String): BggPlay {
         players = seats,
         won = won,
         comment = comment,
+        location = location,
     )
 }
 
