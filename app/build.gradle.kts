@@ -24,8 +24,8 @@ android {
         // Must increase for every release. v1.0.0 is already published, and a
         // device refuses an install whose versionCode is not higher than the
         // one it already has — silently, from the user's point of view.
-        versionCode = 13
-        versionName = "1.5.5"
+        versionCode = 14
+        versionName = "1.5.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -161,9 +161,13 @@ android {
     lint {
         warningsAsErrors = true
         checkDependencies = true
-        // Reported against the version catalog on every new library release;
-        // not a reason to fail CI.
+        // Both of these fire because time passed rather than because anything
+        // is wrong: a new library version, or a new Gradle, was published. With
+        // warningsAsErrors that turns every release into a version bump, and a
+        // build tool upgrade deserves its own change and its own verification
+        // rather than being smuggled into a bug fix.
         disable += "GradleDependency"
+        disable += "AndroidGradlePluginVersion"
     }
 }
 

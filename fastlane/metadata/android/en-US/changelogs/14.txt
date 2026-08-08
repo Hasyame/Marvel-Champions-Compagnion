@@ -1,0 +1,14 @@
+Four bugs found by playing two real games, at two and three players.
+
+The random draw follows your collection again: it used to read what you owned
+once and never look again, so changing your packs left it drawing from the old
+answer. The difficulty picker respects the filter it always claimed to.
+
+A row could quietly stop rerolling: opening a picker to look and pressing OK
+locked it exactly as if you had chosen something. It locks only on a real
+change now.
+
+BoardGameGeek was recording every multiplayer game as solo, because a play
+carries as many players as it has player rows and only one was ever sent.
+Everyone at the table now gets a seat, and the start and finish times are in
+the comment.

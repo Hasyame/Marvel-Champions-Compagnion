@@ -97,6 +97,14 @@ template come from experience rather than from a reading of the book. That is
 the whole roadmap — no further app features are planned, and anything else will
 come from something going wrong at a real table.
 
+## Versioning
+
+Semantic versioning, and the third number carries its weight: **patch releases
+are bug fixes and security work only**. A release that adds a campaign or a
+feature moves the minor. Nothing here is an API anyone depends on, but a version
+that says what kind of change it is means somebody deciding whether to update
+does not have to read the diff to find out.
+
 ## Requirements
 
 - JDK 21
