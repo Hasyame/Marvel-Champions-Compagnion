@@ -47,7 +47,14 @@ object ScenarioRandomizer {
         } else {
             Difficulty.entries
                 .filter { it in filters.allowedDifficulties }
+                // Owning the pack a difficulty came in is not a preference, so
+                // it is checked here rather than left to the filter.
+                .filter { it in pools.difficulties }
                 .randomOrNull(random)
+                // Nothing ownable and allowed at once means the filter and the
+                // collection disagree. The collection wins: a draw the player
+                // cannot put on the table is not a draw.
+                ?: pools.difficulties.randomOrNull(random)
         }
 
         val playerCount = if (DrawField.PLAYER_COUNT in locked) {

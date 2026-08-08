@@ -27,7 +27,19 @@ import com.hasyame.marvelchampions.R
 import com.hasyame.marvelchampions.domain.randomizer.DrawField
 
 /** One option a row can be set to: what is stored, and what is read. */
-data class DrawOption(val id: String, val label: String)
+data class DrawOption(
+    val id: String,
+    val label: String,
+    /**
+     * Where it came from — the pack, for a scenario or a modular set.
+     *
+     * Without it a scenario is unfindable by the thing a player remembers. The
+     * Green Goblin pack contains "Entreprise à Risques" and "Formule Mutagène",
+     * and somebody looking for the Goblin scenarios reasonably concluded they
+     * were missing, because neither name mentions him.
+     */
+    val detail: String? = null,
+)
 
 /**
  * Picks a value for one row of the draw.
@@ -82,6 +94,9 @@ fun ChooseDrawValueDialog(
                         val isPicked = option.id in picked
                         ListItem(
                             headlineContent = { Text(option.label) },
+                            supportingContent = option.detail?.let {
+                                { Text(it, style = MaterialTheme.typography.bodySmall) }
+                            },
                             leadingContent = {
                                 if (limit == 1) {
                                     RadioButton(selected = isPicked, onClick = null)

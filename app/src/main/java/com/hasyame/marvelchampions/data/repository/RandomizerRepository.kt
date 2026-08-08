@@ -25,6 +25,8 @@ data class RandomizerNames(
     val scenarios: Map<String, String> = emptyMap(),
     val modularSets: Map<String, String> = emptyMap(),
     val heroes: Map<String, String> = emptyMap(),
+    /** Pack code to its name, so a picker can say where a scenario came from. */
+    val packs: Map<String, String> = emptyMap(),
 )
 
 @Singleton
@@ -59,6 +61,13 @@ class RandomizerRepository @Inject constructor(
             // Aspects are the primary factions. 'basic' is not an aspect you
             // choose, and 'pool' is filtered per hero by the randomiser itself.
             aspects = ASPECTS,
+            // Each difficulty is a set of encounter cards that came in a box.
+            // Core is assumed rather than checked: without it there is no game
+            // to set a difficulty for, and offering nothing would be worse than
+            // offering the two levels everybody has.
+            difficulties = Difficulty.entries.filter {
+                it.packCode == "core" || it.packCode in owned
+            },
         )
     }
 
@@ -104,6 +113,7 @@ class RandomizerRepository @Inject constructor(
                 .mapNotNull { s -> (overrides[s.code] ?: s.name)?.let { s.code to it } }.toMap(),
             heroes = cardDao.getHeroes(locale.code)
                 .mapNotNull { s -> s.name?.let { s.code to it } }.toMap(),
+            packs = collectionRepository.packNames(locale),
         )
     }
 

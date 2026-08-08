@@ -472,18 +472,30 @@ private fun com.hasyame.marvelchampions.domain.randomizer.RandomizerDraw.asSessi
 @Composable
 private fun RandomizerUiState.optionsFor(field: DrawField): List<DrawOption> = when (field) {
     DrawField.SCENARIO -> pools.scenarios
-        .map { DrawOption(it.code, names.scenarios[it.code] ?: it.code) }
+        .map {
+            DrawOption(
+                id = it.code,
+                label = names.scenarios[it.code] ?: it.code,
+                detail = names.packs[it.packCode],
+            )
+        }
         .sortedBy { it.label }
 
     // Only the difficulties the filter allows. The draw has always respected
     // that filter; this picker did not, so tapping the row offered five and
     // let you pick one you had just excluded.
-    DrawField.DIFFICULTY -> Difficulty.entries
+    DrawField.DIFFICULTY -> pools.difficulties
         .filter { it in filters.allowedDifficulties }
         .map { DrawOption(it.name, difficultyLabel(it)) }
 
     DrawField.MODULAR_SETS -> pools.modularSets
-        .map { DrawOption(it.code, names.modularSets[it.code] ?: it.code) }
+        .map {
+            DrawOption(
+                id = it.code,
+                label = names.modularSets[it.code] ?: it.code,
+                detail = names.packs[it.packCode],
+            )
+        }
         .sortedBy { it.label }
 
     DrawField.PLAYER_COUNT -> (1..MAX_PLAYERS).map { DrawOption(it.toString(), it.toString()) }

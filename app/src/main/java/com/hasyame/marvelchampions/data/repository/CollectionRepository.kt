@@ -112,6 +112,10 @@ class CollectionRepository @Inject constructor(
             .groupBy { it.packCode }
     }
 
+    /** Pack code to its localised name, falling back to the code. */
+    suspend fun packNames(locale: CardLocale): Map<String, String> =
+        packDao.getTranslations(locale.code).associate { it.packCode to it.name }
+
     fun observeExcludedModularSets(): Flow<Set<String>> =
         excludedModularSetDao.observeExcluded().map { rows -> rows.map { it.setCode }.toSet() }
 

@@ -1,12 +1,25 @@
 package com.hasyame.marvelchampions.domain.randomizer
 
 /** The four difficulty levels the game offers. */
-enum class Difficulty {
-    STANDARD_I,
-    STANDARD_II,
-    STANDARD_III,
-    EXPERT_I,
-    EXPERT_II,
+/**
+ * A difficulty, and the pack whose cards it needs.
+ *
+ * Difficulty is not an app setting: each level is a physical set of encounter
+ * cards, and it arrived in a particular box. Standard I and Expert I are in the
+ * Core Set, Standard II and Expert II came with The Hood, Standard III with The
+ * Age of Apocalypse. The randomiser offered all five to everybody, which is a
+ * draw somebody cannot set up.
+ *
+ * MarvelCDB has no concept of this — it knows cards, not which difficulty they
+ * constitute — so the mapping is stated here. It changes about once every two
+ * years.
+ */
+enum class Difficulty(val packCode: String) {
+    STANDARD_I("core"),
+    STANDARD_II("hood"),
+    STANDARD_III("aoa"),
+    EXPERT_I("core"),
+    EXPERT_II("hood"),
 }
 
 /** A field of the draw. Each one can be locked and rerolled on its own. */
@@ -53,6 +66,11 @@ data class RandomizerPools(
     val modularSets: List<SetRef> = emptyList(),
     val heroes: List<HeroRef> = emptyList(),
     val aspects: List<String> = emptyList(),
+    /**
+     * Difficulties the collection can field, which is a property of the packs
+     * owned rather than a preference.
+     */
+    val difficulties: List<Difficulty> = Difficulty.entries,
 )
 
 data class RandomizerFilters(
