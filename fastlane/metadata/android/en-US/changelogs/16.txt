@@ -1,0 +1,11 @@
+The random draw no longer offers difficulties you have not got. Standard I and
+Expert I come in the Core Set, Standard II and Expert II with The Hood, and
+Standard III with The Age of Apocalypse — so a Core-only collection was being
+told to play a difficulty sitting in a shop.
+
+The scenario picker now names the pack under each scenario. The Green Goblin
+pack contains "Risky Business" and "Mutagen Formula", so looking for the Goblin
+found nothing even though both were there.
+
+French set names MarvelCDB leaves in English can now be corrected in the app
+rather than waited on. "Escape the Museum" is "Fuir le Musée".

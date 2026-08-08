@@ -189,26 +189,50 @@ def french_names(cards, kind):
     return out
 
 
+def existing_french():
+    """French names already in the file, so regenerating never loses them.
+
+    Translating is slow, hand work; regenerating is a command somebody runs
+    without thinking. Whatever is in the file wins over whatever the API says,
+    because the file is where a person who owns the cards wrote it down.
+    """
+    try:
+        with io.open("docs/game_contents.json", encoding="utf-8") as f:
+            previous = json.load(f)
+    except (OSError, ValueError):
+        return {}
+    kept = {}
+    for wave in previous.get("waves", []):
+        for pack in wave.get("packs", []):
+            for key in ("scenarios", "modularSets"):
+                for entry in pack.get(key, []):
+                    if entry.get("fr"):
+                        kept[(key, entry["en"])] = entry["fr"]
+    return kept
+
+
 def main():
+    kept = existing_french()
     en_cards, fr_cards = fetch(EN), fetch(FR)
     en_villain = english_index(en_cards, "villain")
     en_modular = english_index(en_cards, "modular")
     fr_villain = french_names(fr_cards, "villain")
     fr_modular = french_names(fr_cards, "modular")
 
-    def resolve(name, index, french):
+    def resolve(name, index, french, kind):
         key = name.strip().lower()
         hit = index.get(ALIASES.get(key, key)) or index.get(key)
         if not hit:
-            return {"en": name, "code": None, "fr": None}
+            return {"en": name, "code": None, "fr": kept.get((kind, name))}
         code, en_name = hit
         translated = french.get(code)
+        from_api = translated if translated and translated != en_name else None
         return {
             "en": en_name,
             "code": code,
-            # null rather than the English name when MarvelCDB has not
-            # translated it: a gap you can see is a gap somebody can fill.
-            "fr": translated if translated and translated != en_name else None,
+            # Hand-written first, then the API. null rather than the English
+            # name: a gap you can see is a gap somebody can fill.
+            "fr": kept.get((kind, en_name)) or kept.get((kind, name)) or from_api,
         }
 
     waves = []
@@ -219,8 +243,12 @@ def main():
                 "name": name,
                 "code": code,
                 "type": kind,
-                "scenarios": [resolve(s, en_villain, fr_villain) for s in scenarios],
-                "modularSets": [resolve(m, en_modular, fr_modular) for m in modulars],
+                "scenarios": [
+                    resolve(s, en_villain, fr_villain, "scenarios") for s in scenarios
+                ],
+                "modularSets": [
+                    resolve(m, en_modular, fr_modular, "modularSets") for m in modulars
+                ],
                 "difficultiesAdded": difficulties,
             }
             if code in SPECIAL:
