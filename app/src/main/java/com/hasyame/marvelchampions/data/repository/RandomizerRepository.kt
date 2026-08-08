@@ -4,6 +4,7 @@ import com.hasyame.marvelchampions.data.db.dao.CardDao
 import com.hasyame.marvelchampions.data.db.dao.RandomizerHistoryDao
 import com.hasyame.marvelchampions.data.db.entity.RandomizerHistoryEntity
 import com.hasyame.marvelchampions.data.seed.CardSeedSource
+import com.hasyame.marvelchampions.data.seed.SetNameOverrides
 import com.hasyame.marvelchampions.domain.model.CardLocale
 import com.hasyame.marvelchampions.domain.randomizer.Difficulty
 import com.hasyame.marvelchampions.domain.randomizer.HeroAssignment
@@ -32,6 +33,7 @@ class RandomizerRepository @Inject constructor(
     private val historyDao: RandomizerHistoryDao,
     private val collectionRepository: CollectionRepository,
     private val seed: CardSeedSource,
+    private val setNameOverrides: SetNameOverrides,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
 
@@ -91,11 +93,15 @@ class RandomizerRepository @Inject constructor(
     }
 
     suspend fun loadNames(locale: CardLocale): RandomizerNames = withContext(ioDispatcher) {
+        // Corrections first, then whatever the card database says. MarvelCDB
+        // leaves some French set names in English, and a player reading a name
+        // off the app while holding the card cannot tell whose fault that is.
+        val overrides = setNameOverrides.forLocale(locale)
         RandomizerNames(
             scenarios = cardDao.getPlayableScenarios(locale.code)
-                .mapNotNull { s -> s.name?.let { s.code to it } }.toMap(),
+                .mapNotNull { s -> (overrides[s.code] ?: s.name)?.let { s.code to it } }.toMap(),
             modularSets = cardDao.getCardSets(MODULAR_SET, locale.code)
-                .mapNotNull { s -> s.name?.let { s.code to it } }.toMap(),
+                .mapNotNull { s -> (overrides[s.code] ?: s.name)?.let { s.code to it } }.toMap(),
             heroes = cardDao.getHeroes(locale.code)
                 .mapNotNull { s -> s.name?.let { s.code to it } }.toMap(),
         )

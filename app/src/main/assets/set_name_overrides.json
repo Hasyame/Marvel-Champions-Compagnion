@@ -1,0 +1,8 @@
+{
+  "_note": "Set names MarvelCDB has not translated, or has translated in a way that does not match the printed cards. Keyed by locale, then by card set code. Anything not listed here uses whatever the card database says, which is the right default: this file is a correction, not a translation layer.",
+  "fr": {
+    "escape_the_museum": "Fuir le Musée",
+    "infiltrate_the_museum": "Infiltrer le Musée",
+    "venom_goblin": "Le Bouffon Vert"
+  }
+}

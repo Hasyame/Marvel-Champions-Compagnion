@@ -1,6 +1,7 @@
 package com.hasyame.marvelchampions.data.repository
 
 import com.hasyame.marvelchampions.data.db.dao.CardDao
+import com.hasyame.marvelchampions.data.seed.SetNameOverrides
 import com.hasyame.marvelchampions.data.db.dao.ExcludedModularSetDao
 import com.hasyame.marvelchampions.data.db.dao.OwnedPackDao
 import com.hasyame.marvelchampions.data.db.dao.PackDao
@@ -34,6 +35,7 @@ class CollectionRepository @Inject constructor(
     private val ownedPackDao: OwnedPackDao,
     private val excludedModularSetDao: ExcludedModularSetDao,
     private val cardDao: CardDao,
+    private val setNameOverrides: SetNameOverrides,
 ) {
 
     fun observeCollection(locale: CardLocale): Flow<List<PackOwnership>> =
@@ -96,11 +98,19 @@ class CollectionRepository @Inject constructor(
      * Derived from the cards themselves rather than curated: a set belongs to
      * whichever pack its cards came in.
      */
-    suspend fun modularSetsByPack(locale: CardLocale): Map<String, List<ModularSet>> =
-        cardDao.getCardSets(MODULAR_SET, locale.code)
-            .map { ModularSet(code = it.code, name = it.name ?: it.code, packCode = it.packCode) }
+    suspend fun modularSetsByPack(locale: CardLocale): Map<String, List<ModularSet>> {
+        val overrides = setNameOverrides.forLocale(locale)
+        return cardDao.getCardSets(MODULAR_SET, locale.code)
+            .map {
+                ModularSet(
+                    code = it.code,
+                    name = overrides[it.code] ?: it.name ?: it.code,
+                    packCode = it.packCode,
+                )
+            }
             .sortedBy { it.name }
             .groupBy { it.packCode }
+    }
 
     fun observeExcludedModularSets(): Flow<Set<String>> =
         excludedModularSetDao.observeExcluded().map { rows -> rows.map { it.setCode }.toSet() }
