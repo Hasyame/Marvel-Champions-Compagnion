@@ -1,0 +1,1139 @@
+{
+  "_note": "What the boxes contain, listed by somebody holding them. The structure is authoritative. Codes and French names come from MarvelCDB and are null where MarvelCDB has nothing, which is how you find what still needs translating or entering. Regenerate with tools/build_game_contents.py.",
+  "generatedFrom": [
+    "https://marvelcdb.com/api/public/cards/?encounter=1",
+    "https://fr.marvelcdb.com/api/public/cards/?encounter=1"
+  ],
+  "waves": [
+    {
+      "wave": 0,
+      "packs": [
+        {
+          "name": "Core Set",
+          "code": "core",
+          "type": "core",
+          "scenarios": [
+            {
+              "en": "Rhino",
+              "code": "rhino",
+              "fr": null
+            },
+            {
+              "en": "Klaw",
+              "code": "klaw",
+              "fr": null
+            },
+            {
+              "en": "Ultron",
+              "code": "ultron",
+              "fr": null
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "Bomb Scare",
+              "code": "bomb_scare",
+              "fr": "Alerte à la Bombe"
+            },
+            {
+              "en": "Masters of Evil",
+              "code": "masters_of_evil",
+              "fr": "Maîtres du Mal"
+            },
+            {
+              "en": "Under Attack",
+              "code": "under_attack",
+              "fr": "Civils Attaqués"
+            },
+            {
+              "en": "Legions of Hydra",
+              "code": "legions_of_hydra",
+              "fr": "Légions d'Hydra"
+            },
+            {
+              "en": "The Doomsday Chair",
+              "code": "the_doomsday_chair",
+              "fr": "Le Siège de l'Apocalypse"
+            }
+          ],
+          "difficultiesAdded": [
+            "Standard I",
+            "Expert I"
+          ]
+        }
+      ]
+    },
+    {
+      "wave": 1,
+      "packs": [
+        {
+          "name": "The Green Goblin",
+          "code": "gob",
+          "type": "scenario_pack",
+          "scenarios": [
+            {
+              "en": "Risky Business",
+              "code": "risky_business",
+              "fr": "Entreprise à Risques"
+            },
+            {
+              "en": "Mutagen Formula",
+              "code": "mutagen_formula",
+              "fr": "Formule Mutagène"
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "Goblin Gimmicks",
+              "code": "goblin_gimmicks",
+              "fr": "Gadgets du Bouffon"
+            },
+            {
+              "en": "A Mess of Things",
+              "code": "a_mess_of_things",
+              "fr": "Un Immense Gâchis"
+            },
+            {
+              "en": "Power Drain",
+              "code": "power_drain",
+              "fr": "Absorption Électrique"
+            },
+            {
+              "en": "Running Interference",
+              "code": "running_interference",
+              "fr": "Ingérence en Cours"
+            }
+          ],
+          "difficultiesAdded": []
+        },
+        {
+          "name": "The Wrecking Crew",
+          "code": "twc",
+          "type": "scenario_pack",
+          "scenarios": [
+            {
+              "en": "Wrecking Crew",
+              "code": "wrecking_crew",
+              "fr": "Les Démolisseurs"
+            }
+          ],
+          "modularSets": [],
+          "difficultiesAdded": []
+        },
+        {
+          "name": "The Rise of Red Skull",
+          "code": "trors",
+          "type": "campaign_box",
+          "scenarios": [
+            {
+              "en": "Crossbones",
+              "code": "crossbones",
+              "fr": null
+            },
+            {
+              "en": "Absorbing Man",
+              "code": "absorbing_man",
+              "fr": "L'Homme Absorbant"
+            },
+            {
+              "en": "Taskmaster",
+              "code": "taskmaster",
+              "fr": null
+            },
+            {
+              "en": "Zola",
+              "code": "zola",
+              "fr": null
+            },
+            {
+              "en": "Red Skull",
+              "code": "red_skull",
+              "fr": "Crâne Rouge"
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "Hydra Assault",
+              "code": "hydra_assault",
+              "fr": "Offensive d'Hydra"
+            },
+            {
+              "en": "Weapon Master",
+              "code": "weap_master",
+              "fr": "Maîtrise des Armes"
+            },
+            {
+              "en": "Hydra Patrol",
+              "code": "hydra_patrol",
+              "fr": "Patrouille d'Hydra"
+            }
+          ],
+          "difficultiesAdded": []
+        }
+      ]
+    },
+    {
+      "wave": 2,
+      "packs": [
+        {
+          "name": "The Once and Future Kang",
+          "code": "toafk",
+          "type": "scenario_pack",
+          "scenarios": [
+            {
+              "en": "Kang",
+              "code": "kang",
+              "fr": null
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "Temporal",
+              "code": "temporal",
+              "fr": "Temporel"
+            },
+            {
+              "en": "Anachronauts",
+              "code": "anachronauts",
+              "fr": "Les Anachronautes"
+            },
+            {
+              "en": "Master of Time",
+              "code": "mot",
+              "fr": "Le Maître du Temps"
+            }
+          ],
+          "difficultiesAdded": []
+        },
+        {
+          "name": "Galaxy's Most Wanted",
+          "code": "gmw",
+          "type": "campaign_box",
+          "scenarios": [
+            {
+              "en": "Brotherhood Of Badoon",
+              "code": "brotherhood_of_badoon",
+              "fr": "La Confrérie des Badoon"
+            },
+            {
+              "en": "Infiltrate the Museum",
+              "code": "infiltrate_the_museum",
+              "fr": null
+            },
+            {
+              "en": "Escape the Museum",
+              "code": "escape_the_museum",
+              "fr": null
+            },
+            {
+              "en": "Nebula",
+              "code": "nebula",
+              "fr": null
+            },
+            {
+              "en": "Ronan the Accuser",
+              "code": "ronan",
+              "fr": "Ronan"
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "Band of Badoon",
+              "code": "band_of_badoon",
+              "fr": "Troupe de Badoon"
+            },
+            {
+              "en": "Galactic Artifacts",
+              "code": "galactic_artifacts",
+              "fr": "Artefacts Galactiques"
+            },
+            {
+              "en": "Kree Militants",
+              "code": "kree_militant",
+              "fr": "Milices Kree"
+            },
+            {
+              "en": "Menagerie Medley",
+              "code": "menagerie_medley",
+              "fr": "Créatures de la Ménagerie"
+            },
+            {
+              "en": "Space Pirates",
+              "code": "space_pirates",
+              "fr": "Pirates de l'Espace"
+            },
+            {
+              "en": "Badoon Headhunter",
+              "code": "badoon_headhunter",
+              "fr": "Traqueur Badoon"
+            },
+            {
+              "en": "Ship Command",
+              "code": "ship_command",
+              "fr": "Contrôles du Vaisseau"
+            }
+          ],
+          "difficultiesAdded": []
+        }
+      ]
+    },
+    {
+      "wave": 3,
+      "packs": [
+        {
+          "name": "The Mad Titan's Shadow",
+          "code": "mts",
+          "type": "campaign_box",
+          "scenarios": [
+            {
+              "en": "Ebony Maw",
+              "code": "ebony_maw",
+              "fr": "Mâchoire d'Ébène"
+            },
+            {
+              "en": "Tower Defense",
+              "code": "tower_defense",
+              "fr": "Défense de la Tour"
+            },
+            {
+              "en": "Thanos",
+              "code": "thanos",
+              "fr": null
+            },
+            {
+              "en": "Hela",
+              "code": "hela",
+              "fr": null
+            },
+            {
+              "en": "Loki",
+              "code": "loki",
+              "fr": null
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "The Black Order",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Armies of Titan",
+              "code": "armies_of_titan",
+              "fr": "Armées du Titan"
+            },
+            {
+              "en": "Children of Thanos",
+              "code": "children_of_thanos",
+              "fr": "Enfants de Thanos"
+            },
+            {
+              "en": "Infinity Gauntlet",
+              "code": "infinity_gauntlet",
+              "fr": "Gant de l'Infini"
+            },
+            {
+              "en": "Legions of Hel",
+              "code": "legions_of_hel",
+              "fr": "Légions de Hel"
+            },
+            {
+              "en": "Frost Giants",
+              "code": "frost_giants",
+              "fr": "Géants de Glace"
+            },
+            {
+              "en": "Enchantress",
+              "code": "enchantress",
+              "fr": "L'Enchanteresse"
+            }
+          ],
+          "difficultiesAdded": []
+        }
+      ]
+    },
+    {
+      "wave": 4,
+      "packs": [
+        {
+          "name": "The Hood",
+          "code": "hood",
+          "type": "scenario_pack",
+          "scenarios": [
+            {
+              "en": "The Hood",
+              "code": "the_hood",
+              "fr": null
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "Beasty Boys",
+              "code": "beasty_boys",
+              "fr": "Hommes-Bêtes"
+            },
+            {
+              "en": "Brothers Grimm",
+              "code": "brothers_grimm",
+              "fr": "Les Frères Grimm"
+            },
+            {
+              "en": "Mister Hyde",
+              "code": "mister_hyde",
+              "fr": null
+            },
+            {
+              "en": "Wrecking Crew",
+              "code": "wrecking_crew_modular",
+              "fr": "Les Démolisseurs"
+            },
+            {
+              "en": "Sinister Syndicate",
+              "code": "sinister_syndicate",
+              "fr": "Sinistre Syndicat"
+            },
+            {
+              "en": "Crossfire's Crew",
+              "code": "crossfire_crew",
+              "fr": "Gang de Crossfire"
+            },
+            {
+              "en": "Ransacked Armory",
+              "code": "ransacked_armory",
+              "fr": "Armurerie Pillée"
+            },
+            {
+              "en": "State of Emergency",
+              "code": "state_of_emergency",
+              "fr": "État d'Urgence"
+            },
+            {
+              "en": "Streets of Mayhem",
+              "code": "streets_of_mayhem",
+              "fr": "Rues Malfamées"
+            }
+          ],
+          "difficultiesAdded": [
+            "Standard II",
+            "Expert II"
+          ]
+        },
+        {
+          "name": "Sinister Motives",
+          "code": "sm",
+          "type": "campaign_box",
+          "scenarios": [
+            {
+              "en": "Sandman",
+              "code": "sandman",
+              "fr": "L'Homme-Sable"
+            },
+            {
+              "en": "Venom",
+              "code": "venom",
+              "fr": null
+            },
+            {
+              "en": "Mysterio",
+              "code": "mysterio",
+              "fr": null
+            },
+            {
+              "en": "The Sinister Six",
+              "code": "sinister_six",
+              "fr": "Les Sinistres Six"
+            },
+            {
+              "en": "Venom Goblin",
+              "code": "venom_goblin",
+              "fr": "Le Bouffon Venom"
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "City in Chaos",
+              "code": "city_in_chaos",
+              "fr": "Chaos dans la Ville"
+            },
+            {
+              "en": "Down to Earth",
+              "code": "down_to_earth",
+              "fr": "Les Pieds sur Terre"
+            },
+            {
+              "en": "Goblin Gear",
+              "code": "goblin_gear",
+              "fr": "Équipement du Bouffon"
+            },
+            {
+              "en": "Guerilla Tactics",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Osborn Tech",
+              "code": "osborn_tech",
+              "fr": "Technologie Osborn"
+            },
+            {
+              "en": "Personal Nightmare",
+              "code": "personal_nightmare",
+              "fr": "Cauchemar Personnel"
+            },
+            {
+              "en": "Sinister Assault",
+              "code": "sinister_assault",
+              "fr": "Assaut Sinistre"
+            },
+            {
+              "en": "Symbiotic Strength",
+              "code": "symbiotic_strength",
+              "fr": "Force Symbiotique"
+            },
+            {
+              "en": "Whispers of Paranoia",
+              "code": "whispers_of_paranoia",
+              "fr": "Murmures de Paranoïa"
+            }
+          ],
+          "difficultiesAdded": []
+        }
+      ]
+    },
+    {
+      "wave": 5,
+      "packs": [
+        {
+          "name": "Mutant Genesis",
+          "code": "mut_gen",
+          "type": "campaign_box",
+          "scenarios": [
+            {
+              "en": "Sabretooth",
+              "code": "sabretooth",
+              "fr": "Dents-de-Sabre"
+            },
+            {
+              "en": "Project Wideawake",
+              "code": "project_wideawake",
+              "fr": "Projet Wideawake"
+            },
+            {
+              "en": "Master Mold",
+              "code": "master_mold",
+              "fr": "Moule Initial"
+            },
+            {
+              "en": "Mansion Attack",
+              "code": "mansion_attack",
+              "fr": "L'Attaque du Manoir"
+            },
+            {
+              "en": "Magneto",
+              "code": "magneto_villain",
+              "fr": "Magnéto"
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "Mystique",
+              "code": "mystique",
+              "fr": null
+            },
+            {
+              "en": "Brotherhood",
+              "code": "brotherhood",
+              "fr": "Confrérie"
+            },
+            {
+              "en": "Operation Zero Tolerance",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Sentinels",
+              "code": "sentinels",
+              "fr": "Sentinelles"
+            },
+            {
+              "en": "Acolytes",
+              "code": "acolytes",
+              "fr": null
+            },
+            {
+              "en": "Future Past",
+              "code": "future_past",
+              "fr": "Avenir Passé"
+            }
+          ],
+          "difficultiesAdded": []
+        }
+      ]
+    },
+    {
+      "wave": 6,
+      "packs": [
+        {
+          "name": "MojoMania",
+          "code": "mojo",
+          "type": "scenario_pack",
+          "scenarios": [
+            {
+              "en": "Magog",
+              "code": "magog",
+              "fr": "MaGog"
+            },
+            {
+              "en": "Spiral",
+              "code": "spiral",
+              "fr": "Spirale"
+            },
+            {
+              "en": "Mojo",
+              "code": "mojo",
+              "fr": null
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "Crime",
+              "code": "crime",
+              "fr": null
+            },
+            {
+              "en": "Fantasy",
+              "code": "fantasy",
+              "fr": null
+            },
+            {
+              "en": "Horror",
+              "code": "horror",
+              "fr": "Horreur"
+            },
+            {
+              "en": "Sci-Fi",
+              "code": "sci-fi",
+              "fr": "Science-Fiction"
+            },
+            {
+              "en": "Sitcom",
+              "code": "sitcom",
+              "fr": null
+            },
+            {
+              "en": "Western",
+              "code": "western",
+              "fr": null
+            }
+          ],
+          "difficultiesAdded": []
+        },
+        {
+          "name": "NeXt Evolution",
+          "code": "next_evol",
+          "type": "campaign_box",
+          "scenarios": [
+            {
+              "en": "Morlock Siege",
+              "code": "morlock_siege",
+              "fr": "Le Siège des Morlocks"
+            },
+            {
+              "en": "On the Run",
+              "code": "on_the_run",
+              "fr": "En Fuite"
+            },
+            {
+              "en": "Juggernaut",
+              "code": "juggernaut",
+              "fr": "Le Fléau"
+            },
+            {
+              "en": "Mister Sinister",
+              "code": "mister_sinister",
+              "fr": "Mister Sinistre"
+            },
+            {
+              "en": "Stryfe",
+              "code": "stryfe",
+              "fr": null
+            }
+          ],
+          "modularSets": [],
+          "difficultiesAdded": []
+        }
+      ]
+    },
+    {
+      "wave": 7,
+      "packs": [
+        {
+          "name": "The Age of Apocalypse",
+          "code": "aoa",
+          "type": "campaign_box",
+          "scenarios": [
+            {
+              "en": "Unus",
+              "code": "unus",
+              "fr": null
+            },
+            {
+              "en": "Four Horsemen",
+              "code": "four_horsemen",
+              "fr": "Quatre Cavaliers"
+            },
+            {
+              "en": "Apocalypse",
+              "code": "apocalypse",
+              "fr": null
+            },
+            {
+              "en": "Dark Beast",
+              "code": "dark_beast",
+              "fr": "Le Fauve Noir"
+            },
+            {
+              "en": "En Sabah Nur",
+              "code": "en_sabah_nur",
+              "fr": null
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "Infinites",
+              "code": "infinites",
+              "fr": "Infinis"
+            },
+            {
+              "en": "Dystopian Nightmare",
+              "code": "dystopian_nightmare",
+              "fr": "Cauchemar Dystopique"
+            },
+            {
+              "en": "Hounds",
+              "code": "hounds",
+              "fr": "Chiens de Chasse"
+            },
+            {
+              "en": "Dark Riders",
+              "code": "dark_riders",
+              "fr": null
+            },
+            {
+              "en": "Savage Land",
+              "code": "savage_land",
+              "fr": "Terre Sauvage"
+            },
+            {
+              "en": "Genosha",
+              "code": "genosha",
+              "fr": "Génosha"
+            },
+            {
+              "en": "Blue Moon",
+              "code": "blue_moon",
+              "fr": "Lune Bleue"
+            },
+            {
+              "en": "Celestial Tech",
+              "code": "celestial_tech",
+              "fr": "Technologie Céleste"
+            },
+            {
+              "en": "Clan Akkaba",
+              "code": "clan_akkaba",
+              "fr": null
+            },
+            {
+              "en": "Age of Apocalypse",
+              "code": "age_of_apocalypse",
+              "fr": "Ère d'Apocalypse"
+            }
+          ],
+          "difficultiesAdded": [
+            "Standard III"
+          ]
+        }
+      ]
+    },
+    {
+      "wave": 8,
+      "packs": [
+        {
+          "name": "Agents of S.H.I.E.L.D.",
+          "code": "aos",
+          "type": "campaign_box",
+          "scenarios": [
+            {
+              "en": "Black Widow",
+              "code": "black_widow_villain",
+              "fr": null
+            },
+            {
+              "en": "Batroc",
+              "code": "batroc",
+              "fr": null
+            },
+            {
+              "en": "M.O.D.O.K",
+              "code": "m.o.d.o.k.",
+              "fr": null
+            },
+            {
+              "en": "Thunderbolts",
+              "code": "thunderbolts",
+              "fr": null
+            },
+            {
+              "en": "Baron Zemo",
+              "code": "baron_zemo",
+              "fr": null
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "A.I.M. Abduction",
+              "code": "a.i.m._abduction",
+              "fr": null
+            },
+            {
+              "en": "A.I.M. Science",
+              "code": "a.i.m._science",
+              "fr": null
+            },
+            {
+              "en": "Batroc's Brigade",
+              "code": "batrocs_brigade",
+              "fr": null
+            },
+            {
+              "en": "Scientist Supreme",
+              "code": "scientist_supreme",
+              "fr": null
+            },
+            {
+              "en": "S.H.I.E.L.D.",
+              "code": "s.h.i.e.l.d.",
+              "fr": null
+            }
+          ],
+          "difficultiesAdded": []
+        }
+      ]
+    },
+    {
+      "wave": 9,
+      "packs": [
+        {
+          "name": "Trickster Takeover",
+          "code": "tt",
+          "type": "scenario_pack",
+          "scenarios": [
+            {
+              "en": "Enchantress",
+              "code": "enchantress_villain",
+              "fr": null
+            },
+            {
+              "en": "God of Lies",
+              "code": "god_of_lies",
+              "fr": null
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "Trickster Magic",
+              "code": "trickster_magic",
+              "fr": null
+            }
+          ],
+          "difficultiesAdded": []
+        },
+        {
+          "name": "Civil War",
+          "code": "cw",
+          "type": "campaign_box",
+          "scenarios": [
+            {
+              "en": "Resistance: Captain Marvel",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Resistance: Iron Man",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Resistance: Spider-Woman",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Resistance: Captain America",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Registration: Captain Marvel",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Registration: Iron Man",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Registration: Spider-Woman",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Registration: Captain America",
+              "code": null,
+              "fr": null
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "Dangerous Recruits",
+              "code": "dangerous_recruits",
+              "fr": null
+            },
+            {
+              "en": "Mighty Avengers",
+              "code": "mighty_avengers",
+              "fr": null
+            },
+            {
+              "en": "Heroes for Hire",
+              "code": "heroes_for_hire",
+              "fr": null
+            },
+            {
+              "en": "Paladin",
+              "code": "paladin",
+              "fr": null
+            },
+            {
+              "en": "Cape-Killer",
+              "code": "cape_killer",
+              "fr": null
+            },
+            {
+              "en": "The Initiative",
+              "code": "the_initiative",
+              "fr": null
+            },
+            {
+              "en": "Martial Law",
+              "code": "martial_law",
+              "fr": null
+            },
+            {
+              "en": "Maria Hill",
+              "code": "maria_hill_modular",
+              "fr": null
+            },
+            {
+              "en": "New Avengers",
+              "code": "new_avengers",
+              "fr": null
+            },
+            {
+              "en": "Secret Avengers",
+              "code": "secret_avengers",
+              "fr": null
+            },
+            {
+              "en": "Namor",
+              "code": "namor_modular",
+              "fr": null
+            },
+            {
+              "en": "Atlanteans",
+              "code": "atlanteans",
+              "fr": null
+            },
+            {
+              "en": "Spider-Man",
+              "code": "spider_man_modular",
+              "fr": null
+            },
+            {
+              "en": "Defenders",
+              "code": "defenders",
+              "fr": null
+            },
+            {
+              "en": "Hell's Kitchen",
+              "code": "hells_kitchen",
+              "fr": null
+            }
+          ],
+          "difficultiesAdded": [],
+          "special": {
+            "modularCount": [
+              3,
+              4
+            ],
+            "modularsRestrictedTo": [
+              "cw",
+              "shulk"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "wave": 10,
+      "packs": [
+        {
+          "name": "She-Hulk",
+          "code": "shulk",
+          "type": "scenario_pack",
+          "scenarios": [
+            {
+              "en": "Resistance: She-Hulk",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Registration: She-Hulk",
+              "code": null,
+              "fr": null
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "S.H.I.E.L.D. Ops",
+              "code": "shield_ops",
+              "fr": null
+            },
+            {
+              "en": "Thunderbolts",
+              "code": "thunderbolts_modular",
+              "fr": null
+            },
+            {
+              "en": "Taskmaster",
+              "code": "taskmaster_modular",
+              "fr": null
+            },
+            {
+              "en": "Deadly Duo",
+              "code": "deadly_duo",
+              "fr": null
+            },
+            {
+              "en": "Vision",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Young Avengers",
+              "code": "young_avengers",
+              "fr": null
+            },
+            {
+              "en": "Scarlet Twins",
+              "code": "scarlet_twins",
+              "fr": null
+            },
+            {
+              "en": "Moon Knight",
+              "code": "moon_knight_modular",
+              "fr": null
+            },
+            {
+              "en": "Royal Guard",
+              "code": "royal_guard",
+              "fr": null
+            }
+          ],
+          "difficultiesAdded": [],
+          "special": {
+            "modularCount": [
+              3,
+              4
+            ],
+            "modularsRestrictedTo": [
+              "cw",
+              "shulk"
+            ]
+          }
+        },
+        {
+          "name": "Fear No Evil",
+          "code": "fne",
+          "type": "campaign_box",
+          "scenarios": [
+            {
+              "en": "The Getaway",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Protection Racket",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "The Raft Breakout",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Kingpin",
+              "code": null,
+              "fr": null
+            }
+          ],
+          "modularSets": [
+            {
+              "en": "Bullseye",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Electro",
+              "code": null,
+              "fr": null
+            }
+          ],
+          "difficultiesAdded": []
+        }
+      ]
+    },
+    {
+      "wave": 11,
+      "packs": [
+        {
+          "name": "Shadowland",
+          "code": "shadowland",
+          "type": "scenario_pack",
+          "scenarios": [
+            {
+              "en": "Shadows in the Night",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Shadow Labyrinth",
+              "code": null,
+              "fr": null
+            },
+            {
+              "en": "Heart of Shadow",
+              "code": null,
+              "fr": null
+            }
+          ],
+          "modularSets": [],
+          "difficultiesAdded": []
+        }
+      ]
+    }
+  ]
+}
