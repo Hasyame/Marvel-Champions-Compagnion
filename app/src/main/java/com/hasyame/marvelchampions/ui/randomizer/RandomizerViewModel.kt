@@ -105,6 +105,26 @@ class RandomizerViewModel @Inject constructor(
         viewModelScope.launch {
             repository.observeExcludedModularSets().collect { missingModularSets = it }
         }
+        // The pools are what the player owns, and owning things changes. They
+        // used to be read once in init, and this view model outlives a trip to
+        // the collection screen — so buying a pack, or ticking one you already
+        // had, left the draw working from the answer to a question asked before
+        // you changed it. Same mistake as the deck list on the campaign start
+        // screen, one screen over.
+        viewModelScope.launch {
+            var first = true
+            repository.observeOwnedPackCodes().collect {
+                if (first) {
+                    // init has already loaded these; reloading immediately would
+                    // throw away the opening roll for nothing.
+                    first = false
+                    return@collect
+                }
+                val locale = preferences.currentCardLocale()
+                pools.value = repository.loadPools(locale)
+                names.value = repository.loadNames(locale)
+            }
+        }
     }
 
     /** Rerolls everything that is not locked. */
@@ -140,6 +160,11 @@ class RandomizerViewModel @Inject constructor(
      * group has agreed on — and the rest should be rolled around it. Choosing
      * locks the field, because a value picked deliberately and then rolled away
      * by the next tap of Roll would be worse than not offering the choice.
+     *
+     * Only when it actually changes something, though. Opening the picker to
+     * see what is in there and pressing OK used to lock the row just the same,
+     * so a player who looked at the modular sets found they had quietly stopped
+     * rerolling and no longer knew why.
      */
     fun choose(field: DrawField, values: List<String>) {
         val current = draw.value
@@ -185,7 +210,19 @@ class RandomizerViewModel @Inject constructor(
                 },
             )
         }
-        locked.value = locked.value + field
+        if (valuesFor(field, draw.value) != valuesFor(field, current)) {
+            locked.value = locked.value + field
+        }
+    }
+
+    /** What a field holds in a given draw, for telling a change from a look. */
+    private fun valuesFor(field: DrawField, of: RandomizerDraw): List<String> = when (field) {
+        DrawField.SCENARIO -> listOfNotNull(of.scenarioCode)
+        DrawField.DIFFICULTY -> listOfNotNull(of.difficulty?.name)
+        DrawField.MODULAR_SETS -> of.modularSetCodes
+        DrawField.PLAYER_COUNT -> listOf(of.playerCount.toString())
+        DrawField.HEROES -> of.heroes.map { it.heroCode }
+        DrawField.ASPECTS -> of.heroes.map { it.aspect }
     }
 
     fun toggleLock(field: DrawField) {

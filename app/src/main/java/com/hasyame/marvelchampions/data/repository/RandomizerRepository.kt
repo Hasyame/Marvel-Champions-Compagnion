@@ -73,6 +73,10 @@ class RandomizerRepository @Inject constructor(
     suspend fun getExcludedModularSets(): Set<String> =
         collectionRepository.getExcludedModularSets()
 
+    /** The packs owned, so a draw can be rebuilt when the collection changes. */
+    fun observeOwnedPackCodes(): Flow<Set<String>> =
+        collectionRepository.observeOwnedCodes()
+
     suspend fun loadRules(): Map<String, ScenarioRule> = withContext(ioDispatcher) {
         seed.readScenarioRules().scenarios.associate { dto ->
             dto.code to ScenarioRule(

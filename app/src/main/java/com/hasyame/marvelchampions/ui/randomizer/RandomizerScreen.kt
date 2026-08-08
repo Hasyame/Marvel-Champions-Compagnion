@@ -475,7 +475,12 @@ private fun RandomizerUiState.optionsFor(field: DrawField): List<DrawOption> = w
         .map { DrawOption(it.code, names.scenarios[it.code] ?: it.code) }
         .sortedBy { it.label }
 
-    DrawField.DIFFICULTY -> Difficulty.entries.map { DrawOption(it.name, difficultyLabel(it)) }
+    // Only the difficulties the filter allows. The draw has always respected
+    // that filter; this picker did not, so tapping the row offered five and
+    // let you pick one you had just excluded.
+    DrawField.DIFFICULTY -> Difficulty.entries
+        .filter { it in filters.allowedDifficulties }
+        .map { DrawOption(it.name, difficultyLabel(it)) }
 
     DrawField.MODULAR_SETS -> pools.modularSets
         .map { DrawOption(it.code, names.modularSets[it.code] ?: it.code) }
