@@ -60,9 +60,12 @@
         <item quantity="many">%1$d de cartes connues sur %2$d</item>
         <item quantity="other">%1$d cartes connues sur %2$d</item>
     </plurals>
+    <string name="collection_contents_hint">Décochez ce qui manque dans cette extension. Rien de tel ne sera tiré, ni proposé quand vous préparez une partie vous-même.</string>
+    <string name="collection_scenarios">Scénarios</string>
+    <string name="collection_modular_sets">Sets modulaires</string>
+    <string name="randomizer_collection_note">Seuls les scénarios, difficultés, héros et aspects de votre collection sont proposés.</string>
     <string name="collection_show_modular_sets">Afficher les sets modulaires de cette extension</string>
     <string name="collection_hide_modular_sets">Masquer les sets modulaires de cette extension</string>
-    <string name="collection_modular_sets_hint">Décochez un set que vous ne possédez pas. Il ne sera jamais tiré, et les scénarios qui l\'exigent ne seront pas proposés.</string>
     <plurals name="collection_missing_sets">
         <item quantity="one">%1$d set manquant</item>
         <item quantity="many">%1$d de sets manquants</item>

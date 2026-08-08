@@ -107,13 +107,16 @@ fun CollectionScreen(
                 }
                 items(group.packs, key = { it.pack.code }) { ownership ->
                     val sets = state.modularSetsByPack[ownership.pack.code].orEmpty()
+                    val scenarios = state.scenariosByPack[ownership.pack.code].orEmpty()
                     PackRow(
                         ownership = ownership,
-                        // Only an owned pack can have sets missing from it, and
+                        // Only an owned pack can have things missing from it, and
                         // a pack with none has nothing to open.
                         modularSets = if (ownership.isOwned) sets else emptyList(),
+                        scenarios = if (ownership.isOwned) scenarios else emptyList(),
                         expanded = ownership.pack.code in expanded,
                         excludedSets = state.excludedModularSets,
+                        excludedScenarios = state.excludedScenarios,
                         onToggle = { viewModel.setOwned(ownership.pack.code, it) },
                         onToggleExpanded = {
                             expanded = if (ownership.pack.code in expanded) {
@@ -123,6 +126,9 @@ fun CollectionScreen(
                             }
                         },
                         onToggleSet = { code, owned -> viewModel.setModularSetOwned(code, owned) },
+                        onToggleScenario = { code, owned ->
+                            viewModel.setScenarioOwned(code, owned)
+                        },
                     )
                 }
             }
@@ -174,16 +180,21 @@ private fun BulkActions(
 private fun PackRow(
     ownership: PackOwnership,
     modularSets: List<ModularSet>,
+    scenarios: List<ModularSet>,
     expanded: Boolean,
     excludedSets: Set<String>,
+    excludedScenarios: Set<String>,
     onToggle: (Boolean) -> Unit,
     onToggleExpanded: () -> Unit,
     onToggleSet: (String, Boolean) -> Unit,
+    onToggleScenario: (String, Boolean) -> Unit,
 ) {
-    val missing = modularSets.count { it.code in excludedSets }
+    val contents = scenarios + modularSets
+    val missing = scenarios.count { it.code in excludedScenarios } +
+        modularSets.count { it.code in excludedSets }
 
     ListItem(
-        modifier = if (modularSets.isEmpty()) {
+        modifier = if (contents.isEmpty()) {
             Modifier
         } else {
             Modifier.clickable(onClick = onToggleExpanded)
@@ -222,7 +233,7 @@ private fun PackRow(
         },
         trailingContent = {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (modularSets.isNotEmpty()) {
+                if (contents.isNotEmpty()) {
                     Icon(
                         imageVector = if (expanded) {
                             Icons.Filled.KeyboardArrowUp
@@ -243,30 +254,60 @@ private fun PackRow(
         },
     )
 
-    if (expanded && modularSets.isNotEmpty()) {
+    if (expanded && contents.isNotEmpty()) {
         Text(
-            text = stringResource(R.string.collection_modular_sets_hint),
+            text = stringResource(R.string.collection_contents_hint),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(start = 32.dp, end = 16.dp, bottom = 4.dp),
         )
-        modularSets.forEach { set ->
-            val owned = set.code !in excludedSets
-            ListItem(
-                modifier = Modifier
-                    .padding(start = 32.dp)
-                    .clickable { onToggleSet(set.code, !owned) },
-                headlineContent = {
-                    Text(text = set.name, style = MaterialTheme.typography.bodyMedium)
-                },
-                leadingContent = {
-                    Checkbox(
-                        checked = owned,
-                        onCheckedChange = { onToggleSet(set.code, it) },
-                    )
-                },
-            )
-        }
+        // Scenarios first, then modular sets: a box is remembered by what you
+        // play in it, not by what you shuffle into the encounter deck.
+        ContentGroup(
+            title = stringResource(R.string.collection_scenarios),
+            entries = scenarios,
+            excluded = excludedScenarios,
+            onToggle = onToggleScenario,
+        )
+        ContentGroup(
+            title = stringResource(R.string.collection_modular_sets),
+            entries = modularSets,
+            excluded = excludedSets,
+            onToggle = onToggleSet,
+        )
+    }
+}
+
+/** One tickable list inside an expanded pack. */
+@Composable
+private fun ContentGroup(
+    title: String,
+    entries: List<ModularSet>,
+    excluded: Set<String>,
+    onToggle: (String, Boolean) -> Unit,
+) {
+    if (entries.isEmpty()) {
+        return
+    }
+    Text(
+        text = title,
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(start = 32.dp, top = 4.dp),
+    )
+    entries.forEach { entry ->
+        val owned = entry.code !in excluded
+        ListItem(
+            modifier = Modifier
+                .padding(start = 32.dp)
+                .clickable { onToggle(entry.code, !owned) },
+            headlineContent = {
+                Text(text = entry.name, style = MaterialTheme.typography.bodyMedium)
+            },
+            leadingContent = {
+                Checkbox(checked = owned, onCheckedChange = { onToggle(entry.code, it) })
+            },
+        )
     }
 }
 

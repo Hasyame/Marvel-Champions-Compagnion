@@ -19,6 +19,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -113,7 +115,10 @@ class RandomizerViewModel @Inject constructor(
         // screen, one screen over.
         viewModelScope.launch {
             var first = true
-            repository.observeOwnedPackCodes().collect {
+            merge(
+                repository.observeOwnedPackCodes().map { },
+                repository.observeExcludedScenarios().map { },
+            ).collect {
                 if (first) {
                     // init has already loaded these; reloading immediately would
                     // throw away the opening roll for nothing.

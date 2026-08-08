@@ -33,6 +33,9 @@ data class CollectionUiState(
     val modularSetsByPack: Map<String, List<ModularSet>> = emptyMap(),
     /** Sets the user has said they cannot field. Absence means owned. */
     val excludedModularSets: Set<String> = emptySet(),
+    /** The scenarios each pack contains, keyed by pack code. */
+    val scenariosByPack: Map<String, List<ModularSet>> = emptyMap(),
+    val excludedScenarios: Set<String> = emptySet(),
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -48,15 +51,16 @@ class CollectionViewModel @Inject constructor(
      * It comes from the card cache rather than the collection, so it is read
      * once per locale instead of being folded into the collection flow.
      */
-    private val modularSetsByPack = preferences.cardLocale.map { locale ->
-        repository.modularSetsByPack(locale)
+    private val contentsByPack = preferences.cardLocale.map { locale ->
+        repository.modularSetsByPack(locale) to repository.scenariosByPack(locale)
     }
 
     val uiState: StateFlow<CollectionUiState> = combine(
         preferences.cardLocale.flatMapLatest { locale -> repository.observeCollection(locale) },
-        modularSetsByPack,
+        contentsByPack,
         repository.observeExcludedModularSets(),
-    ) { collection, setsByPack, excluded ->
+        repository.observeExcludedScenarios(),
+    ) { collection, contents, excludedSets, excludedScenarios ->
         CollectionUiState(
             waves = collection
                 .groupBy { it.pack.wave }
@@ -65,8 +69,10 @@ class CollectionViewModel @Inject constructor(
             ownedCount = collection.count { it.isOwned },
             totalCount = collection.size,
             isLoading = false,
-            modularSetsByPack = setsByPack,
-            excludedModularSets = excluded,
+            modularSetsByPack = contents.first,
+            excludedModularSets = excludedSets,
+            scenariosByPack = contents.second,
+            excludedScenarios = excludedScenarios,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -90,6 +96,11 @@ class CollectionViewModel @Inject constructor(
      */
     fun setModularSetOwned(setCode: String, owned: Boolean) {
         viewModelScope.launch { repository.setModularSetExcluded(setCode, excluded = !owned) }
+    }
+
+    /** Same meaning as a modular set: unticked is "I have not got it". */
+    fun setScenarioOwned(scenarioCode: String, owned: Boolean) {
+        viewModelScope.launch { repository.setScenarioExcluded(scenarioCode, excluded = !owned) }
     }
 
     /** "Select all hero packs" and friends. */

@@ -222,6 +222,15 @@ private fun SetupPhase(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
+        // Same note as the randomiser, for the same reason: everything on this
+        // screen is filtered by the collection, and a player who does not know
+        // that concludes something is missing.
+        Text(
+            text = stringResource(R.string.randomizer_collection_note),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+
         PickerSection(stringResource(R.string.session_scenario)) {
             state.pools.scenarios.forEach { scenario ->
                 FilterChip(

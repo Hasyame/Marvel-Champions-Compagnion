@@ -3,9 +3,11 @@ package com.hasyame.marvelchampions.data.repository
 import com.hasyame.marvelchampions.data.db.dao.CardDao
 import com.hasyame.marvelchampions.data.seed.SetNameOverrides
 import com.hasyame.marvelchampions.data.db.dao.ExcludedModularSetDao
+import com.hasyame.marvelchampions.data.db.dao.ExcludedScenarioDao
 import com.hasyame.marvelchampions.data.db.dao.OwnedPackDao
 import com.hasyame.marvelchampions.data.db.dao.PackDao
 import com.hasyame.marvelchampions.data.db.entity.ExcludedModularSetEntity
+import com.hasyame.marvelchampions.data.db.entity.ExcludedScenarioEntity
 import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
 import com.hasyame.marvelchampions.data.db.entity.PackEntity
 import com.hasyame.marvelchampions.domain.model.CardLocale
@@ -34,6 +36,7 @@ class CollectionRepository @Inject constructor(
     private val packDao: PackDao,
     private val ownedPackDao: OwnedPackDao,
     private val excludedModularSetDao: ExcludedModularSetDao,
+    private val excludedScenarioDao: ExcludedScenarioDao,
     private val cardDao: CardDao,
     private val setNameOverrides: SetNameOverrides,
 ) {
@@ -110,6 +113,42 @@ class CollectionRepository @Inject constructor(
             }
             .sortedBy { it.name }
             .groupBy { it.packCode }
+    }
+
+    /**
+     * The scenarios each pack contains, keyed by pack code.
+     *
+     * Only villain sets that bring a scenario of their own, for the same reason
+     * the draw uses that rule: the four Wrecking Crew villains are played inside
+     * Wrecking Crew, and offering them as things to tick would be nonsense.
+     */
+    suspend fun scenariosByPack(locale: CardLocale): Map<String, List<ModularSet>> {
+        val overrides = setNameOverrides.forLocale(locale)
+        return cardDao.getPlayableScenarios(locale.code)
+            .map {
+                ModularSet(
+                    code = it.code,
+                    name = overrides[it.code] ?: it.name ?: it.code,
+                    packCode = it.packCode,
+                )
+            }
+            .sortedBy { it.name }
+            .groupBy { it.packCode }
+    }
+
+    fun observeExcludedScenarios(): Flow<Set<String>> =
+        excludedScenarioDao.observeExcluded().map { rows -> rows.map { it.scenarioCode }.toSet() }
+
+    suspend fun getExcludedScenarios(): Set<String> =
+        excludedScenarioDao.getExcludedCodes().toSet()
+
+    /** [excluded] true means the user has not got it, so nothing may offer it. */
+    suspend fun setScenarioExcluded(scenarioCode: String, excluded: Boolean) {
+        if (excluded) {
+            excludedScenarioDao.exclude(ExcludedScenarioEntity(scenarioCode))
+        } else {
+            excludedScenarioDao.include(scenarioCode)
+        }
     }
 
     /** Pack code to its localised name, falling back to the code. */

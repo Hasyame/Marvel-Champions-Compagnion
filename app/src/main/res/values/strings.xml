@@ -58,9 +58,12 @@
         <item quantity="one">%1$d of %2$d card known</item>
         <item quantity="other">%1$d of %2$d cards known</item>
     </plurals>
+    <string name="collection_contents_hint">Untick anything this pack is missing. It is never drawn, and never offered when you set a game up by hand.</string>
+    <string name="collection_scenarios">Scenarios</string>
+    <string name="collection_modular_sets">Modular sets</string>
+    <string name="randomizer_collection_note">Only scenarios, difficulties, heroes and aspects in your collection are offered.</string>
     <string name="collection_show_modular_sets">Show the modular sets in this pack</string>
     <string name="collection_hide_modular_sets">Hide the modular sets in this pack</string>
-    <string name="collection_modular_sets_hint">Untick a set you have not got. It is never drawn, and scenarios that require it are not offered.</string>
     <plurals name="collection_missing_sets">
         <item quantity="one">%1$d set missing</item>
         <item quantity="other">%1$d sets missing</item>

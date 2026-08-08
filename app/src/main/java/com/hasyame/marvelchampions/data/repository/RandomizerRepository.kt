@@ -47,12 +47,17 @@ class RandomizerRepository @Inject constructor(
      */
     suspend fun loadPools(locale: CardLocale): RandomizerPools = withContext(ioDispatcher) {
         val owned = collectionRepository.getOwnedCodes()
+        // Dropped from the pool rather than filtered per draw: a scenario the
+        // player has not got is not a scenario, so it should be missing from
+        // My own setup and the pickers too, not only from the roll.
+        val missingScenarios = collectionRepository.getExcludedScenarios()
         val scenarios = cardDao.getPlayableScenarios(locale.code)
         val modulars = cardDao.getCardSets(MODULAR_SET, locale.code)
         val heroes = cardDao.getHeroes(locale.code)
 
         RandomizerPools(
-            scenarios = scenarios.filter { it.packCode in owned }
+            scenarios = scenarios
+                .filter { it.packCode in owned && it.code !in missingScenarios }
                 .map { SetRef(it.code, it.packCode) },
             modularSets = modulars.filter { it.packCode in owned }
                 .map { SetRef(it.code, it.packCode) },
@@ -60,7 +65,10 @@ class RandomizerRepository @Inject constructor(
                 .map { HeroRef(it.code, it.packCode) },
             // Aspects are the primary factions. 'basic' is not an aspect you
             // choose, and 'pool' is filtered per hero by the randomiser itself.
-            aspects = ASPECTS,
+            //
+            // 'Pool is also a pack: its cards came with Deadpool, so without
+            // that hero there is no such aspect to build a deck in.
+            aspects = ASPECTS.filter { it !in ASPECT_PACKS || ASPECT_PACKS[it] in owned },
             // Each difficulty is a set of encounter cards that came in a box.
             // Core is assumed rather than checked: without it there is no game
             // to set a difficulty for, and offering nothing would be worse than
@@ -87,6 +95,10 @@ class RandomizerRepository @Inject constructor(
     /** The packs owned, so a draw can be rebuilt when the collection changes. */
     fun observeOwnedPackCodes(): Flow<Set<String>> =
         collectionRepository.observeOwnedCodes()
+
+    /** Scenarios the collection says are missing, for the same reason. */
+    fun observeExcludedScenarios(): Flow<Set<String>> =
+        collectionRepository.observeExcludedScenarios()
 
     suspend fun loadRules(): Map<String, ScenarioRule> = withContext(ioDispatcher) {
         seed.readScenarioRules().scenarios.associate { dto ->
@@ -147,6 +159,15 @@ class RandomizerRepository @Inject constructor(
         /** Primary factions that are playable aspects. */
         val ASPECTS: List<String> =
             listOf("aggression", "justice", "leadership", "protection", "pool")
+
+        /**
+         * Aspects that arrived in a pack of their own.
+         *
+         * The four originals are in the Core Set, so owning the game is owning
+         * them. 'Pool came with Deadpool and is the only one anybody can be
+         * without.
+         */
+        val ASPECT_PACKS: Map<String, String> = mapOf("pool" to "deadpool")
 
         /** Rebuilds the hero assignments stored in a history row. */
         fun parseHeroes(stored: String): List<HeroAssignment> = stored

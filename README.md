@@ -14,7 +14,7 @@ you can read the app in French and the cards in English, or the reverse.
 
 ## Status
 
-In use, and being played with. Current release: **[v1.8.1](https://github.com/Hasyame/Thwart/releases/latest)**.
+In use, and being played with. Current release: **[v1.9.0](https://github.com/Hasyame/Thwart/releases/latest)**.
 
 Every feature planned for the app is now in, and the work from here is campaign
 content rather than machinery.
@@ -33,11 +33,13 @@ content rather than machinery.
 - **Offline images.** Download the pictures for the packs you own, so cards are
   readable at a table with no signal. Never automatic — it is a large download
   and asking first is the only decent way to do that on mobile data.
-- **Collection.** Mark the packs you own; the randomiser and deck legality
-  follow from it. Owning a pack is not owning everything in it, so tapping one
-  opens the modular sets it contains — untick whatever is missing from a
-  second-hand box or a set lent out and never returned. An excluded set is never
-  drawn, and no scenario that requires it is offered.
+- **Collection.** Mark the packs you own; everything the app offers follows from
+  it. Owning a pack is not owning everything in it, so tapping one opens the
+  scenarios and modular sets inside — untick whatever is missing from a
+  second-hand box or a set lent out and never returned. What you untick is never
+  drawn and never offered when you set a game up by hand. The same rule covers
+  difficulties, which arrive in boxes of their own, and the 'Pool aspect, whose
+  cards came with Deadpool.
 - **Decks.** Import from a MarvelCDB link or a share from the browser, build
   from scratch, edit, check legality as you go, see what a deck is made of, and
   share a decklist as plain text.

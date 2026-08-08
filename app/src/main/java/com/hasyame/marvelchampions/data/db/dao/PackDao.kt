@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.hasyame.marvelchampions.data.db.entity.ExcludedModularSetEntity
+import com.hasyame.marvelchampions.data.db.entity.ExcludedScenarioEntity
 import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
 import com.hasyame.marvelchampions.data.db.entity.PackEntity
 import com.hasyame.marvelchampions.data.db.entity.PackTranslationEntity
@@ -146,5 +147,37 @@ interface ExcludedModularSetDao {
     suspend fun replaceAll(sets: List<ExcludedModularSetEntity>) {
         clear()
         excludeAll(sets)
+    }
+}
+
+@Dao
+interface ExcludedScenarioDao {
+
+    @Query("SELECT * FROM excluded_scenarios")
+    fun observeExcluded(): Flow<List<ExcludedScenarioEntity>>
+
+    @Query("SELECT * FROM excluded_scenarios")
+    suspend fun getExcluded(): List<ExcludedScenarioEntity>
+
+    @Query("SELECT scenarioCode FROM excluded_scenarios")
+    suspend fun getExcludedCodes(): List<String>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun exclude(scenario: ExcludedScenarioEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun excludeAll(scenarios: List<ExcludedScenarioEntity>)
+
+    @Query("DELETE FROM excluded_scenarios WHERE scenarioCode = :scenarioCode")
+    suspend fun include(scenarioCode: String)
+
+    @Query("DELETE FROM excluded_scenarios")
+    suspend fun clear()
+
+    /** Replaces the whole list, for the import and restore paths. */
+    @Transaction
+    suspend fun replaceAll(scenarios: List<ExcludedScenarioEntity>) {
+        clear()
+        excludeAll(scenarios)
     }
 }

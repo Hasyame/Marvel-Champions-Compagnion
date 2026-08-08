@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import com.hasyame.marvelchampions.data.db.dao.CampaignDao
 import com.hasyame.marvelchampions.data.db.dao.CardDao
 import com.hasyame.marvelchampions.data.db.dao.ExcludedModularSetDao
+import com.hasyame.marvelchampions.data.db.dao.ExcludedScenarioDao
 import com.hasyame.marvelchampions.data.db.dao.OwnedPackDao
 import com.hasyame.marvelchampions.data.db.dao.PackDao
 import com.hasyame.marvelchampions.data.db.dao.FavouriteDao
@@ -18,6 +19,7 @@ import com.hasyame.marvelchampions.data.db.entity.CampaignRunEntity
 import com.hasyame.marvelchampions.data.db.entity.CardEntity
 import com.hasyame.marvelchampions.data.db.entity.CardFtsEntity
 import com.hasyame.marvelchampions.data.db.entity.ExcludedModularSetEntity
+import com.hasyame.marvelchampions.data.db.entity.ExcludedScenarioEntity
 import com.hasyame.marvelchampions.data.db.entity.OwnedPackEntity
 import com.hasyame.marvelchampions.data.db.entity.FavouriteCardEntity
 import com.hasyame.marvelchampions.data.db.entity.PackEntity
@@ -53,8 +55,9 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
         PlayEntity::class,
         FavouriteCardEntity::class,
         ExcludedModularSetEntity::class,
+        ExcludedScenarioEntity::class,
     ],
-    version = 12,
+    version = 13,
     exportSchema = true,
     // Both migrations so far only add a table, so Room can generate them from
     // the exported schemas. Anything that alters an existing table needs a
@@ -71,6 +74,7 @@ import com.hasyame.marvelchampions.data.db.entity.SavedDeckEntity
         AutoMigration(from = 9, to = 10),
         AutoMigration(from = 10, to = 11),
         AutoMigration(from = 11, to = 12),
+        AutoMigration(from = 12, to = 13),
     ],
 )
 abstract class MarvelChampionsDatabase : RoomDatabase() {
@@ -83,6 +87,7 @@ abstract class MarvelChampionsDatabase : RoomDatabase() {
     abstract fun playDao(): PlayDao
     abstract fun favouriteDao(): FavouriteDao
     abstract fun excludedModularSetDao(): ExcludedModularSetDao
+    abstract fun excludedScenarioDao(): ExcludedScenarioDao
 
     companion object {
         const val NAME: String = "marvelchampions.db"

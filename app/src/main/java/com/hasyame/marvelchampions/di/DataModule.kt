@@ -10,6 +10,7 @@ import com.hasyame.marvelchampions.data.db.dao.FavouriteDao
 import com.hasyame.marvelchampions.data.db.dao.PlayDao
 import com.hasyame.marvelchampions.data.db.dao.CardDao
 import com.hasyame.marvelchampions.data.db.dao.ExcludedModularSetDao
+import com.hasyame.marvelchampions.data.db.dao.ExcludedScenarioDao
 import com.hasyame.marvelchampions.data.db.dao.OwnedPackDao
 import com.hasyame.marvelchampions.data.db.dao.PackDao
 import com.hasyame.marvelchampions.data.db.dao.RandomizerHistoryDao
@@ -91,6 +92,10 @@ object DataModule {
     @Provides
     fun provideExcludedModularSetDao(database: MarvelChampionsDatabase): ExcludedModularSetDao =
         database.excludedModularSetDao()
+
+    @Provides
+    fun provideExcludedScenarioDao(database: MarvelChampionsDatabase): ExcludedScenarioDao =
+        database.excludedScenarioDao()
 
     @Provides
     fun provideRandomizerHistoryDao(database: MarvelChampionsDatabase): RandomizerHistoryDao =

@@ -114,6 +114,16 @@ fun RandomizerScreen(
                     DrawCard(state = state, viewModel = viewModel)
                 }
                 item {
+                    // Said once, where somebody wondering "why is that missing"
+                    // is looking. The alternative is them concluding the app has
+                    // lost a scenario, which is what happened.
+                    Text(
+                        text = stringResource(R.string.randomizer_collection_note),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                item {
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -412,7 +422,9 @@ private fun FiltersCard(state: RandomizerUiState, viewModel: RandomizerViewModel
                 style = MaterialTheme.typography.titleSmall,
             )
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                RandomizerRepository.ASPECTS.forEach { aspect ->
+                // Only aspects the collection can field: 'Pool came with
+                // Deadpool, so without him there is no such aspect to exclude.
+                state.pools.aspects.forEach { aspect ->
                     FilterChip(
                         selected = aspect in state.filters.excludedAspects,
                         onClick = { viewModel.toggleExcludedAspect(aspect) },

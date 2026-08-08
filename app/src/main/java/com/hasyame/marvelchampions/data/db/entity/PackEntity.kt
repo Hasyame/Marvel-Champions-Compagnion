@@ -89,3 +89,21 @@ data class OwnedPackEntity(
 data class ExcludedModularSetEntity(
     @PrimaryKey val setCode: String,
 )
+
+/**
+ * A scenario the user owns the pack for but has not got.
+ *
+ * The same fact as [ExcludedModularSetEntity], about the other half of a box.
+ * A pack bought second hand, or split with a friend, can be missing scenarios
+ * as easily as modular sets, and a draw that offers one is a draw nobody can
+ * set up.
+ *
+ * Kept in its own table rather than sharing one with a kind column: they are
+ * read by different queries and a shared table would need every read to
+ * remember which kind it wanted.
+ */
+@Entity(tableName = "excluded_scenarios")
+@Serializable
+data class ExcludedScenarioEntity(
+    @PrimaryKey val scenarioCode: String,
+)
