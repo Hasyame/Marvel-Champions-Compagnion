@@ -46,9 +46,21 @@ content rather than machinery.
 - **Randomiser.** Scenario, difficulty, modular sets, heroes and aspects, drawn
   only from what you own, with locking, rerolls and a history. Tap any row to
   choose it yourself instead — the choice locks, and the rest rolls around it.
-  Five difficulty steps from Standard I to Expert II, and only villain sets that
-  bring a scenario of their own: the four Wrecking Crew villains are played
-  inside Wrecking Crew, not instead of it.
+  Each option names the pack it came from, because a scenario is often not named
+  after the villain on the box: The Green Goblin contains *Risky Business* and
+  *Mutagen Formula*.
+- **Scenarios the card database does not have.** MarvelCDB enters cards as
+  volunteers get to them, so the newest boxes lag by months — nineteen scenarios
+  as of August 2026. Civil War and She-Hulk are offered anyway, from
+  `docs/game_contents.json`: a Civil War game is a pair, a side and the hero you
+  face, drawing three or four modular sets from a pool that is legal only in
+  those games. The app can name such a game and cannot show a setup for it,
+  which beats leaving a whole campaign box out.
+- **Rules the card database cannot express.** Only villain sets that bring a
+  scenario of their own — the four Wrecking Crew villains are played inside
+  Wrecking Crew, not instead of it. Difficulties limited to the boxes they came
+  in: Standard I and Expert I in the Core Set, Standard II and Expert II with
+  The Hood, Standard III with The Age of Apocalypse.
 - **Play log.** Finished games are recorded and timed, whether they came from
   the randomiser, from a campaign, or were set up by hand with your own modular
   sets. The clock can be corrected afterwards, a game can be thrown away before
@@ -92,12 +104,15 @@ content rather than machinery.
 
 ### Next
 
-- **Fear No Evil**, once MarvelCDB publishes its encounter cards. The pack
-  currently holds only the two heroes, so there is nothing to build the
-  scenarios against. The engine work the campaign needs — a table that chooses
-  its next scenario, a villain drawn into its own deck, choosing one of two
-  drawn cards, and a counter fed by how often a card was offered — is already
-  done and tested.
+- **The Fear No Evil campaign template**, once MarvelCDB publishes its encounter
+  cards. The pack currently holds only the two heroes, so there is nothing to
+  build the scenarios against. The engine work the campaign needs — a table that
+  chooses its next scenario, a villain drawn into its own deck, choosing one of
+  two drawn cards, and a counter fed by how often a card was offered — is
+  already done and tested.
+- **Fear No Evil and Shadowland in the randomiser.** The same nine scenarios
+  could be offered the way Civil War is, from the box list rather than the card
+  database. They have no special rules to carry, so it is a line of data each.
 
 Campaigns are added after they have been played, so that the mechanics in the
 template come from experience rather than from a reading of the book. That is
