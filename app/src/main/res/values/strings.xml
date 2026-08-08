@@ -103,6 +103,7 @@
     <string name="randomizer_scenario">Scenario</string>
     <string name="randomizer_difficulty">Difficulty</string>
     <string name="randomizer_modular_sets">Modular sets</string>
+    <string name="randomizer_mandatory_legend">* required by this scenario, so rerolling cannot change it.</string>
     <string name="randomizer_players">Players</string>
     <string name="randomizer_heroes">Heroes</string>
     <string name="randomizer_aspects">Aspects</string>

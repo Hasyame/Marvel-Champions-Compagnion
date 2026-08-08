@@ -14,7 +14,7 @@ you can read the app in French and the cards in English, or the reverse.
 
 ## Status
 
-In use, and being played with. Current release: **[v1.10.0](https://github.com/Hasyame/Thwart/releases/latest)**.
+In use, and being played with. Current release: **[v1.10.1](https://github.com/Hasyame/Thwart/releases/latest)**.
 
 Every feature planned for the app is now in, and the work from here is campaign
 content rather than machinery.
@@ -49,13 +49,11 @@ content rather than machinery.
   Each option names the pack it came from, because a scenario is often not named
   after the villain on the box: The Green Goblin contains *Risky Business* and
   *Mutagen Formula*.
-- **Scenarios the card database does not have.** MarvelCDB enters cards as
-  volunteers get to them, so the newest boxes lag by months — nineteen scenarios
-  as of August 2026. Civil War and She-Hulk are offered anyway, from
-  `docs/game_contents.json`: a Civil War game is a pair, a side and the hero you
-  face, drawing three or four modular sets from a pool that is legal only in
-  those games. The app can name such a game and cannot show a setup for it,
-  which beats leaving a whole campaign box out.
+- **Versus games.** Civil War and Synthezoid Smackdown are not played against a
+  villain but as a leader plus a side — Resistance or Registration — drawing
+  three or four modular sets from a pool legal only in those games. Both halves
+  are read from the card database, which models a leader as a set type of its
+  own, so a new versus pack needs no code.
 - **Rules the card database cannot express.** Only villain sets that bring a
   scenario of their own — the four Wrecking Crew villains are played inside
   Wrecking Crew, not instead of it. Difficulties limited to the boxes they came
@@ -110,9 +108,11 @@ content rather than machinery.
   chooses its next scenario, a villain drawn into its own deck, choosing one of
   two drawn cards, and a counter fed by how often a card was offered — is
   already done and tested.
-- **Fear No Evil and Shadowland in the randomiser.** The same nine scenarios
-  could be offered the way Civil War is, from the box list rather than the card
-  database. They have no special rules to carry, so it is a line of data each.
+- **Fear No Evil and Shadowland in the randomiser.** Nine scenarios the card
+  database has not got. Civil War looked like the same problem and was not — the
+  card database had it all along, under a set type nothing else uses — so these
+  would need a curated list, which is a thing worth adding once rather than
+  speculatively.
 
 Campaigns are added after they have been played, so that the mechanics in the
 template come from experience rather than from a reading of the book. That is

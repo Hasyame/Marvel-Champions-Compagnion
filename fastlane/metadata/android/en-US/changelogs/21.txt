@@ -1,0 +1,11 @@
+Corrects yesterday's Civil War release, which had the wrong pack code for
+Synthezoid Smackdown. Its two scenarios could never appear, and its eight
+modular sets were still drawable for every other scenario in the game.
+
+The versus games are now read from the card database rather than from a list
+written by hand. A versus game is a leader and a side, and the card database
+models both — which also means Vision appears, having been missing from the
+list entirely.
+
+The asterisk beside a modular set now explains itself: it marks a set the
+scenario requires, which rerolling cannot change.

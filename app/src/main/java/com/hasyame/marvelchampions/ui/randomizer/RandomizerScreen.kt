@@ -268,6 +268,16 @@ private fun DrawCard(state: RandomizerUiState, viewModel: RandomizerViewModel) {
                 state = state,
                 viewModel = viewModel,
             )
+            // The asterisk meant something only to whoever wrote it. Said out
+            // loud, and only when there is one to explain.
+            if (state.draw.mandatoryModularCodes.isNotEmpty()) {
+                Text(
+                    text = stringResource(R.string.randomizer_mandatory_legend),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
+                )
+            }
             DrawRow(
                 label = stringResource(R.string.randomizer_players),
                 value = state.draw.playerCount.toString(),

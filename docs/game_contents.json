@@ -980,7 +980,7 @@
             ],
             "modularsRestrictedTo": [
               "cw",
-              "shulk"
+              "synthezoid"
             ]
           }
         }
@@ -990,8 +990,8 @@
       "wave": 10,
       "packs": [
         {
-          "name": "She-Hulk",
-          "code": "shulk",
+          "name": "Synthezoid Smackdown",
+          "code": "synthezoid",
           "type": "scenario_pack",
           "scenarios": [
             {
@@ -1060,7 +1060,7 @@
             ],
             "modularsRestrictedTo": [
               "cw",
-              "shulk"
+              "synthezoid"
             ]
           }
         },

@@ -220,6 +220,41 @@ interface CardDao {
     )
     suspend fun getPlayableScenarios(locale: String): List<CardSetSummary>
 
+    /**
+     * The leaders of a versus game — Captain Marvel, Iron Man, She-Hulk.
+     *
+     * Civil War and Synthezoid Smackdown are not played as a villain but as a
+     * leader plus a side, and the card database models that with its own set
+     * type. Nothing else in the game uses it, so a pack that has leaders is a
+     * versus pack.
+     */
+    @Query(
+        """
+        SELECT cardSetCode AS code,
+               MIN(cardSetName) AS name,
+               MIN(packCode) AS packCode
+        FROM cards
+        WHERE locale = :locale AND cardSetTypeNameCode = 'leader' AND cardSetCode IS NOT NULL
+        GROUP BY cardSetCode
+        ORDER BY name
+        """,
+    )
+    suspend fun getLeaders(locale: String): List<CardSetSummary>
+
+    /** The sides of a versus game: Resistance and Registration. */
+    @Query(
+        """
+        SELECT cardSetCode AS code,
+               MIN(cardSetName) AS name,
+               MIN(packCode) AS packCode
+        FROM cards
+        WHERE locale = :locale AND cardSetTypeNameCode = 'main_scheme' AND cardSetCode IS NOT NULL
+        GROUP BY cardSetCode
+        ORDER BY name
+        """,
+    )
+    suspend fun getVersusSides(locale: String): List<CardSetSummary>
+
     /** Hero identities, which are cards rather than sets. */
     @Query(
         """

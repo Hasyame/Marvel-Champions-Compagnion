@@ -4,7 +4,6 @@ import com.hasyame.marvelchampions.data.db.dao.CardDao
 import com.hasyame.marvelchampions.data.db.dao.RandomizerHistoryDao
 import com.hasyame.marvelchampions.data.db.entity.RandomizerHistoryEntity
 import com.hasyame.marvelchampions.data.seed.CardSeedSource
-import com.hasyame.marvelchampions.data.seed.CuratedScenarios
 import com.hasyame.marvelchampions.data.seed.SetNameOverrides
 import com.hasyame.marvelchampions.domain.model.CardLocale
 import com.hasyame.marvelchampions.domain.randomizer.Difficulty
@@ -20,6 +19,13 @@ import kotlinx.coroutines.withContext
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
+
+/** A versus game: who you face, and which side you are on. */
+private data class VersusScenario(
+    val code: String,
+    val packCode: String,
+    val name: String,
+)
 
 /** Display names for the codes a draw contains, in the user's card language. */
 data class RandomizerNames(
@@ -37,7 +43,6 @@ class RandomizerRepository @Inject constructor(
     private val collectionRepository: CollectionRepository,
     private val seed: CardSeedSource,
     private val setNameOverrides: SetNameOverrides,
-    private val curatedScenarios: CuratedScenarios,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
 
@@ -53,7 +58,7 @@ class RandomizerRepository @Inject constructor(
         // player has not got is not a scenario, so it should be missing from
         // My own setup and the pickers too, not only from the roll.
         val missingScenarios = collectionRepository.getExcludedScenarios()
-        val curated = curatedScenarios.load()
+        val versus = versusScenarios(locale)
         val scenarios = cardDao.getPlayableScenarios(locale.code)
         val modulars = cardDao.getCardSets(MODULAR_SET, locale.code)
         val heroes = cardDao.getHeroes(locale.code)
@@ -65,7 +70,7 @@ class RandomizerRepository @Inject constructor(
             scenarios = scenarios
                 .filter { it.packCode in owned && it.code !in missingScenarios }
                 .map { SetRef(it.code, it.packCode) } +
-                curated.scenarios
+                versus
                     .filter { it.packCode in owned && it.code !in missingScenarios }
                     .map { SetRef(it.code, it.packCode) },
             modularSets = modulars.filter { it.packCode in owned }
@@ -110,11 +115,12 @@ class RandomizerRepository @Inject constructor(
         collectionRepository.observeExcludedScenarios()
 
     suspend fun loadRules(): Map<String, ScenarioRule> = withContext(ioDispatcher) {
-        val curated = curatedScenarios.load()
-        // Every scenario from a restricted pack keeps that restriction, whether
-        // its rule came from the generator or from the curated file: the sets
-        // are illegal outside those games either way.
-        val restricted = curated.restrictedModularPacks
+        // Versus packs own their modular sets, and their sets are illegal
+        // anywhere else. Which packs those are is read off the cards — a pack
+        // with leaders in it is a versus pack — rather than being a list
+        // somebody has to remember to update.
+        val versus = versusScenarios(CardLocale.ENGLISH)
+        val restricted = versus.map { it.packCode }.distinct()
 
         val fromCards = seed.readScenarioRules().scenarios.associate { dto ->
             dto.code to ScenarioRule(
@@ -128,17 +134,39 @@ class RandomizerRepository @Inject constructor(
             )
         }
 
-        val fromBoxes = curated.scenarios.associate { dto ->
-            dto.code to ScenarioRule(
-                code = dto.code,
-                packCode = dto.packCode,
-                modularCount = dto.modularCountMin,
-                modularCountMax = dto.modularCountMax,
-                modularPacks = dto.modularPacks,
+        val fromVersus = versus.associate { pair ->
+            pair.code to ScenarioRule(
+                code = pair.code,
+                packCode = pair.packCode,
+                // Three or four, decided at the table and so by the draw.
+                modularCount = VERSUS_MODULAR_MIN,
+                modularCountMax = VERSUS_MODULAR_MAX,
+                modularPacks = restricted,
             )
         }
 
-        fromCards + fromBoxes
+        fromCards + fromVersus
+    }
+
+    /**
+     * Every playable versus game: a leader, and the side you play it on.
+     *
+     * Neither half is a game on its own — Captain Marvel is who you face, and
+     * Resistance is how — so the pair is what the randomiser offers. Four
+     * leaders and two sides in Civil War make eight; She-Hulk and Vision make
+     * four more in Synthezoid Smackdown.
+     */
+    private suspend fun versusScenarios(locale: CardLocale): List<VersusScenario> {
+        val sides = cardDao.getVersusSides(locale.code).groupBy { it.packCode }
+        return cardDao.getLeaders(locale.code).flatMap { leader ->
+            sides[leader.packCode].orEmpty().map { side ->
+                VersusScenario(
+                    code = "${side.code}__${leader.code}",
+                    packCode = leader.packCode,
+                    name = "${side.name ?: side.code} : ${leader.name ?: leader.code}",
+                )
+            }
+        }
     }
 
     suspend fun loadNames(locale: CardLocale): RandomizerNames = withContext(ioDispatcher) {
@@ -149,8 +177,7 @@ class RandomizerRepository @Inject constructor(
         RandomizerNames(
             scenarios = cardDao.getPlayableScenarios(locale.code)
                 .mapNotNull { s -> (overrides[s.code] ?: s.name)?.let { s.code to it } }.toMap() +
-                curatedScenarios.load().scenarios
-                    .associate { it.code to curatedScenarios.name(it, locale) },
+                versusScenarios(locale).associate { it.code to it.name },
             modularSets = cardDao.getCardSets(MODULAR_SET, locale.code)
                 .mapNotNull { s -> (overrides[s.code] ?: s.name)?.let { s.code to it } }.toMap(),
             heroes = cardDao.getHeroes(locale.code)
@@ -185,6 +212,10 @@ class RandomizerRepository @Inject constructor(
 
     companion object {
         private const val MODULAR_SET = "modular"
+
+        /** A versus game takes three or four modular sets, never one. */
+        private const val VERSUS_MODULAR_MIN = 3
+        private const val VERSUS_MODULAR_MAX = 4
 
         /** Primary factions that are playable aspects. */
         val ASPECTS: List<String> =

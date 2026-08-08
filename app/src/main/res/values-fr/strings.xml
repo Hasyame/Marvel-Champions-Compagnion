@@ -106,6 +106,7 @@
     <string name="randomizer_scenario">Scénario</string>
     <string name="randomizer_difficulty">Difficulté</string>
     <string name="randomizer_modular_sets">Sets modulaires</string>
+    <string name="randomizer_mandatory_legend">* exigé par ce scénario : relancer ne peut pas le changer.</string>
     <string name="randomizer_players">Joueurs</string>
     <string name="randomizer_heroes">Héros</string>
     <string name="randomizer_aspects">Aspects</string>
