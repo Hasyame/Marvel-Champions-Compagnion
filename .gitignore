@@ -25,3 +25,4 @@ keystore.properties
 # A personal template holding book text should be named *.campaign.json, which
 # stays ignored.
 *.campaign.json
+.kotlin/
