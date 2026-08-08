@@ -235,7 +235,10 @@ private fun SetupPhase(
         }
 
         PickerSection(stringResource(R.string.session_difficulty)) {
-            Difficulty.entries.forEach { difficulty ->
+            // The same rule as the randomiser: a difficulty is a set of
+            // encounter cards that came in a box, so only the ones the
+            // collection can field are offered.
+            state.pools.difficulties.forEach { difficulty ->
                 val stored = difficulty.name.lowercase()
                 FilterChip(
                     selected = state.difficulty == stored,

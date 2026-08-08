@@ -1,0 +1,6 @@
+The difficulty filter, and the difficulty picker on My own setup, no longer
+offer difficulties your collection cannot field. Standard II and Expert II came
+with The Hood and Standard III with The Age of Apocalypse, so without those
+boxes the cards are not on your table.
+
+The draw itself already knew this. Each screen had its own copy of the list.

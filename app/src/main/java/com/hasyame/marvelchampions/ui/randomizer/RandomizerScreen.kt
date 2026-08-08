@@ -386,7 +386,11 @@ private fun FiltersCard(state: RandomizerUiState, viewModel: RandomizerViewModel
                 style = MaterialTheme.typography.titleSmall,
             )
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Difficulty.entries.forEach { difficulty ->
+                // Only the difficulties the collection can field. The draw and
+                // the picker already knew this; the filter chips did not, so
+                // Standard II sat here offering itself to somebody who does not
+                // own The Hood.
+                state.pools.difficulties.forEach { difficulty ->
                     val selected = difficulty in state.filters.allowedDifficulties
                     FilterChip(
                         selected = selected,
